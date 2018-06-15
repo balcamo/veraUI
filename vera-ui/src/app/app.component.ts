@@ -14,5 +14,10 @@ export class AppComponent {
     this.isIn = bool === false ? true : false;
   }
   public isCollapsed = true;
-  public isIconCollapsed = true
+  public isIconCollapsed = true;
+  public collapse = true;
+
+
+
+
 }
