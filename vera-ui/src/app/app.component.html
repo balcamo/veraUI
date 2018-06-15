@@ -1,20 +1,82 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<!-- nav bar -->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button"
+              class="navbar-toggle collapsed"
+              (click)="toggleState()">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <p class="navbar-brand">Drop Down Menu</p>
+    </div>
+    <div class="collapse navbar-collapse"
+         [ngClass]="{ 'in': isIn }">
+      <ul class="nav navbar-nav">
+        <li><a>Link 1</a></li>
+        <li><a>Link 2</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<br />
+<!-- toggle -->
+<div>
+  <button type="button" class="btn btn-primary" (click)="isCollapsed = !isCollapsed"
+          data-target="#collapseExample" [attr.aria-expanded]="!isCollapsed"
+          aria-controls="collapseExample">
+    Toggle Menu
+  </button>
+  <div id="collapseExample" [ngbCollapse]="isCollapsed">
+    <div class="card">
+      <div>
+        <button class="btn btn-secondary">
+          color option1
+        </button>
+      </div>
+      <div>
+        <button class="btn btn-info">
+          color option2
+        </button>
+      </div>
+      <div>
+        <button class="btn btn-success">
+          color option3
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+
+<br />
+<!-- icons -->
+<div>
+  <button type="button" class="btn btn-primary" (click)="isIconCollapsed = !isIconCollapsed"
+          data-target="#collapseIconExample" [attr.aria-expanded]="!isIconCollapsed"
+          aria-controls="collapseIconExample">
+    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+  </button>
+  <div id="collapseIconExample" [ngbCollapse]="isIconCollapsed">
+    <div class="card">
+      <div>
+        <button class="btn btn-secondary">
+          <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div>
+        <button class="btn btn-info">
+          <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div>
+        <button class="btn btn-success">
+          <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
