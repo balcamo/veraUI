@@ -24,7 +24,7 @@
 
   <!-- drop down -->
   <div>
-    <button type="button" class="btn btn-primary" (click)="isCollapsed = !isCollapsed"
+    <button type="button" class="btn bg-primary" (click)="isCollapsed = !isCollapsed"
             data-target="#collapseExample" [attr.aria-expanded]="!isCollapsed"
             aria-controls="collapseExample">
       Basic dropdown
@@ -44,7 +44,7 @@
 
   <!-- icons -->
   <div>
-    <button type="button" class="btn btn-primary" (click)="isIconCollapsed = !isIconCollapsed"
+    <button type="button" class="btn bg-primary" (click)="isIconCollapsed = !isIconCollapsed"
             data-target="#collapseIconExample" [attr.aria-expanded]="!isIconCollapsed"
             aria-controls="collapseIconExample">
       <span class="fa fa-bars" aria-hidden="true"></span>
@@ -52,17 +52,17 @@
     <div id="collapseIconExample" [ngbCollapse]="isIconCollapsed">
       <div class="card">
         <div>
-          <button class="btn btn-secondary">
+          <button class="btn bg-secondary">
             <i class="fa fa-cloud" aria-hidden="true"></i>
           </button>
         </div>
         <div>
-          <button class="btn btn-info">
+          <button class="btn bg-info">
             <i class="fa fa-print" aria-hidden="true"></i>
           </button>
         </div>
         <div>
-          <button class="btn btn-success">
+          <button class="btn bg-success">
             <span class="fa fa-gear" aria-hidden="true"></span>
           </button>
         </div>
@@ -76,7 +76,7 @@
   <!-- side slide -->
   <!-- SideNav slide-out button -->
   <div class="wrapper">
-    <button type="button" class="btn btn-primary" (click)="toggle()"
+    <button type="button" class="btn bg-primary" (click)="toggle()"
             data-target="#sidebar" 
             aria-controls="sidebar">
       <i class="glyphicon glyphicon-align-left"></i>
