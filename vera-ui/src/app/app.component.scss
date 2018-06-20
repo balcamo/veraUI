@@ -1,24 +1,2 @@
 @import '../theme.scss';
-.wrapper {
-  //display: flex;
-}
 
-#sidebar {
-  min-width: 250px;
-  max-width: 250px;
-  height: 100vh;
-  background-color: $info;
-  position: fixed;
-  top: 57px;
-  left: 0vw;
-  border-style: solid;
-  border-width: 5px;
-  border-color: $success;
-}
-.wrapper button{
-  margin:auto;
-
-}
-.sidebar-header{
-  display:flex;
-}

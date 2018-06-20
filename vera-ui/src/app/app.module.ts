@@ -6,10 +6,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
+import { NavComponent } from './nav/nav.component';
+import { TravelComponent } from './travel/travel.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NavComponent,
+    TravelComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
