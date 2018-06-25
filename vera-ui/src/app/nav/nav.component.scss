@@ -4,17 +4,19 @@
   //display: flex;
 }
 
-#sidebar {
-  min-width: 250px;
-  max-width: 250px;
+.sidebar {
+  min-width: 50px;
+  max-width: 100px;
   height: 100vh;
-  background-color: $info;
+  background-color: $primary;
   position: fixed;
-  top: 57px;
+  top: 0px;
   left: 0vw;
-  border-style: solid;
-  border-width: 5px;
-  border-color: $success;
+  opacity:0.75;
+}
+
+button{
+  opacity:2;
 }
 
 .wrapper button {
