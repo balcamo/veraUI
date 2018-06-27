@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { TravelComponent } from './travel/travel.component';
 import { HomeComponent } from './home/home.component';
+import { TravelAuthComponent } from './travel/travel-auth/travel-auth.component';
+
 const routes: Routes = [
   {
     path: 'travel',

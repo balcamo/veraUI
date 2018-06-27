@@ -9,13 +9,16 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { TravelComponent } from './travel/travel.component';
 import { HomeComponent } from './home/home.component';
+import { TravelAuthComponent } from './travel/travel-auth/travel-auth.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
     TravelComponent,
-    HomeComponent
+    HomeComponent,
+    TravelAuthComponent,
+   
   ],
   imports: [
     BrowserModule,

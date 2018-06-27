@@ -7,9 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TravelComponent implements OnInit {
 
+  authDisplay = "none";
   constructor() { }
 
   ngOnInit() {
   }
 
+  displayAuth() {
+    if (this.authDisplay == "none") {
+      this.authDisplay = "block";
+    } else {
+      this.authDisplay = "none"
+    }
+  }
 }

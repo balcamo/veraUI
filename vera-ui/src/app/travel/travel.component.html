@@ -1,4 +1,11 @@
-<br />
-<h1>
-  travel works!
-</h1>
+<div class="topbar">
+  <button class="btn bg-primary" (click)="displayAuth()">
+    Travel Authorization
+  </button>
+
+  <button class="btn bg-primary">Reservations</button>
+  <button class="btn bg-primary">Travel Recap</button>
+</div>
+<div [ngStyle]="{'display':authDisplay}">
+  <app-travel-auth></app-travel-auth>
+</div>

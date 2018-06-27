@@ -1,0 +1,75 @@
+<div class="form-control wrapper">
+  <h1>Traveler Authorization Form</h1>
+  <br />
+  <h2>Traveler Information</h2>
+  <h6>Name:
+    <input required type="text" class="form-control" [(ngModel)]="form.Name" />
+  </h6>
+  <h6>Personal Phone:
+    <input required type="number" class="form-control" [(ngModel)]="form.Phone" />
+  </h6>
+  <h6>Email:
+    <input type="number" class="form-control" [(ngModel)]="form.Email" />
+  </h6>
+
+  <h2>Event Information</h2>
+  <h6>Event Title:
+    <input required type="text" class="form-control" [(ngModel)]="form.EventTitle" />
+  </h6>
+  <h6>Event Location:
+    <input required type="text" class="form-control" [(ngModel)]="form.Location" />
+  </h6>
+  <h6>Travel Start Date:
+    <input required type="Date" class="form-control" [(ngModel)]="form.TravelBegin" />
+  </h6>
+  <h6>Travel End Date:
+    <input required type="Date" class="form-control" [(ngModel)]="form.TravelEnd" />
+  </h6>
+  <h6>
+    Are you driving a district vehicle:
+    <input required type="radio" class="form-control form-check-input" name="form.DistVehicle" />
+    <label class="form-check-label">yes</label>
+  </h6>
+  <h6>District Vehicle Number:
+    <input required type="number" class="form-control" [(ngModel)]="form.DistVehicleNum" />
+  </h6>
+
+  <h2>Estimated costs</h2>
+  <h6>Registration Cost:
+    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.RegistrationCost" />
+  </h6>
+  <h6>Airfare Cost:
+    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Airfare" />
+  </h6>
+  <h6>Rental Car Cost:
+    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.RentalCar" />
+  </h6>
+  <h6>Fuel and Parking Cost:
+    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.FuelParking" />
+  </h6>
+  <h6>Mileage:
+    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Mileage" />
+  </h6>
+  <h6>Lodging:
+    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Lodging" />
+  </h6>
+  <h6>Per Diem:
+    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.PerDiem" />
+  </h6>
+  <h6>Number of full days traveling:
+    <input required type="number" class="form-control" [(ngModel)]="form.FullDays" />
+  </h6>
+  <h6>Miscellaneous:
+    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Misc" />
+  </h6>
+  
+  <h5><b>Total Estimate: ${{total}}</b></h5>
+
+
+
+
+  <button class="btn bg-success" (click)="submitForm()">Submit</button>
+</div>
+<br />
+  Advance: boolean;
+  Policy: boolean;
