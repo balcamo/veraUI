@@ -27,8 +27,12 @@
   </h6>
   <h6>
     Are you driving a district vehicle:
-    <input required type="radio" class="form-control form-check-input" name="form.DistVehicle" />
-    <label class="form-check-label">yes</label>
+    <input required type="radio" class="form-control form-check-inline"
+           id="yes" (click)="form.DistVehicle = true" />
+    <label class="form-check-label" for="yes">yes</label>
+    <input required type="radio" class="form-control form-check-inline"
+           id="no" (click)="form.DistVehicle = false" />
+    <label class="form-check-label" for="no">no</label>
   </h6>
   <h6>District Vehicle Number:
     <input required type="number" class="form-control" [(ngModel)]="form.DistVehicleNum" />
