@@ -2,78 +2,132 @@
   <h1>Traveler Authorization Form</h1>
   <br />
   <h2>Traveler Information</h2>
-  <h6>Name:
-    <input required type="text" class="form-control" [(ngModel)]="form.Name" />
+  <h6>
+    Name:
+    <input aria-required="true" type="text" class="form-control" [(ngModel)]="form.Name" />
   </h6>
-  <h6>Personal Phone:
+  <h6>
+    Personal Phone:
     <input required type="number" class="form-control" [(ngModel)]="form.Phone" />
   </h6>
-  <h6>Email:
-    <input type="number" class="form-control" [(ngModel)]="form.Email" />
+  <h6>
+    Email:
+    <input type="string" class="form-control" [(ngModel)]="form.Email" />
   </h6>
 
   <h2>Event Information</h2>
-  <h6>Event Title:
+  <h6>
+    Event Title:
     <input required type="text" class="form-control" [(ngModel)]="form.EventTitle" />
   </h6>
-  <h6>Event Location:
+  <h6>
+    Event Location:
     <input required type="text" class="form-control" [(ngModel)]="form.Location" />
   </h6>
-  <h6>Travel Start Date:
+  <h6>
+    Travel Start Date:
     <input required type="Date" class="form-control" [(ngModel)]="form.TravelBegin" />
   </h6>
-  <h6>Travel End Date:
-    <input required type="Date" class="form-control" [(ngModel)]="form.TravelEnd" />
-  </h6>
   <h6>
-    Are you driving a district vehicle:
-    <input required type="radio" class="form-control form-check-inline"
-           id="yes" (click)="form.DistVehicle = true" />
-    <label class="form-check-label" for="yes">yes</label>
-    <input required type="radio" class="form-control form-check-inline"
-           id="no" (click)="form.DistVehicle = false" />
-    <label class="form-check-label" for="no">no</label>
+    Travel End Date:
+    <input type="Date" class="form-control" [(ngModel)]="form.TravelEnd" required/>
   </h6>
-  <h6>District Vehicle Number:
+
+
+  <h6 class="form-check form-check-inline">
+    Are you driving a district vehicle:
+  </h6>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+           id="inlineRadio1" value="true" [(ngModel)]="form.DistVehicle">
+    <label class="form-check-label" for="inlineRadio1">Yes</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+           id="inlineRadio2" value="false" [(ngModel)]="form.DistVehicle">
+    <label class="form-check-label" for="inlineRadio2">No</label>
+  </div>
+
+
+
+  <h6>
+    District Vehicle Number:
     <input required type="number" class="form-control" [(ngModel)]="form.DistVehicleNum" />
   </h6>
 
   <h2>Estimated costs</h2>
-  <h6>Registration Cost:
+  <h6>
+    Registration Cost:
     <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.RegistrationCost" />
   </h6>
-  <h6>Airfare Cost:
+  <h6>
+    Airfare Cost:
     <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Airfare" />
   </h6>
-  <h6>Rental Car Cost:
+  <h6>
+    Rental Car Cost:
     <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.RentalCar" />
   </h6>
-  <h6>Fuel and Parking Cost:
+  <h6>
+    Fuel and Parking Cost:
     <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.FuelParking" />
   </h6>
-  <h6>Mileage:
+  <h6>
+    Mileage:
     <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Mileage" />
   </h6>
-  <h6>Lodging:
+  <h6>
+    Lodging:
     <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Lodging" />
   </h6>
-  <h6>Per Diem:
+  <h6>
+    Per Diem:
     <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.PerDiem" />
   </h6>
-  <h6>Number of full days traveling:
+  <h6>
+    Number of full days traveling:
     <input required type="number" class="form-control" [(ngModel)]="form.FullDays" />
   </h6>
-  <h6>Miscellaneous:
+  <h6>
+    Miscellaneous:
     <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Misc" />
   </h6>
-  
+
   <h5><b>Total Estimate: ${{total}}</b></h5>
 
 
 
+  <h6 class="form-check form-check-inline">
+    Are you requesting a travel advance:
+  </h6>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="Advance"
+           id="inlineRadio3" value="true" [(ngModel)]="form.Advance">
+    <label class="form-check-label" for="inlineRadio3">Yes</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="Advance"
+           id="inlineRadio4" value="false" [(ngModel)]="form.Advance">
+    <label class="form-check-label" for="inlineRadio4">No</label>
+  </div>
+
+  <h6 class="form-check form-check-inline">
+    Have you read and do you understand the 
+    <a href="https://verawaterandpower.sharepoint.com/PolicyDocs/Forms/AllItems.aspx?id=%2FPolicyDocs%2FPolicy%20No%2E%20200%20-%20Personnel%2Epdf&parent=%2FPolicyDocs"
+            target="_blank"> District Travel Policy</a>:
+  </h6>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="Policy"
+           id="inlineRadio5" value="true" [(ngModel)]="form.Policy">
+    <label class="form-check-label" for="inlineRadio5">Yes</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="Policy"
+           id="inlineRadio6" value="false" [(ngModel)]="form.Policy">
+    <label class="form-check-label" for="inlineRadio6">No</label>
+  </div>
+  <br />
 
   <button class="btn bg-success" (click)="submitForm()">Submit</button>
 </div>
 <br />
-  Advance: boolean;
-  Policy: boolean;

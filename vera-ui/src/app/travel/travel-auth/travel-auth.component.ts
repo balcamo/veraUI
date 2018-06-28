@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthForm } from '../../classes/travel-auth-form';
+import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-travel-auth',
@@ -9,8 +12,11 @@ import { AuthForm } from '../../classes/travel-auth-form';
 export class TravelAuthComponent implements OnInit {
   form = new AuthForm();
   total: number;
+  http: Http;
 
-  constructor() { }
+  constructor(http: Http) {
+    this.http = http;
+  }
 
   ngOnInit() {
   }
@@ -24,5 +30,8 @@ export class TravelAuthComponent implements OnInit {
 
   submitForm() {
     console.log("submitted");
+    console.log(this.form);
+    this.http.get('/api/API')
+      .subscribe((data) => console.log(data));
   }
 }
