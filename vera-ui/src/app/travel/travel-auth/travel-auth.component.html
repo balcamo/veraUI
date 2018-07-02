@@ -1,41 +1,50 @@
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <div class="form-control wrapper">
   <h1>Traveler Authorization Form</h1>
-  <br />
+
   <h2>Traveler Information</h2>
   <h6>
-    <label class="control-label requiredField" for="name">Name<span class="asteriskField">*:</span></label>
-    <input type="text" id="name" class="form-control" [(ngModel)]="form.Name" required />
+    <label class="mr-sm-2 mb-0 sr-only" for="name">Name</label>
+    <input type="text" id="name" class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.Name"
+           placeholder="Name*" required />
   </h6>
   <h6>
-    Personal Phone:
-    <input type="number" class="form-control" [(ngModel)]="form.Phone" required />
+    <label class="mr-sm-2 mb-0 sr-only" for="phone">Personal Phone Number</label>
+    <input type="tel" id="phone" class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.Phone"
+           placeholder="Personal Phone Number*" required />
   </h6>
   <h6>
-    Email:
-    <input type="text" class="form-control" [(ngModel)]="form.Email" />
+    <label class="mr-sm-2 mb-0 sr-only" for="email">Email</label>
+
+    <input type="email" id="email" class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.Email"
+           placeholder="Email"/>
   </h6>
 
   <h2>Event Information</h2>
   <h6>
-    Event Title:
-    <input type="text" class="form-control" [(ngModel)]="form.EventTitle" required />
+    <label class="mr-sm-2 mb-0 sr-only" for="eventTitle">Event Title</label>
+    <input type="text" id="eventTitle" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           [(ngModel)]="form.EventTitle" placeholder="Event Title*" required/>
   </h6>
   <h6>
-    Event Location:
-    <input type="text" class="form-control" [(ngModel)]="form.Location" required />
+    <label class="mr-sm-2 mb-0 sr-only" for="eventLocation">Event Location</label>
+    <input type="text" id="eventLocation" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           placeholder="Event Location*" [(ngModel)]="form.Location" required />
   </h6>
   <h6>
-    Travel Start Date:
-    <input type="Date" class="form-control" [(ngModel)]="form.TravelBegin" required />
+    <label class="mr-sm-2 mb-0 " for="startDate">Travel Start Date*</label>
+    <input type="Date" id="startDate" class="form-control mr-sm-2 mb-2 mb-sm-0"
+            [(ngModel)]="form.TravelBegin" required />
   </h6>
   <h6>
-    Travel End Date:
-    <input type="Date" class="form-control" [(ngModel)]="form.TravelEnd" required/>
+    <label class="mr-sm-2 mb-0 " for="endDate">Travel End Date*</label>
+    <input type="Date" id="endDate" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           [(ngModel)]="form.TravelEnd" required/>
   </h6>
 
 
   <h6 class="form-check form-check-inline">
-    Are you driving a district vehicle:
+    Are you driving a district vehicle*:
   </h6>
   <div class="form-check form-check-inline">
     <input class="form-check-input" type="radio" name="inlineRadioOptions"
@@ -51,46 +60,56 @@
 
 
   <h6>
-    District Vehicle Number:
-    <input type="number" class="form-control" [(ngModel)]="form.DistVehicleNum" />
+    <label class="mr-sm-2 mb-0 sr-only" for="vehicle">District Vehicle Number</label>
+    <input type="number" id="vehicle" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           placeholder="District Vehicle Number" [(ngModel)]="form.DistVehicleNum" />
   </h6>
 
   <h2>Estimated costs</h2>
   <h6>
-    Registration Cost:
-    <input type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.RegistrationCost" required />
+    <label class="mr-sm-2 mb-0 sr-only" for="registration">Registration Cost</label>
+    <input type="number" id="registration" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
+            placeholder="Registration Cost*" [(ngModel)]="form.RegistrationCost" required />
   </h6>
   <h6>
-    Airfare Cost:
-    <input type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Airfare" required />
+    <label class="mr-sm-2 mb-0 sr-only" for="airfare">Airfare Cost</label>
+    <input type="number" id="airfare" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           placeholder="Airfare Cost*" [(ngModel)]="form.Airfare" required />
   </h6>
   <h6>
-    Rental Car Cost:
-    <input type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.RentalCar" required />
+    <label class="mr-sm-2 mb-0 sr-only" for="rental">Rental Car Cost</label>
+    <input type="number" id="rental" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           placeholder="Rental Car Cost*" [(ngModel)]="form.RentalCar" required />
   </h6>
   <h6>
-    Fuel and Parking Cost:
-    <input type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.FuelParking" required/>
+    <label class="mr-sm-2 mb-0 sr-only" for="fuel">Fuel and Parking Cost</label>
+    <input type="number" id="fuel" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           placeholder="Fuel and Parking Cost*" [(ngModel)]="form.FuelParking" required/>
   </h6>
   <h6>
-    Mileage:
-    <input type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Mileage" required />
+    <label class="mr-sm-2 mb-0 sr-only" for="mileage">Mileage</label>
+    <input type="number" id="mileage" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           placeholder="Mileage*" [(ngModel)]="form.Mileage" required />
   </h6>
   <h6>
-    Lodging:
-    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Lodging" />
+    <label class="mr-sm-2 mb-0 sr-only" for="lodging">Lodging</label>
+    <input type="number" id="lodging" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           placeholder="Lodging*" [(ngModel)]="form.Lodging" required/>
   </h6>
   <h6>
-    Per Diem:
+    <label class="mr-sm-2 mb-0 sr-only" for="lodging">Per Diem*</label>
+    <a href="https://www.gsa.gov/" target="_blank" placement="right" ngbTooltip="Find your city to find the Per Diem">Per Diem:*</a>
     <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.PerDiem" />
   </h6>
   <h6>
-    Number of full days traveling:
-    <input required type="number" class="form-control" [(ngModel)]="form.FullDays" />
+    <label class="mr-sm-2 mb-0 sr-only" for="travelDays">Number of full days traveling:</label>
+    <input type="number" id="travelDays" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           placeholder="Number of full days traveling*" [(ngModel)]="form.FullDays" required />
   </h6>
   <h6>
-    Miscellaneous:
-    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Misc" />
+    <label class="mr-sm-2 mb-0 sr-only" for="misc">Miscellaneous:</label>
+    <input type="number" id="misc" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           placeholder="Miscellaneous*" [(ngModel)]="form.Misc" required />
   </h6>
 
   <h5><b>Total Estimate: ${{total}}</b></h5>
@@ -108,7 +127,7 @@
            id="inlineRadio4" value="false" [(ngModel)]="form.Advance">
     <label class="form-check-label" for="inlineRadio4">No</label>
   </div>
-
+  <br />
   <h6 class="form-check form-check-inline">
     Have you read and do you understand the 
     <a href="https://verawaterandpower.sharepoint.com/PolicyDocs/Forms/AllItems.aspx?id=%2FPolicyDocs%2FPolicy%20No%2E%20200%20-%20Personnel%2Epdf&parent=%2FPolicyDocs"
@@ -131,6 +150,3 @@
 <br />
 
 
-
-<!-- syldnos pet studio
-     509 315 7808 -->
