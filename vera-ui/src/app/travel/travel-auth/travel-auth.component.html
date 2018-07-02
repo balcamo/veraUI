@@ -3,30 +3,30 @@
   <br />
   <h2>Traveler Information</h2>
   <h6>
-    Name:
-    <input aria-required="true" type="text" class="form-control" [(ngModel)]="form.Name" />
+    <label class="control-label requiredField" for="name">Name<span class="asteriskField">*:</span></label>
+    <input type="text" id="name" class="form-control" [(ngModel)]="form.Name" required />
   </h6>
   <h6>
     Personal Phone:
-    <input required type="number" class="form-control" [(ngModel)]="form.Phone" />
+    <input type="number" class="form-control" [(ngModel)]="form.Phone" required />
   </h6>
   <h6>
     Email:
-    <input type="string" class="form-control" [(ngModel)]="form.Email" />
+    <input type="text" class="form-control" [(ngModel)]="form.Email" />
   </h6>
 
   <h2>Event Information</h2>
   <h6>
     Event Title:
-    <input required type="text" class="form-control" [(ngModel)]="form.EventTitle" />
+    <input type="text" class="form-control" [(ngModel)]="form.EventTitle" required />
   </h6>
   <h6>
     Event Location:
-    <input required type="text" class="form-control" [(ngModel)]="form.Location" />
+    <input type="text" class="form-control" [(ngModel)]="form.Location" required />
   </h6>
   <h6>
     Travel Start Date:
-    <input required type="Date" class="form-control" [(ngModel)]="form.TravelBegin" />
+    <input type="Date" class="form-control" [(ngModel)]="form.TravelBegin" required />
   </h6>
   <h6>
     Travel End Date:
@@ -52,29 +52,29 @@
 
   <h6>
     District Vehicle Number:
-    <input required type="number" class="form-control" [(ngModel)]="form.DistVehicleNum" />
+    <input type="number" class="form-control" [(ngModel)]="form.DistVehicleNum" />
   </h6>
 
   <h2>Estimated costs</h2>
   <h6>
     Registration Cost:
-    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.RegistrationCost" />
+    <input type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.RegistrationCost" required />
   </h6>
   <h6>
     Airfare Cost:
-    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Airfare" />
+    <input type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Airfare" required />
   </h6>
   <h6>
     Rental Car Cost:
-    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.RentalCar" />
+    <input type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.RentalCar" required />
   </h6>
   <h6>
     Fuel and Parking Cost:
-    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.FuelParking" />
+    <input type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.FuelParking" required/>
   </h6>
   <h6>
     Mileage:
-    <input required type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Mileage" />
+    <input type="number" (change)="checkTot()" class="form-control" [(ngModel)]="form.Mileage" required />
   </h6>
   <h6>
     Lodging:
@@ -94,8 +94,6 @@
   </h6>
 
   <h5><b>Total Estimate: ${{total}}</b></h5>
-
-
 
   <h6 class="form-check form-check-inline">
     Are you requesting a travel advance:
@@ -128,6 +126,11 @@
   </div>
   <br />
 
-  <button class="btn bg-success" (click)="submitForm()">Submit</button>
+  <input type="submit" (click)="submitForm()">
 </div>
 <br />
+
+
+
+<!-- syldnos pet studio
+     509 315 7808 -->
