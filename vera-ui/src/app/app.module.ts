@@ -43,4 +43,4 @@ import { TravelAuthComponent } from './travel/travel-auth/travel-auth.component'
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }
-platformBrowserDynamic().bootstrapModule(AppModule);
+//platformBrowserDynamic().bootstrapModule(AppModule);
