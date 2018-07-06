@@ -61,10 +61,8 @@ export class TravelAuthComponent implements OnInit {
 
   checkRequired() {
     var valid = true;
-    if (this.form.Name == null) {
-      this.nameBorder = "red";
-      valid = false;
-    } if (this.form.Phone == null) {
+    this.nameBorder = (this.form.Name == null ? "red" : "black");
+    if (this.form.Phone == null) {
       this.phoneBorder = "red";
       valid = false;
     } if (this.form.EventTitle == null) {
