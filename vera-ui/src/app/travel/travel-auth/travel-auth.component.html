@@ -43,7 +43,7 @@
   </h6>
 
 
-  <h6 class="form-check form-check-inline">
+  <h6 class="form-check form-check-inline" [ngStyle]="{'color':distVehColor}">
     Are you driving a district vehicle*:
   </h6>
   <div class="form-check form-check-inline">
@@ -100,7 +100,7 @@
     <label class="mr-sm-2 mb-0 sr-only" for="lodging">Per Diem*</label>
     <a href="https://www.gsa.gov/" target="_blank" placement="right" ngbTooltip="Find your city to find the Per Diem">Per Diem:*</a>
     <input [ngStyle]="{'border-color':perDiemBorder}" required type="number" (change)="checkTot()"
-           class="form-control" [(ngModel)]="form.PerDiem" />
+           class="form-control" [(ngModel)]="form.PerDiem"  placeholder="Food allowence for each day"/>
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0 sr-only" for="travelDays">Number of full days traveling:</label>
@@ -115,7 +115,7 @@
 
   <h5><b>Total Estimate: ${{total}}</b></h5>
 
-  <h6 class="form-check form-check-inline">
+  <h6 class="form-check form-check-inline" [ngStyle]="{'color':advanceColor}">
     Are you requesting a travel advance*:
   </h6>
   <div class="form-check form-check-inline">
@@ -129,7 +129,7 @@
     <label class="form-check-label" for="inlineRadio4">No</label>
   </div>
   <br />
-  <h6 class="form-check form-check-inline">
+  <h6 class="form-check form-check-inline" [ngStyle]="{'color':policyColor}">
     Have you read and do you understand the 
     <a href="https://verawaterandpower.sharepoint.com/PolicyDocs/Forms/AllItems.aspx?id=%2FPolicyDocs%2FPolicy%20No%2E%20200%20-%20Personnel%2Epdf&parent=%2FPolicyDocs"
             target="_blank"> District Travel Policy</a>*:
