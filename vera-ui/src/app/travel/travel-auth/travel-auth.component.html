@@ -12,7 +12,7 @@
   <h6>
     <label class="mr-sm-2 mb-0 sr-only" for="phone">Personal Phone Number</label>
     <input [ngStyle]="{'border-color':phoneBorder}" type="tel" id="phone" class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.Phone"
-           placeholder="Personal Phone Number*" required />
+           placeholder="Best Phone Number While Traveling*" required />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0 sr-only" for="email">Email</label>
@@ -34,12 +34,12 @@
            placeholder="Event Location*" [(ngModel)]="form.Location" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0 " for="startDate">Travel Start Date*</label>
+    <label class="mr-sm-2 mb-0 " for="startDate">Date Leaving*</label>
     <input [ngStyle]="{'border-color':travelStartBorder}" type="Date" id="startDate" class="form-control mr-sm-2 mb-2 mb-sm-0"
             [(ngModel)]="form.TravelBegin" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0 " for="endDate">Travel End Date*</label>
+    <label class="mr-sm-2 mb-0 " for="endDate">Date Returning*</label>
     <input [ngStyle]="{'border-color':travelEndBorder}" type="Date" id="endDate" class="form-control mr-sm-2 mb-2 mb-sm-0"
            [(ngModel)]="form.TravelEnd" required/>
   </h6>
@@ -87,7 +87,7 @@
   <h6>
     <label class="mr-sm-2 mb-0 sr-only" for="mileage">Mileage</label>
     <input [ngStyle]="{'border-color':mileageBorder}" type="number" id="mileage" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Mileage*" [(ngModel)]="form.Mileage" required />
+           placeholder="Estimated Miles to be Driven*" [(ngModel)]="form.Mileage" required />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0 sr-only" for="lodging">Lodging</label>
@@ -102,8 +102,10 @@
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0 sr-only" for="travelDays">Number of full days traveling:</label>
-    <input [ngStyle]="{'border-color':daysBorder}" type="number" id="travelDays" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Number of full days traveling*" [(ngModel)]="form.FullDays" required />
+    <input [ngStyle]="{'border-color':daysBorder}" type="number" id="travelDays"
+           class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Number of Full Days of the Trip*"
+           [(ngModel)]="form.FullDays"
+           ngbTooltip="Count the days you will be gone. Don't include first or last day. i.e. If you are traveling Mon-Wed that's 1 full day" required />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0 sr-only" for="misc">Miscellaneous:</label>
@@ -130,8 +132,9 @@
   <br />
   <h6 class="form-check form-check-inline" [ngStyle]="{'color':policyColor}">
     Have you read and do you understand the 
-    <a href="https://verawaterandpower.sharepoint.com/PolicyDocs/Forms/AllItems.aspx?id=%2FPolicyDocs%2FPolicy%20No%2E%20200%20-%20Personnel%2Epdf&parent=%2FPolicyDocs"
-            target="_blank"> District Travel Policy</a>*:
+    <a ngbTooltip="Travel Policy starts on page 18"
+       href="https://verawaterandpower.sharepoint.com/PolicyDocs/Forms/AllItems.aspx?id=%2FPolicyDocs%2FPolicy%20No%2E%20200%20-%20Personnel%2Epdf&parent=%2FPolicyDocs"
+       target="_blank"> District Travel Policy</a>*:
   </h6>
   <div class="form-check form-check-inline">
     <input class="form-check-input" type="radio" name="Policy"

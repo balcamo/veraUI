@@ -7,12 +7,17 @@ import { TravelAuthComponent } from './travel/travel-auth/travel-auth.component'
 const routes: Routes = [
   {
     path: 'travel',
-    component: TravelComponent
+    component: TravelComponent,
   },
   {
     path: '',
     component: HomeComponent
   },
+  {
+    path: '**',
+    component: HomeComponent,
+    redirectTo:''
+  }
 ];
 
 @NgModule({
