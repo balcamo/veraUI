@@ -2,6 +2,7 @@
 <div class="form-control wrapper">
   <h1>Traveler Authorization Form</h1>
 
+
   <h2>Traveler Information</h2>
   <h6>
     <label class="mr-sm-2 mb-0 sr-only" for="name">Name</label>
@@ -19,6 +20,7 @@
     <input type="email" id="email" class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.Email"
            placeholder="Email"/>
   </h6>
+
 
   <h2>Event Information</h2>
   <h6>
@@ -41,8 +43,6 @@
     <input [ngStyle]="{'border-color':travelEndBorder}" type="Date" id="endDate" class="form-control mr-sm-2 mb-2 mb-sm-0"
            [(ngModel)]="form.TravelEnd" required/>
   </h6>
-
-
   <h6 class="form-check form-check-inline" [ngStyle]="{'color':distVehColor}">
     Are you driving a district vehicle*:
   </h6>
@@ -56,14 +56,12 @@
            id="inlineRadio2" value="false" [(ngModel)]="form.DistVehicle">
     <label class="form-check-label" for="inlineRadio2">No</label>
   </div>
-
-
-
   <h6>
     <label class="mr-sm-2 mb-0 sr-only" for="vehicle">District Vehicle Number</label>
     <input type="number" id="vehicle" class="form-control mr-sm-2 mb-2 mb-sm-0"
            placeholder="District Vehicle Number" [(ngModel)]="form.DistVehicleNum" />
   </h6>
+
 
   <h2>Estimated costs</h2>
   <h6>
@@ -113,7 +111,8 @@
            placeholder="Miscellaneous*" [(ngModel)]="form.Misc" required />
   </h6>
 
-  <h5><b>Total Estimate: ${{total}}</b></h5>
+  <h6><b>Total Estimate: ${{total}}</b></h6>
+  <br />
 
   <h6 class="form-check form-check-inline" [ngStyle]="{'color':advanceColor}">
     Are you requesting a travel advance*:

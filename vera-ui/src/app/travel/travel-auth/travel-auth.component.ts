@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthForm } from '../../classes/travel-auth-form';
-import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
+import { Headers, Http, URLSearchParams, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 
 
@@ -40,20 +40,20 @@ export class TravelAuthComponent implements OnInit {
   checkTot() {
     this.total = 0;
     this.total = this.form.RegistrationCost + this.form.Airfare + this.form.RentalCar +
-      this.form.FuelParking + this.form.Mileage * 0.545 + this.form.Lodging + this.form.PerDiem * .75 * 2 +
-      this.form.PerDiem * this.form.FullDays + this.form.Misc;
+      this.form.FuelParking + this.form.Mileage * 0.545 + this.form.Lodging +
+      this.form.PerDiem * .75 * 2 + this.form.PerDiem * this.form.FullDays + this.form.Misc;
     this.form.total = this.total;
   }
 
   submitForm() {
-    console.log("submitted");
+    console.log("submitting form");
     console.log(this.form);
 
+   
     if (this.checkRequired()) {
-      //this.http.get('bigfoot.verawp.local/api/API')
-      //.subscribe((data) => alert(data));
+      this.http.get('http://bigfoot.verawp.local/api/API')
+        .subscribe((data) => alert(data.text()));
       this.setFormDefaults();
-      this.nameBorder, this.phoneBorder = "black";
     } else {
       alert("Please fill in the required fields");
     }
@@ -117,5 +117,6 @@ export class TravelAuthComponent implements OnInit {
     this.form.total = null;
     this.form.Advance = null;
     this.form.Policy = null;
+    this.total = 0; 
   }
 }
