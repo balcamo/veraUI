@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./travel-auth.component.scss']
 })
 export class TravelAuthComponent implements OnInit {
+  /** variables needed to change colors and fill in the form **/
   form = new AuthForm();
   total=0;
   http: Http;
@@ -31,25 +32,33 @@ export class TravelAuthComponent implements OnInit {
   advanceColor = "black";
   distVehColor = "black";
   policyColor = "black";
+
+  // set up HTTP var
   constructor(http: Http) {
     this.http = http;
   }
 
   ngOnInit() {
   }
+
+  // calculate the estimated total
   checkTot() {
     this.total = 0;
+    var mileage = this.form.Mileage * 0.545;
+    var foodTravel = this.form.PerDiem * .75 * 2;
+    var foodFull = this.form.PerDiem * this.form.FullDays
     this.total = this.form.RegistrationCost + this.form.Airfare + this.form.RentalCar +
-      this.form.FuelParking + this.form.Mileage * 0.545 + this.form.Lodging +
-      this.form.PerDiem * .75 * 2 + this.form.PerDiem * this.form.FullDays + this.form.Misc;
+      this.form.FuelParking + mileage + this.form.Lodging +
+      foodTravel + foodFull + this.form.Misc;
     this.form.total = this.total;
   }
 
+  // function to contact API and submit the form
   submitForm() {
     console.log("submitting form");
     console.log(this.form);
-
-   
+    // this will check if all required fields have been 
+    //   filled in before submitting the form to the API
     if (this.checkRequired()) {
       this.http.get('http://bigfoot.verawp.local/api/API')
         .subscribe((data) => alert(data.text()));
@@ -60,6 +69,11 @@ export class TravelAuthComponent implements OnInit {
     
   }
 
+  /**
+   * this function will check if all required fields are
+   * filled in and toggle the border colors of the required
+   * fields
+   **/
   checkRequired() {
     var valid = true;
     if (this.form.Name == null || this.form.Phone == null || this.form.EventTitle == null
@@ -95,6 +109,10 @@ export class TravelAuthComponent implements OnInit {
     return valid;
 
   }
+
+  /**
+   * This function will reset the forms values
+   **/
   setFormDefaults() {
     this.form.Name = null;
     this.form.Phone = null;

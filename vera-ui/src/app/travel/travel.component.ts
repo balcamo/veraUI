@@ -12,7 +12,9 @@ export class TravelComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  /**
+   * This function will toggle the display of
+   * the travel authorization form*/
   displayAuth() {
     if (this.authDisplay == "none") {
       this.authDisplay = "block";

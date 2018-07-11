@@ -2,7 +2,7 @@
 <div class="form-control wrapper">
   <h1>Traveler Authorization Form</h1>
 
-
+  <!-- Traveler information -->
   <h2>Traveler Information</h2>
   <h6>
     <label class="mr-sm-2 mb-0 sr-only" for="name">Name</label>
@@ -21,7 +21,7 @@
            placeholder="Email"/>
   </h6>
 
-
+  <!-- Event information -->
   <h2>Event Information</h2>
   <h6>
     <label class="mr-sm-2 mb-0 sr-only" for="eventTitle">Event Title</label>
@@ -62,7 +62,7 @@
            placeholder="District Vehicle Number" [(ngModel)]="form.DistVehicleNum" />
   </h6>
 
-
+  <!-- Estimated Costs to be used in travel advance -->
   <h2>Estimated costs</h2>
   <h6>
     <label class="mr-sm-2 mb-0 sr-only" for="registration">Registration Cost</label>
@@ -104,7 +104,7 @@
     <label class="mr-sm-2 mb-0 sr-only" for="travelDays">Number of full days traveling:</label>
     <input [ngStyle]="{'border-color':daysBorder}" type="number" id="travelDays"
            class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Number of Full Days of the Trip*"
-           [(ngModel)]="form.FullDays"
+           [(ngModel)]="form.FullDays"  (change)="checkTot()"
            ngbTooltip="Count the days you will be gone. Don't include first or last day. i.e. If you are traveling Mon-Wed that's 1 full day" required />
   </h6>
   <h6>
@@ -115,7 +115,7 @@
 
   <h6><b>Total Estimate: ${{total}}</b></h6>
   <br />
-
+  <!-- yes no questions for policy and advance -->
   <h6 class="form-check form-check-inline" [ngStyle]="{'color':advanceColor}">
     Are you requesting a travel advance*:
   </h6>
