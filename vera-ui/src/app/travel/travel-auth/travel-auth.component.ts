@@ -32,7 +32,8 @@ export class TravelAuthComponent implements OnInit {
   advanceColor = "black";
   distVehColor = "black";
   policyColor = "black";
-
+  distVehDisplay = "none";
+  advaneDisplay = "none";
   // set up HTTP var
   constructor(http: Http) {
     this.http = http;
@@ -41,6 +42,7 @@ export class TravelAuthComponent implements OnInit {
 
   ngOnInit() {
   }
+
 
   // calculate the estimated total
   checkTot() {
@@ -134,6 +136,7 @@ export class TravelAuthComponent implements OnInit {
     this.form.FullDays = 0;
     this.form.Misc = 0;
     this.form.total = null;
+    this.form.Advance = null;
     this.form.Advance = null;
     this.form.Policy = null;
     this.total = 0; 

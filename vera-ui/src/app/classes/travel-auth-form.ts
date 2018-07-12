@@ -20,6 +20,7 @@ export class AuthForm {
   Misc: number;
   total: number;
   Advance: boolean;
+  AdvanceAmount: number;
   Policy: boolean;
 
 }

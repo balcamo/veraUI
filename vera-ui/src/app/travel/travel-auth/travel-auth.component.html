@@ -18,7 +18,7 @@
     <label class="mr-sm-2 mb-0" for="email">Email</label>
 
     <input type="email" id="email" class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.Email"
-           placeholder="Email"/>
+           placeholder="Email" />
   </h6>
 
   <!-- Event information -->
@@ -26,7 +26,7 @@
   <h6>
     <label class="mr-sm-2 mb-0" for="eventTitle">Event Title*</label>
     <input [ngStyle]="{'border-color':eventTitleBorder}" type="text" id="eventTitle" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           [(ngModel)]="form.EventTitle" placeholder="Event Title*" required/>
+           [(ngModel)]="form.EventTitle" placeholder="Event Title*" required />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0" for="eventLocation">Event Location*</label>
@@ -36,39 +36,39 @@
   <h6>
     <label class="mr-sm-2 mb-0 " for="startDate">Date Leaving*</label>
     <input [ngStyle]="{'border-color':travelStartBorder}" type="Date" id="startDate" class="form-control mr-sm-2 mb-2 mb-sm-0"
-            [(ngModel)]="form.TravelBegin" required />
+           [(ngModel)]="form.TravelBegin" required />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0 " for="endDate">Date Returning*</label>
     <input [ngStyle]="{'border-color':travelEndBorder}" type="Date" id="endDate" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           [(ngModel)]="form.TravelEnd" required/>
+           [(ngModel)]="form.TravelEnd" required />
   </h6>
   <h6 class="form-check form-check-inline" [ngStyle]="{'color':distVehColor}">
     Are you driving a district vehicle*:
   </h6>
   <div class="form-check form-check-inline">
-    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+    <input class="form-check-input" type="radio" name="inlineRadioOptions" (click)="distVehDisplay = 'block'"
            id="inlineRadio1" value="true" [(ngModel)]="form.DistVehicle">
     <label class="form-check-label" for="inlineRadio1">Yes</label>
   </div>
   <div class="form-check form-check-inline">
-    <input class="form-check-input" type="radio" name="inlineRadioOptions"
+    <input class="form-check-input" type="radio" name="inlineRadioOptions" (click)="distVehDisplay = 'none'"
            id="inlineRadio2" value="false" [(ngModel)]="form.DistVehicle">
     <label class="form-check-label" for="inlineRadio2">No</label>
   </div>
-  <h6>
+  <div [ngStyle]="{'display':distVehDisplay}">
     <label class="mr-sm-2 mb-0 sr-only" for="vehicle">District Vehicle Number</label>
     <input type="number" id="vehicle" class="form-control mr-sm-2 mb-2 mb-sm-0"
            placeholder="District Vehicle Number" [(ngModel)]="form.DistVehicleNum" />
-  </h6>
+  </div>
 
   <!-- Estimated Costs to be used in travel advance -->
   <h2>Estimated Costs</h2>
   <h6>
     <label class="mr-sm-2 mb-0" for="registration">Registration Cost*</label>
     <input [ngStyle]="{'border-color':registrationBorder}" type="number" id="registration"
-            ngbTooltip="Registration Cost" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
-            placeholder="Registration Cost*" [(ngModel)]="form.RegistrationCost" required />
+           ngbTooltip="Registration Cost" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           placeholder="Registration Cost*" [(ngModel)]="form.RegistrationCost" required />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0" for="airfare">Airfare Cost*</label>
@@ -86,7 +86,7 @@
     <label class="mr-sm-2 mb-0" for="fuel">Fuel and Parking Cost*</label>
     <input [ngStyle]="{'border-color':fuelBorder}" type="number" id="fuel"
            ngbTooltip="Fuel and Parking Cost" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Fuel and Parking Cost*" [(ngModel)]="form.FuelParking" required/>
+           placeholder="Fuel and Parking Cost*" [(ngModel)]="form.FuelParking" required />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0" for="mileage">Estimated Miles to be Driven*</label>
@@ -99,20 +99,20 @@
     <label class="mr-sm-2 mb-0" for="lodging">Lodging*</label>
     <input [ngStyle]="{'border-color':lodgingBorder}" type="number" id="lodging"
            ngbTooltip="Cost of Lodging" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Lodging*" [(ngModel)]="form.Lodging" required/>
+           placeholder="Lodging*" [(ngModel)]="form.Lodging" required />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0 sr-only" for="lodging">Per Diem*</label>
     <a href="https://www.gsa.gov/" target="_blank" placement="right"
        ngbTooltip="Find your city to find the Per Diem">Per Diem:*</a>
     <input [ngStyle]="{'border-color':perDiemBorder}" required type="number" (change)="checkTot()"
-           class="form-control" [(ngModel)]="form.PerDiem"  placeholder="Food allowence for each day"/>
+           class="form-control" [(ngModel)]="form.PerDiem" placeholder="Food allowence for each day" />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0" for="travelDays">Number of full days traveling*:</label>
     <input [ngStyle]="{'border-color':daysBorder}" type="number" id="travelDays"
            class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Number of Full Days of the Trip*"
-           [(ngModel)]="form.FullDays"  (change)="checkTot()"
+           [(ngModel)]="form.FullDays" (change)="checkTot()"
            ngbTooltip="Count the days you will be gone. Don't include first or last day. i.e. If you are traveling Mon-Wed that's 1 full day" required />
   </h6>
   <h6>
@@ -129,21 +129,27 @@
     Are you requesting a travel advance*:
   </h6>
   <div class="form-check form-check-inline">
-    <input class="form-check-input" type="radio" name="Advance"
+    <input class="form-check-input" type="radio" name="Advance" (click)="advaneDisplay='block'"
            id="inlineRadio3" value="true" [(ngModel)]="form.Advance">
     <label class="form-check-label" for="inlineRadio3">Yes</label>
   </div>
   <div class="form-check form-check-inline">
-    <input class="form-check-input" type="radio" name="Advance"
+    <input class="form-check-input" type="radio" name="Advance" (click)="advaneDisplay='none'"
            id="inlineRadio4" value="false" [(ngModel)]="form.Advance">
     <label class="form-check-label" for="inlineRadio4">No</label>
   </div>
+  <div [ngStyle]="{'display':advaneDisplay}">
+    <label class="mr-sm-2 mb-0 sr-only" for="advance">District Vehicle Number</label>
+    <input type="number" id="advance" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           placeholder="Amount for Advance" [(ngModel)]="form.AdvanceAmount" />
+  </div>
   <br />
+
   <h6 class="form-check form-check-inline" [ngStyle]="{'color':policyColor}">
-    Have you read and do you understand the 
+    Have you read and do you understand the
     <a ngbTooltip="Travel Policy starts on page 18"
        href="https://verawaterandpower.sharepoint.com/PolicyDocs/Forms/AllItems.aspx?id=%2FPolicyDocs%2FPolicy%20No%2E%20200%20-%20Personnel%2Epdf&parent=%2FPolicyDocs"
-       target="_blank"> District Travel Policy</a>*:
+       target="_blank">District Travel Policy</a>*:
   </h6>
   <div class="form-check form-check-inline">
     <input class="form-check-input" type="radio" name="Policy"
