@@ -36,6 +36,7 @@ export class TravelAuthComponent implements OnInit {
   // set up HTTP var
   constructor(http: Http) {
     this.http = http;
+    this.setFormDefaults();
   }
 
   ngOnInit() {
