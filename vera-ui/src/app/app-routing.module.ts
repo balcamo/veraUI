@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AppComponent } from "./app.component";
 import { TravelComponent } from './travel/travel.component';
 import { HomeComponent } from './home/home.component';
 import { TravelAuthComponent } from './travel/travel-auth/travel-auth.component';
@@ -14,9 +15,14 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
+    path: '404',
+    component: HomeComponent,
+    // pathMatch:'full'
+  },
+  {
     path: '**',
     component: HomeComponent,
-    redirectTo:''
+    pathMatch:'full'
   }
 ];
 

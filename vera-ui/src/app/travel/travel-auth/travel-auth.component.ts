@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthForm } from '../../classes/travel-auth-form';
+import { Constants } from '../../classes/constants';
 import { Headers, Http, URLSearchParams, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 
@@ -12,6 +13,7 @@ import { Observable } from 'rxjs';
 export class TravelAuthComponent implements OnInit {
   /** variables needed to change colors and fill in the form **/
   form = new AuthForm();
+  consts = new Constants();
   total=0;
   http: Http;
   nameBorder = "black";
@@ -47,8 +49,8 @@ export class TravelAuthComponent implements OnInit {
   // calculate the estimated total
   checkTot() {
     this.total = 0;
-    var mileage = this.form.Mileage * 0.545;
-    var foodTravel = this.form.PerDiem * .75 * 2;
+    var mileage = this.form.Mileage * this.consts.mileageRate;
+    var foodTravel = this.form.PerDiem * this.consts.firstLastDayFood;
     var foodFull = this.form.PerDiem * this.form.FullDays
     this.total = this.form.RegistrationCost + this.form.Airfare + this.form.RentalCar +
       this.form.FuelParking + mileage + this.form.Lodging +
@@ -63,7 +65,7 @@ export class TravelAuthComponent implements OnInit {
     // this will check if all required fields have been 
     //   filled in before submitting the form to the API
     if (this.checkRequired()) {
-      this.http.get('http://bigfoot.verawp.local/api/API')
+      this.http.get(this.consts.url)
         .subscribe((data) => alert(data.text()));
       this.setFormDefaults();
     } else {
@@ -79,6 +81,7 @@ export class TravelAuthComponent implements OnInit {
    **/
   checkRequired() {
     var valid = true;
+
     if (this.form.Name == null || this.form.Phone == null || this.form.EventTitle == null
       || this.form.Location == null || this.form.TravelBegin == null || this.form.FullDays == null
       || this.form.Mileage == null || this.form.Lodging == null || this.form.PerDiem == null
