@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using veraAPI.Models;
+using veraAPI.HelperClasses;
 
 namespace veraAPI.Controllers
 {
@@ -12,7 +14,7 @@ namespace veraAPI.Controllers
         // GET: api/API
         public string Get()
         {
-            return "Subbmitted to the API";
+            return "Submitted to the API";
         }
 
         // GET: api/API/5
@@ -22,8 +24,10 @@ namespace veraAPI.Controllers
         }
 
         // POST: api/API
-        public void Post([FromBody]string value)
+        public string Post([FromBody]TravelAuthForm value)
         {
+            AuthHelp authHelper = new AuthHelp();
+            return authHelper.SubmitAuthForm(value);
         }
 
         // PUT: api/API/5

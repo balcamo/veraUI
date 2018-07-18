@@ -5,5 +5,5 @@ export class Constants {
   firstLastDayFood = .75 * 2;
 
   // Change url based on what server deploying to
-  url = 'http://bigfoot.verawp.local/api/API';
+  url = 'http://bigfoot.verawp.local/api/';
 }

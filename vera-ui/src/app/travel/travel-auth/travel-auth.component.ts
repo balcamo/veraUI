@@ -36,6 +36,7 @@ export class TravelAuthComponent implements OnInit {
   policyColor = "black";
   distVehDisplay = "none";
   advaneDisplay = "none";
+  sigColor = "black";
   // set up HTTP var
   constructor(http: Http) {
     this.http = http;
@@ -64,13 +65,22 @@ export class TravelAuthComponent implements OnInit {
     console.log(this.form);
     // this will check if all required fields have been 
     //   filled in before submitting the form to the API
-    if (this.checkRequired()) {
-      this.http.get(this.consts.url)
+    
+      let params: URLSearchParams = new URLSearchParams();
+      var pageHeaders = new Headers();
+      pageHeaders.append('Content-Type', 'application/json');
+      let options = new RequestOptions({
+        search: params,
+        headers: pageHeaders
+      });
+      var body = JSON.stringify(this.form);
+      this.http.post(this.consts.url + 'API', body, options)
         .subscribe((data) => alert(data.text()));
-      this.setFormDefaults();
+    this.setFormDefaults();
+    /*if (this.checkRequired()) {
     } else {
       alert("Please fill in the required fields");
-    }
+    }*/
     
   }
 
@@ -111,7 +121,7 @@ export class TravelAuthComponent implements OnInit {
     this.miscBorder = (this.form.Misc == null ? "red" : "black");
     this.advanceColor = (this.form.Advance == null ? "red" : "black");
     this.policyColor = (this.form.Policy == null ? "red" : "black");
-
+    this.sigColor = (this.form.SubmitterSig == null ? "red" : "black");
     return valid;
 
   }
@@ -142,6 +152,8 @@ export class TravelAuthComponent implements OnInit {
     this.form.Advance = null;
     this.form.Advance = null;
     this.form.Policy = null;
+    this.form.Preparer = false;
+    this.form.SubmitterSig = null;
     this.total = 0; 
   }
 }
