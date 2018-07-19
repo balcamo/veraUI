@@ -10,6 +10,10 @@ namespace veraAPI.HelperClasses
     {
         public string SubmitAuthForm(TravelAuthForm authForm)
         {
+            // TODO : impliment method to pass data to job service
+
+            // TODO : impliment method to call email service
+
             return "submitted!";
         }
     }
