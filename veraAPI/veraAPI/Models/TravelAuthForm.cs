@@ -7,6 +7,7 @@ namespace veraAPI.Models
 {
     public class TravelAuthForm
     {
+        public string Preparer;
         public string Name;
         public string Phone;
         public string Email;
@@ -29,7 +30,6 @@ namespace veraAPI.Models
         public string Advance;
         public string AdvanceAmount;
         public string Policy;
-        public string Preparer;
         public string SubmitterSig;
     }
 }

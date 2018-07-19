@@ -1,5 +1,6 @@
 
 export class AuthForm {
+  Preparer = false;
   Name: string;
   Phone: number;
   Email: string;
@@ -22,7 +23,6 @@ export class AuthForm {
   Advance: boolean;
   AdvanceAmount: number;
   Policy: boolean;
-  Preparer = false;
   SubmitterSig: string;
 
 }

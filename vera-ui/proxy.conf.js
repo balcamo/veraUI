@@ -9,7 +9,7 @@ const PROXY_CONFIG = [
     ],
     // TODO : change to server location/url
    // target: "http://localhost:64154",
-    target: "http://bigfoot.verawp.local",
+    target: "http://bigfoot.verawp.local/",
 
         secure: false
     }
