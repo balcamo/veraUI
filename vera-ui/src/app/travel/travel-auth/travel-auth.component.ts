@@ -65,24 +65,23 @@ export class TravelAuthComponent implements OnInit {
     console.log(this.form);
     // this will check if all required fields have been 
     //   filled in before submitting the form to the API
-    
-    let params: URLSearchParams = new URLSearchParams();
-    var pageHeaders = new Headers({
-      'Content-Type': 'application/json'
-       });
-    let options = new RequestOptions({
-      search: params,
-      headers: pageHeaders
-    });
-    var body = JSON.stringify(this.form);
-    console.log(this.consts.url+'API');
-      this.http.post(this.consts.url + 'API', body, options)
-        .subscribe((data) => alert(data.text()));
-    this.setFormDefaults();
-    /*if (this.checkRequired()) {
+    if (this.checkRequired()) {
+      let params: URLSearchParams = new URLSearchParams();
+      var pageHeaders = new Headers({
+        'Content-Type': 'application/json'
+         });
+      let options = new RequestOptions({
+        search: params,
+        headers: pageHeaders
+      });
+      var body = JSON.stringify(this.form);
+      console.log(this.consts.url+'API');
+        this.http.post(this.consts.url + 'API', body, options)
+          .subscribe((data) => alert(data.text()));
+      this.setFormDefaults();
     } else {
       alert("Please fill in the required fields");
-    }*/
+    }
     
   }
 

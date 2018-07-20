@@ -6,4 +6,5 @@ export class Constants {
 
   // Change url based on what server deploying to
   url = 'http://bigfoot.verawp.local/api/';
+  //url = 'http://localhost:64154/api/';
 }
