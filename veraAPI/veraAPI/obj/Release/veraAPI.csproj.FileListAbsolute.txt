@@ -96,3 +96,4 @@ C:\Users\balcamo\Documents\GitHub\veraUI\veraAPI\veraAPI\obj\Release\veraAPI.csp
 C:\Users\balcamo\Documents\GitHub\veraUI\veraAPI\veraAPI\obj\Release\veraAPI.csproj.CopyComplete
 C:\Users\balcamo\Documents\GitHub\veraUI\veraAPI\veraAPI\obj\Release\veraAPI.dll
 C:\Users\balcamo\Documents\GitHub\veraUI\veraAPI\veraAPI\obj\Release\veraAPI.pdb
+C:\Users\balcamo\Documents\GitHub\veraUI\veraAPI\veraAPI\obj\Release\veraAPI.csprojAssemblyReference.cache

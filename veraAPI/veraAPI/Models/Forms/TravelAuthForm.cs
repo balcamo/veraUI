@@ -33,34 +33,5 @@ namespace veraAPI.Models
         public string AdvanceAmount;
         public string Policy;
         public string SubmitterSig;
-
-      /*  public TravelAuthForm(object tempform)
-        {
-            Preparer = tempform.Preparer;
-            FirstName = tempform.FirstName;
-            LastName = tempform.LastName;
-            Phone = tempform.Phone;
-            Email = tempform.Email;
-            EventTitle = tempform.EventTitle;
-            Location = tempform.Location;
-            TravelBegin = tempform.TravelBegin;
-            TravelEnd = tempform.TravelEnd;
-            DistVehicle = tempform.DistVehicle;
-            DistVehicleNum = tempform.DistVehicleNum;
-            RegistrationCost = tempform.RegistrationCost;
-            Airfare = tempform.Airfare;
-            RentalCar = tempform.RentalCar;
-            FuelParking = tempform.FuelParking;
-            Mileage = tempform.Mileage;
-            Lodging = tempform.Lodging;
-            PerDiem = tempform.PerDiem;
-            FullDays = tempform.FullDays;
-            Misc = tempform.Misc;
-            total = tempform.total;
-            Advance = tempform.Advance;
-            AdvanceAmount = tempform.AdvanceAmount;
-            Policy = tempform.Policy;
-            SubmitterSig = tempform.SubmitterSig;
-        }   */
     }
 }

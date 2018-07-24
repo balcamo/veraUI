@@ -76,8 +76,8 @@ export class TravelAuthComponent implements OnInit {
         headers: pageHeaders
       });
       var body = JSON.stringify(this.form);
-      console.log(this.consts.url+'API');
-        this.http.post(this.consts.url + 'API', body, options)
+      console.log(this.consts.url +'TravelAuth');
+      this.http.post(this.consts.url + 'TravelAuth', body, options)
           .subscribe((data) => alert(data.text()));
       this.setFormDefaults();
     } else {
