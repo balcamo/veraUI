@@ -189,7 +189,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="HelperClasses\AuthHelp.cs" />
+    <Compile Include="HelperClasses\FormHelp.cs" />
     <Compile Include="Models\TravelAuthForm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

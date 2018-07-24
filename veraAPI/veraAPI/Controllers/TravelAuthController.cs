@@ -12,8 +12,10 @@ using System.Threading.Tasks;
 
 namespace veraAPI.Controllers
 {
-    public class APIController : ApiController
+    public class TravelAuthController : ApiController
     {
+        FormHelp helper = new FormHelp();
+
         // GET: api/API
         public string Get()
         {
@@ -29,24 +31,27 @@ namespace veraAPI.Controllers
         // POST: api/API
         public string Post([FromBody]TravelAuthForm value)
         {
-            string result;
-            AuthHelp authHelper = new AuthHelp();
+            string result = string.Empty;
             try {
-                TravelAuthForm authForm = new TravelAuthForm(value);
-                result = "Submitted Successfully";
-
-
-                Task t = Task.Run(() =>
+                if (value.GetType() == typeof(TravelAuthForm))
                 {
-                    authHelper.SubmitAuthForm(authForm);
-                });
-                //Thread helpThread = new Thread(authHelper.SubmitAuthForm);
+                    //TravelAuthForm authForm = new TravelAuthForm(value);
+                    result = "Submitted Successfully";
 
-                //helpThread.Start(authForm);
+
+                    Task t = Task.Run(() =>
+                    {
+                        // change number to constant once file is made
+                        helper.SubmitForm(value, 1);
+                    });
+                    //Thread helpThread = new Thread(authHelper.SubmitAuthForm);
+
+                    //helpThread.Start(authForm);
+                }
             }
             catch(Exception e)
             {
-                result = "Submit Failed" + e;
+                result = "Submit Failed " + e;
             }
             return result;
         }

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using veraAPI.Models.Forms;
 
 namespace veraAPI.Models
 {
-    public class TravelAuthForm
+    public class TravelAuthForm : BaseForm
     {
         public string Preparer;
         public string FirstName;
@@ -33,7 +34,7 @@ namespace veraAPI.Models
         public string Policy;
         public string SubmitterSig;
 
-        public TravelAuthForm(TravelAuthForm tempform)
+      /*  public TravelAuthForm(object tempform)
         {
             Preparer = tempform.Preparer;
             FirstName = tempform.FirstName;
@@ -60,6 +61,6 @@ namespace veraAPI.Models
             AdvanceAmount = tempform.AdvanceAmount;
             Policy = tempform.Policy;
             SubmitterSig = tempform.SubmitterSig;
-        }   
+        }   */
     }
 }

@@ -92,7 +92,6 @@ C:\Users\balcamo\Documents\GitHub\veraUI\veraAPI\veraAPI\bin\Microsoft.AI.Depend
 C:\Users\balcamo\Documents\GitHub\veraUI\veraAPI\veraAPI\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\balcamo\Documents\GitHub\veraUI\veraAPI\veraAPI\bin\Microsoft.AI.Web.xml
 C:\Users\balcamo\Documents\GitHub\veraUI\veraAPI\veraAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\balcamo\Documents\GitHub\veraUI\veraAPI\veraAPI\obj\Release\veraAPI.csprojAssemblyReference.cache
 C:\Users\balcamo\Documents\GitHub\veraUI\veraAPI\veraAPI\obj\Release\veraAPI.csproj.CoreCompileInputs.cache
 C:\Users\balcamo\Documents\GitHub\veraUI\veraAPI\veraAPI\obj\Release\veraAPI.csproj.CopyComplete
 C:\Users\balcamo\Documents\GitHub\veraUI\veraAPI\veraAPI\obj\Release\veraAPI.dll
