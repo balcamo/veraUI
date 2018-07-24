@@ -16,7 +16,8 @@ export class TravelAuthComponent implements OnInit {
   consts = new Constants();
   total=0;
   http: Http;
-  nameBorder = "black";
+  firstNameBorder = "black";
+  lastNameBorder = "black";
   phoneBorder = "black";
   eventTitleBorder = "black";
   eventLocBorder = "black";
@@ -93,18 +94,19 @@ export class TravelAuthComponent implements OnInit {
   checkRequired() {
     var valid = true;
 
-    if (this.form.Name == null || this.form.Phone == null || this.form.EventTitle == null
+    if (this.form.FirstName == null || this.form.Phone == null || this.form.EventTitle == null
       || this.form.Location == null || this.form.TravelBegin == null || this.form.FullDays == null
       || this.form.Mileage == null || this.form.Lodging == null || this.form.PerDiem == null
       || this.form.RentalCar == null || this.form.FuelParking == null || this.form.Misc == null
       || this.form.TravelEnd == null || this.form.DistVehicle == null || this.form.Airfare == null
       || this.form.RegistrationCost == null || this.form.Advance == null || this.form.DistVehicle == null
-      || this.form.Policy == null
+      || this.form.Policy == null || this.form.LastName == null
       ) {
       valid = false;
     }
 
-    this.nameBorder = (this.form.Name == null ? "red" : "black");
+    this.firstNameBorder = (this.form.FirstName == null ? "red" : "black");
+    this.lastNameBorder = (this.form.LastName == null ? "red" : "black");
     this.phoneBorder = (this.form.Phone == null ? "red" : "black");
     this.eventTitleBorder = (this.form.EventTitle == null ? "red" : "black");
     this.eventLocBorder = (this.form.Location == null ? "red" : "black");
@@ -131,7 +133,8 @@ export class TravelAuthComponent implements OnInit {
    * This function will reset the forms values
    **/
   setFormDefaults() {
-    this.form.Name = null;
+    this.form.FirstName = null;
+    this.form.LastName = null;
     this.form.Phone = null;
     this.form.Email = null;
     this.form.EventTitle = null;

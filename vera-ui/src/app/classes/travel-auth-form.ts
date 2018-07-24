@@ -1,7 +1,8 @@
 
 export class AuthForm {
   Preparer = false;
-  Name: string;
+  FirstName: string;
+  LastName: string;
   Phone: number;
   Email: string;
   EventTitle: string;

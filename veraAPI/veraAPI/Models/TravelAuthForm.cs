@@ -8,7 +8,8 @@ namespace veraAPI.Models
     public class TravelAuthForm
     {
         public string Preparer;
-        public string Name;
+        public string FirstName;
+        public string LastName;
         public string Phone;
         public string Email;
         public string EventTitle;
@@ -35,7 +36,8 @@ namespace veraAPI.Models
         public TravelAuthForm(TravelAuthForm tempform)
         {
             Preparer = tempform.Preparer;
-            Name = tempform.Name;
+            FirstName = tempform.FirstName;
+            LastName = tempform.LastName;
             Phone = tempform.Phone;
             Email = tempform.Email;
             EventTitle = tempform.EventTitle;

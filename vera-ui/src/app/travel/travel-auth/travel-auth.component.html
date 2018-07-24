@@ -5,9 +5,14 @@
   <!-- Traveler information -->
   <h2>Traveler Information</h2>
   <h6>
-    <label class="mr-sm-2 mb-0" for="name">Name*</label>
-    <input [ngStyle]="{'border-color':nameBorder}" type="text" id="name" class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.Name"
-           placeholder="Name*" required />
+    <label class="mr-sm-2 mb-0" for="firstName">First Name*</label>
+    <input [ngStyle]="{'border-color':firstNameBorder}" type="text" id="firstName" class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.FirstName"
+           placeholder="First Name*" required />
+  </h6>
+  <h6>
+    <label class="mr-sm-2 mb-0" for="lastName">Last Name*</label>
+    <input [ngStyle]="{'border-color':lastNameBorder}" type="text" id="lastName" class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.LastName"
+           placeholder="Last Name*" required />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0" for="phone">Best Phone Number While Traveling*</label>
