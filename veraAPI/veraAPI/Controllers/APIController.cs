@@ -6,6 +6,9 @@ using System.Net.Http;
 using System.Web.Http;
 using veraAPI.Models;
 using veraAPI.HelperClasses;
+using System.Threading;
+using System.Threading.Tasks;
+
 
 namespace veraAPI.Controllers
 {
@@ -26,8 +29,26 @@ namespace veraAPI.Controllers
         // POST: api/API
         public string Post([FromBody]TravelAuthForm value)
         {
+            string result;
             AuthHelp authHelper = new AuthHelp();
-            return authHelper.SubmitAuthForm(value);
+            try {
+                TravelAuthForm authForm = new TravelAuthForm(value);
+                result = "Submitted Successfully";
+
+
+                Task t = Task.Run(() =>
+                {
+                    authHelper.SubmitAuthForm(authForm);
+                });
+                //Thread helpThread = new Thread(authHelper.SubmitAuthForm);
+
+                //helpThread.Start(authForm);
+            }
+            catch(Exception e)
+            {
+                result = "Submit Failed" + e;
+            }
+            return result;
         }
 
         // PUT: api/API/5
