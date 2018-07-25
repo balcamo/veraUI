@@ -9,16 +9,16 @@ namespace veraAPI.HelperClasses
 {
     public class FormHelp
     {
-        public UIDataHandler UIData = new UIDataHandler("Azure", "Valhalla");
+       // public UIDataHandler UIData = new UIDataHandler("Azure", "Valhalla");
         
         public void SubmitForm(BaseForm form, int templateID)
         {
-            UIData.FormData = FormData;
+            /*UIData.FormData = FormData;
             if (UIData.LoadJobTemplate(UIData.FormData.TemplateID))
             {
                 if (UIData.InsertFormData())
                     UIData.InsertJob();
-            }
+            }*/
             
             return;
         }
