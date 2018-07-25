@@ -9,7 +9,7 @@ namespace veraAPI.HelperClasses
 {
     public class FormHelp
     {
-        public UIDataHandler UIData = new UIDataHandler("Azure", "Valhalla");
+        public UIDataHandler UIData = new UIDataHandler("Valhalla", "Valhalla");
         
         public void SubmitForm(BaseForm FormData)
         {

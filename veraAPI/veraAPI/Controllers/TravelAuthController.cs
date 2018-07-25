@@ -16,6 +16,8 @@ namespace veraAPI.Controllers
     {
         FormHelp helper = new FormHelp();
 
+        public TravelAuthController() { }
+
         // GET: api/API
         public string Get()
         {
