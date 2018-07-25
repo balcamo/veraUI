@@ -1,13 +1,15 @@
-<!-- travel nevigation -->
-<div class="topbar">
-  <button class="btn bg-primary" (click)="displayAuth()">
-    Travel Authorization
-  </button>
-  <button class="btn bg-primary">Reservations</button>
-  <button class="btn bg-primary">Travel Recap</button>
-</div>
+<body (onload)="reloadOverwrite()">
+  <!-- travel nevigation -->
+  <div class="topbar">
+    <button class="btn bg-primary" (click)="displayAuth()">
+      Travel Authorization
+    </button>
+    <button class="btn bg-primary">Reservations</button>
+    <button class="btn bg-primary">Travel Recap</button>
+  </div>
 
-<!-- display of button selected from the nav -->
-<div [ngStyle]="{'display':authDisplay}">
-  <app-travel-auth></app-travel-auth>
-</div>
+  <!-- display of button selected from the nav -->
+  <div [ngStyle]="{'display':authDisplay}">
+    <app-travel-auth></app-travel-auth>
+  </div>
+</body>

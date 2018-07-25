@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-travel',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class TravelComponent implements OnInit {
 
   authDisplay = "none";
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
@@ -21,5 +22,9 @@ export class TravelComponent implements OnInit {
     } else {
       this.authDisplay = "none"
     }
+  }
+  reloadOverwrite() {
+    console.log("this should print on refresh");
+    this.router.navigate(['/'], { replaceUrl: true });
   }
 }
