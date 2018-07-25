@@ -1,12 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\vera-ui",
     "\\veraAPI",
     "\\veraAPI\\veraAPI",
-    "\\veraAPI\\veraAPI\\Models",
-    "\\veraAPI\\veraAPI\\Views"
+    "\\veraAPI\\veraAPI\\HelperClasses",
+    "\\veraAPI\\veraAPI\\Models"
   ],
-  "SelectedNode": "\\veraAPI\\veraAPI\\Web.Release.config",
+  "SelectedNode": "\\veraAPI\\veraAPI\\Models\\UIDataHandler.cs",
   "PreviewInSolutionExplorer": false
 }
