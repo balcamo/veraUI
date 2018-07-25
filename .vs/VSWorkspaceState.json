@@ -1,10 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\vera-ui",
     "\\veraAPI",
     "\\veraAPI\\veraAPI",
-    "\\veraAPI\\veraAPI\\Models"
+    "\\veraAPI\\veraAPI\\Models",
+    "\\veraAPI\\veraAPI\\Views"
   ],
-  "SelectedNode": "\\veraAPI\\veraAPI.sln",
+  "SelectedNode": "\\veraAPI\\veraAPI\\Web.Release.config",
   "PreviewInSolutionExplorer": false
 }
