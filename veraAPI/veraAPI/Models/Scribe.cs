@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace VeraWP.VeraUILibrary
+namespace veraAPI.Models
 {
     public class Scribe
     {
@@ -27,7 +28,7 @@ namespace VeraWP.VeraUILibrary
             this.logFileName = fileName;
             this.logFile = Path.Combine(this.logFilePath, this.logFileName);
         }
-        
+
         //Methods
         public void WriteLogEntry(string message)
         {

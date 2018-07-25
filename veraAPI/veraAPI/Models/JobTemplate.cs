@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VeraWP.VeraUILibrary
+namespace veraAPI.Models
 {
     public class JobTemplate
     {
+
         public int TemplateID { get; set; }
         public string TemplateName { get; set; }
         public string TableName { get; set; }
