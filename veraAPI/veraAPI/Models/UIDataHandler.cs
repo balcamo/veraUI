@@ -184,6 +184,7 @@ namespace veraAPI.Models
             Log.WriteLogEntry("Begin LoadJobTemplate...");
             bool result = false;
             string cmdString = string.Format(@"select * from {0}.dbo.job_template where template_id = @templateID", dbName);
+            Log.WriteLogEntry("SQL command string: " + cmdString);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
@@ -192,10 +193,11 @@ namespace veraAPI.Models
                     try
                     {
                         conn.Open();
-                        using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SingleRow))
+                        using (SqlDataReader rdr = cmd.ExecuteReader())
                         {
                             if (rdr.Read())
                             {
+                                Log.WriteLogEntry("Retrieved job template " + templateID);
                                 Template = new JobTemplate(templateID);
                                 Template.TemplateName = rdr["template_name"].ToString();
                                 Template.TableName = rdr["table_name"].ToString();
