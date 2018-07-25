@@ -1,2 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters />
+<parameters>
+  <parameter name="Springbrook-Web.config Connection String" description="Springbrook Connection String used in web.config by the application to access the database." defaultValue="Data Source=SQL.verawp.local;Initial Catalog=Springbrook0;Integrated Security=True" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\balcamo\\Documents\\GitHub\\veraUI\\veraAPI\\veraAPI\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='Springbrook']/@connectionString" />
+  </parameter>
+  <parameter name="Valhalla-Web.config Connection String" description="Valhalla Connection String used in web.config by the application to access the database." defaultValue="Data Source=veraz-sql.database.windows.net;Initial Catalog=Valhalla;Integrated Security=True;Connect Timeout=90;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\balcamo\\Documents\\GitHub\\veraUI\\veraAPI\\veraAPI\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='Valhalla']/@connectionString" />
+  </parameter>
+</parameters>

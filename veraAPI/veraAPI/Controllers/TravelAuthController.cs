@@ -32,6 +32,7 @@ namespace veraAPI.Controllers
         public string Post([FromBody]TravelAuthForm value)
         {
             string result = string.Empty;
+            value.TemplateID = TemplateIndex.InsertTravelAuth;
             try {
                 if (value.GetType() == typeof(TravelAuthForm))
                 {
@@ -42,7 +43,7 @@ namespace veraAPI.Controllers
                     Task t = Task.Run(() =>
                     {
                         // change number to constant once file is made
-                        helper.SubmitForm(value, 1);
+                        helper.SubmitForm(value);
                     });
                     //Thread helpThread = new Thread(authHelper.SubmitAuthForm);
 

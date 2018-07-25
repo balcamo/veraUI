@@ -190,8 +190,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HelperClasses\FormHelp.cs" />
+    <Compile Include="Models\JobHeader.cs" />
     <Compile Include="Models\Forms\BaseForm.cs" />
     <Compile Include="Models\Forms\TravelAuthForm.cs" />
+    <Compile Include="Models\JobTemplate.cs" />
+    <Compile Include="Models\Scribe.cs" />
+    <Compile Include="Models\SQLDataHandler.cs" />
+    <Compile Include="Models\TemplateIndex.cs" />
+    <Compile Include="Models\UIDataHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
