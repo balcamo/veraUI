@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
+    "\\veraAPI",
     "\\veraAPI\\veraAPI",
     "\\veraAPI\\veraAPI\\Models"
   ],
+  "SelectedNode": "\\veraAPI\\veraAPI.sln",
   "PreviewInSolutionExplorer": false
 }

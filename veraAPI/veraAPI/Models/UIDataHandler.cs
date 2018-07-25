@@ -25,7 +25,7 @@ namespace veraAPI.Models
         {
             this.dbServer = dbServer;
             this.dbName = dbName;
-            this.Log = new Scribe("%TEMP%", "UIDataHandler_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIDataHandler_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
             this.dataConnectionString = GetDataConnectionString();
         }
 
