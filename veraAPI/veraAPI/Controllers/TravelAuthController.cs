@@ -40,7 +40,7 @@ namespace veraAPI.Controllers
                 {
                     //TravelAuthForm authForm = new TravelAuthForm(value);
                     result = "Submitted Successfully";
-
+                    value.setNulls();
 
                     Task t = Task.Run(() =>
                     {
