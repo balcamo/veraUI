@@ -95,8 +95,7 @@ namespace veraAPI.Models
             switch (this.FormData.TemplateID)
             {
                 case 1:
-                    this.FormData.FormDataID = InsertTravelAuth();
-                    result = true;
+                    result = InsertTravelAuth();
                     break;
                 default:
                     result = false;
@@ -105,12 +104,12 @@ namespace veraAPI.Models
             return result;
         }
 
-        private int InsertTravelAuth()
+        private bool InsertTravelAuth()
         {
             //Returns the SQL generated travel_id from the travel table
             Log.WriteLogEntry("Starting InsertTravelAuth...");
             TravelAuthForm Travel = (TravelAuthForm)FormData;
-            int result = 0;
+            bool result = false;
             string tableName = Template.TableName;
             string cmdString = string.Format(@"insert into {0}.dbo.{1} (first_name, last_name, phone, email, event_description, event_location, depart_date, return_date, district_vehicle, registration_amt, airfare_amt, rental_amt, 
                                             fuel_parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, misc_amt, request_advance, advance_amt, travel_policy) output inserted.travel_id 
@@ -141,7 +140,9 @@ namespace veraAPI.Models
             }
             catch (Exception ex)
             {
+                result = false;
                 Log.WriteLogEntry("Form data conversion error: " + ex.Message);
+                return result;
             }
 
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
@@ -172,17 +173,18 @@ namespace veraAPI.Models
                     try
                     {
                         conn.Open();
-                        result = (int)cmd.ExecuteScalar();
+                        this.FormData.FormDataID = (int)cmd.ExecuteScalar();
+                        result = true;
                         Log.WriteLogEntry("Successful insert travel ID " + result);
                     }
                     catch (SqlException ex)
                     {
-                        result = -1;
+                        result = false;
                         Log.WriteLogEntry("SQL error " + ex.Message);
                     }
                     catch (Exception ex)
                     {
-                        result = -1;
+                        result = false;
                         Log.WriteLogEntry("General program error " + ex.Message);
                     }
                 }
