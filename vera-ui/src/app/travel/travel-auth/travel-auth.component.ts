@@ -142,7 +142,7 @@ export class TravelAuthComponent implements OnInit {
     this.form.TravelBegin = null;
     this.form.TravelEnd = null;
     this.form.DistVehicle = null;
-    this.form.DistVehicleNum = null;
+    this.form.DistVehicleNum = 0;
     this.form.RegistrationCost = 0;
     this.form.Airfare = 0;
     this.form.RentalCar = 0;
@@ -154,7 +154,7 @@ export class TravelAuthComponent implements OnInit {
     this.form.Misc = 0;
     this.form.total = null;
     this.form.Advance = null;
-    this.form.Advance = null;
+    this.form.AdvanceAmount = 0;
     this.form.Policy = null;
     this.form.Preparer = false;
     this.form.SubmitterSig = null;
