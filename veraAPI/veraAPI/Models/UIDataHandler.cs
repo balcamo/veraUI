@@ -116,21 +116,33 @@ namespace veraAPI.Models
                                             fuel_parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, misc_amt, request_advance, advance_amt, travel_policy) output inserted.travel_id 
                                             values (@firstName, @lastName, @phone, @email, @eventDescription, @eventLocation, @departDate, @returnDate, @districtVehicle, @registrationAmt, @airfareAmt, @rentalAmt, @fuelParkingAmt, @estimatedMiles, 
                                             @lodgingAmt, @perdiemAmt, @travelDays, @miscAmt, @requestAdvance, @advanceAmt, @travelPolicy)", dbName, tableName);
-            DateTime departDate = DateTime.Parse(Travel.TravelBegin);
-            DateTime returnDate = DateTime.Parse(Travel.TravelEnd);
-            bool districtVehicle = Travel.DistVehicle == "true" ? true : false;
-            decimal registrationAmt = decimal.Parse(Travel.RegistrationCost);
-            decimal airfareAmt = decimal.Parse(Travel.Airfare);
-            decimal rentalAmt = decimal.Parse(Travel.RentalCar);
-            decimal fuelParkingAmt = decimal.Parse(Travel.FuelParking);
-            int estimatedMiles = int.Parse(Travel.Mileage);
-            decimal lodgingAmt = decimal.Parse(Travel.Lodging);
-            decimal perdiemAmt = decimal.Parse(Travel.PerDiem);
-            int travelDays = int.Parse(Travel.FullDays);
-            decimal miscAmt = decimal.Parse(Travel.Misc);
-            bool requestAdvance = Travel.Advance == "true" ? true : false;
-            decimal advanceAmt = decimal.Parse(Travel.AdvanceAmount);
-            bool travelPolicy = Travel.Policy == "true" ? true : false;
+            DateTime departDate = DateTime.MinValue, returnDate = DateTime.MinValue;
+            bool districtVehicle = false, requestAdvance = false, travelPolicy = false;
+            decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelParkingAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0, advanceAmt = 0;
+            int estimatedMiles = 0, travelDays = 0;
+
+            try
+            {
+                departDate = DateTime.Parse(Travel.TravelBegin);
+                returnDate = DateTime.Parse(Travel.TravelEnd);
+                districtVehicle = Travel.DistVehicle == "true" ? true : false;
+                registrationAmt = decimal.Parse(Travel.RegistrationCost);
+                airfareAmt = decimal.Parse(Travel.Airfare);
+                rentalAmt = decimal.Parse(Travel.RentalCar);
+                fuelParkingAmt = decimal.Parse(Travel.FuelParking);
+                estimatedMiles = int.Parse(Travel.Mileage);
+                lodgingAmt = decimal.Parse(Travel.Lodging);
+                perdiemAmt = decimal.Parse(Travel.PerDiem);
+                travelDays = int.Parse(Travel.FullDays);
+                miscAmt = decimal.Parse(Travel.Misc);
+                requestAdvance = Travel.Advance == "true" ? true : false;
+                advanceAmt = decimal.Parse(Travel.AdvanceAmount);
+                travelPolicy = Travel.Policy == "true" ? true : false;
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLogEntry("Form data conversion error: " + ex.Message);
+            }
 
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
