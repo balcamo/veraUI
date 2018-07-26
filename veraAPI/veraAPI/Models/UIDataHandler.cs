@@ -112,13 +112,14 @@ namespace veraAPI.Models
             bool result = false;
             string tableName = Template.TableName;
             string cmdString = string.Format(@"insert into {0}.dbo.{1} (first_name, last_name, phone, email, event_description, event_location, depart_date, return_date, district_vehicle, registration_amt, airfare_amt, rental_amt, 
-                                            fuel_parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, misc_amt, request_advance, advance_amt, travel_policy) output inserted.travel_id 
+                                            fuel_parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, misc_amt, request_advance, advance_amt, travel_policy, submit_date) output inserted.travel_id 
                                             values (@firstName, @lastName, @phone, @email, @eventDescription, @eventLocation, @departDate, @returnDate, @districtVehicle, @registrationAmt, @airfareAmt, @rentalAmt, @fuelParkingAmt, @estimatedMiles, 
-                                            @lodgingAmt, @perdiemAmt, @travelDays, @miscAmt, @requestAdvance, @advanceAmt, @travelPolicy)", dbName, tableName);
+                                            @lodgingAmt, @perdiemAmt, @travelDays, @miscAmt, @requestAdvance, @advanceAmt, @travelPolicy, GETDATE())", dbName, tableName);
             DateTime departDate = DateTime.MinValue, returnDate = DateTime.MinValue;
             bool districtVehicle = false, requestAdvance = false, travelPolicy = false;
             decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelParkingAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0, advanceAmt = 0;
             int estimatedMiles = 0, travelDays = 0;
+            string districtVehicleNum = string.Empty;
 
             try
             {
@@ -129,6 +130,8 @@ namespace veraAPI.Models
                 returnDate = DateTime.Parse(Travel.TravelEnd);
                 Log.WriteLogEntry("DistrictVehicle: " + Travel.DistVehicle);
                 districtVehicle = Travel.DistVehicle == "true" ? true : false;
+                Log.WriteLogEntry("DistrictVehicleNum: " + Travel.DistVehicleNum);
+                districtVehicleNum = Travel.DistVehicleNum.ToString();
                 Log.WriteLogEntry("RegistrationCost: " + Travel.RegistrationCost);
                 registrationAmt = decimal.Parse(Travel.RegistrationCost);
                 Log.WriteLogEntry("Airfare: " + Travel.Airfare);
@@ -174,6 +177,7 @@ namespace veraAPI.Models
                     cmd.Parameters.AddWithValue("@departDate", departDate);
                     cmd.Parameters.AddWithValue("@returnDate", returnDate);
                     cmd.Parameters.AddWithValue("@districtVehicle", districtVehicle);
+                    cmd.Parameters.AddWithValue("@districtVehicleNumber", districtVehicleNum);
                     cmd.Parameters.AddWithValue("@registrationAmt", registrationAmt);
                     cmd.Parameters.AddWithValue("@airfareAmt", airfareAmt);
                     cmd.Parameters.AddWithValue("@rentalAmt", rentalAmt);
