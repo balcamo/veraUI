@@ -122,20 +122,36 @@ namespace veraAPI.Models
 
             try
             {
+                Log.WriteLogEntry("Try conversion of data form fields to correct types.");
+                Log.WriteLogEntry("TravelBegin: " + Travel.TravelBegin);
                 departDate = DateTime.Parse(Travel.TravelBegin);
+                Log.WriteLogEntry("TravelEnd: " + Travel.TravelEnd);
                 returnDate = DateTime.Parse(Travel.TravelEnd);
+                Log.WriteLogEntry("DistrictVehicle: " + Travel.DistVehicle);
                 districtVehicle = Travel.DistVehicle == "true" ? true : false;
+                Log.WriteLogEntry("RegistrationCost: " + Travel.RegistrationCost);
                 registrationAmt = decimal.Parse(Travel.RegistrationCost);
+                Log.WriteLogEntry("Airfare: " + Travel.Airfare);
                 airfareAmt = decimal.Parse(Travel.Airfare);
+                Log.WriteLogEntry("RentalCar: " + Travel.RentalCar);
                 rentalAmt = decimal.Parse(Travel.RentalCar);
+                Log.WriteLogEntry("FuelParking: " + Travel.FuelParking);
                 fuelParkingAmt = decimal.Parse(Travel.FuelParking);
+                Log.WriteLogEntry("Mileage: " + Travel.Mileage);
                 estimatedMiles = int.Parse(Travel.Mileage);
+                Log.WriteLogEntry("Lodging: " + Travel.Lodging);
                 lodgingAmt = decimal.Parse(Travel.Lodging);
+                Log.WriteLogEntry("PerDiem: " + Travel.PerDiem);
                 perdiemAmt = decimal.Parse(Travel.PerDiem);
+                Log.WriteLogEntry("TravelDays: " + Travel.FullDays);
                 travelDays = int.Parse(Travel.FullDays);
+                Log.WriteLogEntry("Misc: " + Travel.Misc);
                 miscAmt = decimal.Parse(Travel.Misc);
+                Log.WriteLogEntry("Advance: " + Travel.Advance);
                 requestAdvance = Travel.Advance == "true" ? true : false;
+                Log.WriteLogEntry("AdvanceAmount: " + Travel.AdvanceAmount);
                 advanceAmt = decimal.Parse(Travel.AdvanceAmount);
+                Log.WriteLogEntry("Policy: " + Travel.Policy);
                 travelPolicy = Travel.Policy == "true" ? true : false;
             }
             catch (Exception ex)
