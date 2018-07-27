@@ -338,7 +338,8 @@ namespace VeraAPI.Models
                             {
                                 TravelAuthForm Travel = new TravelAuthForm(dataID);
                                 Travel.FirstName = rdr["first_name"].ToString();
-                                Travel.LastName = rdr["last_name"].ToString();
+                                //Travel.LastName = rdr["last_name"].ToString();
+                                Travel.LastName = "Tester";
                                 Travel.Phone = rdr["phone"].ToString();
                                 Travel.Email = rdr["email"].ToString();
                                 Travel.EventTitle = rdr["event_description"].ToString();
