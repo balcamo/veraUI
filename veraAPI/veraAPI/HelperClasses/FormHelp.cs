@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using veraAPI.Models;
-using veraAPI.Models.Forms;
+using VeraAPI.Models;
+using VeraAPI.Models.Forms;
 
-namespace veraAPI.HelperClasses
+namespace VeraAPI.HelperClasses
 {
     public class FormHelp
     {

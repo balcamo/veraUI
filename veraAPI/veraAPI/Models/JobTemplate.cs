@@ -5,7 +5,7 @@ using System.Web;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace veraAPI.Models
+namespace VeraAPI.Models
 {
     public class JobTemplate
     {

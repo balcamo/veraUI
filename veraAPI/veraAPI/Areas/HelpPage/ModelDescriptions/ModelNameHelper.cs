@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace veraAPI.Areas.HelpPage.ModelDescriptions
+namespace VeraAPI.Areas.HelpPage.ModelDescriptions
 {
     internal static class ModelNameHelper
     {

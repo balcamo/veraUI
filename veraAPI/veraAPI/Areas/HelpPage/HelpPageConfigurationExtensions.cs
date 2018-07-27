@@ -11,10 +11,10 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
-using veraAPI.Areas.HelpPage.ModelDescriptions;
-using veraAPI.Areas.HelpPage.Models;
+using VeraAPI.Areas.HelpPage.ModelDescriptions;
+using VeraAPI.Areas.HelpPage.Models;
 
-namespace veraAPI.Areas.HelpPage
+namespace VeraAPI.Areas.HelpPage
 {
     public static class HelpPageConfigurationExtensions
     {

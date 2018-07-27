@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace veraAPI
+namespace VeraAPI
 {
     public class FilterConfig
     {

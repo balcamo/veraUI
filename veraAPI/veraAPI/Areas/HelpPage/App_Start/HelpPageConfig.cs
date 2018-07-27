@@ -16,7 +16,7 @@ using System.Web.Http;
 using System.Web.Http.OData;
 #endif
 
-namespace veraAPI.Areas.HelpPage
+namespace VeraAPI.Areas.HelpPage
 {
     /// <summary>
     /// Use this class to customize the Help Page.

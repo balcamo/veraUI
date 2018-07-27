@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace veraAPI.Areas.HelpPage.ModelDescriptions
+namespace VeraAPI.Areas.HelpPage.ModelDescriptions
 {
     public class ComplexTypeModelDescription : ModelDescription
     {
