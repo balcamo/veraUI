@@ -18,8 +18,10 @@ namespace veraAPI.Models
             FieldInfo[] BravoFields = BravoType.GetFields();
             if (AlphaType == BravoType)
             {
-                result = AlphaFields.Except(BravoFields).Any();
+                result = !AlphaFields.Except(BravoFields).Any();
             }
+            else
+                result = false;
             return result;
         }
     }

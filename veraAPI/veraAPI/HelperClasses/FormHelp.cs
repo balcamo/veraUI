@@ -25,6 +25,7 @@ namespace veraAPI.HelperClasses
                     {
                         Submitted = (TravelAuthForm)UIData.FormData;
                         UIData.LoadTravelAuth(Submitted.FormDataID);
+                        Log.WriteLogEntry("Submitted last name: " + Submitted.LastName + " Inserted last name: " + UIData.FormData);
                         FormValidator = new Validator();
                         if (FormValidator.CompareAlphaBravo(Submitted, UIData.FormData))
                             Log.WriteLogEntry("Submitted form matches inserted form!");
