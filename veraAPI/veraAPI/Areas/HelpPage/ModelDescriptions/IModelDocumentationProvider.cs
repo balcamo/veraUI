@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace veraAPI.Areas.HelpPage.ModelDescriptions
+namespace VeraAPI.Areas.HelpPage.ModelDescriptions
 {
     public interface IModelDocumentationProvider
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace veraAPI.Areas.HelpPage.ModelDescriptions
+namespace VeraAPI.Areas.HelpPage.ModelDescriptions
 {
     /// <summary>
     /// Describes a type model.

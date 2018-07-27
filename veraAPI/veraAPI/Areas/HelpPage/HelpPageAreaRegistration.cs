@@ -1,7 +1,7 @@
 using System.Web.Http;
 using System.Web.Mvc;
 
-namespace veraAPI.Areas.HelpPage
+namespace VeraAPI.Areas.HelpPage
 {
     public class HelpPageAreaRegistration : AreaRegistration
     {

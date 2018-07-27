@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace veraAPI.Models
+namespace VeraAPI.Models
 {
     public class Scribe
     {

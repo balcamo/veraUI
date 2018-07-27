@@ -1,4 +1,4 @@
-namespace veraAPI.Areas.HelpPage.ModelDescriptions
+namespace VeraAPI.Areas.HelpPage.ModelDescriptions
 {
     public class KeyValuePairModelDescription : ModelDescription
     {

@@ -4,13 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using veraAPI.Models;
-using veraAPI.HelperClasses;
+using VeraAPI.Models;
+using VeraAPI.HelperClasses;
 using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace veraAPI.Controllers
+namespace VeraAPI.Controllers
 {
     public class TravelAuthController : ApiController
     {
@@ -45,7 +45,6 @@ namespace veraAPI.Controllers
                     Task t = Task.Run(() =>
                     {
                         // change number to constant once file is made
-                        Task.Delay(10000).Wait();
                         helper.SubmitForm(value);
                         
                     });

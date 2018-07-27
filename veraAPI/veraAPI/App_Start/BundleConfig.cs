@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace veraAPI
+namespace VeraAPI
 {
     public class BundleConfig
     {

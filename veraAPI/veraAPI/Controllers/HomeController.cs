@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace veraAPI.Controllers
+namespace VeraAPI.Controllers
 {
     public class HomeController : Controller
     {

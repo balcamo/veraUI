@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace veraAPI.Models.Forms
+namespace VeraAPI.Models.Forms
 {
     public class BaseForm
     {

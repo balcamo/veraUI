@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
-using veraAPI.Models.Forms;
+using VeraAPI.Models.Forms;
 
 
-namespace veraAPI.Models
+namespace VeraAPI.Models
 {
     public class UIDataHandler : SQLDataHandler
     {

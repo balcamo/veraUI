@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http.Headers;
 using System.Web.Http.Description;
-using veraAPI.Areas.HelpPage.ModelDescriptions;
+using VeraAPI.Areas.HelpPage.ModelDescriptions;
 
-namespace veraAPI.Areas.HelpPage.Models
+namespace VeraAPI.Areas.HelpPage.Models
 {
     /// <summary>
     /// The model that represents an API displayed on the help page.

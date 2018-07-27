@@ -1,10 +1,10 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using veraAPI.Areas.HelpPage.ModelDescriptions;
-using veraAPI.Areas.HelpPage.Models;
+using VeraAPI.Areas.HelpPage.ModelDescriptions;
+using VeraAPI.Areas.HelpPage.Models;
 
-namespace veraAPI.Areas.HelpPage.Controllers
+namespace VeraAPI.Areas.HelpPage.Controllers
 {
     /// <summary>
     /// The controller that will handle requests for the help page.
