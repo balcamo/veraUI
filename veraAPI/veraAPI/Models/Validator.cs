@@ -18,7 +18,7 @@ namespace veraAPI.Models
             FieldInfo[] BravoFields = BravoType.GetFields();
             if (AlphaType == BravoType)
             {
-                result = AlphaFields.Intersect(BravoFields).Any();
+                result = AlphaFields.Except(BravoFields).Any();
             }
             return result;
         }
