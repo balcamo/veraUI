@@ -13,7 +13,7 @@ namespace veraAPI.Models
         public int TemplateID { get; set; }
         public int DataID { get; set; }
         public string JobDescription { get; set; }
-        public DateTime EntryTimestamp { get; set; }
+        public DateTime EntryDate { get; set; }
         public DateTime CompleteDate { get; set; }
         public int Duration { get; set; }
         public string TableName { get; set; }

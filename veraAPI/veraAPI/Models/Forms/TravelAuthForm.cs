@@ -34,6 +34,13 @@ namespace veraAPI.Models
         public string Policy;
         public string SubmitterSig;
 
+        public TravelAuthForm() { }
+
+        public TravelAuthForm(int formDataID)
+        {
+            this.FormDataID = formDataID;
+        }
+
         public void setNulls()
         {
             if (Preparer == null) { Preparer = string.Empty; }

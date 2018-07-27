@@ -231,7 +231,6 @@ namespace veraAPI.Models
                         {
                             if (rdr.Read())
                             {
-                                Log.WriteLogEntry("Retrieved job template " + templateID);
                                 Template = new JobTemplate(templateID);
                                 Template.TemplateName = rdr["template_name"].ToString();
                                 Template.TableName = rdr["table_name"].ToString();
@@ -239,6 +238,7 @@ namespace veraAPI.Models
                                 Template.JobPriority = (int)rdr["job_priority"];
                                 Template.JobWeight = (int)rdr["job_weight"];
                                 Template.JobType = rdr["job_type"].ToString();
+                                Log.WriteLogEntry("Retrieved job template " + templateID + " " + Template.TemplateName);
                                 result = true;
                             }
                         }
@@ -256,6 +256,130 @@ namespace veraAPI.Models
                 }
             }
             Log.WriteLogEntry("End LoadJobTemplate.");
+            return result;
+        }
+
+        public bool LoadJobHeader(int jobID)
+        {
+            Log.WriteLogEntry("Begin LoadJobHeader...");
+            bool result = false;
+            string cmdString = string.Format(@"select * from {0}.dbo.job_header where job_id = @jobID", dbName);
+            Log.WriteLogEntry("SQL command string: " + cmdString);
+            using (SqlConnection conn = new SqlConnection(dataConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(cmdString, conn))
+                {
+                    cmd.Parameters.AddWithValue("@jobID", jobID);
+                    try
+                    {
+                        conn.Open();
+                        using (SqlDataReader rdr = cmd.ExecuteReader())
+                        {
+                            if (rdr.Read())
+                            {
+                                Job = new JobHeader(jobID);
+                                Job.TemplateID = (int)rdr["template_id"];
+                                Job.DataID = (int)rdr["data_id"];
+                                Job.JobDescription = rdr["job_description"].ToString();
+                                var entryDate = rdr["entry_dt"];
+                                if (entryDate != DBNull.Value)
+                                    Job.EntryDate = DateTime.Parse(entryDate.ToString());
+                                var completeDate = rdr["complete_dt"];
+                                if (completeDate != DBNull.Value)
+                                    Job.CompleteDate = DateTime.Parse(completeDate.ToString());
+                                var duration = rdr["duration"];
+                                if (duration != DBNull.Value)
+                                    Job.Duration = (int)duration;
+                                var jobPriority = rdr["job_priority"];
+                                if (jobPriority != DBNull.Value)
+                                    Job.JobPriority = (int)jobPriority;
+                                var jobWeight = rdr["job_weight"];
+                                if (jobWeight != DBNull.Value)
+                                    Job.JobWeight = (int)jobWeight;
+                                Job.JobType = rdr["job_type"].ToString();
+                                Log.WriteLogEntry("Job header retrieved " + jobID + " " + Job.JobDescription);
+                                result = true;
+                            }
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        result = false;
+                        Log.WriteLogEntry("SQL error " + ex.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        result = false;
+                        Log.WriteLogEntry("General program error " + ex.Message);
+                    }
+                }
+            }
+            Log.WriteLogEntry("End LoadJobHeader.");
+            return result;
+        }
+
+        public bool LoadTravelAuth(int dataID)
+        {
+            Log.WriteLogEntry("Begin LoadTravelAuth...");
+            bool result = false;
+            string cmdString = string.Format(@"select * from {0}.dbo.travel where travel_id = @dataID", dbName);
+            Log.WriteLogEntry("SQL command string: " + cmdString);
+            using (SqlConnection conn = new SqlConnection(dataConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(cmdString, conn))
+                {
+                    cmd.Parameters.AddWithValue("@dataID", dataID);
+                    try
+                    {
+                        conn.Open();
+                        using (SqlDataReader rdr = cmd.ExecuteReader())
+                        {
+                            if (rdr.Read())
+                            {
+                                TravelAuthForm Travel = new TravelAuthForm(dataID);
+                                Travel.FirstName = rdr["first_name"].ToString();
+                                Travel.LastName = rdr["last_name"].ToString();
+                                Travel.Phone = rdr["phone"].ToString();
+                                Travel.Email = rdr["email"].ToString();
+                                Travel.EventTitle = rdr["event_description"].ToString();
+                                Travel.Location = rdr["event_location"].ToString();
+                                Travel.TravelBegin = rdr["depart_date"].ToString();
+                                Travel.TravelEnd = rdr["return_date"].ToString();
+                                Travel.DistVehicle = rdr["district_vehicle"].ToString();
+                                Travel.DistVehicleNum = rdr["district_vehicle_number"].ToString();
+                                Travel.RegistrationCost = rdr["registration_amt"].ToString();
+                                Travel.Airfare = rdr["airfare_amt"].ToString();
+                                Travel.RentalCar = rdr["rental_amt"].ToString();
+                                Travel.FuelParking = rdr["fuel_parking_amt"].ToString();
+                                Travel.Mileage = rdr["estimated_miles"].ToString();
+                                Travel.Lodging = rdr["lodging_amt"].ToString();
+                                Travel.PerDiem = rdr["perdiem_amt"].ToString();
+                                Travel.FullDays = rdr["travel_days"].ToString();
+                                Travel.Misc = rdr["misc_amt"].ToString();
+                                Travel.total = rdr["total_cost"].ToString();
+                                Travel.AdvanceAmount = rdr["advance_amt"].ToString();
+                                Travel.Advance = rdr["request_advance"].ToString();
+                                Travel.Policy = rdr["travel_policy"].ToString();
+                                Travel.Preparer = rdr["preparer_name"].ToString();
+                                Travel.SubmitterSig = rdr["submitter_approval"].ToString();
+                                Log.WriteLogEntry("Retrieved travel data " + dataID + " " + Travel.EventTitle);
+                                result = true;
+                            }
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        result = false;
+                        Log.WriteLogEntry("SQL error " + ex.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        result = false;
+                        Log.WriteLogEntry("General program error " + ex.Message);
+                    }
+                }
+            }
+            Log.WriteLogEntry("End LoadTravelAuth.");
             return result;
         }
     }
