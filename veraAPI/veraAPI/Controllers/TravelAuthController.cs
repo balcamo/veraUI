@@ -45,7 +45,9 @@ namespace veraAPI.Controllers
                     Task t = Task.Run(() =>
                     {
                         // change number to constant once file is made
+                        Task.Delay(10000).Wait();
                         helper.SubmitForm(value);
+                        
                     });
                     //Thread helpThread = new Thread(authHelper.SubmitAuthForm);
 
