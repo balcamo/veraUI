@@ -169,10 +169,13 @@ namespace VeraAPI.Models
                 return result;
             }
             // What does this block do?
+            //Define the SQL connection and construct SQL query parameters
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                 {
+                    //Construction of query parameters based on travel authorization form data
+                    //and converted data from above
                     cmd.Parameters.AddWithValue("@firstName", Travel.FirstName);
                     cmd.Parameters.AddWithValue("@lastName", Travel.LastName);
                     cmd.Parameters.AddWithValue("@phone", Travel.Phone);
@@ -197,6 +200,7 @@ namespace VeraAPI.Models
                     cmd.Parameters.AddWithValue("@travelPolicy", travelPolicy);
                     try
                     {
+                        //Try opening the SQL connection and executing the above constructed SQL query
                         conn.Open();
                         this.FormData.FormDataID = (int)cmd.ExecuteScalar();
                         result = true;
