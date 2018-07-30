@@ -100,6 +100,7 @@ namespace VeraAPI.Models
                     result = InsertTravelAuth();
                     break;
                 default:
+                    // is this redundent since we set it to false in the beginning?
                     result = false;
                     break;
             }
@@ -108,7 +109,7 @@ namespace VeraAPI.Models
 
         private bool InsertTravelAuth()
         {
-            //Returns the SQL generated travel_id from the travel table
+            // Returns the SQL generated travel_id from the travel table
             Log.WriteLogEntry("Starting InsertTravelAuth...");
             TravelAuthForm Travel = (TravelAuthForm)FormData;
             bool result = false;
@@ -168,14 +169,14 @@ namespace VeraAPI.Models
                 Log.WriteLogEntry("Form data conversion error: " + ex.Message);
                 return result;
             }
-            // What does this block do?
-            //Define the SQL connection and construct SQL query parameters
+
+            // Define the SQL connection and construct SQL query parameters
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                 {
-                    //Construction of query parameters based on travel authorization form data
-                    //and converted data from above
+                    // Construction of query parameters based on travel authorization form data
+                    //      and converted data from above
                     cmd.Parameters.AddWithValue("@firstName", Travel.FirstName);
                     cmd.Parameters.AddWithValue("@lastName", Travel.LastName);
                     cmd.Parameters.AddWithValue("@phone", Travel.Phone);
@@ -200,7 +201,7 @@ namespace VeraAPI.Models
                     cmd.Parameters.AddWithValue("@travelPolicy", travelPolicy);
                     try
                     {
-                        //Try opening the SQL connection and executing the above constructed SQL query
+                        // Try opening the SQL connection and executing the above constructed SQL query
                         conn.Open();
                         this.FormData.FormDataID = (int)cmd.ExecuteScalar();
                         result = true;
