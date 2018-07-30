@@ -100,7 +100,7 @@ namespace VeraAPI.Models
                     result = InsertTravelAuth();
                     break;
                 default:
-                    // is this redundent since we set it to false in the beginning?
+                    // Redundnant setting result to false as safeguard for default case
                     result = false;
                     break;
             }
