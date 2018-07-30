@@ -14,7 +14,7 @@ namespace VeraAPI.HelperClasses
         
         public void SubmitForm(BaseForm FormData)
         {
-            TravelAuthForm Submitted;
+            BaseForm SubmittedForm = FormData;
             Validator FormValidator;
             UIData.FormData = FormData;
             if (UIData.LoadJobTemplate(UIData.FormData.TemplateID))
@@ -23,11 +23,8 @@ namespace VeraAPI.HelperClasses
                 {
                     if (UIData.InsertJob())
                     {
-                        Submitted = (TravelAuthForm)UIData.FormData;
-                        UIData.LoadTravelAuth(Submitted.FormDataID);
-                        Log.WriteLogEntry("Submitted last name: " + Submitted.LastName + " Inserted last name: " + UIData.FormData);
-                        FormValidator = new Validator();
-                        if (FormValidator.CompareAlphaBravo(Submitted, UIData.FormData))
+                        FormValidator = new Validator(Log);
+                        if (FormValidator.CompareAlphaBravo(SubmittedForm, UIData.FormData))
                             Log.WriteLogEntry("Submitted form matches inserted form!");
                         else
                             Log.WriteLogEntry("Mismatch!!! Submitted form does not match inserted form!");

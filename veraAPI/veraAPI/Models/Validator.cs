@@ -9,16 +9,39 @@ namespace VeraAPI.Models
 {
     public class Validator
     {
+        private Scribe Log;
+
+        public Validator(Scribe Log)
+        {
+            this.Log = Log;
+        }
+
         public bool CompareAlphaBravo(object Alpha, object Bravo)
         {
             bool result = false;
             Type AlphaType = Alpha.GetType();
-            FieldInfo[] AlphaFields = AlphaType.GetFields();
             Type BravoType = Bravo.GetType();
-            FieldInfo[] BravoFields = BravoType.GetFields();
+            Log.WriteLogEntry("Alpha type: " + AlphaType.FullName);
+            Log.WriteLogEntry("Bravo type: " + BravoType.FullName);
             if (AlphaType == BravoType)
             {
-                result = !AlphaFields.Except(BravoFields).Any();
+                FieldInfo[] AlphaFields = AlphaType.GetFields();
+                FieldInfo[] BravoFields = BravoType.GetFields();
+                foreach (FieldInfo Field in AlphaFields)
+                {
+                    Log.WriteLogEntry("Alpha field value: " + Field.GetValue(Alpha));
+                    Log.WriteLogEntry("Bravo field value: " + Field.GetValue(Bravo));
+                    if (object.Equals(Field.GetValue(Alpha), Field.GetValue(Bravo)))
+                    {
+                        result = true;
+                    }
+                    else
+                    {
+                        result = false;
+                        break;
+                    }
+
+                }
             }
             else
                 result = false;
