@@ -23,9 +23,12 @@ namespace VeraAPI.HelperClasses
                 {
                     if (UIData.InsertJob())
                     {
+                        //Call UIDataHandler method to load the form data from SQL using the submitted form ID
+                        UIData.LoadTravelAuth(SubmittedForm.FormDataID);
                         FormValidator = new Validator(Log);
                         // since SubmittedForm and UIData.FormData 
                         // are both made from FormData what's the point in comparing?
+                        //Compare above stored SubmittedForm to loaded UIDataHandler form
                         if (FormValidator.CompareAlphaBravo(SubmittedForm, UIData.FormData))
                             Log.WriteLogEntry("Submitted form matches inserted form!");
                         else
