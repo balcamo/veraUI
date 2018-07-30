@@ -42,9 +42,8 @@ namespace VeraAPI.Models
             Log.WriteLogEntry("Begin InsertJob...");
             bool result = false;
             string cmdString = string.Format(@"insert into {0}.dbo.job_header (template_id, data_id, job_description, job_priority, job_weight, job_type, entry_dt) output inserted.job_id values (@templateID, @dataID, @jobDescription, @jobPriority, @jobWeight, @jobType, GETDATE())", dbName);
-            // what is the  purpose of the if-else block?
-            //Check JobTemplate and FormData objects for required ID data prior to calling SQL query
-            //if TemplateID or FormDataID are missing skip the SQL call and log the reason
+            // Check JobTemplate and FormData objects for required ID data prior to calling SQL query
+            //      if TemplateID or FormDataID are missing skip the SQL call and log the reason
             if (Template.TemplateID > 0 || FormData.FormDataID > 0)
             {
                 using (SqlConnection conn = new SqlConnection(dataConnectionString))
@@ -123,10 +122,10 @@ namespace VeraAPI.Models
             decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelParkingAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0, advanceAmt = 0;
             int estimatedMiles = 0, travelDays = 0;
             string districtVehicleNum = string.Empty;
-            // What does this block do?
-            //Attempt data typing of required form fields prior to SQL call
-            //Set the result to false and return in the catch and do not insert the form data
-            //Verbose logging to assist debugging
+            
+            // Attempt data typing of required form fields prior to SQL call
+            // Set the result to false and return in the catch and do not insert the form data
+            // Verbose logging to assist debugging
             try
             {
                 Log.WriteLogEntry("Try conversion of data form fields to correct types.");
