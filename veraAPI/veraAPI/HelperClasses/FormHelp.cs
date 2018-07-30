@@ -24,6 +24,8 @@ namespace VeraAPI.HelperClasses
                     if (UIData.InsertJob())
                     {
                         FormValidator = new Validator(Log);
+                        // since SubmittedForm and UIData.FormData 
+                        // are both made from FormData what's the point in comparing?
                         if (FormValidator.CompareAlphaBravo(SubmittedForm, UIData.FormData))
                             Log.WriteLogEntry("Submitted form matches inserted form!");
                         else

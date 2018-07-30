@@ -42,6 +42,7 @@ namespace VeraAPI.Models
             Log.WriteLogEntry("Begin InsertJob...");
             bool result = false;
             string cmdString = string.Format(@"insert into {0}.dbo.job_header (template_id, data_id, job_description, job_priority, job_weight, job_type, entry_dt) output inserted.job_id values (@templateID, @dataID, @jobDescription, @jobPriority, @jobWeight, @jobType, GETDATE())", dbName);
+            // what is the  purpose of the if-else block?
             if (Template.TemplateID > 0 || FormData.FormDataID > 0)
             {
                 using (SqlConnection conn = new SqlConnection(dataConnectionString))
@@ -120,7 +121,7 @@ namespace VeraAPI.Models
             decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelParkingAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0, advanceAmt = 0;
             int estimatedMiles = 0, travelDays = 0;
             string districtVehicleNum = string.Empty;
-
+            // What does this block do?
             try
             {
                 Log.WriteLogEntry("Try conversion of data form fields to correct types.");
@@ -163,7 +164,7 @@ namespace VeraAPI.Models
                 Log.WriteLogEntry("Form data conversion error: " + ex.Message);
                 return result;
             }
-
+            // What does this block do?
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
