@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 export class TravelComponent implements OnInit {
 
   authDisplay = "none";
+  allAuthDisplay = "none";
   constructor(private router: Router) { }
 
   ngOnInit() {
@@ -19,8 +20,17 @@ export class TravelComponent implements OnInit {
   displayAuth() {
     if (this.authDisplay == "none") {
       this.authDisplay = "block";
+      this.allAuthDisplay = "none";
     } else {
       this.authDisplay = "none"
+    }
+  }
+  displayAllAuth() {
+    if (this.authDisplay == "none") {
+      this.allAuthDisplay = "block";
+      this.authDisplay = "none";
+    } else {
+      this.allAuthDisplay = "none"
     }
   }
   reloadOverwrite() {

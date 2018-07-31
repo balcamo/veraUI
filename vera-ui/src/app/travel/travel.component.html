@@ -2,14 +2,22 @@
   <!-- travel nevigation -->
   <div class="topbar">
     <button class="btn bg-primary" (click)="displayAuth()">
-      Travel Authorization
+      New Travel Authorization
     </button>
-    <button class="btn bg-primary">Reservations</button>
+
+    <button class="btn bg-primary" (click)="displayAllAuth()">
+      Active Authorization Forms
+    </button>
+
     <button class="btn bg-primary">Travel Recap</button>
   </div>
 
   <!-- display of button selected from the nav -->
   <div [ngStyle]="{'display':authDisplay}">
     <app-travel-auth></app-travel-auth>
+  </div>
+
+  <div [ngStyle]="{'display':allAuthDisplay}">
+    <app-view-auth-forms></app-view-auth-forms>
   </div>
 </body>

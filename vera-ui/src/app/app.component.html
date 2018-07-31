@@ -1,9 +1,16 @@
-<body (onload)="reloadOverwrite()">
 
-  <!-- display the nav bar -->
-  <app-nav></app-nav>
-  <!-- router output -->
-  <div class="d-flex flex-wrap main">
-    <router-outlet></router-outlet>
+<div [ngStyle]="{'display':userEntry}">
+  <input type="text" id="firstName" class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="userName"
+      placeholder="User Name" required />
+  <input type="submit" (click)="submitUserName()">
+</div>
+  <div [ngStyle]="{'display':mainPage}">
+    <!-- display the nav bar -->
+    <app-nav></app-nav>
+    <!-- router output -->
+    <div class="d-flex flex-wrap main">
+      <router-outlet></router-outlet>
+    </div>
   </div>
-</body>
+  <body (onload)="reloadOverwrite()">
+  </body>
