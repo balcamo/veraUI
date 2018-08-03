@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { User } from '../classes/user';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 
 export class UserService {
   private userObject: User;

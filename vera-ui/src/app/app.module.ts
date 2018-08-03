@@ -27,6 +27,7 @@ import { UserService } from './service/app.service.user';
     HomeComponent,
     TravelAuthComponent,
     ViewAuthFormsComponent,
+    
   ],
   imports: [
     BrowserModule,

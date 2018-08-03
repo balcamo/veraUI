@@ -16,9 +16,9 @@ namespace veraAPI.Controllers
         }
 
         // GET: api/User/5
-        public string Get(string userName)
+        public int Get(string userName)
         {
-            return "value";
+            return 1;
         }
 
         // POST: api/User

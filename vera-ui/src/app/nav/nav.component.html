@@ -1,28 +1,12 @@
 <!-- icon side menu with use of routing -->
-<div class="sidebar">
-  <div>
-    <a class="btn bg-success mr-2" placement="right" ngbTooltip="Home" routerLink="">
-        <i class="fa fa-home" aria-hidden="true"></i>
-    </a>
-    
-  </div>
-  <div>
-    
-      <a routerLink="./travel" class="btn bg-success mr-2"  placement="right" ngbTooltip="Travel">
-        <i class="fa fa-plane" aria-hidden="true"></i>
-      </a>
-    
-  </div>
-  <div>
-    <a class="btn bg-success mr-2"  placement="right" ngbTooltip="TBD">
-      <i class="fa fa-print" aria-hidden="true"></i>
+<div class="sidebar" (onload)="checkNavList()">
+
+  <div *ngFor="let opt of nav" ng-onload="checkNavList()">
+    <a class="btn bg-success mr-2" placement="right" ngbTooltip="{{opt.name}}" routerLink="{{opt.route}}">
+      <i class="{{opt.icon}}" aria-hidden="true"></i>
     </a>
   </div>
-  <div>
-    <a class="btn bg-success mr-2"  placement="right" ngbTooltip="TBD">
-      <span class="fa fa-gear" aria-hidden="true"></span>
-    </a>
-  </div>
+
 </div>
 
 
