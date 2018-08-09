@@ -1,3 +1,6 @@
-<p>
-  view-auth-forms works!
-</p>
+<h4>Current Active Forms</h4>
+<div *ngFor="let form of authForms">
+  <div>
+    <button>{{form.EventTitle}}</button>
+  </div>
+</div>

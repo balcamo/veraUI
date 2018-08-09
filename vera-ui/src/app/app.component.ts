@@ -40,11 +40,11 @@ export class AppComponent {
   }
 
   submitUserName() {
-    if (this.user.UserName == null) {
+    if (this.user.UserEmail == null) {
       alert("Please Enter your user name");
     } else {
-     
-      console.log("user name " + this.user.UserName);
+
+      console.log("user email " + this.user.UserEmail);
       let params: URLSearchParams = new URLSearchParams();
       var pageHeaders = new Headers({
         'Content-Type': 'application/json'
@@ -53,11 +53,10 @@ export class AppComponent {
         search: params,
         headers: pageHeaders
       });
-      var body = JSON.stringify(this.user.UserName);
+      var body = JSON.stringify(this.user.UserEmail);
       console.log(this.consts.url + 'User');
-      this.http.get(this.consts.url + 'User?userName={' + this.user.UserName + '}')
+      this.http.get(this.consts.url + 'User?userName={' + this.user.UserEmail + '}')
         .subscribe((data) => this.waitForHttp(data));
-
     }
   }
 

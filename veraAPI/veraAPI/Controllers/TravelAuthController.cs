@@ -25,9 +25,9 @@ namespace VeraAPI.Controllers
         }
 
         // GET: api/API/5
-        public string Get(int id)
+        public string Get(string userEmail)
         {
-            return "value";
+            return "in the Get()!!!";
         }
 
         // POST: api/API

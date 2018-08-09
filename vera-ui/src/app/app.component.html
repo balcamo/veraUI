@@ -1,9 +1,9 @@
 <div [ngStyle]="{'display':userEntry}">
   <div class="form-control wrapper">
-    <label class="mr-sm-2 mb-0" for="username">Email</label>
-    <input type="text" id="username" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           [(ngModel)]="user.UserName" placeholder="User Name" required
-           (input)="username=$event.target.value" />
+    <label class="mr-sm-2 mb-0" for="email">Email</label>
+    <input type="text" id="email" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           [(ngModel)]="user.UserEmail" placeholder="Email" required
+           (input)="useremail=$event.target.value" />
     <input type="submit" (click)="submitUserName()" routerLink="">
   </div>
 </div>
@@ -12,6 +12,6 @@
   <app-nav [nav]="user.nav"></app-nav>
   <!-- router output -->
   <div class="d-flex flex-wrap main">
-    <router-outlet></router-outlet>
+    <router-outlet [user]="user"></router-outlet>
   </div>
 </div>
