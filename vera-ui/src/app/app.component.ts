@@ -71,6 +71,7 @@ export class AppComponent {
       console.log("finishing waitForHttp");
       //this.nav = new NavComponent(this.userService);
       console.log("changing view");
+      this.emit_event("nav");
       this.userEntry = "none";
       this.mainPage = "block";
     }

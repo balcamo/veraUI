@@ -9,7 +9,7 @@
 </div>
 <div [ngStyle]="{'display':mainPage}">
   <!-- display the nav bar -->
-  <app-nav></app-nav>
+  <app-nav [nav]="user.nav"></app-nav>
   <!-- router output -->
   <div class="d-flex flex-wrap main">
     <router-outlet></router-outlet>
