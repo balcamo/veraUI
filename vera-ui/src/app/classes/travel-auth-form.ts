@@ -26,5 +26,5 @@ export class AuthForm {
   AdvanceAmount: number;
   Policy: boolean;
   SubmitterSig: string;
-
+  Supervisor: string;
 }

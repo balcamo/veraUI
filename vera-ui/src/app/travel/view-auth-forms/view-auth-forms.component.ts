@@ -18,6 +18,7 @@ export class ViewAuthFormsComponent implements OnInit {
   //temp
   authForms = [];
   form: AuthForm;
+  oldForm: AuthForm;
   auth1 = new AuthForm();
   auth2 = new AuthForm();
   constructor(http: Http, userService: UserService) {
@@ -28,18 +29,25 @@ export class ViewAuthFormsComponent implements OnInit {
 
   ngOnInit() {
     this.auth1.EventTitle = "Event 1";
+    this.auth1.Supervisor = "red";
     this.auth2.EventTitle = "Event 2";
+    this.auth2.Supervisor = "green";
+
     this.authForms.push(this.auth1);
     this.authForms.push(this.auth2);
   }
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
+
     console.log(this.form);
     if (this.displayForm == "none") {
       this.displayForm = "block";
-    } else {
+    } else if (this.form !== this.oldForm) {
+      this.displayForm = "block"
+    } else if (this.form == this.oldForm) {
       this.displayForm = "none"
-    }
+    } 
+    this.oldForm = this.form
   }
 
 }
