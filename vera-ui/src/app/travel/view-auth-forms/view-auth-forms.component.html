@@ -8,15 +8,21 @@
 </div>
 <br />
 <div [ngStyle]="{'display':displayForm}" style="border:solid 5px; max-width:80%;
-  min-width:50%; background-color:white;padding:5%;border-radius: 25px; margin-left:5%">
-    <h4>First Name: <b style="padding-left:8%;"><i>{{form.FirstName}}</i></b></h4>
-    <h4>Last Name: <b style="padding-left:8%;"><i>{{form.LastName}}</i></b></h4>
-    <h4>Phone: <b style="padding-left:8%;"><i>{{form.Phone}}</i></b></h4>
-    <h4>Email: <b style="padding-left:8%;"><i>{{form.Email}}</i></b></h4>
-    <h4>Event Title:<b style="padding-left:8%;"> <i>{{form.EventTitle}}</i> </b></h4>
-    <h4>Location:<b style="padding-left:8%;"> <i>{{form.Location}}</i></b></h4>
-    <h4>Travel Start Date: <b style="padding-left:8%;"><i>{{form.TravelBegin}}</i></b></h4>
-    <h4>Travel End Date:<b style="padding-left:8%;"> <i>{{form.TravelEnd}}</i></b></h4>
-    <h4>Total Estimate of Trip:<b style="padding-left:8%;"> <i>{{form.total}}</i></b></h4>
-    <h4>Advance Taken: <b style="padding-left:8%;"><i>{{form.AdvanceAmount}}</i></b></h4>
+      min-width:50%; background-color:white;padding:5%;border-radius: 25px; margin-left:5%">
+  <h4>First Name: <b style="padding-left:8%;"><i>{{form.FirstName}}</i></b></h4>
+  <h4>Last Name: <b style="padding-left:8%;"><i>{{form.LastName}}</i></b></h4>
+  <h4>Phone: <b style="padding-left:8%;"><i>{{form.Phone}}</i></b></h4>
+  <h4>Email: <b style="padding-left:8%;"><i>{{form.Email}}</i></b></h4>
+  <h4>Event Title:<b style="padding-left:8%;"> <i>{{form.EventTitle}}</i> </b></h4>
+  <h4>Location:<b style="padding-left:8%;"> <i>{{form.Location}}</i></b></h4>
+  <h4>Travel Start Date: <b style="padding-left:8%;"><i>{{form.TravelBegin}}</i></b></h4>
+  <h4>Travel End Date:<b style="padding-left:8%;"> <i>{{form.TravelEnd}}</i></b></h4>
+  <h4>Total Estimate of Trip:<b style="padding-left:8%;"> <i>{{form.total}}</i></b></h4>
+  <h4>Advance Taken: <b style="padding-left:8%;"><i>{{form.AdvanceAmount}}</i></b></h4>
+
+  <button class="btn bg-success" (click)="showRecap()">Travel Recap</button>
+</div>
+<div [ngStyle]="{'display':displayRecap}" style="border:solid 5px; max-width:80%;
+      min-width:50%; background-color:white;padding:5%;border-radius: 25px; margin-left:5%">
+  <p>this will be recap</p>
 </div>

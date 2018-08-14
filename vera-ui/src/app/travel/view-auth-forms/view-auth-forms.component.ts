@@ -3,6 +3,7 @@ import { UserService } from '../../service/app.service.user';
 import { User } from '../../classes/user';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 import { AuthForm } from '../../classes/travel-auth-form';
+import { RecapForm } from '../../classes/recap-form';
 
 @Component({
   selector: 'app-view-auth-forms',
@@ -15,9 +16,11 @@ export class ViewAuthFormsComponent implements OnInit {
   userService: UserService
   user: User;
   displayForm = "none";
+  displayRecap = "none";
   //temp
   authForms = [];
   form: AuthForm;
+  recap: RecapForm;
   oldForm: AuthForm;
   auth1 = new AuthForm();
   auth2 = new AuthForm();
@@ -38,7 +41,7 @@ export class ViewAuthFormsComponent implements OnInit {
   }
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
-
+    this.displayRecap = "none";
     console.log(this.form);
     if (this.displayForm == "none") {
       this.displayForm = "block";
@@ -49,5 +52,27 @@ export class ViewAuthFormsComponent implements OnInit {
     } 
     this.oldForm = this.form
   }
+  showRecap() {
+    this.displayForm = "none";
+    this.displayRecap = "block";
 
+    this.recap.AdvanceTaken = this.form.AdvanceAmount;
+    this.recap.FirstName = this.form.FirstName;
+    this.recap.LastName = this.form.LastName;
+    this.recap.Airfare = this.form.Airfare;
+    this.recap.Email = this.form.Email;
+    this.recap.Location = this.form.Location;
+    this.recap.Phone = this.form.Phone;
+    this.recap.EventTitle = this.form.EventTitle;
+    this.recap.RegistrationCost = this.form.RegistrationCost;
+    this.recap.RentalCar = this.form.RentalCar;
+    this.recap.FuelParking = this.form.FuelParking;
+    this.recap.Mileage = this.form.Mileage;
+    this.recap.Lodging = this.form.Lodging;
+    this.recap.FullDays = this.form.FullDays;
+    this.recap.PerDiem = this.form.PerDiem;
+    this.recap.Misc = this.form.Misc;
+    this.recap.TotalRecap = this.form.total;
+
+  }
 }
