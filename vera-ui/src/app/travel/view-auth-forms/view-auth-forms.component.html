@@ -9,6 +9,7 @@
 <br />
 <div [ngStyle]="{'display':displayForm}" style="border:solid 5px; max-width:80%;
       min-width:50%; background-color:white;padding:5%;border-radius: 25px; margin-left:5%">
+  <h2 style="text-align:center">{{form.EventTitle}} : {{form.Location}}</h2>
   <h4>First Name: <b style="padding-left:8%;"><i>{{form.FirstName}}</i></b></h4>
   <h4>Last Name: <b style="padding-left:8%;"><i>{{form.LastName}}</i></b></h4>
   <h4>Phone: <b style="padding-left:8%;"><i>{{form.Phone}}</i></b></h4>
@@ -22,7 +23,118 @@
 
   <button class="btn bg-success" (click)="showRecap()">Travel Recap</button>
 </div>
+
+
 <div [ngStyle]="{'display':displayRecap}" style="border:solid 5px; max-width:80%;
       min-width:50%; background-color:white;padding:5%;border-radius: 25px; margin-left:5%">
-  <p>this will be recap</p>
+  <h2 style="text-align:center">{{form.EventTitle}} : {{form.Location}}</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th><h5></h5></th>
+        <th><h5>Info From Advance</h5></th>
+        <th><h5>Recap Form</h5></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th><h5><b>Registration Cost</b></h5></th>
+        <th><h5>{{form.RegistrationCost}}</h5></th>
+        <th>
+          <input type="number" ngbTooltip="Registration Cost" (change)="checkTot()"
+                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Registration Cost*"
+                 [(ngModel)]="recap.RegistrationCost" required />
+        </th>
+      </tr>
+      <tr>
+        <th><h5><b>Airfare</b></h5></th>
+        <th><h5>{{form.Airfare}}</h5></th>
+        <th>
+          <input type="number" ngbTooltip="Registration Cost" (change)="checkTot()"
+                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Registration Cost*"
+                 [(ngModel)]="recap.Airfare" required />
+        </th>
+      </tr>
+      <tr>
+        <th><h5><b>Rental Car</b></h5></th>
+        <th><h5>{{form.RentalCar}}</h5></th>
+        <th>
+          <input type="number" ngbTooltip="Registration Cost" (change)="checkTot()"
+                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Registration Cost*"
+                 [(ngModel)]="recap.RentalCar" required />
+        </th>
+      </tr>
+      <tr>
+        <th><h5><b>Miles Driven</b></h5></th>
+        <th><h5>{{form.Mileage}}</h5></th>
+        <th>
+          <input type="number" ngbTooltip="Registration Cost" (change)="checkTot()"
+                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Registration Cost*"
+                 [(ngModel)]="recap.Mileage" required />
+        </th>
+      </tr>
+      <tr>
+        <th><h5><b>Lodging</b></h5></th>
+        <th><h5>{{form.Lodging}}</h5></th>
+        <th>
+          <input type="number" ngbTooltip="Registration Cost" (change)="checkTot()"
+                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Registration Cost*"
+                 [(ngModel)]="recap.Lodging" required />
+        </th>
+      </tr>
+      <tr>
+        <th>
+          <h5>
+            <a href="https://www.gsa.gov/" target="_blank" placement="right"
+               ngbTooltip="Find your city to find the Per Diem">
+              <b>Per Diem</b>
+            </a>
+          </h5>
+        </th>
+        <th><h5>{{form.PerDiem}}</h5></th>
+        <th>
+          <input type="number" ngbTooltip="Find your city to find the Per Diem at https://www.gsa.gov/" (change)="checkTot()"
+                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Registration Cost*"
+                 [(ngModel)]="recap.PerDiem" required />
+        </th>
+      </tr>
+      <tr>
+        <th><h5><b>Fuel and Parking</b></h5></th>
+        <th><h5>{{form.FuelParking}}</h5></th>
+        <th>
+          <input type="number" ngbTooltip="Fuel and Parking" (change)="checkTot()"
+                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Registration Cost*"
+                 [(ngModel)]="recap.FuelParking" required />
+        </th>
+      </tr>
+      <tr>
+        <th><h5><b>Full Days of Travel</b></h5></th>
+        <th><h5>{{form.FullDays}}</h5></th>
+        <th>
+          <input type="number" ngbTooltip="Full Days of Travel" (change)="checkTot()"
+                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Registration Cost*"
+                 [(ngModel)]="recap.FullDays" required />
+        </th>
+      </tr>
+      <tr>
+        <th><h5><b>Miscellaneous</b></h5></th>
+        <th><h5>{{form.Misc}}</h5></th>
+        <th>
+          <input type="number" ngbTooltip="Miscellaneous" (change)="checkTot()"
+                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Registration Cost*"
+                 [(ngModel)]="recap.Misc" required />
+        </th>
+      </tr>
+      <tr>
+        <th><h5><b>Total</b></h5></th>
+        <th><h5>{{form.total}}</h5></th>
+        <th><h5>{{recap.Total}}</h5></th>
+      </tr>
+      <tr>
+        <th><h5><b>Total for Reimbursement</b></h5></th>
+        <th><h5></h5></th>
+        <th><h5>{{recap.TotalRecap}}</h5></th>
+      </tr>
+    </tbody>
+  </table>
 </div>

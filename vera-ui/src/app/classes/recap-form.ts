@@ -15,6 +15,7 @@ export class RecapForm {
   PerDiem: number;
   FullDays: number;
   Misc: number;
+  Total: number;
   TotalRecap: number;
   AdvanceTaken: number;
   SubmitterSig: string;

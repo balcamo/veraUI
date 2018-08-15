@@ -4,6 +4,7 @@ import { User } from '../../classes/user';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 import { AuthForm } from '../../classes/travel-auth-form';
 import { RecapForm } from '../../classes/recap-form';
+import { Constants } from '../../classes/constants';
 
 @Component({
   selector: 'app-view-auth-forms',
@@ -17,10 +18,10 @@ export class ViewAuthFormsComponent implements OnInit {
   user: User;
   displayForm = "none";
   displayRecap = "none";
-  //temp
+  consts = new Constants();
   authForms = [];
   form: AuthForm;
-  recap: RecapForm;
+  recap = new RecapForm();
   oldForm: AuthForm;
   auth1 = new AuthForm();
   auth2 = new AuthForm();
@@ -32,8 +33,10 @@ export class ViewAuthFormsComponent implements OnInit {
 
   ngOnInit() {
     this.auth1.EventTitle = "Event 1";
+    this.auth1.Location = "Washington";
     this.auth1.Supervisor = "red";
     this.auth2.EventTitle = "Event 2";
+    this.auth2.Location = "Texas";
     this.auth2.Supervisor = "green";
 
     this.authForms.push(this.auth1);
@@ -52,6 +55,17 @@ export class ViewAuthFormsComponent implements OnInit {
     } 
     this.oldForm = this.form
   }
+
+  checkTot() {
+    this.recap.Total = 0;
+    var mileage = this.recap.Mileage * this.consts.mileageRate;
+    var foodTravel = this.recap.PerDiem * this.consts.firstLastDayFood;
+    var foodFull = this.recap.PerDiem * this.recap.FullDays
+    this.recap.Total = this.recap.RegistrationCost + this.recap.Airfare + this.recap.RentalCar +
+      this.recap.FuelParking + mileage + this.recap.Lodging + foodTravel + foodFull + this.recap.Misc;
+    this.recap.TotalRecap = this.recap.Total - this.recap.AdvanceTaken;
+  }
+
   showRecap() {
     this.displayForm = "none";
     this.displayRecap = "block";
@@ -73,6 +87,7 @@ export class ViewAuthFormsComponent implements OnInit {
     this.recap.PerDiem = this.form.PerDiem;
     this.recap.Misc = this.form.Misc;
     this.recap.TotalRecap = this.form.total;
-
+    console.log("Form" +this.form);
+    console.log("Recap" + this.recap);
   }
 }
