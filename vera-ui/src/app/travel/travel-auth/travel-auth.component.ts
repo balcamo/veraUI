@@ -57,7 +57,7 @@ export class TravelAuthComponent implements OnInit {
     this.total = this.form.RegistrationCost + this.form.Airfare + this.form.RentalCar +
       this.form.FuelParking + mileage + this.form.Lodging +
       foodTravel + foodFull + this.form.Misc;
-    this.form.total = this.total;
+    this.form.TotalEstimate = this.total;
   }
 
   // function to contact API and submit the form
@@ -152,7 +152,7 @@ export class TravelAuthComponent implements OnInit {
     this.form.PerDiem = 0;
     this.form.FullDays = 0;
     this.form.Misc = 0;
-    this.form.total = null;
+    this.form.TotalEstimate = null;
     this.form.Advance = null;
     this.form.AdvanceAmount = 0;
     this.form.Policy = null;

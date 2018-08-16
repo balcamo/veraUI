@@ -1,7 +1,7 @@
 <!-- icon side menu with use of routing -->
-<div class="sidebar" (onload)="checkNavList()">
+<div class="sidebar">
 
-  <div *ngFor="let opt of nav" ng-onload="checkNavList()">
+  <div *ngFor="let opt of nav">
     <a class="btn bg-success mr-2" placement="right" ngbTooltip="{{opt.name}}" routerLink="{{opt.route}}">
       <i class="{{opt.icon}}" aria-hidden="true"></i>
     </a>

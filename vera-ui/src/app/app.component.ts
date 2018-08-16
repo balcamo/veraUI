@@ -23,6 +23,7 @@ export class AppComponent {
   http: Http;
   notify: EventEmitter<string> = new EventEmitter<string>();
   nav: NavComponent;
+  useremail: string;
 
   constructor(private router: Router, http: Http, userService: UserService) {
     this.userService = userService;
@@ -40,6 +41,7 @@ export class AppComponent {
   }
 
   submitUserName() {
+    this.user.UserEmail = this.useremail;
     if (this.user.UserEmail == null) {
       alert("Please Enter your user name");
     } else {

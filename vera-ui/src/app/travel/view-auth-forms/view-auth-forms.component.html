@@ -18,7 +18,7 @@
   <h4>Location:<b style="padding-left:8%;"> <i>{{form.Location}}</i></b></h4>
   <h4>Travel Start Date: <b style="padding-left:8%;"><i>{{form.TravelBegin}}</i></b></h4>
   <h4>Travel End Date:<b style="padding-left:8%;"> <i>{{form.TravelEnd}}</i></b></h4>
-  <h4>Total Estimate of Trip:<b style="padding-left:8%;"> <i>{{form.total}}</i></b></h4>
+  <h4>Total Estimate of Trip:<b style="padding-left:8%;"> <i>{{form.TotalEstimate}}</i></b></h4>
   <h4>Advance Taken: <b style="padding-left:8%;"><i>{{form.AdvanceAmount}}</i></b></h4>
 
   <button class="btn bg-success" (click)="showRecap()">Travel Recap</button>
@@ -127,13 +127,13 @@
       </tr>
       <tr>
         <th><h5><b>Total</b></h5></th>
-        <th><h5>{{form.total}}</h5></th>
-        <th><h5>{{recap.Total}}</h5></th>
+        <th><h5>{{form.TotalEstimate}}</h5></th>
+        <th><h5>{{form.TotalRecap}}</h5></th>
       </tr>
       <tr>
         <th><h5><b>Total for Reimbursement</b></h5></th>
         <th><h5></h5></th>
-        <th><h5>{{recap.TotalRecap}}</h5></th>
+        <th><h5>{{form.TotalReimburse}}</h5></th>
       </tr>
     </tbody>
   </table>
