@@ -38,6 +38,7 @@ export class TravelComponent implements OnInit {
       this.authDisplay = "none"
     }
   }
+
   displayAllAuth() {
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({
@@ -52,7 +53,6 @@ export class TravelComponent implements OnInit {
     this.http.get(this.consts.url + 'TravelAuth?userEmail={' + this.user.UserEmail + '}')
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => console.log(data.text()));
-
 
     if (this.allAuthDisplay == "none") {
       this.allAuthDisplay = "block";

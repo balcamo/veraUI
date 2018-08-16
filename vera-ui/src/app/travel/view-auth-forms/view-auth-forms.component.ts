@@ -3,7 +3,6 @@ import { UserService } from '../../service/app.service.user';
 import { User } from '../../classes/user';
 import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 import { AuthForm } from '../../classes/travel-auth-form';
-import { RecapForm } from '../../classes/recap-form';
 import { Constants } from '../../classes/constants';
 
 @Component({
@@ -20,8 +19,7 @@ export class ViewAuthFormsComponent implements OnInit {
   displayRecap = "none";
   consts = new Constants();
   authForms = [];
-  form: AuthForm;
-  recap = new RecapForm();
+  form = new AuthForm();
   oldForm: AuthForm;
   auth1 = new AuthForm();
   auth2 = new AuthForm();
@@ -32,7 +30,7 @@ export class ViewAuthFormsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.auth1.EventTitle = "Event 1";
+    this.auth1.EventTitle = "water and power conference";
     this.auth1.Location = "Washington";
     this.auth1.Supervisor = "red";
     this.auth2.EventTitle = "Event 2";
@@ -45,7 +43,7 @@ export class ViewAuthFormsComponent implements OnInit {
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
     this.displayRecap = "none";
-    console.log(this.form);
+    //console.log(this.form);
     if (this.displayForm == "none") {
       this.displayForm = "block";
     } else if (this.form !== this.oldForm) {
@@ -57,37 +55,45 @@ export class ViewAuthFormsComponent implements OnInit {
   }
 
   checkTot() {
-    this.recap.Total = 0;
-    var mileage = this.recap.Mileage * this.consts.mileageRate;
-    var foodTravel = this.recap.PerDiem * this.consts.firstLastDayFood;
-    var foodFull = this.recap.PerDiem * this.recap.FullDays
-    this.recap.Total = this.recap.RegistrationCost + this.recap.Airfare + this.recap.RentalCar +
-      this.recap.FuelParking + mileage + this.recap.Lodging + foodTravel + foodFull + this.recap.Misc;
-    this.recap.TotalRecap = this.recap.Total - this.recap.AdvanceTaken;
+    this.form.TotalRecap = 0;
+    var mileage = this.form.Mileage * this.consts.mileageRate;
+    var foodTravel = this.form.RecapPerDiem * this.consts.firstLastDayFood;
+    var foodFull = this.form.RecapPerDiem * this.form.RecapFullDays
+    this.form.TotalRecap = this.form.RecapRegistrationCost + this.form.RecapAirfare + this.form.RecapRentalCar +
+      this.form.RecapFuelParking + mileage + this.form.RecapLodging + foodTravel + foodFull + this.form.RecapMisc;
+    this.form.TotalReimburse = this.form.TotalRecap - this.form.AdvanceAmount;
   }
 
   showRecap() {
     this.displayForm = "none";
     this.displayRecap = "block";
-
-    this.recap.AdvanceTaken = this.form.AdvanceAmount;
-    this.recap.FirstName = this.form.FirstName;
-    this.recap.LastName = this.form.LastName;
-    this.recap.Airfare = this.form.Airfare;
-    this.recap.Email = this.form.Email;
-    this.recap.Location = this.form.Location;
-    this.recap.Phone = this.form.Phone;
-    this.recap.EventTitle = this.form.EventTitle;
-    this.recap.RegistrationCost = this.form.RegistrationCost;
-    this.recap.RentalCar = this.form.RentalCar;
-    this.recap.FuelParking = this.form.FuelParking;
-    this.recap.Mileage = this.form.Mileage;
-    this.recap.Lodging = this.form.Lodging;
-    this.recap.FullDays = this.form.FullDays;
-    this.recap.PerDiem = this.form.PerDiem;
-    this.recap.Misc = this.form.Misc;
-    this.recap.TotalRecap = this.form.total;
+    
+    this.form.RecapAirfare = this.form.Airfare;
+    this.form.RecapRegistrationCost = this.form.RegistrationCost;
+    this.form.RecapRentalCar = this.form.RentalCar;
+    this.form.RecapFuelParking = this.form.FuelParking;
+    this.form.RecapMileage = this.form.Mileage;
+    this.form.RecapLodging = this.form.Lodging;
+    this.form.RecapFullDays = this.form.FullDays;
+    this.form.RecapPerDiem = this.form.PerDiem;
+    this.form.RecapMisc = this.form.Misc;
+    this.form.TotalRecap = this.form.TotalEstimate;
     console.log("Form" +this.form);
-    console.log("Recap" + this.recap);
+  }
+
+  submitRecap() {
+    let params: URLSearchParams = new URLSearchParams();
+    var pageHeaders = new Headers({
+      'Content-Type': 'application/json'
+    });
+    let options = new RequestOptions({
+      search: params,
+      headers: pageHeaders
+    });
+    var body = JSON.stringify(this.form);
+    console.log(this.consts.url + 'Recap');
+    this.http.post(this.consts.url + 'Recap', body, options)
+      //.subscribe((data) => this.waitForHttp(data));
+      .subscribe((data) => alert(data.text()));
   }
 }
