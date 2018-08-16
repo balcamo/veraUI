@@ -33,6 +33,18 @@ namespace VeraAPI.Models
         public string AdvanceAmount;
         public string Policy;
         public string SubmitterSig;
+        public string RecapRegistrationCost;
+        public string RecapAirfare;
+        public string RecapRentalCar;
+        public string RecapFuelParking;
+        public string RecapMileage;
+        public string RecapLodging;
+        public string RecapPerDiem;
+        public string RecapFullDays;
+        public string RecapMisc;
+        public string TotalRecap;
+        public string TotalReimburse;
+        public string Supervisor;
 
         public TravelAuthForm() { }
 
@@ -68,6 +80,17 @@ namespace VeraAPI.Models
             if (AdvanceAmount == null) { AdvanceAmount = string.Empty; }
             if (Policy == null) { Policy = string.Empty; }
             if (SubmitterSig == null) { SubmitterSig = string.Empty; }
+            if (RecapRegistrationCost == null) { RecapRegistrationCost = string.Empty; }
+            if (RecapRentalCar == null) { RecapRentalCar = string.Empty; }
+            if (RecapAirfare == null) { RecapAirfare = string.Empty; }
+            if (RecapFuelParking == null) { RecapFuelParking = string.Empty; }
+            if (RecapLodging == null) { RecapLodging = string.Empty; }
+            if (RecapPerDiem == null) { RecapPerDiem = string.Empty; }
+            if (RecapFullDays == null) { RecapFullDays = string.Empty; }
+            if (RecapMisc == null) { RecapMisc = string.Empty; }
+            if (TotalRecap == null) { TotalRecap = string.Empty; }
+            if (TotalReimburse == null) { TotalReimburse = string.Empty; }
+            if (Supervisor == null) { Supervisor = string.Empty; }
         }
     }
 }

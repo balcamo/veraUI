@@ -158,6 +158,7 @@ export class TravelAuthComponent implements OnInit {
     this.form.Policy = null;
     this.form.Preparer = false;
     this.form.SubmitterSig = null;
+    this.form.Supervisor = "red";
     this.total = 0; 
   }
 }

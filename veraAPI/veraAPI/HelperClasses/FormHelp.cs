@@ -36,5 +36,10 @@ namespace VeraAPI.HelperClasses
             }
             return;
         }
+
+        public void UpdateForm(BaseForm FormData)
+        {
+            //set up for updating a specific record
+        }
     }
 }

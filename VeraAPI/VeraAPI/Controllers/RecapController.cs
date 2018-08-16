@@ -12,6 +12,7 @@ namespace veraAPI.Controllers
 {
     public class RecapController : ApiController
     {
+        FormHelp helper = new FormHelp();
         // GET: api/Recap
         public IEnumerable<string> Get()
         {
@@ -28,7 +29,7 @@ namespace veraAPI.Controllers
         public string Post([FromBody]TravelAuthForm value)
         {
             string result = string.Empty;
-            /*value.TemplateID = TemplateIndex.InsertTravelAuth;
+            value.TemplateID = TemplateIndex.InsertTravelAuth;
             try
             {
                 if (value.GetType() == typeof(TravelAuthForm))
@@ -43,7 +44,7 @@ namespace veraAPI.Controllers
                         helper.SubmitForm(value);
 
                     });
-                    //Thread helpThread = new Thread(authHelper.SubmitAuthForm);
+                    //Thread helpThread = new Thread(authHelper.UpdateForm);
 
                     //helpThread.Start(authForm);
                 }
@@ -51,7 +52,7 @@ namespace veraAPI.Controllers
             catch (Exception e)
             {
                 result = "Submit Failed " + e;
-            }*/
+            }
             return "Recap has been submitted";
         }
 
