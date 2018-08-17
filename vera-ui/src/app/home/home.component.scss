@@ -1,13 +1,15 @@
 @import '../../theme.scss';
 .group {
-  padding:15px;
+  padding: 15px;
   display: flex;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
   background: #eaeaed;
   border-radius: 6px;
   clear: both;
-  *zoom: 1;
+  width:95%;
   margin: 0 1.5% 24px 1.5%;
+  overflow: hidden;
+  list-style: none;
 }
 .group:before,
 .group:after {
@@ -33,6 +35,8 @@
   font: 14px/24px "Source Code Pro", Inconsolata, "Lucida Console", Terminal, "Courier New", Courier;
   padding: 10px;
   text-align: center;
+  display: -webkit-flex;
+  display: -ms-flexbox;
 }
 .aside {
   float: right;

@@ -1,9 +1,11 @@
-<div class="row" *ngFor="let forms of authForms" style="padding-left:5%;">
-  <div class="col-xs-6 col-sm-3">
-    <button type="button" class="btn secondary" [ngStyle]="{'border-color':forms.Supervisor}" (click)="displaySelected(forms)">
-      <h5>{{forms.EventTitle}}</h5>
-    </button>
-  </div>
+<div class="wrapper" *ngFor="let forms of authForms" style="padding-left:5%;">
+  <ul>
+    <li>
+      <button type="button" class="btn secondary" [ngStyle]="{'border-color':forms.Supervisor}" (click)="displaySelected(forms)">
+        <h5>{{forms.EventTitle}}</h5>
+      </button>
+    </li>
+  </ul>
   
 </div>
 <br />

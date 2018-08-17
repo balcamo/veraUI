@@ -53,7 +53,7 @@ namespace veraAPI.Controllers
             {
                 result = "Submit Failed " + e;
             }
-            return "Recap has been submitted";
+            return result;
         }
 
         // PUT: api/Recap/5

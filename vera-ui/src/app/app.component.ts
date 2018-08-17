@@ -42,7 +42,7 @@ export class AppComponent {
 
   submitUserName() {
     this.user.UserEmail = this.useremail;
-    if (this.user.UserEmail == null) {
+    if (this.user.UserEmail == null || this.user.UserEmail == '') {
       alert("Please Enter your user name");
     } else {
 
