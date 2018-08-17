@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./travel.component.scss']
 })
 export class TravelComponent implements OnInit {
-
   authDisplay = "none";
   allAuthDisplay = "none";
   consts = new Constants();

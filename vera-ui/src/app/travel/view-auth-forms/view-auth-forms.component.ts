@@ -18,9 +18,11 @@ export class ViewAuthFormsComponent implements OnInit {
   displayForm = "none";
   displayRecap = "none";
   consts = new Constants();
-  authForms = [];
+
   form = new AuthForm();
   oldForm: AuthForm;
+  // temperary
+  authForms = [];
   auth1 = new AuthForm();
   auth2 = new AuthForm();
   constructor(http: Http, userService: UserService) {

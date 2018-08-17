@@ -27,6 +27,7 @@ div {
 .wrapper {
   max-width: 100%;
   margin: 0 auto;
+  display: inherit;
 }
 
 .wrapper ul {
@@ -35,9 +36,6 @@ div {
   padding: 0;
   list-style: none;
 }
-
 .wrapper li {
-  float: left;
-  width: calc(33.333333% - 20px);
-  margin: 0 10px 20px 10px;
+  display:inherit;
 }

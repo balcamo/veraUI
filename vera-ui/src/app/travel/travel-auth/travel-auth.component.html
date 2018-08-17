@@ -1,24 +1,24 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <div class="form-control wrapper">
-  <h1>Traveler Authorization Form</h1>
+  <h2>Traveler Authorization Form</h2>
 
   <!-- Traveler information -->
-  <h2>Traveler Information</h2>
+  <h3>Traveler Information</h3>
   <h6>
-    <label class="mr-sm-2 mb-0" for="firstName">First Name*</label>
+    <label class="mr-sm-2 mb-0" for="firstName">First name*</label>
     <input [ngStyle]="{'border-color':firstNameBorder}" type="text" id="firstName" class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.FirstName"
-           placeholder="First Name*" required />
+           placeholder="First name*" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="lastName">Last Name*</label>
+    <label class="mr-sm-2 mb-0" for="lastName">Last name*</label>
     <input [ngStyle]="{'border-color':lastNameBorder}" type="text" id="lastName" class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.LastName"
-           placeholder="Last Name*" required />
+           placeholder="Last name*" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="phone">Best Phone Number While Traveling*</label>
+    <label class="mr-sm-2 mb-0" for="phone">Best phone number while traveling*</label>
     <input [ngStyle]="{'border-color':phoneBorder}" type="tel" id="phone"
            class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.Phone" maxlength="10"
-           minlength="10" placeholder="Best Phone Number While Traveling*" required />
+           minlength="10" placeholder="Best phone number while traveling*" required />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0" for="email">Email</label>
@@ -28,24 +28,24 @@
   </h6>
 
   <!-- Event information -->
-  <h2>Event Information</h2>
+  <h3>Event Information</h3>
   <h6>
-    <label class="mr-sm-2 mb-0" for="eventTitle">Event Title*</label>
+    <label class="mr-sm-2 mb-0" for="eventTitle">Event title*</label>
     <input [ngStyle]="{'border-color':eventTitleBorder}" type="text" id="eventTitle" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           [(ngModel)]="form.EventTitle" placeholder="Event Title*" required />
+           [(ngModel)]="form.EventTitle" placeholder="Event title*" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="eventLocation">Event Location*</label>
+    <label class="mr-sm-2 mb-0" for="eventLocation">Event location*</label>
     <input [ngStyle]="{'border-color':eventLocBorder}" type="text" id="eventLocation" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Event Location*" [(ngModel)]="form.Location" required />
+           placeholder="Event location*" [(ngModel)]="form.Location" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0 " for="startDate">Date Leaving*</label>
+    <label class="mr-sm-2 mb-0 " for="startDate">Date leaving*</label>
     <input [ngStyle]="{'border-color':travelStartBorder}" type="Date" id="startDate" class="form-control mr-sm-2 mb-2 mb-sm-0"
            [(ngModel)]="form.TravelBegin" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0 " for="endDate">Date Returning*</label>
+    <label class="mr-sm-2 mb-0 " for="endDate">Date returning*</label>
     <input [ngStyle]="{'border-color':travelEndBorder}" type="Date" id="endDate" class="form-control mr-sm-2 mb-2 mb-sm-0"
            [(ngModel)]="form.TravelEnd" required />
   </h6>
@@ -69,37 +69,37 @@
   </div>
 
   <!-- Estimated Costs to be used in travel advance -->
-  <h2>Estimated Costs</h2>
+  <h3>Estimated Costs</h3>
   <h6>
-    <label class="mr-sm-2 mb-0" for="registration">Registration Cost*</label>
+    <label class="mr-sm-2 mb-0" for="registration">Registration cost*</label>
     <input [ngStyle]="{'border-color':registrationBorder}" type="number" id="registration"
            ngbTooltip="Registration Cost" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Registration Cost*" [(ngModel)]="form.RegistrationCost" required />
+           placeholder="Registration cost*" [(ngModel)]="form.RegistrationCost" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="airfare">Airfare Cost*</label>
+    <label class="mr-sm-2 mb-0" for="airfare">Airfare cost*</label>
     <input [ngStyle]="{'border-color':airfareBorder}" type="number" id="airfare"
-           ngbTooltip="Airfare Cost" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           ngbTooltip="Airfare cost" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
            placeholder="Airfare Cost*" [(ngModel)]="form.Airfare" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="rental">Rental Car Cost*</label>
+    <label class="mr-sm-2 mb-0" for="rental">Rental car cost*</label>
     <input [ngStyle]="{'border-color':rentalBorder}" type="number" id="rental"
            (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0" ngbTooltip="Rental Car Cost"
-           placeholder="Rental Car Cost*" [(ngModel)]="form.RentalCar" required />
+           placeholder="Rental car cost*" [(ngModel)]="form.RentalCar" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="fuel">Fuel and Parking Cost*</label>
+    <label class="mr-sm-2 mb-0" for="fuel">Fuel and parking cost*</label>
     <input [ngStyle]="{'border-color':fuelBorder}" type="number" id="fuel"
            ngbTooltip="Fuel and Parking Cost" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Fuel and Parking Cost*" [(ngModel)]="form.FuelParking" required />
+           placeholder="Fuel and parking cost*" [(ngModel)]="form.FuelParking" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="mileage">Estimated Miles to be Driven*</label>
+    <label class="mr-sm-2 mb-0" for="mileage">Estimated miles to be driven*</label>
     <input [ngStyle]="{'border-color':mileageBorder}" type="number" id="mileage"
            ngbTooltip="Miles driven * 0.545(current rate per mile) = mileage"
            (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Estimated Miles to be Driven*" [(ngModel)]="form.Mileage" required />
+           placeholder="Estimated miles to be driven*" [(ngModel)]="form.Mileage" required />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0" for="lodging">Lodging*</label>
@@ -117,7 +117,7 @@
   <h6>
     <label class="mr-sm-2 mb-0" for="travelDays">Number of full days traveling*:</label>
     <input [ngStyle]="{'border-color':daysBorder}" type="number" id="travelDays"
-           class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Number of Full Days of the Trip*"
+           class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Number of full days of the trip*"
            [(ngModel)]="form.FullDays" (change)="checkTot()"
            ngbTooltip="Count the days you will be gone. Don't include first or last day. i.e. If you are traveling Mon-Wed that's 1 full day" required />
   </h6>
@@ -132,7 +132,7 @@
   <br />
   <!-- yes no questions for policy and advance -->
   <h6 class="form-check form-check-inline" [ngStyle]="{'color':advanceColor}">
-    Are you requesting a travel advance*:
+    Are you requesting a travel advance?:
   </h6>
   <div class="form-check form-check-inline">
     <input class="form-check-input" type="radio" name="Advance" (click)="advaneDisplay='block'"
@@ -145,9 +145,9 @@
     <label class="form-check-label" for="inlineRadio4">No</label>
   </div>
   <div [ngStyle]="{'display':advaneDisplay}">
-    <label class="mr-sm-2 mb-0 sr-only" for="advance">District Vehicle Number</label>
+    <label class="mr-sm-2 mb-0 sr-only" for="advance">Amount for advance</label>
     <input type="number" id="advance" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Amount for Advance" [(ngModel)]="form.AdvanceAmount" />
+           placeholder="Amount for advance" [(ngModel)]="form.AdvanceAmount" />
   </div>
   <br />
 
@@ -171,7 +171,7 @@
   </div>
   <br />
 
-  <h2>Signature</h2>
+  <h3>Signature</h3>
   <div class="form-check">
     <h6>
       <input type="checkbox" id="preparer" class="form-check-input" value="true"
@@ -180,7 +180,7 @@
     </h6>
   </div>
   <h6>
-    <label class="mr-sm-2 mb-0" for="sig">Submitter Signature*</label>
+    <label class="mr-sm-2 mb-0" for="sig">Submitter signature*</label>
     <input [ngStyle]="{'border-color':sigColor}" type="text" id="sig" class="form-control mr-sm-2 mb-2 mb-sm-0"
            placeholder="Signature*" [(ngModel)]="form.SubmitterSig" required />
   </h6>

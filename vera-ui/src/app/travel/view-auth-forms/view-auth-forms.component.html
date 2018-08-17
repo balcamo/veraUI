@@ -1,14 +1,14 @@
-<div class="wrapper" *ngFor="let forms of authForms" style="padding-left:5%;">
-  <ul>
-    <li>
+
+<div class="topbar" *ngFor="let forms of authForms" >
+  <div >
       <button type="button" class="btn secondary" [ngStyle]="{'border-color':forms.Supervisor}" (click)="displaySelected(forms)">
         <h5>{{forms.EventTitle}}</h5>
       </button>
-    </li>
-  </ul>
-  
+  </div>
 </div>
+
 <br />
+
 <div [ngStyle]="{'display':displayForm}" style="border:solid 5px; max-width:80%;
       min-width:50%; background-color:white;padding:5%;border-radius: 25px; margin-left:5%">
   <h2 style="text-align:center">{{form.EventTitle}} : {{form.Location}}</h2>
