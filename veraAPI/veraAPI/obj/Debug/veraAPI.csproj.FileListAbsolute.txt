@@ -295,3 +295,5 @@ C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\obj\Debug\veraAPI.csproj.Core
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\obj\Debug\veraAPI.csproj.CopyComplete
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\obj\Debug\veraAPI.dll
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\obj\Debug\veraAPI.pdb
+C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.Exchange.WebServices.dll
+C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.Exchange.WebServices.xml

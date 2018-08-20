@@ -4,11 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Threading.Tasks;
 using VeraAPI.HelperClasses;
 using VeraAPI.Models;
-using System.Threading.Tasks;
+using VeraAPI.Models.Forms;
 
-namespace veraAPI.Controllers
+namespace VeraAPI.Controllers
 {
     public class RecapController : ApiController
     {

@@ -6,21 +6,23 @@ using Microsoft.Exchange.WebServices;
 using Microsoft.Exchange.WebServices.Data;
 using System.Configuration;
 using VeraAPI.Models;
+using VeraAPI.Models.Security;
 
-namespace veraAPI.Models
+namespace VeraAPI.Models
 {
     public class EmailHandler
     {
-        public string SenderEmailAddress { get; set; } = "test@verawaterandpower.com";
-        public string EmailSubject { get; set; } = "UI Test Email";
-        public string EmailBody { get; set; } = "Testing UI email sender.";
-        public string RecipientEmailAddress { get; set; } = "thuff@verawaterandpower.com";
+        public string EmailSubject { get; set; }
+        public string EmailBody { get; set; }
+        public string RecipientEmailAddress { get; set; }
+        private User EmailSender;
         private ExchangeService Emailer;
         private EmailMessage EmailMessage;
         private Scribe Log;
 
-        public EmailHandler(Scribe Log)
+        public EmailHandler(User CurrentUser, Scribe Log)
         {
+            this.EmailSender = CurrentUser;
             this.Log = Log;
         }
 
@@ -40,9 +42,9 @@ namespace veraAPI.Models
             {
                 Emailer = new ExchangeService()
                 {
-                    Credentials = new WebCredentials(SenderEmailAddress, "verawateR4power")
+                    Credentials = new WebCredentials(EmailSender.AdUpn, EmailSender.UserPwd)
                 };
-                Emailer.AutodiscoverUrl(SenderEmailAddress, ValidateRedirect);
+                Emailer.AutodiscoverUrl(EmailSender.AdUpn, ValidateRedirect);
                 result = true;
             }
             catch (Exception ex)

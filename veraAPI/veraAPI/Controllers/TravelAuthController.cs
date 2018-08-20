@@ -7,6 +7,7 @@ using System.Web.Http;
 using VeraAPI.Models;
 using VeraAPI.Models.Forms;
 using VeraAPI.HelperClasses;
+using VeraAPI.Models.Security;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +16,8 @@ namespace VeraAPI.Controllers
 {
     public class TravelAuthController : ApiController
     {
-        FormHelp helper = new FormHelp();
+        FormHelp helper;
+        User CurrentUser;
 
         public TravelAuthController() { }
 
@@ -36,6 +38,7 @@ namespace VeraAPI.Controllers
         public string Post([FromBody]TravelAuthForm value)
         {
             string result = string.Empty;
+            helper = new FormHelp();
             value.TemplateID = TemplateIndex.InsertTravelAuth;
             try {
                 if (value.GetType() == typeof(TravelAuthForm))

@@ -4,11 +4,16 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using VeraAPI.Models.Security;
+using VeraAPI.Models.DataHandler;
 
-namespace veraAPI.Controllers
+namespace VeraAPI.Controllers
 {
     public class UserController : ApiController
     {
+        User CurrentUser;
+        LDAPHandler VeraLDAP;
+
         // GET: api/User
         public IEnumerable<string> Get()
         {
@@ -16,14 +21,39 @@ namespace veraAPI.Controllers
         }
 
         // GET: api/User/5
-        public int Get(string userName)
+        public int Get(string userEmail)
         {
-            return 1;
+            int result = 0;
+            string userDomain;
+            System.Configuration.Configuration localDomainConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration(null);
+            System.Configuration.KeyValueConfigurationElement localDomain;
+            if (localDomainConfig.AppSettings.Settings.Count > 0)
+            {
+                localDomain = localDomainConfig.AppSettings.Settings["LocalDomain"];
+                if (localDomain != null)
+                {
+                    userDomain = localDomain.Value;
+                    CurrentUser = new User();
+                    CurrentUser.AdUpn = userEmail;
+                    VeraLDAP = new LDAPHandler(userDomain);
+                    if (VeraLDAP.ValidateUser(CurrentUser.UserName, CurrentUser.UserPwd))
+                    {
+                        CurrentUser.Authenicated = true;
+                        result = 1;
+                    }
+                    else
+                    {
+                        CurrentUser.Authenicated = false;
+                    }
+                }
+            }
+            return result;
         }
 
         // POST: api/User
         public void Post([FromBody]string value)
         {
+
         }
 
         // PUT: api/User/5

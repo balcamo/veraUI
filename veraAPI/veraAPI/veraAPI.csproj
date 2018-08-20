@@ -13,8 +13,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>veraAPI</RootNamespace>
-    <AssemblyName>veraAPI</AssemblyName>
+    <RootNamespace>VeraAPI</RootNamespace>
+    <AssemblyName>VeraAPI</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
@@ -52,6 +52,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.Entity" />
@@ -196,8 +197,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HelperClasses\FormHelp.cs" />
-    <Compile Include="Models\DataHandler\LDAPDataHandler.cs" />
-    <Compile Include="Models\EmailHandler.cs" />
+    <Compile Include="Models\DataHandler\UserDataHandler.cs" />
+    <Compile Include="Models\OfficeHandler\EmailHandler.cs" />
     <Compile Include="Models\JobHeader.cs" />
     <Compile Include="Models\Forms\BaseForm.cs" />
     <Compile Include="Models\Forms\TravelAuthForm.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Models\Scribe.cs" />
     <Compile Include="Models\DataHandler\SQLDataHandler.cs" />
     <Compile Include="Models\Security\User.cs" />
+    <Compile Include="Models\Security\LDAPHandler.cs" />
     <Compile Include="Models\TemplateIndex.cs" />
     <Compile Include="Models\DataHandler\UIDataHandler.cs" />
     <Compile Include="Models\Validator.cs" />
