@@ -10,7 +10,7 @@ namespace VeraAPI.Models.DataHandler
 {
     public class UserDataHandler : SQLDataHandler
     {
-        private Scribe Log = null;
+        private Scribe Log;
         private string dataConnectionString = string.Empty;
         private string dbServer = string.Empty;
         private string dbName = string.Empty;
@@ -21,7 +21,7 @@ namespace VeraAPI.Models.DataHandler
         {
             this.dbServer = dbServer;
             this.dbName = dbName;
-            this.Log = new Scribe("c:\\temp", "UserDataHandler_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserDataHandler_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
             this.dataConnectionString = GetDataConnectionString();
         }
 

@@ -4,19 +4,26 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using VeraAPI.Models.Security;
-using VeraAPI.Models.DataHandler;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
+using VeraAPI.Models;
+using VeraAPI.Models.Security;
+using VeraAPI.Models.DataHandler;
 
 namespace VeraAPI.Controllers
 {
     public class UserController : ApiController
     {
-        User CurrentUser;
-        LDAPHandler VeraLDAP;
-        public PrincipalContext UserContext;
-        public UserPrincipal UserAccount;
+        private User CurrentUser;
+        private LDAPHandler VeraLDAP;
+        private PrincipalContext UserContext;
+        private UserPrincipal UserAccount;
+        private Scribe Log;
+
+        public UserController()
+        {
+            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserDataHandler_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+        }
 
         // GET: api/User
         public IEnumerable<string> Get()
@@ -33,12 +40,16 @@ namespace VeraAPI.Controllers
             System.Configuration.KeyValueConfigurationElement localDomain;
             if (localDomainConfig.AppSettings.Settings.Count > 0)
             {
+                Log.WriteLogEntry("Appsettings are present.");
                 localDomain = localDomainConfig.AppSettings.Settings["LocalDomain"];
                 if (localDomain != null)
                 {
+                    Log.WriteLogEntry("localDomain has a value.");
                     userDomain = localDomain.Value;
+                    Log.WriteLogEntry("localDomain value = " + userDomain);
                     CurrentUser = new User();
                     CurrentUser.AdUpn = userEmail;
+                    Log.WriteLogEntry("User UPN = " + CurrentUser.AdUpn);
                     using (UserContext = new PrincipalContext(ContextType.Domain, userDomain))
                     {
                         UserAccount = new UserPrincipal(UserContext);
@@ -48,6 +59,7 @@ namespace VeraAPI.Controllers
                             UserSearch.QueryFilter = UserAccount;
                             using (PrincipalSearchResult<Principal> Psr = UserSearch.FindAll())
                             {
+                                Log.WriteLogEntry("Principal search result " + Psr.Count<Principal>());
                                 UserAccount = (UserPrincipal)Psr.First<Principal>();
                                 CurrentUser.FirstName = UserAccount.GivenName;
                                 CurrentUser.LastName = UserAccount.Surname;
@@ -57,19 +69,21 @@ namespace VeraAPI.Controllers
                                 CurrentUser.EmployeeID = UserAccount.EmployeeId;
                                 DirectoryEntry entry = UserAccount.GetUnderlyingObject() as DirectoryEntry;
                                 if (entry.Properties.Contains("department"))
-                                {
                                     CurrentUser.Department = entry.Properties["department"].Value.ToString();
-                                }
                                 if (entry.Properties.Contains("manager"))
                                     CurrentUser.Department = entry.Properties["manager"].Value.ToString();
                                 CurrentUser.Authenicated = true;
+                                Log.WriteLogEntry(string.Format("{0} {1} {2} {3}", CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.EmployeeID, CurrentUser.Department));
                                 result = 1;
                             }
                         }
                     }
-                    return result;
                 }
+                else
+                    Log.WriteLogEntry("localDomain Appsetting not found!");
             }
+            else
+                Log.WriteLogEntry("Appsettings nto found!");
             return result;
         }
 
