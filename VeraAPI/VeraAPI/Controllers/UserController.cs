@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Web.Http;
 using VeraAPI.Models.Security;
 using VeraAPI.Models.DataHandler;
+using System.DirectoryServices;
+using System.DirectoryServices.AccountManagement;
 
 namespace VeraAPI.Controllers
 {
@@ -13,6 +15,8 @@ namespace VeraAPI.Controllers
     {
         User CurrentUser;
         LDAPHandler VeraLDAP;
+        public PrincipalContext UserContext;
+        public UserPrincipal UserAccount;
 
         // GET: api/User
         public IEnumerable<string> Get()
@@ -35,6 +39,53 @@ namespace VeraAPI.Controllers
                     userDomain = localDomain.Value;
                     CurrentUser = new User();
                     CurrentUser.AdUpn = userEmail;
+                    using (UserContext = new PrincipalContext(ContextType.Domain, userDomain))
+                    {
+                        UserAccount = new UserPrincipal(UserContext);
+                        UserAccount.UserPrincipalName = CurrentUser.AdUpn;
+                        using (PrincipalSearcher UserSearch = new PrincipalSearcher())
+                        {
+                            UserSearch.QueryFilter = UserAccount;
+                            using (PrincipalSearchResult<Principal> Psr = UserSearch.FindAll())
+                            {
+                                UserAccount = (UserPrincipal)Psr.First<Principal>();
+                                CurrentUser.FirstName = UserAccount.GivenName;
+                                CurrentUser.LastName = UserAccount.Surname;
+                                CurrentUser.AdSam = UserAccount.SamAccountName;
+                                CurrentUser.AdUpn = UserAccount.UserPrincipalName;
+                                CurrentUser.UserEmail = UserAccount.EmailAddress;
+                                CurrentUser.EmployeeID = UserAccount.EmployeeId;
+                                DirectoryEntry entry = UserAccount.GetUnderlyingObject() as DirectoryEntry;
+                                if (entry.Properties.Contains("department"))
+                                {
+                                    CurrentUser.Department = entry.Properties["department"].Value.ToString();
+                                }
+                                if (entry.Properties.Contains("manager"))
+                                    CurrentUser.Department = entry.Properties["manager"].Value.ToString();
+                                CurrentUser.Authenicated = true;
+                                result = 1;
+                            }
+                        }
+                    }
+                    return result;
+                }
+            }
+            return result;
+        }
+
+        public int Get(string userName, string userPwd)
+        {
+            int result = 0;
+            string userDomain;
+            System.Configuration.Configuration localDomainConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration(null);
+            System.Configuration.KeyValueConfigurationElement localDomain;
+            if (localDomainConfig.AppSettings.Settings.Count > 0)
+            {
+                localDomain = localDomainConfig.AppSettings.Settings["LocalDomain"];
+                if (localDomain != null)
+                {
+                    userDomain = localDomain.Value;
+                    CurrentUser = new User();
                     VeraLDAP = new LDAPHandler(userDomain);
                     if (VeraLDAP.ValidateUser(CurrentUser.UserName, CurrentUser.UserPwd))
                     {
