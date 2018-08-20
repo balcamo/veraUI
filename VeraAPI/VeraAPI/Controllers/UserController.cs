@@ -43,7 +43,7 @@ namespace VeraAPI.Controllers
             {
                 Log.WriteLogEntry("localDomain value = " + userDomain);
                 CurrentUser = new User();
-                CurrentUser.AdUpn = userEmail;
+                CurrentUser.AdUpn = userEmail.Substring(1, userEmail.Length - 2);
                 Log.WriteLogEntry("User UPN = " + CurrentUser.AdUpn);
                 using (UserContext = new PrincipalContext(ContextType.Domain, userDomain))
                 {
@@ -70,6 +70,7 @@ namespace VeraAPI.Controllers
                             CurrentUser.Authenicated = true;
                             Log.WriteLogEntry(string.Format("{0} {1} {2} {3}", CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.EmployeeID, CurrentUser.Department));
                             result = 1;
+                            Log.WriteLogEntry("Return Result " + result);
                         }
                     }
                 }
