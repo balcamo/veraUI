@@ -55,28 +55,33 @@ namespace VeraAPI.Controllers
                         using (PrincipalSearchResult<Principal> Psr = UserSearch.FindAll())
                         {
                             Log.WriteLogEntry("Principal search result " + Psr.Count<Principal>());
-                            UserAccount = (UserPrincipal)Psr.First<Principal>();
-                            CurrentUser.FirstName = UserAccount.GivenName;
-                            CurrentUser.LastName = UserAccount.Surname;
-                            CurrentUser.AdSam = UserAccount.SamAccountName;
-                            CurrentUser.AdUpn = UserAccount.UserPrincipalName;
-                            CurrentUser.UserEmail = UserAccount.EmailAddress;
-                            CurrentUser.EmployeeID = UserAccount.EmployeeId;
-                            DirectoryEntry entry = UserAccount.GetUnderlyingObject() as DirectoryEntry;
-                            if (entry.Properties.Contains("department"))
-                                CurrentUser.Department = entry.Properties["department"].Value.ToString();
-                            if (entry.Properties.Contains("manager"))
-                                CurrentUser.Department = entry.Properties["manager"].Value.ToString();
-                            CurrentUser.Authenicated = true;
-                            Log.WriteLogEntry(string.Format("{0} {1} {2} {3}", CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.EmployeeID, CurrentUser.Department));
-                            result = 1;
-                            Log.WriteLogEntry("Return Result " + result);
+                            if (Psr.Count<Principal>() > 0)
+                            {
+                                UserAccount = (UserPrincipal)Psr.First<Principal>();
+                                CurrentUser.FirstName = UserAccount.GivenName;
+                                CurrentUser.LastName = UserAccount.Surname;
+                                CurrentUser.AdSam = UserAccount.SamAccountName;
+                                CurrentUser.AdUpn = UserAccount.UserPrincipalName;
+                                CurrentUser.UserEmail = UserAccount.EmailAddress;
+                                CurrentUser.EmployeeID = UserAccount.EmployeeId;
+                                DirectoryEntry entry = UserAccount.GetUnderlyingObject() as DirectoryEntry;
+                                if (entry.Properties.Contains("department"))
+                                    CurrentUser.Department = entry.Properties["department"].Value.ToString();
+                                if (entry.Properties.Contains("manager"))
+                                    CurrentUser.Department = entry.Properties["manager"].Value.ToString();
+                                CurrentUser.Authenicated = true;
+                                Log.WriteLogEntry(string.Format("{0} {1} {2} {3}", CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.EmployeeID, CurrentUser.Department));
+                                result = 1;
+                            }
+                            else
+                                Log.WriteLogEntry("User not found in directory!");
                         }
                     }
                 }
             }
             else
                 Log.WriteLogEntry("localDomain Appsetting not found!");
+            Log.WriteLogEntry("Return Result " + result);
             return result;
         }
 
