@@ -35,12 +35,10 @@ export class AppComponent {
     this.notify.emit(location);
   }
 
-  reloadOverwrite() {
-    console.log("this should print on refresh");
-    this.router.navigate([''], { replaceUrl: true });
-  }
-
-  submitUserName() {
+  /**
+   * take imput for user email, send it to the server to check if valid
+   * */
+  submitUserEmail() {
     this.user.UserEmail = this.useremail;
     if (this.user.UserEmail == null || this.user.UserEmail == '') {
       alert("Please Enter your user name");

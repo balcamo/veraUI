@@ -30,7 +30,8 @@ namespace VeraAPI.Controllers
         public string Post([FromBody]TravelAuthForm value)
         {
             string result = string.Empty;
-            value.TemplateID = TemplateIndex.InsertTravelAuth;
+            string emailType = string.Empty;
+            value.TemplateID = TemplateIndex.InsertTravelRecap;
             try
             {
                 if (value.GetType() == typeof(TravelAuthForm))
@@ -38,11 +39,11 @@ namespace VeraAPI.Controllers
                     //TravelAuthForm authForm = new TravelAuthForm(value);
                     result = "Submitted Successfully";
                     value.setNulls();
-
+                    if(value.TotalReimburse != null) { emailType = "recap"; }
                     Task t = Task.Run(() =>
                     {
                         // change number to constant once file is made
-                        helper.SubmitForm(value);
+                        helper.UpdateForm(value, emailType);
 
                     });
                     //Thread helpThread = new Thread(authHelper.UpdateForm);
