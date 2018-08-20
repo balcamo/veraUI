@@ -16,6 +16,8 @@ import { NavComponent } from './nav/nav.component';
 import { TravelComponent } from './travel/travel.component';
 import { HomeComponent } from './home/home.component';
 import { TravelAuthComponent } from './travel/travel-auth/travel-auth.component';
+import { ViewAuthFormsComponent } from './travel/view-auth-forms/view-auth-forms.component';
+import { UserService } from './service/app.service.user';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { TravelAuthComponent } from './travel/travel-auth/travel-auth.component'
     TravelComponent,
     HomeComponent,
     TravelAuthComponent,
+    ViewAuthFormsComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -40,7 +44,7 @@ import { TravelAuthComponent } from './travel/travel-auth/travel-auth.component'
     HttpClientModule,
 
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
 })

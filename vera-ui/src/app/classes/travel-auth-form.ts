@@ -1,4 +1,5 @@
 
+
 export class AuthForm {
   Preparer = false;
   FirstName: string;
@@ -20,10 +21,21 @@ export class AuthForm {
   PerDiem: number;
   FullDays: number;
   Misc: number;
-  total: number;
+  TotalEstimate: number;
   Advance: boolean;
   AdvanceAmount: number;
+  RecapRegistrationCost: number;
+  RecapAirfare: number;
+  RecapRentalCar: number;
+  RecapFuelParking: number;
+  RecapMileage: number;
+  RecapLodging: number;
+  RecapPerDiem: number;
+  RecapFullDays: number;
+  RecapMisc: number;
+  TotalRecap: number;
+  TotalReimburse: number;
   Policy: boolean;
   SubmitterSig: string;
-
+  Supervisor: string;
 }
