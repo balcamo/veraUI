@@ -48,7 +48,7 @@ export class TravelAuthComponent implements OnInit {
   }
 
 
-  // calculate the estimated total
+  // calculate the estimated total 
   checkTot() {
     this.total = 0;
     var mileage = this.form.Mileage * this.consts.mileageRate;

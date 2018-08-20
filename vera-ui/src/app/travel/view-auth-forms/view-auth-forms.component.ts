@@ -42,6 +42,13 @@ export class ViewAuthFormsComponent implements OnInit {
     this.authForms.push(this.auth1);
     this.authForms.push(this.auth2);
   }
+
+  /**
+   * 
+   * DisplaySelected will show information form the selected authform
+   * @param authForm : form to be displayed
+   * 
+   */
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
     this.displayRecap = "none";
@@ -56,6 +63,10 @@ export class ViewAuthFormsComponent implements OnInit {
     this.oldForm = this.form
   }
 
+  /**
+   * checkTot will calculate the total spent on the trip
+   * and the total the traveler is owed for reimbursement 
+   * */
   checkTot() {
     this.form.TotalRecap = 0;
     var mileage = this.form.Mileage * this.consts.mileageRate;
@@ -66,6 +77,9 @@ export class ViewAuthFormsComponent implements OnInit {
     this.form.TotalReimburse = this.form.TotalRecap - this.form.AdvanceAmount;
   }
 
+  /**
+   * show recap uses the form from selected to update the recap fields  
+   * */
   showRecap() {
     this.displayForm = "none";
     this.displayRecap = "block";
@@ -83,6 +97,9 @@ export class ViewAuthFormsComponent implements OnInit {
     console.log("Form" +this.form);
   }
 
+  /**
+   * submit the recap to the server to get approval
+   * */
   submitRecap() {
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({

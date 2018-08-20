@@ -28,7 +28,8 @@ export class TravelComponent implements OnInit {
   }
   /**
    * This function will toggle the display of
-   * the travel authorization form*/
+   * the new travel authorization form
+   **/
   displayAuth() {
     if (this.authDisplay == "none") {
       this.authDisplay = "block";
@@ -38,6 +39,9 @@ export class TravelComponent implements OnInit {
     }
   }
 
+  /**
+   * this displays all active authforms found on in the database
+   * */
   displayAllAuth() {
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({

@@ -30,7 +30,7 @@ namespace veraAPI.Controllers
         {
             string result = string.Empty;
             string emailType = string.Empty;
-            value.TemplateID = TemplateIndex.InsertTravelAuth;
+            value.TemplateID = TemplateIndex.InsertTravelRecap;
             try
             {
                 if (value.GetType() == typeof(TravelAuthForm))
