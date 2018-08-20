@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using VeraAPI.Models.Forms;
 
-namespace VeraAPI.Models
+namespace VeraAPI.Models.Forms
 {
     public class TravelAuthForm : BaseForm
     {

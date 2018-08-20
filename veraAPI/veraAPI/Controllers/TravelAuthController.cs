@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using VeraAPI.Models;
+using VeraAPI.Models.Forms;
 using VeraAPI.HelperClasses;
 using System.Threading;
 using System.Threading.Tasks;
