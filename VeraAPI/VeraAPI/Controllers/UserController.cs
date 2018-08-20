@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Configuration;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using VeraAPI.Models;
@@ -36,54 +38,44 @@ namespace VeraAPI.Controllers
         {
             int result = 0;
             string userDomain;
-            System.Configuration.Configuration localDomainConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration(null);
-            System.Configuration.KeyValueConfigurationElement localDomain;
-            if (localDomainConfig.AppSettings.Settings.Count > 0)
+            userDomain = WebConfigurationManager.AppSettings.Get("LocalDomain");
+            if (userDomain != null)
             {
-                Log.WriteLogEntry("Appsettings are present.");
-                localDomain = localDomainConfig.AppSettings.Settings["LocalDomain"];
-                if (localDomain != null)
+                Log.WriteLogEntry("localDomain value = " + userDomain);
+                CurrentUser = new User();
+                CurrentUser.AdUpn = userEmail;
+                Log.WriteLogEntry("User UPN = " + CurrentUser.AdUpn);
+                using (UserContext = new PrincipalContext(ContextType.Domain, userDomain))
                 {
-                    Log.WriteLogEntry("localDomain has a value.");
-                    userDomain = localDomain.Value;
-                    Log.WriteLogEntry("localDomain value = " + userDomain);
-                    CurrentUser = new User();
-                    CurrentUser.AdUpn = userEmail;
-                    Log.WriteLogEntry("User UPN = " + CurrentUser.AdUpn);
-                    using (UserContext = new PrincipalContext(ContextType.Domain, userDomain))
+                    UserAccount = new UserPrincipal(UserContext);
+                    UserAccount.UserPrincipalName = CurrentUser.AdUpn;
+                    using (PrincipalSearcher UserSearch = new PrincipalSearcher())
                     {
-                        UserAccount = new UserPrincipal(UserContext);
-                        UserAccount.UserPrincipalName = CurrentUser.AdUpn;
-                        using (PrincipalSearcher UserSearch = new PrincipalSearcher())
+                        UserSearch.QueryFilter = UserAccount;
+                        using (PrincipalSearchResult<Principal> Psr = UserSearch.FindAll())
                         {
-                            UserSearch.QueryFilter = UserAccount;
-                            using (PrincipalSearchResult<Principal> Psr = UserSearch.FindAll())
-                            {
-                                Log.WriteLogEntry("Principal search result " + Psr.Count<Principal>());
-                                UserAccount = (UserPrincipal)Psr.First<Principal>();
-                                CurrentUser.FirstName = UserAccount.GivenName;
-                                CurrentUser.LastName = UserAccount.Surname;
-                                CurrentUser.AdSam = UserAccount.SamAccountName;
-                                CurrentUser.AdUpn = UserAccount.UserPrincipalName;
-                                CurrentUser.UserEmail = UserAccount.EmailAddress;
-                                CurrentUser.EmployeeID = UserAccount.EmployeeId;
-                                DirectoryEntry entry = UserAccount.GetUnderlyingObject() as DirectoryEntry;
-                                if (entry.Properties.Contains("department"))
-                                    CurrentUser.Department = entry.Properties["department"].Value.ToString();
-                                if (entry.Properties.Contains("manager"))
-                                    CurrentUser.Department = entry.Properties["manager"].Value.ToString();
-                                CurrentUser.Authenicated = true;
-                                Log.WriteLogEntry(string.Format("{0} {1} {2} {3}", CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.EmployeeID, CurrentUser.Department));
-                                result = 1;
-                            }
+                            Log.WriteLogEntry("Principal search result " + Psr.Count<Principal>());
+                            UserAccount = (UserPrincipal)Psr.First<Principal>();
+                            CurrentUser.FirstName = UserAccount.GivenName;
+                            CurrentUser.LastName = UserAccount.Surname;
+                            CurrentUser.AdSam = UserAccount.SamAccountName;
+                            CurrentUser.AdUpn = UserAccount.UserPrincipalName;
+                            CurrentUser.UserEmail = UserAccount.EmailAddress;
+                            CurrentUser.EmployeeID = UserAccount.EmployeeId;
+                            DirectoryEntry entry = UserAccount.GetUnderlyingObject() as DirectoryEntry;
+                            if (entry.Properties.Contains("department"))
+                                CurrentUser.Department = entry.Properties["department"].Value.ToString();
+                            if (entry.Properties.Contains("manager"))
+                                CurrentUser.Department = entry.Properties["manager"].Value.ToString();
+                            CurrentUser.Authenicated = true;
+                            Log.WriteLogEntry(string.Format("{0} {1} {2} {3}", CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.EmployeeID, CurrentUser.Department));
+                            result = 1;
                         }
                     }
                 }
-                else
-                    Log.WriteLogEntry("localDomain Appsetting not found!");
             }
             else
-                Log.WriteLogEntry("Appsettings nto found!");
+                Log.WriteLogEntry("localDomain Appsetting not found!");
             return result;
         }
 
