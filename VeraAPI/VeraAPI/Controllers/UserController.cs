@@ -24,7 +24,7 @@ namespace VeraAPI.Controllers
 
         public UserController()
         {
-            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserDataHandler_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIUserController_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
         }
 
         // GET: api/User

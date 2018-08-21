@@ -46,18 +46,22 @@ namespace VeraAPI.Models.DataHandler
                     {
                         conn.Open();
                         cmd.Parameters.AddWithValue("@upn", userPrincipalName);
+                        Log.WriteLogEntry(cmdString);
                         using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SingleResult))
                         {
                             if (rdr.Read())
                             {
                                 CurrentUser = new User();
                                 CurrentUser.UserID = (int)rdr["user_id"];
+                                CurrentUser.FirstName = rdr["first_name"].ToString();
+                                CurrentUser.LastName = rdr["last_name"].ToString();
                                 CurrentUser.UserEmail = rdr["email"].ToString();
                                 CurrentUser.AdSam = rdr["user_sam"].ToString();
                                 CurrentUser.AdUpn = rdr["user_upn"].ToString();
                                 CurrentUser.EmployeeID = rdr["employee_id"].ToString();
-                                CurrentUser.FirstName = rdr["first_name"].ToString();
-                                CurrentUser.LastName = rdr["last_name"].ToString();
+                                CurrentUser.Department = rdr["department"].ToString();
+                                CurrentUser.SupervisorName = rdr["supervisor"].ToString();
+                                result = true;
                             }
                         }
                     }

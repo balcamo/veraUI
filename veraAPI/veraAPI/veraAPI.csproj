@@ -196,7 +196,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HelperClasses\EmailHelper.cs" />
     <Compile Include="HelperClasses\FormHelp.cs" />
+    <Compile Include="HelperClasses\UserHelper.cs" />
     <Compile Include="Models\DataHandler\UserDataHandler.cs" />
     <Compile Include="Models\OfficeHandler\EmailHandler.cs" />
     <Compile Include="Models\JobHeader.cs" />
