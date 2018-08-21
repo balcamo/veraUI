@@ -23,6 +23,7 @@ namespace VeraAPI.HelperClasses
             dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
             dbName = WebConfigurationManager.AppSettings.Get("DBName");
             Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIFormHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+            UIData = new UIDataHandler(dbServer, dbName);
         }
         /**
         * 
@@ -35,7 +36,6 @@ namespace VeraAPI.HelperClasses
         {
             Log.WriteLogEntry("Begin FormHelp SubmitForm...");
             bool result = false;
-            UIData = new UIDataHandler(dbServer, dbName);
             BaseForm SubmittedForm = FormData;
             UIData.FormData = FormData;
             if (UIData.LoadJobTemplate(UIData.FormData.TemplateID))

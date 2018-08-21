@@ -51,17 +51,21 @@ namespace VeraAPI.Controllers
                 {
                     Log.WriteLogEntry("Verify submitted form is the correct type.");
                     value.setNulls();
-
+                    helper = new FormHelp();
+                    Log.WriteLogEntry("Form Helper initialized.");
+                    TravelEmail = new EmailHelper();
+                    Log.WriteLogEntry("Email Helper initialized.");
+                    Log.WriteLogEntry("Start Task to submit the travel form.");
                     Task t = Task.Run(() =>
                     {
-                        Log.WriteLogEntry("Start Task to submit the travel form.");
-                        helper = new FormHelp();
+                        Log.WriteLogEntry("Inside Helper Task.");
+                        helper.SubmitForm(value);
+                        Log.WriteLogEntry("Helper returned.");
                         // change number to constant once file is made
                         if (helper.SubmitForm(value))
                         {
                             Log.WriteLogEntry("Success submitting travel form.");
                             Log.WriteLogEntry("Start EmailHelper.");
-                            TravelEmail = new EmailHelper();
                             Log.WriteLogEntry("Call Travel email helper load user with user email " + helper.userEmail);
                             if (TravelEmail.LoadUser(helper.userEmail))
                             {
