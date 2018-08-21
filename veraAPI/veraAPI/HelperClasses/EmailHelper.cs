@@ -24,6 +24,7 @@ namespace VeraAPI.HelperClasses
             dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
             dbName = WebConfigurationManager.AppSettings.Get("DBName");
             Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+            UserData = new UserDataHandler(dbServer, dbName);
         }
 
         public bool SendEmail()
@@ -32,27 +33,22 @@ namespace VeraAPI.HelperClasses
             bool result = false;
             try
             {
-                if (CurrentUser.Authenicated)
+                ExchangeMail = new EmailHandler(CurrentUser, Log);
+                if (ExchangeMail.ConnectExchangeService())
                 {
-                    ExchangeMail = new EmailHandler(CurrentUser, Log);
-                    if (ExchangeMail.ConnectExchangeService())
+                    Log.WriteLogEntry("Connection to Exchange service successful.");
+                    ExchangeMail.RecipientEmailAddress = CurrentUser.DepartmentHeadEmail;
+                    ExchangeMail.EmailSubject = "Department Head Test Email";
+                    ExchangeMail.EmailBody = "Testing send email to department head.";
+                    if (ExchangeMail.SendEmail())
                     {
-                        Log.WriteLogEntry("Connection to Exchange service successful.");
-                        ExchangeMail.RecipientEmailAddress = CurrentUser.DepartmentHeadEmail;
-                        ExchangeMail.EmailSubject = "Department Head Test Email";
-                        ExchangeMail.EmailBody = "Testing send email to department head.";
-                        if (ExchangeMail.SendEmail())
-                        {
-                            Log.WriteLogEntry("Email sent to " + CurrentUser.DepartmentHeadEmail);
-                        }
-                        else
-                            Log.WriteLogEntry("Failed send email!");
+                        Log.WriteLogEntry("Email sent to " + CurrentUser.DepartmentHeadEmail);
                     }
                     else
-                        Log.WriteLogEntry("Failed connect to Exchange service!");
+                        Log.WriteLogEntry("Failed send email!");
                 }
                 else
-                    Log.WriteLogEntry("Current user not authenticated!");
+                    Log.WriteLogEntry("Failed connect to Exchange service!");
             }
             catch
             {
@@ -68,25 +64,18 @@ namespace VeraAPI.HelperClasses
             bool result = false;
             try
             {
-                if (CurrentUser.Authenicated)
+                UserData.CurrentUser = CurrentUser;
+                if (UserData.LoadUser(userEmail))
                 {
-                    Log.WriteLogEntry("Success user is authenticated.");
-                    UserData = new UserDataHandler(dbServer, dbName);
-                    UserData.CurrentUser = CurrentUser;
-                    if (UserData.LoadUser(userEmail))
-                    {
-                        Log.WriteLogEntry("Success load email user from database.");
-                        if (UserData.CurrentUser.Department != null)
-                            UserData.FillDepartmentHead();
-                        UserData.FillGeneralManager();
-                        CurrentUser = UserData.CurrentUser;
-                        result = true;
-                    }
-                    else
-                        Log.WriteLogEntry("Failed to load user from database!");
+                    Log.WriteLogEntry("Success load email user from database.");
+                    if (UserData.CurrentUser.Department != null)
+                        UserData.FillDepartmentHead();
+                    UserData.FillGeneralManager();
+                    CurrentUser = UserData.CurrentUser;
+                    result = true;
                 }
                 else
-                    Log.WriteLogEntry("Current user not authenticated!");
+                    Log.WriteLogEntry("Failed to load user from database!");
             }
             catch
             {

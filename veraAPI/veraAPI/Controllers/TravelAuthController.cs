@@ -55,6 +55,7 @@ namespace VeraAPI.Controllers
                     Log.WriteLogEntry("Form Helper initialized.");
                     TravelEmail = new EmailHelper();
                     Log.WriteLogEntry("Email Helper initialized.");
+
                     Log.WriteLogEntry("Start Task to submit the travel form.");
                     Task t = Task.Run(() =>
                     {
@@ -65,7 +66,6 @@ namespace VeraAPI.Controllers
                         if (helper.SubmitForm(value))
                         {
                             Log.WriteLogEntry("Success submitting travel form.");
-                            Log.WriteLogEntry("Start EmailHelper.");
                             Log.WriteLogEntry("Call Travel email helper load user with user email " + helper.userEmail);
                             if (TravelEmail.LoadUser(helper.userEmail))
                             {
