@@ -64,20 +64,23 @@ namespace VeraAPI.HelperClasses
 
         public bool LoadUser(string userEmail)
         {
-            Log.WriteLogEntry("Begin LoadUser...");
+            Log.WriteLogEntry("Begin EmailHelper LoadUser...");
             bool result = false;
             try
             {
                 if (CurrentUser.Authenicated)
                 {
+                    Log.WriteLogEntry("Success user is authenticated.");
                     UserData = new UserDataHandler(dbServer, dbName);
                     UserData.CurrentUser = CurrentUser;
                     if (UserData.LoadUser(userEmail))
                     {
+                        Log.WriteLogEntry("Success load email user from database.");
                         if (UserData.CurrentUser.Department != null)
                             UserData.FillDepartmentHead();
                         UserData.FillGeneralManager();
                         CurrentUser = UserData.CurrentUser;
+                        result = true;
                     }
                     else
                         Log.WriteLogEntry("Failed to load user from database!");
@@ -89,7 +92,7 @@ namespace VeraAPI.HelperClasses
             {
                 Log.WriteLogEntry("User object does not exist!");
             }
-            Log.WriteLogEntry("End LoadUser.");
+            Log.WriteLogEntry("End EmailHelper LoadUser.");
             return result;
         }
     }

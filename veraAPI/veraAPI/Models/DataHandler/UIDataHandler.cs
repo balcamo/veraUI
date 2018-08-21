@@ -129,6 +129,7 @@ namespace VeraAPI.Models.DataHandler
 
                 //Capture email address for notification
                 userEmail = Travel.SubmitterSig;
+                Log.WriteLogEntry("Travel Auth user email set to submitter signature " + userEmail);
 
                 // Attempt data typing of required form fields prior to SQL call
                 // Set the result to false and return in the catch and do not insert the form data

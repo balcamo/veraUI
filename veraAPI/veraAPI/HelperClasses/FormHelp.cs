@@ -33,16 +33,20 @@ namespace VeraAPI.HelperClasses
         **/
         public bool SubmitForm(BaseForm FormData)
         {
+            Log.WriteLogEntry("Begin FormHelp SubmitForm...");
             bool result = false;
             UIData = new UIDataHandler(dbServer, dbName);
             BaseForm SubmittedForm = FormData;
             UIData.FormData = FormData;
             if (UIData.LoadJobTemplate(UIData.FormData.TemplateID))
             {
+                Log.WriteLogEntry("Success load submit form job template.");
                 if (UIData.InsertFormData())
                 {
+                    Log.WriteLogEntry("Success insert form data to database.");
                     if (UIData.InsertJob())
                     {
+                        Log.WriteLogEntry("Success insert job data to database.");
                         // Call UIDataHandler method to load the form data from SQL using the submitted form ID
                         UIData.LoadTravelAuth(SubmittedForm.FormDataID);
                         FormValidator = new Validator(Log);
@@ -51,13 +55,18 @@ namespace VeraAPI.HelperClasses
                         {
                             Log.WriteLogEntry("Submitted form matches inserted form!");
                             userEmail = UIData.userEmail;
+                            Log.WriteLogEntry("FormHelp user email set to " + userEmail);
                             result = true;
                         }
                         else
                             Log.WriteLogEntry("Mismatch!!! Submitted form does not match inserted form!");
                     }
+                    else
+                        Log.WriteLogEntry("Failed insert job data to database!");
                 }
+                Log.WriteLogEntry("Failed insert form data to database.");
             }
+            Log.WriteLogEntry("End FormHelp SubmitForm result " + result);
             return result;
         }
 
