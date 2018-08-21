@@ -65,16 +65,18 @@ namespace VeraAPI.Controllers
                             Log.WriteLogEntry("Call Travel email helper load user with user email " + helper.userEmail);
                             if (TravelEmail.LoadUser(helper.userEmail))
                             {
-                                Log.WriteLogEntry("Success loading email user data.");
+                                Log.WriteLogEntry("Success load email user from database.");
                                 if (TravelEmail.SendEmail())
-                                    Log.WriteLogEntry("Success sending travel authorization email to department head.");
+                                    Log.WriteLogEntry("Success send travel authorization email to department head.");
+                                else
+                                    Log.WriteLogEntry("Failed send travel authorization email.");
                             }
+                            else
+                                Log.WriteLogEntry("Fail load user from database!");
                         }
+                        Log.WriteLogEntry("Fail FormHelp SubmitForm!");
                     });
                     result = "Travel Authorization Form Submitted.";
-                    //Thread helpThread = new Thread(authHelper.SubmitAuthForm);
-
-                    //helpThread.Start(authForm);
                 }
             }
             catch(Exception e)
