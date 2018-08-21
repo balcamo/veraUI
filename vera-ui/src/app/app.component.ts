@@ -54,16 +54,17 @@ export class AppComponent {
         headers: pageHeaders
       });
       var body = JSON.stringify(this.user.UserEmail);
-      console.log(this.consts.url + 'User');
-      this.http.get(this.consts.url + 'User?userName={' + this.user.UserEmail + '}')
+      console.log(this.consts.url + 'User?userEmail={' + this.user.UserEmail + '}');
+      this.http.get(this.consts.url + 'User?userEmail={' + this.user.UserEmail + '}')
         .subscribe((data) => this.waitForHttp(data));
     }
   }
 
   waitForHttp(data: any) {
+    console.log(data.text());
     if (data == undefined) {
-      alert()
-    } else {
+      alert("no data");
+    } else if (data.text() != 0) {
       this.user.EntryGroup = data.text() as number;
       if (data.text() == 1) { this.user.nav = this.consts.employee; }
       this.userService.setUser(this.user);
@@ -73,6 +74,8 @@ export class AppComponent {
       this.emit_event("nav");
       this.userEntry = "none";
       this.mainPage = "block";
+    } else {
+      alert("Not a valid email. Please try again");
     }
   }
   

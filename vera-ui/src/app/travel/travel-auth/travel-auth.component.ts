@@ -3,6 +3,8 @@ import { AuthForm } from '../../classes/travel-auth-form';
 import { Constants } from '../../classes/constants';
 import { Headers, Http, URLSearchParams, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
+import { User } from '../../classes/user';
+import { UserService } from '../../service/app.service.user';
 
 
 @Component({
@@ -16,6 +18,7 @@ export class TravelAuthComponent implements OnInit {
   consts = new Constants();
   total=0;
   http: Http;
+  user: User;
   firstNameBorder = "black";
   lastNameBorder = "black";
   phoneBorder = "black";
@@ -39,8 +42,9 @@ export class TravelAuthComponent implements OnInit {
   advaneDisplay = "none";
   sigColor = "black";
   // set up HTTP var
-  constructor(http: Http) {
+  constructor(http: Http, userService: UserService) {
     this.http = http;
+    this.user = userService.getUser();
     this.setFormDefaults();
   }
 
@@ -64,6 +68,7 @@ export class TravelAuthComponent implements OnInit {
   submitForm() {
     console.log("submitting form");
     console.log(this.form);
+    console.log("user email is" + this.user.UserEmail);
     // this will check if all required fields have been 
     //   filled in before submitting the form to the API
     if (this.checkRequired()) {
@@ -75,6 +80,7 @@ export class TravelAuthComponent implements OnInit {
         search: params,
         headers: pageHeaders
       });
+      this.form.SubmitterSig = this.user.UserEmail;
       var body = JSON.stringify(this.form);
       console.log(this.consts.url +'TravelAuth');
       this.http.post(this.consts.url + 'TravelAuth', body, options)
