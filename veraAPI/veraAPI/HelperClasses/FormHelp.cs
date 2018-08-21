@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using VeraAPI.Models;
 using VeraAPI.Models.Forms;
 using VeraAPI.Models.DataHandler;
@@ -10,9 +11,19 @@ namespace VeraAPI.HelperClasses
 {
     public class FormHelp
     {
-        public UIDataHandler UIData = new UIDataHandler("Valhalla", "Valhalla");
-        Scribe Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIFormHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+        private string dbServer;
+        private string dbName;
+        private UIDataHandler UIData;
+        private Validator FormValidator;
+        private Scribe Log;
+        public string userEmail { get; set; }
 
+        public FormHelp()
+        {
+            dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
+            dbName = WebConfigurationManager.AppSettings.Get("DBName");
+            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIFormHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+        }
         /**
         * 
         * SubmitForm will insert a new record into the database 
@@ -20,10 +31,11 @@ namespace VeraAPI.HelperClasses
         * @param FormData : this is the form that needs to be inserted
         * 
         **/
-        public void SubmitForm(BaseForm FormData)
+        public bool SubmitForm(BaseForm FormData)
         {
+            bool result = false;
+            UIData = new UIDataHandler(dbServer, dbName);
             BaseForm SubmittedForm = FormData;
-            Validator FormValidator;
             UIData.FormData = FormData;
             if (UIData.LoadJobTemplate(UIData.FormData.TemplateID))
             {
@@ -36,13 +48,17 @@ namespace VeraAPI.HelperClasses
                         FormValidator = new Validator(Log);
                         // Compare above stored SubmittedForm to loaded UIDataHandler form
                         if (FormValidator.CompareAlphaBravo(SubmittedForm, UIData.FormData))
+                        {
                             Log.WriteLogEntry("Submitted form matches inserted form!");
+                            userEmail = UIData.userEmail;
+                            result = true;
+                        }
                         else
                             Log.WriteLogEntry("Mismatch!!! Submitted form does not match inserted form!");
                     }
                 }
             }
-            return;
+            return result;
         }
 
         /**

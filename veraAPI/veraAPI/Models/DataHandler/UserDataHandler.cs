@@ -10,7 +10,7 @@ namespace VeraAPI.Models.DataHandler
 {
     public class UserDataHandler : SQLDataHandler
     {
-        private Scribe Log = null;
+        private Scribe Log;
         private string dataConnectionString = string.Empty;
         private string dbServer = string.Empty;
         private string dbName = string.Empty;
@@ -21,7 +21,7 @@ namespace VeraAPI.Models.DataHandler
         {
             this.dbServer = dbServer;
             this.dbName = dbName;
-            this.Log = new Scribe("c:\\temp", "UserDataHandler_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserDataHandler_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
             this.dataConnectionString = GetDataConnectionString();
         }
 
@@ -46,18 +46,22 @@ namespace VeraAPI.Models.DataHandler
                     {
                         conn.Open();
                         cmd.Parameters.AddWithValue("@upn", userPrincipalName);
+                        Log.WriteLogEntry(cmdString);
                         using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SingleResult))
                         {
                             if (rdr.Read())
                             {
                                 CurrentUser = new User();
                                 CurrentUser.UserID = (int)rdr["user_id"];
+                                CurrentUser.FirstName = rdr["first_name"].ToString();
+                                CurrentUser.LastName = rdr["last_name"].ToString();
                                 CurrentUser.UserEmail = rdr["email"].ToString();
                                 CurrentUser.AdSam = rdr["user_sam"].ToString();
                                 CurrentUser.AdUpn = rdr["user_upn"].ToString();
                                 CurrentUser.EmployeeID = rdr["employee_id"].ToString();
-                                CurrentUser.FirstName = rdr["first_name"].ToString();
-                                CurrentUser.LastName = rdr["last_name"].ToString();
+                                CurrentUser.Department = rdr["department"].ToString();
+                                CurrentUser.SupervisorName = rdr["supervisor"].ToString();
+                                result = true;
                             }
                         }
                     }

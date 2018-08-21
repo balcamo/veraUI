@@ -8,6 +8,7 @@ using VeraAPI.Models;
 using VeraAPI.Models.Forms;
 using VeraAPI.HelperClasses;
 using VeraAPI.Models.Security;
+using VeraAPI.Models.DataHandler;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,10 +17,14 @@ namespace VeraAPI.Controllers
 {
     public class TravelAuthController : ApiController
     {
-        FormHelp helper;
-        User CurrentUser;
+        private FormHelp helper;
+        private EmailHelper TravelEmail;
+        private Scribe Log;
 
-        public TravelAuthController() { }
+        public TravelAuthController()
+        {
+            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UITravelAuthController_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+        }
 
         // GET: api/API
         public string Get()
@@ -38,20 +43,26 @@ namespace VeraAPI.Controllers
         public string Post([FromBody]TravelAuthForm value)
         {
             string result = string.Empty;
-            helper = new FormHelp();
             value.TemplateID = TemplateIndex.InsertTravelAuth;
-            try {
+            try
+            {
                 if (value.GetType() == typeof(TravelAuthForm))
                 {
-                    //TravelAuthForm authForm = new TravelAuthForm(value);
-                    result = "Submitted Successfully";
                     value.setNulls();
 
                     Task t = Task.Run(() =>
                     {
+                        helper = new FormHelp();
                         // change number to constant once file is made
-                        helper.SubmitForm(value);
-                        
+                        if (helper.SubmitForm(value))
+                        {
+                            TravelEmail = new EmailHelper();
+                            if (TravelEmail.LoadUser(helper.userEmail))
+                            {
+                                TravelEmail.SendEmail();
+                            }
+                            result = "Travel Authorization Form Submitted.";
+                        }
                     });
                     //Thread helpThread = new Thread(authHelper.SubmitAuthForm);
 

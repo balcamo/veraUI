@@ -8,7 +8,7 @@ using System.Configuration;
 using VeraAPI.Models;
 using VeraAPI.Models.Security;
 
-namespace VeraAPI.Models
+namespace VeraAPI.Models.OfficeHandler
 {
     public class EmailHandler
     {
