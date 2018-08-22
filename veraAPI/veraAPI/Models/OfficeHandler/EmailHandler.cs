@@ -15,15 +15,24 @@ namespace VeraAPI.Models.OfficeHandler
         public string EmailSubject { get; set; }
         public string EmailBody { get; set; }
         public string RecipientEmailAddress { get; set; }
-        private User EmailSender;
+        public User UserEmail { get; set; }
         private ExchangeService Emailer;
+        private WebCredentials UserCredentials;
         private EmailMessage EmailMessage;
         private Scribe Log;
 
-        public EmailHandler(User CurrentUser, Scribe Log)
+        public EmailHandler()
         {
-            this.EmailSender = CurrentUser;
-            this.Log = Log;
+            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+            Emailer = new ExchangeService();
+        }
+
+        public EmailHandler(User CurrentUser)
+        {
+            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+            this.UserEmail = CurrentUser;
+            Emailer = new ExchangeService();
+            UserCredentials = new WebCredentials(this.UserEmail.AdUpn, this.UserEmail.UserPwd);
         }
 
         private bool ValidateRedirect(string redirectionUrl)
@@ -37,14 +46,12 @@ namespace VeraAPI.Models.OfficeHandler
 
         public bool ConnectExchangeService()
         {
+            Log.WriteLogEntry("Starting ConnectExchangeService.");
             bool result = false;
             try
             {
-                Emailer = new ExchangeService()
-                {
-                    Credentials = new WebCredentials(EmailSender.AdUpn, EmailSender.UserPwd)
-                };
-                Emailer.AutodiscoverUrl(EmailSender.AdUpn, ValidateRedirect);
+                Emailer.Credentials = UserCredentials;
+                Emailer.AutodiscoverUrl(UserEmail.AdUpn, ValidateRedirect);
                 result = true;
             }
             catch (Exception ex)
@@ -53,6 +60,7 @@ namespace VeraAPI.Models.OfficeHandler
                 Log.WriteLogEntry(ex.Message);
                 result = false;
             }
+            Log.WriteLogEntry("End ConnectExchangeService.");
             return result;
         }
 

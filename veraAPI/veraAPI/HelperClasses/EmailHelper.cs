@@ -21,39 +21,46 @@ namespace VeraAPI.HelperClasses
 
         public EmailHelper()
         {
+            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
             dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
             dbName = WebConfigurationManager.AppSettings.Get("DBName");
-            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
             UserData = new UserDataHandler(dbServer, dbName);
+            ExchangeMail = new EmailHandler();
         }
 
         public bool SendEmail()
         {
             Log.WriteLogEntry("Begin SendEmail...");
             bool result = false;
-            try
+            if (CurrentUser != null)
             {
-                ExchangeMail = new EmailHandler(CurrentUser, Log);
-                if (ExchangeMail.ConnectExchangeService())
+                Log.WriteLogEntry("Email user object ready.");
+                ExchangeMail = CurrentUser;
+                try
                 {
-                    Log.WriteLogEntry("Connection to Exchange service successful.");
-                    ExchangeMail.RecipientEmailAddress = CurrentUser.DepartmentHeadEmail;
-                    ExchangeMail.EmailSubject = "Department Head Test Email";
-                    ExchangeMail.EmailBody = "Testing send email to department head.";
-                    if (ExchangeMail.SendEmail())
+                    if (ExchangeMail.ConnectExchangeService())
                     {
-                        Log.WriteLogEntry("Email sent to " + CurrentUser.DepartmentHeadEmail);
+                        Log.WriteLogEntry("Connection to Exchange service successful.");
+                        ExchangeMail.RecipientEmailAddress = CurrentUser.DepartmentHeadEmail;
+                        ExchangeMail.EmailSubject = "Department Head Test Email";
+                        ExchangeMail.EmailBody = "Testing send email to department head.";
+                        if (ExchangeMail.SendEmail())
+                        {
+                            Log.WriteLogEntry("Email sent to " + CurrentUser.DepartmentHeadEmail);
+                        }
+                        else
+                            Log.WriteLogEntry("Failed send email!");
                     }
                     else
-                        Log.WriteLogEntry("Failed send email!");
+                        Log.WriteLogEntry("Failed connect to Exchange service!");
                 }
-                else
-                    Log.WriteLogEntry("Failed connect to Exchange service!");
+                catch (Exception ex)
+                {
+                    Log.WriteLogEntry("Program error " + ex.Message);
+                }
             }
-            catch
-            {
+            else
                 Log.WriteLogEntry("User object does not exist!");
-            }
             Log.WriteLogEntry("End SendEmail.");
             return result;
         }
@@ -62,25 +69,17 @@ namespace VeraAPI.HelperClasses
         {
             Log.WriteLogEntry("Begin EmailHelper LoadUser...");
             bool result = false;
-            try
+            if (UserData.LoadUser(userEmail))
             {
-                UserData.CurrentUser = CurrentUser;
-                if (UserData.LoadUser(userEmail))
-                {
-                    Log.WriteLogEntry("Success load email user from database.");
-                    if (UserData.CurrentUser.Department != null)
-                        UserData.FillDepartmentHead();
-                    UserData.FillGeneralManager();
-                    CurrentUser = UserData.CurrentUser;
-                    result = true;
-                }
-                else
-                    Log.WriteLogEntry("Failed to load user from database!");
+                Log.WriteLogEntry("Success load email user from database.");
+                if (UserData.CurrentUser.Department != null)
+                    UserData.FillDepartmentHead();
+                UserData.FillGeneralManager();
+                CurrentUser = UserData.CurrentUser;
+                result = true;
             }
-            catch
-            {
-                Log.WriteLogEntry("User object does not exist!");
-            }
+            else
+                Log.WriteLogEntry("Failed to load user from database!");
             Log.WriteLogEntry("End EmailHelper LoadUser.");
             return result;
         }
