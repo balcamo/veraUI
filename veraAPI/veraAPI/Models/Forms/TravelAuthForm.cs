@@ -17,17 +17,18 @@ namespace VeraAPI.Models.Forms
         public string TravelBegin;
         public string TravelEnd;
         public string DistVehicle;
-        public string DistVehicleNum;
         public string RegistrationCost;
         public string Airfare;
         public string RentalCar;
-        public string FuelParking;
+        public string Fuel;
+        public string ParkingTolls;
         public string Mileage;
         public string Lodging;
         public string PerDiem;
         public string FullDays;
         public string Misc;
-        public string total;
+        public string MiscExplain;
+        public string TotalEstimate;
         public string Advance;
         public string AdvanceAmount;
         public string Policy;
@@ -35,7 +36,8 @@ namespace VeraAPI.Models.Forms
         public string RecapRegistrationCost;
         public string RecapAirfare;
         public string RecapRentalCar;
-        public string RecapFuelParking;
+        public string RecapFuel;
+        public string RecapParkingTolls;
         public string RecapMileage;
         public string RecapLodging;
         public string RecapPerDiem;
@@ -64,17 +66,17 @@ namespace VeraAPI.Models.Forms
             if (TravelBegin == null) { TravelBegin = string.Empty; }
             if (TravelEnd == null) { TravelEnd = string.Empty; }
             if (DistVehicle == null) { DistVehicle = string.Empty; }
-            if (DistVehicleNum == null) { DistVehicleNum = string.Empty; }
             if (RegistrationCost == null) { RegistrationCost = string.Empty; }
             if (Airfare == null) { Airfare = string.Empty; }
             if (RentalCar == null) { RentalCar = string.Empty; }
-            if (FuelParking == null) { FuelParking = string.Empty; }
+            if (Fuel == null) { Fuel = string.Empty; }
+            if (ParkingTolls == null) { ParkingTolls = string.Empty; }
             if (Mileage == null) { Mileage = string.Empty; }
             if (Lodging == null) { Lodging = string.Empty; }
             if (PerDiem == null) { PerDiem = string.Empty; }
             if (FullDays == null) { FullDays = string.Empty; }
             if (Misc == null) { Misc = string.Empty; }
-            if (total == null) { total = string.Empty; }
+            if (TotalEstimate == null) { TotalEstimate = string.Empty; }
             if (Advance == null) { Advance = string.Empty; }
             if (AdvanceAmount == null) { AdvanceAmount = string.Empty; }
             if (Policy == null) { Policy = string.Empty; }
@@ -82,7 +84,8 @@ namespace VeraAPI.Models.Forms
             if (RecapRegistrationCost == null) { RecapRegistrationCost = string.Empty; }
             if (RecapRentalCar == null) { RecapRentalCar = string.Empty; }
             if (RecapAirfare == null) { RecapAirfare = string.Empty; }
-            if (RecapFuelParking == null) { RecapFuelParking = string.Empty; }
+            if (RecapFuel == null) { RecapFuel = string.Empty; }
+            if (RecapParkingTolls == null) { RecapParkingTolls = string.Empty; }
             if (RecapLodging == null) { RecapLodging = string.Empty; }
             if (RecapPerDiem == null) { RecapPerDiem = string.Empty; }
             if (RecapFullDays == null) { RecapFullDays = string.Empty; }
