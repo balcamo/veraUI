@@ -17,8 +17,9 @@ namespace VeraAPI.Controllers
 {
     public class TravelAuthController : ApiController
     {
-        private FormHelp helper;
+        private FormHelp TravelFormHelper;
         private EmailHelper TravelEmail;
+        private UserHelper TravelUser;
         private Scribe Log;
 
         public TravelAuthController()
@@ -51,23 +52,20 @@ namespace VeraAPI.Controllers
                 {
                     Log.WriteLogEntry("Verify submitted form is the correct type.");
                     value.setNulls();
-                    helper = new FormHelp();
-                    Log.WriteLogEntry("Form Helper initialized.");
+                    TravelFormHelper = new FormHelp();
                     TravelEmail = new EmailHelper();
-                    Log.WriteLogEntry("Email Helper initialized.");
+                    TravelUser = new UserHelper();
+
                     Log.WriteLogEntry("Start Task to submit the travel form.");
                     Task t = Task.Run(() =>
                     {
                         Log.WriteLogEntry("Inside Helper Task.");
-                        helper.SubmitForm(value);
-                        Log.WriteLogEntry("Helper returned.");
                         // change number to constant once file is made
-                        if (helper.SubmitForm(value))
+                        if (TravelFormHelper.SubmitForm(value))
                         {
                             Log.WriteLogEntry("Success submitting travel form.");
-                            Log.WriteLogEntry("Start EmailHelper.");
-                            Log.WriteLogEntry("Call Travel email helper load user with user email " + helper.userEmail);
-                            if (TravelEmail.LoadUser(helper.userEmail))
+                            Log.WriteLogEntry("Call Travel email helper load user with user email " + TravelFormHelper.userEmail);
+                            if (TravelEmail.LoadUser(TravelFormHelper.userEmail))
                             {
                                 Log.WriteLogEntry("Success load email user from database.");
                                 if (TravelEmail.SendEmail())

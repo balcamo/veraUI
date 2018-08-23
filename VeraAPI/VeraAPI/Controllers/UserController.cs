@@ -16,7 +16,7 @@ namespace VeraAPI.Controllers
 {
     public class UserController : ApiController
     {
-        private User CurrentUser;
+        public User CurrentUser { get; set; }
         private LDAPHandler VeraLDAP;
         private PrincipalContext UserContext;
         private UserPrincipal UserAccount;

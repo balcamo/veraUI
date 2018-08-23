@@ -21,20 +21,23 @@ namespace VeraAPI.HelperClasses
 
         public EmailHelper()
         {
+            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
             dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
             dbName = WebConfigurationManager.AppSettings.Get("DBName");
-            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+            UserData = new UserDataHandler(dbServer, dbName);
+            ExchangeMail = new EmailHandler();
         }
 
         public bool SendEmail()
         {
             Log.WriteLogEntry("Begin SendEmail...");
             bool result = false;
-            try
+            if (CurrentUser != null)
             {
-                if (CurrentUser.Authenicated)
+                Log.WriteLogEntry("Email user object ready.");
+                ExchangeMail = CurrentUser;
+                try
                 {
-                    ExchangeMail = new EmailHandler(CurrentUser, Log);
                     if (ExchangeMail.ConnectExchangeService())
                     {
                         Log.WriteLogEntry("Connection to Exchange service successful.");
@@ -51,13 +54,13 @@ namespace VeraAPI.HelperClasses
                     else
                         Log.WriteLogEntry("Failed connect to Exchange service!");
                 }
-                else
-                    Log.WriteLogEntry("Current user not authenticated!");
+                catch (Exception ex)
+                {
+                    Log.WriteLogEntry("Program error " + ex.Message);
+                }
             }
-            catch
-            {
+            else
                 Log.WriteLogEntry("User object does not exist!");
-            }
             Log.WriteLogEntry("End SendEmail.");
             return result;
         }
@@ -66,32 +69,17 @@ namespace VeraAPI.HelperClasses
         {
             Log.WriteLogEntry("Begin EmailHelper LoadUser...");
             bool result = false;
-            try
+            if (UserData.LoadUser(userEmail))
             {
-                if (CurrentUser.Authenicated)
-                {
-                    Log.WriteLogEntry("Success user is authenticated.");
-                    UserData = new UserDataHandler(dbServer, dbName);
-                    UserData.CurrentUser = CurrentUser;
-                    if (UserData.LoadUser(userEmail))
-                    {
-                        Log.WriteLogEntry("Success load email user from database.");
-                        if (UserData.CurrentUser.Department != null)
-                            UserData.FillDepartmentHead();
-                        UserData.FillGeneralManager();
-                        CurrentUser = UserData.CurrentUser;
-                        result = true;
-                    }
-                    else
-                        Log.WriteLogEntry("Failed to load user from database!");
-                }
-                else
-                    Log.WriteLogEntry("Current user not authenticated!");
+                Log.WriteLogEntry("Success load email user from database.");
+                if (UserData.CurrentUser.Department != null)
+                    UserData.FillDepartmentHead();
+                UserData.FillGeneralManager();
+                CurrentUser = UserData.CurrentUser;
+                result = true;
             }
-            catch
-            {
-                Log.WriteLogEntry("User object does not exist!");
-            }
+            else
+                Log.WriteLogEntry("Failed to load user from database!");
             Log.WriteLogEntry("End EmailHelper LoadUser.");
             return result;
         }
