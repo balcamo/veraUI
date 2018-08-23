@@ -1,41 +1,43 @@
 
 
 export class AuthForm {
-  Preparer = false;
-  FirstName: string;
-  LastName: string;
-  Phone: number;
-  Email: string;
-  EventTitle: string;
-  Location: string;
-  TravelBegin: Date;
-  TravelEnd: Date;
-  DistVehicle: boolean;
-  DistVehicleNum: number;
-  RegistrationCost: number;
-  Airfare: number;
-  RentalCar: number;
-  FuelParking: number;
-  Mileage: number;
-  Lodging: number;
-  PerDiem: number;
-  FullDays: number;
-  Misc: number;
-  TotalEstimate: number;
-  Advance: boolean;
-  AdvanceAmount: number;
-  RecapRegistrationCost: number;
-  RecapAirfare: number;
-  RecapRentalCar: number;
-  RecapFuelParking: number;
-  RecapMileage: number;
-  RecapLodging: number;
-  RecapPerDiem: number;
-  RecapFullDays: number;
-  RecapMisc: number;
-  TotalRecap: number;
-  TotalReimburse: number;
-  Policy: boolean;
-  SubmitterSig: string;
-  Supervisor: string;
+  Bool1 = false;      // Preparer
+  String1: string;    // FirstName
+  String2: string;    // LastName
+  decimal1: number;   // Phone
+  String3: string;    // Email
+  String4: string;    // EventTitle
+  String5: string;    // Location
+  Date1: Date;        // TravelBegin
+  Date2: Date;        // TravelEnd
+  Bool2: boolean;     // DistVehicle
+  Decimal2: number;   // RegistrationCost
+  Decimal3: number;   // Airfare
+  Decimal4: number;   // RentalCar
+  Decimal5: number;   // Fuel
+  Decimal6: number;   // ParkingTolls
+  Decimal7: number;   // Mileage
+  Decimal8: number;   // Lodging
+  Decimal9: number;   // PerDiem
+  Decimal10: number;  // FullDays
+  Decimal11: number;  // Misc
+  String6: string;    // MiscExplain
+  Decimal12: number;  // TotalEstimate
+  Bool3: boolean;     // Advance
+  Decimal13: number;  // AdvanceAmount
+  Bool4: boolean;     // Policy
+  String7: string;    // SubmitterSig
+  Decimal14: number;  // RecapRegistrationCost
+  Decimal15: number;  // RecapAirfare
+  Decimal16: number;  // RecapRentalCar
+  Decimal17: number;  // RecapFuel
+  Decimal18: number;  // RecapParkingTolls
+  Decimal19: number;  // RecapMileage
+  Decimal20: number;  // RecapLodging
+  Decimal21: number;  // RecapPerDiem
+  Decimal22: number;  // RecapFullDays
+  Decimal23: number;  // RecapMisc
+  Decimal24: number;  // TotalRecap
+  Decimal25: number;  // TotalReimburse
+  String8: string;    // Supervisor
 }

@@ -18,7 +18,8 @@ export class ViewAuthFormsComponent implements OnInit {
   displayForm = "none";
   displayRecap = "none";
   consts = new Constants();
-
+  registrationComp = true;
+  airfareComp = true;
   form = new AuthForm();
   oldForm: AuthForm;
   // temperary
@@ -32,12 +33,12 @@ export class ViewAuthFormsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.auth1.EventTitle = "water and power conference";
-    this.auth1.Location = "Washington";
-    this.auth1.Supervisor = "red";
-    this.auth2.EventTitle = "Event 2";
-    this.auth2.Location = "Texas";
-    this.auth2.Supervisor = "green";
+    this.auth1.String4 = "water and power conference";
+    this.auth1.String5 = "Washington";
+    this.auth1.String8 = "red";
+    this.auth2.String4 = "Event 2";
+    this.auth2.String5 = "Texas";
+    this.auth2.String8 = "green";
 
     this.authForms.push(this.auth1);
     this.authForms.push(this.auth2);
@@ -68,13 +69,15 @@ export class ViewAuthFormsComponent implements OnInit {
    * and the total the traveler is owed for reimbursement 
    * */
   checkTot() {
-    this.form.TotalRecap = 0;
-    var mileage = this.form.Mileage * this.consts.mileageRate;
-    var foodTravel = this.form.RecapPerDiem * this.consts.firstLastDayFood;
-    var foodFull = this.form.RecapPerDiem * this.form.RecapFullDays
-    this.form.TotalRecap = this.form.RecapRegistrationCost + this.form.RecapAirfare + this.form.RecapRentalCar +
-      this.form.RecapFuelParking + mileage + this.form.RecapLodging + foodTravel + foodFull + this.form.RecapMisc;
-    this.form.TotalReimburse = this.form.TotalRecap - this.form.AdvanceAmount;
+    if (this.airfareComp) { this.form.Decimal15 = 0; }
+    if (this.registrationComp) { this.form.Decimal14 = 0; }
+    this.form.Decimal24 = 0;
+    var mileage = this.form.Decimal19 * this.consts.mileageRate;
+    var foodTravel = this.form.Decimal21 * this.consts.firstLastDayFood;
+    var foodFull = this.form.Decimal21 * this.form.Decimal22
+    this.form.Decimal24 = this.form.Decimal14 + this.form.Decimal15 + this.form.Decimal16 + foodFull +
+      this.form.Decimal17 + this.form.Decimal18 + mileage + this.form.Decimal20 + foodTravel  + this.form.Decimal23;
+    this.form.Decimal25 = this.form.Decimal24 - this.form.Decimal13;
   }
 
   /**
@@ -82,19 +85,22 @@ export class ViewAuthFormsComponent implements OnInit {
    * */
   showRecap() {
     this.displayForm = "none";
+    this.form.Decimal15 = 0;
+    this.form.Decimal14 = 0;
+    this.form.Decimal16 = 0;
+    this.form.Decimal17 = 0;
+    this.form.Decimal18 = 0;
+    this.form.Decimal19 = 0;
+    this.form.Decimal20 = 0;
+    this.form.Decimal22 = 0;
+    this.form.Decimal21 = 0;
+    this.form.Decimal23 = 0;
+    this.form.Decimal24 = 0;
+    this.form.Decimal25 = 0;
+
+    console.log("Form" + this.form);
     this.displayRecap = "block";
-    
-    this.form.RecapAirfare = this.form.Airfare;
-    this.form.RecapRegistrationCost = this.form.RegistrationCost;
-    this.form.RecapRentalCar = this.form.RentalCar;
-    this.form.RecapFuelParking = this.form.FuelParking;
-    this.form.RecapMileage = this.form.Mileage;
-    this.form.RecapLodging = this.form.Lodging;
-    this.form.RecapFullDays = this.form.FullDays;
-    this.form.RecapPerDiem = this.form.PerDiem;
-    this.form.RecapMisc = this.form.Misc;
-    this.form.TotalRecap = this.form.TotalEstimate;
-    console.log("Form" +this.form);
+
   }
 
   /**
