@@ -36,33 +36,31 @@ namespace VeraAPI.HelperClasses
         {
             Log.WriteLogEntry("Begin FormHelp SubmitForm...");
             bool result = false;
+            // Hold submitted form for comparison
             BaseForm SubmittedForm = FormData;
+            // Set data handler form to submitted form
             UIData.FormData = FormData;
+            // Load the job template corresponding to the templateID for the submitted form
             if (UIData.LoadJobTemplate(UIData.FormData.TemplateID))
             {
                 Log.WriteLogEntry("Success load submit form job template.");
+                // Insert travel form data into the database
                 if (UIData.InsertFormData())
                 {
                     Log.WriteLogEntry("Success insert form data to database.");
-                    if (UIData.InsertJob())
+                    // Call UIDataHandler method to load the form data from SQL using the submitted form ID
+                    UIData.LoadTravelAuth(SubmittedForm.FormDataID);
+                    FormValidator = new Validator(Log);
+                    // Compare above stored SubmittedForm to loaded UIDataHandler form
+                    if (FormValidator.CompareAlphaBravo(SubmittedForm, UIData.FormData))
                     {
-                        Log.WriteLogEntry("Success insert job data to database.");
-                        // Call UIDataHandler method to load the form data from SQL using the submitted form ID
-                        UIData.LoadTravelAuth(SubmittedForm.FormDataID);
-                        FormValidator = new Validator(Log);
-                        // Compare above stored SubmittedForm to loaded UIDataHandler form
-                        if (FormValidator.CompareAlphaBravo(SubmittedForm, UIData.FormData))
-                        {
-                            Log.WriteLogEntry("Submitted form matches inserted form!");
-                            userEmail = UIData.userEmail;
-                            Log.WriteLogEntry("FormHelp user email set to " + userEmail);
-                            result = true;
-                        }
-                        else
-                            Log.WriteLogEntry("Mismatch!!! Submitted form does not match inserted form!");
+                        Log.WriteLogEntry("Submitted form matches inserted form!");
+                        userEmail = UIData.userEmail;
+                        Log.WriteLogEntry("FormHelp user email set to " + userEmail);
+                        result = true;
                     }
                     else
-                        Log.WriteLogEntry("Failed insert job data to database!");
+                        Log.WriteLogEntry("Mismatch!!! Submitted form does not match inserted form!");
                 }
                 Log.WriteLogEntry("Failed insert form data to database.");
             }

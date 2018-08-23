@@ -16,7 +16,7 @@ namespace VeraAPI.HelperClasses
         private string dbName;
         private EmailHandler ExchangeMail;
         private UserDataHandler UserData;
-        private User CurrentUser;
+        private LoginUser CurrentUser;
         private Scribe Log;
 
         public EmailHelper()

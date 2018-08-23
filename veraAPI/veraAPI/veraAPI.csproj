@@ -50,11 +50,23 @@
     <Reference Include="Microsoft.Exchange.WebServices, Version=2.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Exchange.WebServices.Managed.Api.2.2.1.1\lib\net35\Microsoft.Exchange.WebServices.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.5.2.4\lib\net451\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.5.2.4\lib\net451\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.2.4\lib\net451\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.2.4\lib\net451\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -191,14 +203,17 @@
     <Compile Include="Controllers\RecapController.cs" />
     <Compile Include="Controllers\TravelAuthController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\LDAPController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HelperClasses\EmailHelper.cs" />
     <Compile Include="HelperClasses\FormHelp.cs" />
+    <Compile Include="HelperClasses\TokenHelper.cs" />
+    <Compile Include="HelperClasses\LoginHelper.cs" />
     <Compile Include="HelperClasses\UserHelper.cs" />
+    <Compile Include="Models\DataHandler\DataUser.cs" />
     <Compile Include="Models\DataHandler\UserDataHandler.cs" />
     <Compile Include="Models\OfficeHandler\EmailHandler.cs" />
     <Compile Include="Models\JobHeader.cs" />
@@ -207,8 +222,10 @@
     <Compile Include="Models\JobTemplate.cs" />
     <Compile Include="Models\Scribe.cs" />
     <Compile Include="Models\DataHandler\SQLDataHandler.cs" />
-    <Compile Include="Models\Security\User.cs" />
+    <Compile Include="Models\Security\DomainUser.cs" />
+    <Compile Include="Models\Security\LoginUser.cs" />
     <Compile Include="Models\Security\LDAPHandler.cs" />
+    <Compile Include="Models\Security\Token.cs" />
     <Compile Include="Models\TemplateIndex.cs" />
     <Compile Include="Models\DataHandler\UIDataHandler.cs" />
     <Compile Include="Models\Validator.cs" />

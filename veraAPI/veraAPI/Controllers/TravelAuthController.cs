@@ -19,12 +19,15 @@ namespace VeraAPI.Controllers
     {
         private FormHelp TravelFormHelper;
         private EmailHelper TravelEmail;
-        private UserHelper TravelUser;
+        private LoginHelper TravelUser;
         private Scribe Log;
 
         public TravelAuthController()
         {
             this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UITravelAuthController_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+            TravelFormHelper = new FormHelp();
+            TravelEmail = new EmailHelper();
+            TravelUser = new LoginHelper();
         }
 
         // GET: api/API
@@ -41,27 +44,23 @@ namespace VeraAPI.Controllers
         }
 
         // POST: api/API
-        public string Post([FromBody]TravelAuthForm value)
+        public string Post([FromBody]TravelAuthForm travelAuthForm)
         {
             Log.WriteLogEntry("Begin Post TravelAuthForm...");
             string result = string.Empty;
-            value.TemplateID = TemplateIndex.InsertTravelAuth;
+            // Get template ID for insert travel authorization from static class TemplateIndex
+            travelAuthForm.TemplateID = TemplateIndex.InsertTravelAuth;
             try
             {
-                if (value.GetType() == typeof(TravelAuthForm))
+                if (travelAuthForm.GetType() == typeof(TravelAuthForm))
                 {
-                    Log.WriteLogEntry("Verify submitted form is the correct type.");
-                    value.setNulls();
-                    TravelFormHelper = new FormHelp();
-                    TravelEmail = new EmailHelper();
-                    TravelUser = new UserHelper();
-
+                    Log.WriteLogEntry("Success submitted form is the correct type.");
                     Log.WriteLogEntry("Start Task to submit the travel form.");
                     Task t = Task.Run(() =>
                     {
                         Log.WriteLogEntry("Inside Helper Task.");
                         // change number to constant once file is made
-                        if (TravelFormHelper.SubmitForm(value))
+                        if (TravelFormHelper.SubmitForm(travelAuthForm))
                         {
                             Log.WriteLogEntry("Success submitting travel form.");
                             Log.WriteLogEntry("Call Travel email helper load user with user email " + TravelFormHelper.userEmail);

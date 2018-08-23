@@ -14,8 +14,8 @@ namespace VeraAPI.Models.DataHandler
         private string dataConnectionString = string.Empty;
         private string dbServer = string.Empty;
         private string dbName = string.Empty;
-        public User CurrentUser { get; set; }
-        public List<User> Users { get; set; }
+        public LoginUser CurrentUser { get; set; }
+        public List<LoginUser> Users { get; set; }
 
         public UserDataHandler(string dbServer, string dbName) : base(dbServer)
         {
@@ -51,7 +51,7 @@ namespace VeraAPI.Models.DataHandler
                         {
                             if (rdr.Read())
                             {
-                                CurrentUser = new User();
+                                CurrentUser = new LoginUser();
                                 CurrentUser.UserID = (int)rdr["user_id"];
                                 CurrentUser.FirstName = rdr["first_name"].ToString();
                                 CurrentUser.LastName = rdr["last_name"].ToString();
@@ -95,7 +95,7 @@ namespace VeraAPI.Models.DataHandler
                         {
                             while (rdr.Read())
                             {
-                                CurrentUser = new User();
+                                CurrentUser = new LoginUser();
                                 CurrentUser.UserID = (int)rdr["user_id"];
                                 CurrentUser.UserEmail = rdr["email"].ToString();
                                 CurrentUser.AdSam = rdr["user_sam"].ToString();
@@ -241,7 +241,7 @@ namespace VeraAPI.Models.DataHandler
                 {
                     conn.Open();
                     Log.WriteLogEntry("Open SQL connection successful.");
-                    foreach (User ADUser in Users)
+                    foreach (LoginUser ADUser in Users)
                     {
                         if (ADUser.EmployeeID != null)
                         {
@@ -285,7 +285,7 @@ namespace VeraAPI.Models.DataHandler
                 {
                     conn.Open();
                     Log.WriteLogEntry("Open SQL connection successful.");
-                    foreach (User ADUser in Users)
+                    foreach (LoginUser ADUser in Users)
                     {
                         if (ADUser.EmployeeID != null)
                         {
@@ -327,7 +327,7 @@ namespace VeraAPI.Models.DataHandler
                 {
                     conn.Open();
                     Log.WriteLogEntry("Open SQL connection successful.");
-                    foreach (User ADUser in Users)
+                    foreach (LoginUser ADUser in Users)
                     {
                         if (ADUser.EmployeeID != null)
                         {

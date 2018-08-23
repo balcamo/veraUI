@@ -15,7 +15,7 @@ namespace VeraAPI.Models.OfficeHandler
         public string EmailSubject { get; set; }
         public string EmailBody { get; set; }
         public string RecipientEmailAddress { get; set; }
-        public User UserEmail { get; set; }
+        public LoginUser UserEmail { get; set; }
         private ExchangeService Emailer;
         private WebCredentials UserCredentials;
         private EmailMessage EmailMessage;
@@ -27,7 +27,7 @@ namespace VeraAPI.Models.OfficeHandler
             Emailer = new ExchangeService();
         }
 
-        public EmailHandler(User CurrentUser)
+        public EmailHandler(LoginUser CurrentUser)
         {
             Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
             this.UserEmail = CurrentUser;
