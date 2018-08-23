@@ -1,7 +1,7 @@
 
 
 export class AuthForm {
-  Bool1 = false;      //Preparer
+  Bool1 = false;      // Preparer
   String1: string;    // FirstName
   String2: string;    // LastName
   decimal1: number;   // Phone
