@@ -36,3 +36,8 @@ export class User {
     return this.EntryGroup;
   }*/
 }
+
+export class Auth {
+  public token: string;
+  public userGroup: number;
+}

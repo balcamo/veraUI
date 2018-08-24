@@ -8,7 +8,7 @@
     <input type="password" id="password" class="form-control mr-sm-2 mb-2 mb-sm-0"
            [(ngModel)]="password" placeholder="Password" required
            (input)="password=$event.target.value" />
-    <input type="submit" (click)="submitUserEmail()" routerLink="">
+    <input type="submit" (click)="submitUserEmail()" (keyup.enter)="submitUserEmail()" routerLink="" >
   </div>
 </div>
 <div [ngStyle]="{'display':mainPage}">

@@ -1,7 +1,7 @@
 import { Component, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Headers, Http, URLSearchParams, RequestOptions, Response } from '@angular/http';
-import { User } from './classes/user';
+import { User, Auth } from './classes/user';
 import { UserService } from './service/app.service.user';
 import { Observable } from 'rxjs';
 import { Constants } from './classes/constants';
@@ -56,19 +56,21 @@ export class AppComponent {
       var body = JSON.stringify({ UserName:this.useremail, UserPwd:this.password });
       console.log(this.consts.url + 'LDAP');
       this.http.post(this.consts.url + 'LDAP', body, options)
-        //.subscribe((data) => this.waitForHttp(data));
-        .subscribe((data) => console.log(data.text()));
+        .subscribe((data) => this.waitForHttp(data));
     }
   }
 
   waitForHttp(data: any) {
     console.log(data.text());
+    var value = data.text() as Auth;
+    console.log(value.userGroup);
+    console.log(value.token);
     if (data == undefined) {
       alert("no data");
-    } else if (data.text()[1] != 0) {
+    } else if (data.text()[1] != "0") {
       this.user.EntryGroup = data.text()[1] as number;
       this.user.token = data.text()[0] as string;
-      if (data.text()[1] == 1) { this.user.nav = this.consts.employee; }
+      if (data.text()[1] == "1") { this.user.nav = this.consts.employee; }
       this.userService.setUser(this.user);
       console.log("finishing waitForHttp");
       //this.nav = new NavComponent(this.userService);
