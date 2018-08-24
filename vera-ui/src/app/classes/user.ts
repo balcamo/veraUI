@@ -6,6 +6,7 @@ export class User {
   public UserEmail: string;
   public EntryGroup = 0;
   public nav = [];
+  public token: string;
 
   /*public SetUserName(name: string) {
     this.UserName = name;

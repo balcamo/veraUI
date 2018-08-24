@@ -4,7 +4,7 @@ export class AuthForm {
   Bool1 = false;      // Preparer
   String1: string;    // FirstName
   String2: string;    // LastName
-  decimal1: number;   // Phone
+  Int1: number;   // Phone
   String3: string;    // Email
   String4: string;    // EventTitle
   String5: string;    // Location

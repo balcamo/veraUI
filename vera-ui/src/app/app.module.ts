@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpModule } from '@angular/http';
 
@@ -38,6 +37,7 @@ import { UserService } from './service/app.service.user';
     AppRoutingModule,
     MDBBootstrapModule.forRoot(),
     NgbModule.forRoot(),
+
   ],
   exports: [
     HttpModule,
