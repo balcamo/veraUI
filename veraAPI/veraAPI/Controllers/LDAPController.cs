@@ -43,9 +43,10 @@ namespace VeraAPI.Controllers
         }
 
         // POST: api/User
-        public void Post([FromBody]LoginForm loginCredentials)
+        public string[] Post([FromBody]LoginForm loginCredentials)
         {
             Log.WriteLogEntry("Begin Post authenticate user...");
+            string[] result = new string[] { string.Empty, "0" };
             try
             {
                 if (loginCredentials.GetType() == typeof(LoginForm))
@@ -53,7 +54,10 @@ namespace VeraAPI.Controllers
                     LoginHelp.LoginCredentials = loginCredentials;
                     if (LoginHelp.AuthenticateDomainCredentials())
                     {
-                        //LoginHelp.GetToken();
+                        LoginHelp.GetDomainToken();
+                        string token = LoginHelp.SessionToken;
+                        result[0] = token;
+                        result[1] = "1";
                     }
                 }
             }
@@ -62,6 +66,7 @@ namespace VeraAPI.Controllers
                 Log.WriteLogEntry("Post authentication failed! " + ex.Message);
             }
             Log.WriteLogEntry("End Post authenticate user.");
+            return result;
         }
 
         // PUT: api/User/5
