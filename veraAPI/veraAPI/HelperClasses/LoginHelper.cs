@@ -12,6 +12,7 @@ namespace VeraAPI.HelperClasses
     public class LoginHelper
     {
         public LoginForm LoginCredentials { get; set; }
+        public string SessionToken { get; private set; }
 
         private string domainName;
         private User LoginUser;
@@ -35,6 +36,7 @@ namespace VeraAPI.HelperClasses
                 if (LDAPHandle.AuthenticateUser(LoginCredentials.UserName, LoginCredentials.UserPwd))
                 {
                     LoginUser = LDAPHandle.CurrentUser;
+                    LoginUser.UserType = 1;
                     result = true;
                 }
             }
@@ -44,11 +46,14 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public bool GetToken()
+        public bool GetDomainToken()
         {
             Log.WriteLogEntry("Begin GetToken...");
             bool result = false;
             TokenHandle = new TokenHandler();
+            TokenHandle.CurrentUser = LoginUser;
+            TokenHandle.GenerateDomainToken();
+            SessionToken = TokenHandle.SessionToken;
             Log.WriteLogEntry("End GetToken.");
             return result;
         }

@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens;
+using System.Security.Claims;
 using VeraAPI.Models.Security;
 
 namespace VeraAPI.HelperClasses
 {
     public class TokenHelper
     {
-        public string TokenBody { get; set; }
-
-        private Token LoginToken;
-
 
     }
 }
