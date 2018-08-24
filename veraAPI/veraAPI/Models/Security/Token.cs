@@ -7,11 +7,15 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace VeraAPI.Models.Security
 {
-    public class Token : JwtSecurityToken
+    public class Token
     {
-        public string Signature { get; set; }
-        public string Secret { get; set; }
-        public string UserEmail { get; private set; }
+        public string SessionToken { get; private set; }
         public string UserType { get; private set; }
+
+        public Token(string sessionToken, string userType)
+        {
+            this.SessionToken = sessionToken;
+            this.UserType = userType;
+        }
     }
 }

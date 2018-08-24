@@ -43,28 +43,38 @@ namespace VeraAPI.Controllers
         }
 
         // POST: api/User
-        public string[] Post([FromBody]LoginForm loginCredentials)
+        public string Post([FromBody]LoginForm loginCredentials)
         {
             Log.WriteLogEntry("Begin Post authenticate user...");
-            string[] result = new string[] { string.Empty, "0" };
+            string result = string.Empty;
             try
             {
                 if (loginCredentials.GetType() == typeof(LoginForm))
                 {
+                    Log.WriteLogEntry("Success login credentials are the correct type.");
                     LoginHelp.LoginCredentials = loginCredentials;
                     if (LoginHelp.AuthenticateDomainCredentials())
                     {
-                        LoginHelp.GetDomainToken();
-                        string token = LoginHelp.SessionToken;
-                        result[0] = token;
-                        result[1] = "1";
+                        Log.WriteLogEntry("Success authenticate domain credentials.");
+                        if (LoginHelp.GetDomainToken())
+                        {
+                            Log.WriteLogEntry("Success getting domain json web token.");
+                            result = LoginHelp.JsonToken;
+                        }
+                        else
+                            Log.WriteLogEntry("Failed getting domain json web token!");
                     }
+                    else
+                        Log.WriteLogEntry("Failed authenticate domain credentials!");
                 }
+                else
+                    Log.WriteLogEntry("Failed login credentials are the wrong type!");
             }
             catch (Exception ex)
             {
                 Log.WriteLogEntry("Post authentication failed! " + ex.Message);
             }
+            Log.WriteLogEntry("Return result " + result);
             Log.WriteLogEntry("End Post authenticate user.");
             return result;
         }

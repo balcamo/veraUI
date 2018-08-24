@@ -200,7 +200,6 @@ C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\obj\Release\VeraAPI.dll
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\obj\Release\VeraAPI.pdb
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.JsonWebTokens.dll
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Logging.dll
-C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Tokens.dll
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.JsonWebTokens.pdb
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.JsonWebTokens.xml
