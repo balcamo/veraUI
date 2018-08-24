@@ -105,7 +105,7 @@ export class TravelAuthComponent implements OnInit {
   checkRequired() {
     var valid = true;
 
-    if (this.form.String1 == null || this.form.decimal1 == null || this.form.String4 == null
+    if (this.form.String1 == null || this.form.Int1 == null || this.form.String4 == null
       || this.form.String5 == null || this.form.Date1 == null || this.form.Decimal10 == null
       || this.form.Decimal7 == null || this.form.Decimal8 == null || this.form.Decimal9 == null
       || this.form.Decimal4 == null || this.form.Decimal5 == null || this.form.Decimal11 == null
@@ -118,7 +118,7 @@ export class TravelAuthComponent implements OnInit {
 
     this.firstNameBorder = (this.form.String1 == null ? "red" : "black");
     this.lastNameBorder = (this.form.String2 == null ? "red" : "black");
-    this.phoneBorder = (this.form.decimal1 == null ? "red" : "black");
+    this.phoneBorder = (this.form.Int1 == null ? "red" : "black");
     this.eventTitleBorder = (this.form.String4 == null ? "red" : "black");
     this.eventLocBorder = (this.form.String5 == null ? "red" : "black");
     this.travelStartBorder = (this.form.Date1 == null ? "red" : "black");
@@ -150,7 +150,7 @@ export class TravelAuthComponent implements OnInit {
   setFormDefaults() {
     this.form.String1 = null;
     this.form.String2 = null;
-    this.form.decimal1 = null;
+    this.form.Int1 = null;
     this.form.String3 = null;
     this.form.String4 = null;
     this.form.String5 = null;

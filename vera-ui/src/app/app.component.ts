@@ -24,6 +24,7 @@ export class AppComponent {
   notify: EventEmitter<string> = new EventEmitter<string>();
   nav: NavComponent;
   useremail: string;
+  password: string;
 
   constructor(private router: Router, http: Http, userService: UserService) {
     this.userService = userService;
@@ -40,10 +41,9 @@ export class AppComponent {
    * */
   submitUserEmail() {
     this.user.UserEmail = this.useremail;
-    if (this.user.UserEmail == null || this.user.UserEmail == '') {
-      alert("Please Enter your user name");
+    if (this.user.UserEmail == null || this.user.UserEmail == '' || this.password == null) {
+      alert("Please Enter your email and password");
     } else {
-
       console.log("user email " + this.user.UserEmail);
       let params: URLSearchParams = new URLSearchParams();
       var pageHeaders = new Headers({
@@ -53,10 +53,11 @@ export class AppComponent {
         search: params,
         headers: pageHeaders
       });
-      var body = JSON.stringify(this.user.UserEmail);
-      console.log(this.consts.url + 'User?userEmail={' + this.user.UserEmail + '}');
-      this.http.get(this.consts.url + 'User?userEmail={' + this.user.UserEmail + '}')
-        .subscribe((data) => this.waitForHttp(data));
+      var body = JSON.stringify({ UserName:this.useremail, UserPwd:this.password });
+      console.log(this.consts.url + 'LDAP');
+      this.http.post(this.consts.url + 'LDAP', body, options)
+        //.subscribe((data) => this.waitForHttp(data));
+        .subscribe((data) => console.log(data.text()));
     }
   }
 
@@ -64,9 +65,10 @@ export class AppComponent {
     console.log(data.text());
     if (data == undefined) {
       alert("no data");
-    } else if (data.text() != 0) {
-      this.user.EntryGroup = data.text() as number;
-      if (data.text() == 1) { this.user.nav = this.consts.employee; }
+    } else if (data.text()[1] != 0) {
+      this.user.EntryGroup = data.text()[1] as number;
+      this.user.token = data.text()[0] as string;
+      if (data.text()[1] == 1) { this.user.nav = this.consts.employee; }
       this.userService.setUser(this.user);
       console.log("finishing waitForHttp");
       //this.nav = new NavComponent(this.userService);
