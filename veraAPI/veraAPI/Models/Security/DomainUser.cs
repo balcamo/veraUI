@@ -5,11 +5,24 @@ using System.Web;
 
 namespace VeraAPI.Models.Security
 {
-    public class DomainUser : LoginUser
+    public class DomainUser : User
     {
+        public int UserID { get; set; }
         public string DomainName { get; set; }
         public string DomainUpn { get; set; }
         public string DomainSam { get; set; }
-
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string EmployeeID { get; set; }
+        public string Department { get; set; }
+        public string SupervisorName { get; set; }
+        public string SupervisorEmpID { get; set; }
+        public string SupervisorEmail { get; set; }
+        public string DepartmentHead { get; set; }
+        public string DepartmentHeadEmpID { get; set; }
+        public string DepartmentHeadEmail { get; set; }
+        public string GeneralManager { get; set; }
+        public string GeneralManagerEmpID { get; set; }
+        public string GeneralManagerEmail { get; set; }
     }
 }

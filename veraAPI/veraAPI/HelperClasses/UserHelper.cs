@@ -7,6 +7,6 @@ namespace VeraAPI.HelperClasses
 {
     public class UserHelper
     {
-        public 
+
     }
 }

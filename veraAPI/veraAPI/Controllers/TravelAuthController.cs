@@ -19,7 +19,6 @@ namespace VeraAPI.Controllers
     {
         private FormHelp TravelFormHelper;
         private EmailHelper TravelEmail;
-        private LoginHelper TravelUser;
         private Scribe Log;
 
         public TravelAuthController()
@@ -27,7 +26,6 @@ namespace VeraAPI.Controllers
             this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UITravelAuthController_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
             TravelFormHelper = new FormHelp();
             TravelEmail = new EmailHelper();
-            TravelUser = new LoginHelper();
         }
 
         // GET: api/API
@@ -60,10 +58,11 @@ namespace VeraAPI.Controllers
                     {
                         Log.WriteLogEntry("Inside Helper Task.");
                         // change number to constant once file is made
-                        if (TravelFormHelper.SubmitForm(travelAuthForm))
+                        TravelFormHelper.WebForm = travelAuthForm;
+                        if (TravelFormHelper.SubmitForm())
                         {
                             Log.WriteLogEntry("Success submitting travel form.");
-                            Log.WriteLogEntry("Call Travel email helper load user with user email " + TravelFormHelper.userEmail);
+                            /** Log.WriteLogEntry("Call Travel email helper load user with user email " + TravelFormHelper.userEmail);
                             if (TravelEmail.LoadUser(TravelFormHelper.userEmail))
                             {
                                 Log.WriteLogEntry("Success load email user from database.");
@@ -73,7 +72,7 @@ namespace VeraAPI.Controllers
                                     Log.WriteLogEntry("Failed send travel authorization email.");
                             }
                             else
-                                Log.WriteLogEntry("Fail load user from database!");
+                                Log.WriteLogEntry("Fail load user from database!"); **/
                         }
                         Log.WriteLogEntry("Fail FormHelp SubmitForm!");
                     });
@@ -82,7 +81,7 @@ namespace VeraAPI.Controllers
             }
             catch(Exception e)
             {
-                result = "Submit Failed " + e;
+                result = "Submit Failed " + e.Message;
             }
             return result;
         }

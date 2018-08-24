@@ -5,18 +5,13 @@ using System.Web;
 
 namespace VeraAPI.Models.Security
 {
-    public class LoginUser
+    public class User
     {
-        public string LoginToken { get; set; }
         public string UserName { get; set; }
         public string UserPwd { get; set; }
         public string UserEmail { get; set; }
         public int UserType { get; set; }
         public bool Authenicated { get; set; }
-
-        public LoginUser()
-        {
-            this.Authenicated = false;
-        }
+        public string LoginToken { get; set; }
     }
 }

@@ -101,8 +101,6 @@ namespace VeraAPI.Models.DataHandler
                     result = InsertTravelAuth();
                     break;
                 default:
-                    // Redundnant setting result to false as safeguard for default case
-                    result = false;
                     break;
             }
             return result;

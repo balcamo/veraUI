@@ -11,18 +11,20 @@ namespace VeraAPI.HelperClasses
 {
     public class FormHelp
     {
+        public BaseForm WebForm { get; set; }
+
         private string dbServer;
         private string dbName;
         private UIDataHandler UIData;
         private Validator FormValidator;
         private Scribe Log;
-        public string userEmail { get; set; }
 
         public FormHelp()
         {
             dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
             dbName = WebConfigurationManager.AppSettings.Get("DBName");
             Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIFormHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+            WebForm = new BaseForm();
             UIData = new UIDataHandler(dbServer, dbName);
         }
         /**
@@ -32,14 +34,14 @@ namespace VeraAPI.HelperClasses
         * @param FormData : this is the form that needs to be inserted
         * 
         **/
-        public bool SubmitForm(BaseForm FormData)
+        public bool SubmitForm()
         {
             Log.WriteLogEntry("Begin FormHelp SubmitForm...");
             bool result = false;
             // Hold submitted form for comparison
-            BaseForm SubmittedForm = FormData;
+            BaseForm SubmittedForm = WebForm;
             // Set data handler form to submitted form
-            UIData.FormData = FormData;
+            UIData.FormData = WebForm;
             // Load the job template corresponding to the templateID for the submitted form
             if (UIData.LoadJobTemplate(UIData.FormData.TemplateID))
             {
@@ -55,8 +57,6 @@ namespace VeraAPI.HelperClasses
                     if (FormValidator.CompareAlphaBravo(SubmittedForm, UIData.FormData))
                     {
                         Log.WriteLogEntry("Submitted form matches inserted form!");
-                        userEmail = UIData.userEmail;
-                        Log.WriteLogEntry("FormHelp user email set to " + userEmail);
                         result = true;
                     }
                     else

@@ -44,7 +44,27 @@ namespace VeraAPI.Models.Security
                 {
                     UserAccount = UserPrincipal.FindByIdentity(UserContext, userName);
                     if (UserAccount != null)
+                    {
+                        CurrentUser.UserName = userName;
+                        CurrentUser.UserPwd = userPwd;
+                        CurrentUser.DomainUpn = UserAccount.UserPrincipalName;
+                        CurrentUser.UserEmail = UserAccount.EmailAddress;
+                        CurrentUser.DomainSam = UserAccount.SamAccountName;
+                        CurrentUser.FirstName = UserAccount.GivenName;
+                        CurrentUser.LastName = UserAccount.Surname;
+                        CurrentUser.EmployeeID = UserAccount.EmployeeId;
+                        DirectoryEntry entry = UserAccount.GetUnderlyingObject() as DirectoryEntry;
+                        if (entry.Properties.Contains("department"))
+                        {
+                            CurrentUser.Department = entry.Properties["department"].Value.ToString();
+                            Log.WriteLogEntry("Department " + CurrentUser.Department);
+                        }
+                        else
+                            Log.WriteLogEntry("No department found.");
+                        if (entry.Properties.Contains("manager"))
+                            CurrentUser.Department = entry.Properties["manager"].Value.ToString();
                         result = true;
+                    }
                 }
             }
             Log.WriteLogEntry("End LDAPHandler AuthenticateUser.");
@@ -68,7 +88,7 @@ namespace VeraAPI.Models.Security
             using (UserContext = new PrincipalContext(ContextType.Domain, domainName))
             {
                 UserAccount = new UserPrincipal(UserContext);
-                UserAccount.UserPrincipalName = CurrentUser.AdUpn;
+                UserAccount.UserPrincipalName = CurrentUser.DomainUpn;
                 Log.WriteLogEntry("User UPN " + UserAccount.UserPrincipalName);
                 using (PrincipalSearcher UserSearch = new PrincipalSearcher())
                 {
@@ -84,58 +104,11 @@ namespace VeraAPI.Models.Security
             return result;
         }
 
-        public bool LoginDomain()
-        {
-            int result = 0;
-                Log.WriteLogEntry("localDomain value = " + userDomain);
-                CurrentUser = new LoginUser();
-                CurrentUser.AdUpn = userEmail.Substring(1, userEmail.Length - 2);
-                Log.WriteLogEntry("User UPN = " + CurrentUser.AdUpn);
-                using (UserContext = new PrincipalContext(ContextType.Domain, userDomain))
-                {
-                    UserAccount = new UserPrincipal(UserContext);
-                    UserAccount.UserPrincipalName = CurrentUser.AdUpn;
-                    using (PrincipalSearcher UserSearch = new PrincipalSearcher())
-                    {
-                        UserSearch.QueryFilter = UserAccount;
-                        using (PrincipalSearchResult<Principal> Psr = UserSearch.FindAll())
-                        {
-                            Log.WriteLogEntry("Principal search result " + Psr.Count<Principal>());
-                            if (Psr.Count<Principal>() > 0)
-                            {
-                                UserAccount = (UserPrincipal)Psr.First<Principal>();
-                                CurrentUser.FirstName = UserAccount.GivenName;
-                                CurrentUser.LastName = UserAccount.Surname;
-                                CurrentUser.AdSam = UserAccount.SamAccountName;
-                                CurrentUser.AdUpn = UserAccount.UserPrincipalName;
-                                CurrentUser.UserEmail = UserAccount.EmailAddress;
-                                CurrentUser.EmployeeID = UserAccount.EmployeeId;
-                                DirectoryEntry entry = UserAccount.GetUnderlyingObject() as DirectoryEntry;
-                                if (entry.Properties.Contains("department"))
-                                    CurrentUser.Department = entry.Properties["department"].Value.ToString();
-                                if (entry.Properties.Contains("manager"))
-                                    CurrentUser.Department = entry.Properties["manager"].Value.ToString();
-                                CurrentUser.Authenicated = true;
-                                Log.WriteLogEntry(string.Format("{0} {1} {2} {3}", CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.EmployeeID, CurrentUser.Department));
-                                result = 1;
-                            }
-                            else
-                                Log.WriteLogEntry("User not found in directory!");
-                        }
-                    }
-                }
-            }
-            else
-                Log.WriteLogEntry("localDomain Appsetting not found!");
-            Log.WriteLogEntry("Return Result " + result);
-            return result;
-        }
-
         public int LoadAllUsers()
         {
             int result = 0;
-            Users = new List<LoginUser>();
-            using (UserContext = new PrincipalContext(ContextType.Domain, userDomain))
+            Users = new List<DomainUser>();
+            using (UserContext = new PrincipalContext(ContextType.Domain, domainName))
             {
                 using (PrincipalSearcher UserSearch = new PrincipalSearcher(new UserPrincipal(UserContext)))
                 {
@@ -143,11 +116,11 @@ namespace VeraAPI.Models.Security
                     {
                         foreach (UserPrincipal ADUser in SearchResult)
                         {
-                            LoginUser user = new LoginUser();
+                            DomainUser user = new DomainUser();
                             user.FirstName = ADUser.GivenName;
                             user.LastName = ADUser.Surname;
-                            user.AdSam = ADUser.SamAccountName;
-                            user.AdUpn = ADUser.UserPrincipalName;
+                            user.DomainSam = ADUser.SamAccountName;
+                            user.DomainUpn = ADUser.UserPrincipalName;
                             user.UserEmail = ADUser.EmailAddress;
                             user.EmployeeID = ADUser.EmployeeId;
                             DirectoryEntry entry = ADUser.GetUnderlyingObject() as DirectoryEntry;
@@ -179,7 +152,7 @@ namespace VeraAPI.Models.Security
             using (UserContext = new PrincipalContext(ContextType.Domain, domainName))
             {
                 UserAccount = new UserPrincipal(UserContext);
-                UserAccount.UserPrincipalName = CurrentUser.AdUpn;
+                UserAccount.UserPrincipalName = CurrentUser.DomainUpn;
                 Log.WriteLogEntry("User UPN " + UserAccount.UserPrincipalName);
                 using (PrincipalSearcher UserSearch = new PrincipalSearcher())
                 {
@@ -188,14 +161,11 @@ namespace VeraAPI.Models.Security
                     {
                         UserAccount = (UserPrincipal)Psr.First<Principal>();
                         CurrentUser.FirstName = UserAccount.GivenName;
-                        Log.WriteLogEntry("First Name " + CurrentUser.FirstName);
                         CurrentUser.LastName = UserAccount.Surname;
-                        Log.WriteLogEntry("Last Name " + CurrentUser.LastName);
-                        CurrentUser.AdSam = UserAccount.SamAccountName;
-                        CurrentUser.AdUpn = UserAccount.UserPrincipalName;
+                        CurrentUser.DomainSam = UserAccount.SamAccountName;
+                        CurrentUser.DomainUpn = UserAccount.UserPrincipalName;
                         CurrentUser.UserEmail = UserAccount.EmailAddress;
                         CurrentUser.EmployeeID = UserAccount.EmployeeId;
-                        Log.WriteLogEntry("Employee ID " + CurrentUser.EmployeeID);
                         DirectoryEntry entry = UserAccount.GetUnderlyingObject() as DirectoryEntry;
                         if (entry.Properties.Contains("department"))
                         {
