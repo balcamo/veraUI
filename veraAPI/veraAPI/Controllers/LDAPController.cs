@@ -17,14 +17,12 @@ namespace VeraAPI.Controllers
     public class LDAPController : ApiController
     {
         private LoginHelper LoginHelp;
-        private TokenHelper TokenHelp;
         private Scribe Log;
 
         public LDAPController()
         {
             this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LDAPController_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             LoginHelp = new LoginHelper();
-            TokenHelp = new TokenHelper();
         }
 
         // GET: api/User
