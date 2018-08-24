@@ -14,8 +14,8 @@ namespace VeraAPI.Models.DataHandler
         private string dataConnectionString = string.Empty;
         private string dbServer = string.Empty;
         private string dbName = string.Empty;
-        public LoginForm CurrentUser { get; set; }
-        public List<LoginForm> Users { get; set; }
+        public DomainUser CurrentUser { get; set; }
+        public List<DomainUser> Users { get; set; }
 
         public UserDataHandler(string dbServer, string dbName) : base(dbServer)
         {
@@ -51,13 +51,13 @@ namespace VeraAPI.Models.DataHandler
                         {
                             if (rdr.Read())
                             {
-                                CurrentUser = new LoginForm();
+                                CurrentUser = new DomainUser();
                                 CurrentUser.UserID = (int)rdr["user_id"];
                                 CurrentUser.FirstName = rdr["first_name"].ToString();
                                 CurrentUser.LastName = rdr["last_name"].ToString();
                                 CurrentUser.UserEmail = rdr["email"].ToString();
-                                CurrentUser.AdSam = rdr["user_sam"].ToString();
-                                CurrentUser.AdUpn = rdr["user_upn"].ToString();
+                                CurrentUser.DomainSam = rdr["user_sam"].ToString();
+                                CurrentUser.DomainUpn = rdr["user_upn"].ToString();
                                 CurrentUser.EmployeeID = rdr["employee_id"].ToString();
                                 CurrentUser.Department = rdr["department"].ToString();
                                 CurrentUser.SupervisorName = rdr["supervisor"].ToString();
@@ -95,11 +95,11 @@ namespace VeraAPI.Models.DataHandler
                         {
                             while (rdr.Read())
                             {
-                                CurrentUser = new LoginForm();
+                                CurrentUser = new DomainUser();
                                 CurrentUser.UserID = (int)rdr["user_id"];
                                 CurrentUser.UserEmail = rdr["email"].ToString();
-                                CurrentUser.AdSam = rdr["user_sam"].ToString();
-                                CurrentUser.AdUpn = rdr["user_upn"].ToString();
+                                CurrentUser.DomainSam = rdr["user_sam"].ToString();
+                                CurrentUser.DomainUpn = rdr["user_upn"].ToString();
                                 CurrentUser.EmployeeID = rdr["employee_id"].ToString();
                                 CurrentUser.FirstName = rdr["first_name"].ToString();
                                 CurrentUser.LastName = rdr["last_name"].ToString();
@@ -241,18 +241,18 @@ namespace VeraAPI.Models.DataHandler
                 {
                     conn.Open();
                     Log.WriteLogEntry("Open SQL connection successful.");
-                    foreach (LoginForm ADUser in Users)
+                    foreach (DomainUser ADUser in Users)
                     {
                         if (ADUser.EmployeeID != null)
                         {
                             using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                             {
-                                Log.WriteLogEntry("AD User " + ADUser.FirstName + " " + ADUser.LastName + " " + ADUser.AdUpn + " " + ADUser.EmployeeID);
+                                Log.WriteLogEntry("AD User " + ADUser.FirstName + " " + ADUser.LastName + " " + ADUser.DomainUpn + " " + ADUser.EmployeeID);
                                 cmd.Parameters.AddWithValue("@firstName", ADUser.FirstName);
                                 cmd.Parameters.AddWithValue("@lastName", ADUser.LastName);
                                 cmd.Parameters.AddWithValue("@email", ADUser.UserEmail);
-                                cmd.Parameters.AddWithValue("@sam", ADUser.AdSam);
-                                cmd.Parameters.AddWithValue("@upn", ADUser.AdUpn);
+                                cmd.Parameters.AddWithValue("@sam", ADUser.DomainSam);
+                                cmd.Parameters.AddWithValue("@upn", ADUser.DomainUpn);
                                 cmd.Parameters.AddWithValue("@empID", ADUser.EmployeeID);
                                 cmd.ExecuteNonQuery();
                                 result++;
@@ -285,7 +285,7 @@ namespace VeraAPI.Models.DataHandler
                 {
                     conn.Open();
                     Log.WriteLogEntry("Open SQL connection successful.");
-                    foreach (LoginForm ADUser in Users)
+                    foreach (DomainUser ADUser in Users)
                     {
                         if (ADUser.EmployeeID != null)
                         {
@@ -327,7 +327,7 @@ namespace VeraAPI.Models.DataHandler
                 {
                     conn.Open();
                     Log.WriteLogEntry("Open SQL connection successful.");
-                    foreach (LoginForm ADUser in Users)
+                    foreach (DomainUser ADUser in Users)
                     {
                         if (ADUser.EmployeeID != null)
                         {

@@ -15,7 +15,7 @@ namespace VeraAPI.Models.OfficeHandler
         public string EmailSubject { get; set; }
         public string EmailBody { get; set; }
         public string RecipientEmailAddress { get; set; }
-        public LoginForm UserEmail { get; set; }
+        public DomainUser CurrentUser { get; set; }
         private ExchangeService Emailer;
         private WebCredentials UserCredentials;
         private EmailMessage EmailMessage;
@@ -25,14 +25,7 @@ namespace VeraAPI.Models.OfficeHandler
         {
             Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
             Emailer = new ExchangeService();
-        }
-
-        public EmailHandler(LoginForm CurrentUser)
-        {
-            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
-            this.UserEmail = CurrentUser;
-            Emailer = new ExchangeService();
-            UserCredentials = new WebCredentials(this.UserEmail.AdUpn, this.UserEmail.UserPwd);
+            UserCredentials = new WebCredentials(this.CurrentUser.DomainUpn, this.CurrentUser.UserPwd);
         }
 
         private bool ValidateRedirect(string redirectionUrl)
@@ -51,7 +44,7 @@ namespace VeraAPI.Models.OfficeHandler
             try
             {
                 Emailer.Credentials = UserCredentials;
-                Emailer.AutodiscoverUrl(UserEmail.AdUpn, ValidateRedirect);
+                Emailer.AutodiscoverUrl(CurrentUser.DomainUpn, ValidateRedirect);
                 result = true;
             }
             catch (Exception ex)

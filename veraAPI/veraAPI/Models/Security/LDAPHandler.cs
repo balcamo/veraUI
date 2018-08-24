@@ -23,13 +23,13 @@ namespace VeraAPI.Models.Security
         public LDAPHandler(string domainName)
         {
             this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LDAPHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            domainName = WebConfigurationManager.AppSettings.Get(domainName);
+            this.domainName = WebConfigurationManager.AppSettings.Get(domainName);
             CurrentUser = new DomainUser();
         }
 
         public LDAPHandler(string domainName, Scribe Log)
         {
-            domainName = WebConfigurationManager.AppSettings.Get(domainName);
+            this.domainName = WebConfigurationManager.AppSettings.Get(domainName);
             CurrentUser = new DomainUser();
             this.Log = Log;
         }

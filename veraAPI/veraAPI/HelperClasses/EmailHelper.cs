@@ -16,7 +16,7 @@ namespace VeraAPI.HelperClasses
         private string dbName;
         private EmailHandler ExchangeMail;
         private UserDataHandler UserData;
-        private LoginForm CurrentUser;
+        private DomainUser CurrentUser;
         private Scribe Log;
 
         public EmailHelper()
@@ -35,7 +35,7 @@ namespace VeraAPI.HelperClasses
             if (CurrentUser != null)
             {
                 Log.WriteLogEntry("Email user object ready.");
-                ExchangeMail = CurrentUser;
+                ExchangeMail.CurrentUser = CurrentUser;
                 try
                 {
                     if (ExchangeMail.ConnectExchangeService())

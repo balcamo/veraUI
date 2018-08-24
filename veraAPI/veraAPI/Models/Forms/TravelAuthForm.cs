@@ -10,7 +10,7 @@ namespace VeraAPI.Models.Forms
         public string Bool1;        // Preparer
         public string String1;      // FirstName
         public string String2;      // LastName
-        public string Decimal1;     // Phone
+        public string Int1;     // Phone
         public string String3;      // Email
         public string String4;      // EventTitle
         public string String5;      // Location
@@ -59,7 +59,7 @@ namespace VeraAPI.Models.Forms
             if (Bool1 == null) { Bool1 = string.Empty; }
             if (String1 == null) { String1 = string.Empty; }
             if (String2 == null) { String2 = string.Empty; }
-            if (Decimal1 == null) { Decimal1 = string.Empty; }
+            if (Int1 == null) { Int1 = string.Empty; }
             if (String3 == null) { String3 = string.Empty; }
             if (String4 == null) { String4 = string.Empty; }
             if (String5 == null) { String5 = string.Empty; }
