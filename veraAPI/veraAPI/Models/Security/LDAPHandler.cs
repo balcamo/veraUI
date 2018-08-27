@@ -45,24 +45,25 @@ namespace VeraAPI.Models.Security
                     UserAccount = UserPrincipal.FindByIdentity(UserContext, userName);
                     if (UserAccount != null)
                     {
-                        CurrentUser.UserName = userName;
-                        CurrentUser.UserPwd = userPwd;
-                        CurrentUser.DomainUpn = UserAccount.UserPrincipalName;
-                        CurrentUser.UserEmail = UserAccount.EmailAddress;
-                        CurrentUser.DomainSam = UserAccount.SamAccountName;
-                        CurrentUser.FirstName = UserAccount.GivenName;
-                        CurrentUser.LastName = UserAccount.Surname;
-                        CurrentUser.EmployeeID = UserAccount.EmployeeId;
+                        DomainUser user = new DomainUser();
+                        user.UserName = userName;
+                        user.UserPwd = userPwd;
+                        user.DomainUpn = UserAccount.UserPrincipalName;
+                        user.UserEmail = UserAccount.EmailAddress;
+                        user.DomainUserName = UserAccount.SamAccountName;
+                        user.FirstName = UserAccount.GivenName;
+                        user.LastName = UserAccount.Surname;
+                        user.EmployeeID = UserAccount.EmployeeId;
                         DirectoryEntry entry = UserAccount.GetUnderlyingObject() as DirectoryEntry;
                         if (entry.Properties.Contains("department"))
                         {
-                            CurrentUser.Department = entry.Properties["department"].Value.ToString();
-                            Log.WriteLogEntry("Department " + CurrentUser.Department);
+                            user.Department = entry.Properties["department"].Value.ToString();
+                            Log.WriteLogEntry("Department " + user.Department);
                         }
                         else
                             Log.WriteLogEntry("No department found.");
-                        if (entry.Properties.Contains("manager"))
-                            CurrentUser.Department = entry.Properties["manager"].Value.ToString();
+                        user.Authenicated = true;
+                        user.UserType = User.DomainUser;
                         result = true;
                     }
                 }
@@ -119,7 +120,7 @@ namespace VeraAPI.Models.Security
                             DomainUser user = new DomainUser();
                             user.FirstName = ADUser.GivenName;
                             user.LastName = ADUser.Surname;
-                            user.DomainSam = ADUser.SamAccountName;
+                            user.DomainUserName = ADUser.SamAccountName;
                             user.DomainUpn = ADUser.UserPrincipalName;
                             user.UserEmail = ADUser.EmailAddress;
                             user.EmployeeID = ADUser.EmployeeId;
@@ -162,7 +163,7 @@ namespace VeraAPI.Models.Security
                         UserAccount = (UserPrincipal)Psr.First<Principal>();
                         CurrentUser.FirstName = UserAccount.GivenName;
                         CurrentUser.LastName = UserAccount.Surname;
-                        CurrentUser.DomainSam = UserAccount.SamAccountName;
+                        CurrentUser.DomainUserName = UserAccount.SamAccountName;
                         CurrentUser.DomainUpn = UserAccount.UserPrincipalName;
                         CurrentUser.UserEmail = UserAccount.EmailAddress;
                         CurrentUser.EmployeeID = UserAccount.EmployeeId;

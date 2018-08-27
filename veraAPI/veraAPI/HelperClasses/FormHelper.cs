@@ -9,23 +9,23 @@ using VeraAPI.Models.DataHandler;
 
 namespace VeraAPI.HelperClasses
 {
-    public class FormHelp
+    public class FormHelper
     {
         public BaseForm WebForm { get; set; }
 
         private string dbServer;
         private string dbName;
-        private UIDataHandler UIData;
+        private FormDataHandler FormDataHandle;
         private Validator FormValidator;
         private Scribe Log;
 
-        public FormHelp()
+        public FormHelper()
         {
             dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
             dbName = WebConfigurationManager.AppSettings.Get("DBName");
             Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIFormHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
             WebForm = new BaseForm();
-            UIData = new UIDataHandler(dbServer, dbName);
+            FormDataHandle = new FormDataHandler(dbServer, dbName);
         }
         /**
         * 
@@ -41,20 +41,20 @@ namespace VeraAPI.HelperClasses
             // Hold submitted form for comparison
             BaseForm SubmittedForm = WebForm;
             // Set data handler form to submitted form
-            UIData.FormData = WebForm;
+            FormDataHandle.FormData = WebForm;
             // Load the job template corresponding to the templateID for the submitted form
-            if (UIData.LoadJobTemplate(UIData.FormData.TemplateID))
+            if (FormDataHandle.LoadJobTemplate(FormDataHandle.FormData.TemplateID))
             {
                 Log.WriteLogEntry("Success load submit form job template.");
                 // Insert travel form data into the database
-                if (UIData.InsertFormData())
+                if (FormDataHandle.InsertFormData())
                 {
                     Log.WriteLogEntry("Success insert form data to database.");
                     // Call UIDataHandler method to load the form data from SQL using the submitted form ID
-                    UIData.LoadTravelAuth(SubmittedForm.FormDataID);
+                    FormDataHandle.LoadTravelAuth(SubmittedForm.FormDataID);
                     FormValidator = new Validator(Log);
                     // Compare above stored SubmittedForm to loaded UIDataHandler form
-                    if (FormValidator.CompareAlphaBravo(SubmittedForm, UIData.FormData))
+                    if (FormValidator.CompareAlphaBravo(SubmittedForm, FormDataHandle.FormData))
                     {
                         Log.WriteLogEntry("Submitted form matches inserted form!");
                         result = true;

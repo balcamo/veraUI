@@ -202,12 +202,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HelperClasses\EmailHelper.cs" />
-    <Compile Include="HelperClasses\FormHelp.cs" />
-    <Compile Include="HelperClasses\TokenHelper.cs" />
+    <Compile Include="HelperClasses\FormHelper.cs" />
     <Compile Include="HelperClasses\LoginHelper.cs" />
     <Compile Include="HelperClasses\UserHelper.cs" />
     <Compile Include="Models\DataHandler\UserDataHandler.cs" />
-    <Compile Include="Models\OfficeHandler\EmailHandler.cs" />
+    <Compile Include="Models\OfficeHandler\ExchangeHandler.cs" />
     <Compile Include="Models\JobHeader.cs" />
     <Compile Include="Models\Forms\BaseForm.cs" />
     <Compile Include="Models\Forms\TravelAuthForm.cs" />
@@ -215,13 +214,15 @@
     <Compile Include="Models\Scribe.cs" />
     <Compile Include="Models\DataHandler\SQLDataHandler.cs" />
     <Compile Include="Models\Security\DomainUser.cs" />
+    <Compile Include="Models\Security\FieldUser.cs" />
     <Compile Include="Models\Security\LoginForm.cs" />
     <Compile Include="Models\Security\LDAPHandler.cs" />
+    <Compile Include="Models\Security\PublicUser.cs" />
     <Compile Include="Models\Security\Token.cs" />
     <Compile Include="Models\Security\TokenHandler.cs" />
     <Compile Include="Models\Security\User.cs" />
     <Compile Include="Models\TemplateIndex.cs" />
-    <Compile Include="Models\DataHandler\UIDataHandler.cs" />
+    <Compile Include="Models\DataHandler\FormDataHandler.cs" />
     <Compile Include="Models\Validator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
