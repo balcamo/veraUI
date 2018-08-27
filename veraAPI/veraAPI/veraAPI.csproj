@@ -206,7 +206,7 @@
     <Compile Include="HelperClasses\LoginHelper.cs" />
     <Compile Include="HelperClasses\UserHelper.cs" />
     <Compile Include="Models\DataHandler\UserDataHandler.cs" />
-    <Compile Include="Models\OfficeHandler\EmailHandler.cs" />
+    <Compile Include="Models\OfficeHandler\ExchangeHandler.cs" />
     <Compile Include="Models\JobHeader.cs" />
     <Compile Include="Models\Forms\BaseForm.cs" />
     <Compile Include="Models\Forms\TravelAuthForm.cs" />

@@ -10,7 +10,7 @@ namespace VeraAPI.Models.DataHandler
 {
     public class UserDataHandler : SQLDataHandler
     {
-        public User LoginUser { get; set; }
+        public User CurrentUser { get; set; }
         public List<User> Users { get; set; }
 
         private Scribe Log;
@@ -24,7 +24,7 @@ namespace VeraAPI.Models.DataHandler
             this.dbName = dbName;
             this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserDataHandler_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
             this.dataConnectionString = GetDataConnectionString();
-            LoginUser = new User();
+            CurrentUser = new User();
         }
 
         public UserDataHandler(string dbServer, string dbName, Scribe Log) : base(dbServer)
@@ -33,17 +33,17 @@ namespace VeraAPI.Models.DataHandler
             this.dbName = dbName;
             this.Log = Log;
             this.dataConnectionString = GetDataConnectionString();
-            LoginUser = new User();
+            CurrentUser = new User();
         }
 
-        public bool LoadDomainUser()
+        public bool LoadDomainLoginUser()
         {
             Log.WriteLogEntry("Begin LoadUser...");
             bool result = false;
-            if (LoginUser.GetType() == typeof(DomainUser))
+            if (CurrentUser.GetType() == typeof(DomainUser))
             {
                 Log.WriteLogEntry("Success user type is domain user.");
-                DomainUser user = (DomainUser)LoginUser;
+                DomainUser user = (DomainUser)CurrentUser;
                 string cmdString = string.Format(@"select * from {0}.dbo.user_header where user_upn = @upn", dbName);
                 using (SqlConnection conn = new SqlConnection(dataConnectionString))
                 {
@@ -67,7 +67,167 @@ namespace VeraAPI.Models.DataHandler
                                     user.EmployeeID = rdr["employee_id"].ToString();
                                     user.Department = rdr["department"].ToString();
                                     user.SupervisorName = rdr["supervisor"].ToString();
-                                    LoginUser = user;
+                                    CurrentUser = user;
+                                    result = true;
+                                }
+                            }
+                        }
+                        catch (SqlException ex)
+                        {
+                            Log.WriteLogEntry("SQL error " + ex.Message);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.WriteLogEntry("General program error " + ex.Message);
+                        }
+                    }
+                }
+            }
+            else
+                Log.WriteLogEntry("Failed user type is not domain user!");
+            Log.WriteLogEntry("End LoadUser.");
+            return result;
+        }
+
+        public bool LoadDataUser()
+        {
+            Log.WriteLogEntry("Begin LoadUser...");
+            bool result = false;
+            if (CurrentUser.GetType() == typeof(DomainUser))
+            {
+                Log.WriteLogEntry("Success user type is domain user.");
+                DomainUser user = (DomainUser)CurrentUser;
+                string cmdString = string.Format(@"select * from {0}.dbo.user_header where user_upn = @upn", dbName);
+                using (SqlConnection conn = new SqlConnection(dataConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(cmdString, conn))
+                    {
+                        try
+                        {
+                            conn.Open();
+                            cmd.Parameters.AddWithValue("@upn", user.UserEmail);
+                            Log.WriteLogEntry(cmdString);
+                            using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SingleResult))
+                            {
+                                if (rdr.Read())
+                                {
+                                    user.UserID = (int)rdr["user_id"];
+                                    user.FirstName = rdr["first_name"].ToString();
+                                    user.LastName = rdr["last_name"].ToString();
+                                    user.UserEmail = rdr["email"].ToString();
+                                    user.DomainUserName = rdr["user_sam"].ToString();
+                                    user.DomainUpn = rdr["user_upn"].ToString();
+                                    user.EmployeeID = rdr["employee_id"].ToString();
+                                    user.Department = rdr["department"].ToString();
+                                    user.SupervisorName = rdr["supervisor"].ToString();
+                                    CurrentUser = user;
+                                    result = true;
+                                }
+                            }
+                        }
+                        catch (SqlException ex)
+                        {
+                            Log.WriteLogEntry("SQL error " + ex.Message);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.WriteLogEntry("General program error " + ex.Message);
+                        }
+                    }
+                }
+            }
+            else
+                Log.WriteLogEntry("Failed user type is not domain user!");
+            Log.WriteLogEntry("End LoadUser.");
+            return result;
+
+        }
+
+        public bool LoadPublicLoginUser()
+        {
+            Log.WriteLogEntry("Begin LoadUser...");
+            bool result = false;
+            if (CurrentUser.GetType() == typeof(DomainUser))
+            {
+                Log.WriteLogEntry("Success user type is domain user.");
+                DomainUser user = (DomainUser)CurrentUser;
+                string cmdString = string.Format(@"select * from {0}.dbo.user_header where user_upn = @upn", dbName);
+                using (SqlConnection conn = new SqlConnection(dataConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(cmdString, conn))
+                    {
+                        try
+                        {
+                            conn.Open();
+                            cmd.Parameters.AddWithValue("@upn", user.UserEmail);
+                            Log.WriteLogEntry(cmdString);
+                            using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SingleResult))
+                            {
+                                if (rdr.Read())
+                                {
+                                    user.UserID = (int)rdr["user_id"];
+                                    user.FirstName = rdr["first_name"].ToString();
+                                    user.LastName = rdr["last_name"].ToString();
+                                    user.UserEmail = rdr["email"].ToString();
+                                    user.DomainUserName = rdr["user_sam"].ToString();
+                                    user.DomainUpn = rdr["user_upn"].ToString();
+                                    user.EmployeeID = rdr["employee_id"].ToString();
+                                    user.Department = rdr["department"].ToString();
+                                    user.SupervisorName = rdr["supervisor"].ToString();
+                                    CurrentUser = user;
+                                    result = true;
+                                }
+                            }
+                        }
+                        catch (SqlException ex)
+                        {
+                            Log.WriteLogEntry("SQL error " + ex.Message);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.WriteLogEntry("General program error " + ex.Message);
+                        }
+                    }
+                }
+            }
+            else
+                Log.WriteLogEntry("Failed user type is not domain user!");
+            Log.WriteLogEntry("End LoadUser.");
+            return result;
+        }
+
+        public bool LoadFieldLoginUser()
+        {
+            Log.WriteLogEntry("Begin LoadUser...");
+            bool result = false;
+            if (CurrentUser.GetType() == typeof(DomainUser))
+            {
+                Log.WriteLogEntry("Success user type is domain user.");
+                DomainUser user = (DomainUser)CurrentUser;
+                string cmdString = string.Format(@"select * from {0}.dbo.user_header where user_upn = @upn", dbName);
+                using (SqlConnection conn = new SqlConnection(dataConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(cmdString, conn))
+                    {
+                        try
+                        {
+                            conn.Open();
+                            cmd.Parameters.AddWithValue("@upn", user.UserEmail);
+                            Log.WriteLogEntry(cmdString);
+                            using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SingleResult))
+                            {
+                                if (rdr.Read())
+                                {
+                                    user.UserID = (int)rdr["user_id"];
+                                    user.FirstName = rdr["first_name"].ToString();
+                                    user.LastName = rdr["last_name"].ToString();
+                                    user.UserEmail = rdr["email"].ToString();
+                                    user.DomainUserName = rdr["user_sam"].ToString();
+                                    user.DomainUpn = rdr["user_upn"].ToString();
+                                    user.EmployeeID = rdr["employee_id"].ToString();
+                                    user.Department = rdr["department"].ToString();
+                                    user.SupervisorName = rdr["supervisor"].ToString();
+                                    CurrentUser = user;
                                     result = true;
                                 }
                             }
@@ -135,10 +295,10 @@ namespace VeraAPI.Models.DataHandler
         {
             Log.WriteLogEntry("Begin FillDepartmentHead...");
             bool result = false;
-            if (LoginUser.GetType() == typeof(DomainUser))
+            if (CurrentUser.GetType() == typeof(DomainUser))
             {
                 Log.WriteLogEntry("Success user type is domain user.");
-                DomainUser user = (DomainUser)LoginUser;
+                DomainUser user = (DomainUser)CurrentUser;
                 string depString = string.Format(@"select dept_head_emp_id from {0}.dbo.department where dept_name = @deptName", dbName);
                 string empString = string.Format(@"select first_name, last_name, email from {0}.dbo.user_header where employee_id = @empID", dbName);
                 using (SqlConnection conn = new SqlConnection(dataConnectionString))
@@ -168,7 +328,7 @@ namespace VeraAPI.Models.DataHandler
                                         string empName = string.Format("{0} {1}", rdr["first_name"].ToString(), rdr["last_name"].ToString());
                                         user.DepartmentHead = empName;
                                         user.DepartmentHeadEmail = rdr["email"].ToString();
-                                        LoginUser = user;
+                                        CurrentUser = user;
                                         result = true;
                                     }
                                 }
@@ -195,10 +355,10 @@ namespace VeraAPI.Models.DataHandler
         {
             Log.WriteLogEntry("Begin FillGeneralManager...");
             bool result = false;
-            if (LoginUser.GetType() == typeof(DomainUser))
+            if (CurrentUser.GetType() == typeof(DomainUser))
             {
                 Log.WriteLogEntry("Success user type is domain user.");
-                DomainUser user = (DomainUser)LoginUser;
+                DomainUser user = (DomainUser)CurrentUser;
                 string comString = string.Format(@"select general_manager_emp_id from {0}.dbo.company", dbName);
                 string empString = string.Format(@"select first_name, last_name, email from {0}.dbo.user_header where employee_id = @empID", dbName);
                 using (SqlConnection conn = new SqlConnection(dataConnectionString))
@@ -227,7 +387,7 @@ namespace VeraAPI.Models.DataHandler
                                         string empName = string.Format("{0} {1}", rdr["first_name"].ToString(), rdr["last_name"].ToString());
                                         user.GeneralManager = empName;
                                         user.GeneralManagerEmail = rdr["email"].ToString();
-                                        LoginUser = user;
+                                        CurrentUser = user;
                                         result = true;
                                     }
                                     else
@@ -266,7 +426,7 @@ namespace VeraAPI.Models.DataHandler
                     Log.WriteLogEntry("Open SQL connection successful.");
                     using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                     {
-                        User user = LoginUser;
+                        User user = CurrentUser;
                         Log.WriteLogEntry("Domain user " + user.FirstName + " " + user.LastName + " ");
                         cmd.Parameters.AddWithValue("@firstName", user.FirstName);
                         cmd.Parameters.AddWithValue("@lastName", user.LastName);
@@ -296,7 +456,7 @@ namespace VeraAPI.Models.DataHandler
         {
             Log.WriteLogEntry("Begin InsertDomainLoginUser...");
             bool result = false;
-            if (LoginUser.GetType() == typeof(DomainUser))
+            if (CurrentUser.GetType() == typeof(DomainUser))
             {
                 Log.WriteLogEntry("Success user type is domain user.");
                 string cmdString = string.Format(@"insert into {0}.dbo.user_session (domain_username, domain_upn, user_employee_id, first_name, last_name, user_email, user_department, dept_head_name, dept_head_email, authenticated, user_type, login_name, login_token)
@@ -309,7 +469,7 @@ namespace VeraAPI.Models.DataHandler
                         Log.WriteLogEntry("Open SQL connection successful.");
                         using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                         {
-                            DomainUser user = (DomainUser)LoginUser;
+                            DomainUser user = (DomainUser)CurrentUser;
                             Log.WriteLogEntry(string.Format("Domain user {0} {1} {2} {3}", user.FirstName, user.LastName, user.DomainUserName, user.DomainUpn));
                             cmd.Parameters.AddWithValue("@userName", user.DomainUserName);
                             cmd.Parameters.AddWithValue("@upn", user.DomainUpn);

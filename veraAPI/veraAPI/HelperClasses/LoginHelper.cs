@@ -80,7 +80,7 @@ namespace VeraAPI.HelperClasses
             Log.WriteLogEntry("Begin InsertLoginUser...");
             bool result = false;
             UserData = new UserDataHandler(DbServer, DbName);
-            UserData.LoginUser = LoginUser;
+            UserData.CurrentUser = LoginUser;
             if (UserData.InsertDomainLoginUser())
             {
                 Log.WriteLogEntry("Success inserting domain login user.");
