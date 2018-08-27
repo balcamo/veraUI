@@ -38,6 +38,6 @@ export class User {
 }
 
 export class Auth {
-  public SessionToken: string;
-  public UserType: number;
+  public SessionToken: any;
+  public UserType: any;
 }
