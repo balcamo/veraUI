@@ -8,6 +8,7 @@ import { Constants } from './classes/constants';
 import { NavComponent } from './nav/nav.component';
 
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -62,9 +63,10 @@ export class AppComponent {
 
   waitForHttp(data: any) {
     console.log(data.text());
-    var value = data.text() as Auth;
-    console.log(value.userGroup);
-    console.log(value.token);
+    var value = new Auth();
+    value = JSON.parse(data.text());
+    console.log(value.UserType);
+    console.log("After reassignment:" + value);
     if (data == undefined) {
       alert("no data");
     } else if (data.text()[1] != "0") {
