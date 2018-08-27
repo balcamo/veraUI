@@ -38,6 +38,6 @@ export class User {
 }
 
 export class Auth {
-  public token: string;
-  public userGroup: number;
+  public SessionToken: string;
+  public UserType: number;
 }
