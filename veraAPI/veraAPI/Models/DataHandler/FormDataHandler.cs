@@ -11,7 +11,7 @@ using VeraAPI.Models.Forms;
 
 namespace VeraAPI.Models.DataHandler
 {
-    public class UIDataHandler : SQLDataHandler
+    public class FormDataHandler : SQLDataHandler
     {
         private Scribe Log = null;
         private string dataConnectionString = string.Empty;
@@ -22,7 +22,7 @@ namespace VeraAPI.Models.DataHandler
         public BaseForm FormData { get; set; } = new BaseForm();
         public string userEmail { get; set; }
 
-        public UIDataHandler(string dbServer, string dbName) : base(dbServer)
+        public FormDataHandler(string dbServer, string dbName) : base(dbServer)
         {
             this.dbServer = dbServer;
             this.dbName = dbName;
@@ -30,7 +30,7 @@ namespace VeraAPI.Models.DataHandler
             this.dataConnectionString = GetDataConnectionString();
         }
 
-        public UIDataHandler(string dbServer, string dbName, Scribe Log) : base(dbServer)
+        public FormDataHandler(string dbServer, string dbName, Scribe Log) : base(dbServer)
         {
             this.dbServer = dbServer;
             this.dbName = dbName;

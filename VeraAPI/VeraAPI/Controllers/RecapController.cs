@@ -13,7 +13,7 @@ namespace VeraAPI.Controllers
 {
     public class RecapController : ApiController
     {
-        FormHelp helper = new FormHelp();
+        FormHelper helper = new FormHelper();
         // GET: api/Recap
         public IEnumerable<string> Get()
         {

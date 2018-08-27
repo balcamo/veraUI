@@ -15,29 +15,33 @@ namespace VeraAPI.HelperClasses
         public LoginForm LoginCredentials { get; set; }
         public string JsonToken { get; private set; }
 
-        private string domainName;
+        private string DomainName;
+        private string DbServer;
+        private string DbName;
         private User LoginUser;
         private LDAPHandler LDAPHandle;
         private TokenHandler TokenHandle;
+        private UserDataHandler UserData;
         private Scribe Log;
 
         public LoginHelper()
         {
             Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            domainName = "LocalDomain";
+            DomainName = "LocalDomain";
+            DbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
+            DbName = WebConfigurationManager.AppSettings.Get("LoginDB");
         }
 
         public bool AuthenticateDomainCredentials()
         {
             Log.WriteLogEntry("Begin AuthenticateDomainCredentials...");
             bool result = false;
-            LDAPHandle = new LDAPHandler(domainName);
+            LDAPHandle = new LDAPHandler(DomainName);
             if (LDAPHandle.ValidateDomain())
             {
                 if (LDAPHandle.AuthenticateUser(LoginCredentials.UserName, LoginCredentials.UserPwd))
                 {
                     LoginUser = LDAPHandle.CurrentUser;
-                    LoginUser.UserType = 1;
                     result = true;
                 }
             }
@@ -61,12 +65,30 @@ namespace VeraAPI.HelperClasses
                 if (JsonToken != null)
                 {
                     Log.WriteLogEntry("Success converting token string to json string");
+                    LoginUser.LoginToken = JsonToken;
                     result = true;
                 }
                 else
                     Log.WriteLogEntry("Failed to convert token string to json string!");
             }
             Log.WriteLogEntry("End GetToken.");
+            return result;
+        }
+
+        public bool InsertDomainLoginUser()
+        {
+            Log.WriteLogEntry("Begin InsertLoginUser...");
+            bool result = false;
+            UserData = new UserDataHandler(DbServer, DbName);
+            UserData.LoginUser = LoginUser;
+            if (UserData.InsertDomainLoginUser())
+            {
+                Log.WriteLogEntry("Success inserting domain login user.");
+                result = true;
+            }
+            else
+                Log.WriteLogEntry("Failed inserting domain login user!");
+            Log.WriteLogEntry("End InsertLoginUser.");
             return result;
         }
     }

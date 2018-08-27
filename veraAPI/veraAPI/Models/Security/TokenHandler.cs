@@ -38,7 +38,6 @@ namespace VeraAPI.Models.Security
                     RandomNumberGenerator rng = RandomNumberGenerator.Create();
                     byte[] rngKey = new byte[32];
                     rng.GetBytes(rngKey);
-                    //string sharedSecret = "Wendigo";
                     var signatureKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(rngKey);
                     Log.WriteLogEntry("Success create security key.");
                     var signatureCreds = new Microsoft.IdentityModel.Tokens.SigningCredentials(signatureKey, SecurityAlgorithms.HmacSha256Signature, SecurityAlgorithms.Sha256Digest);

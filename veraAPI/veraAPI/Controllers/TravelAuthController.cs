@@ -17,14 +17,14 @@ namespace VeraAPI.Controllers
 {
     public class TravelAuthController : ApiController
     {
-        private FormHelp TravelFormHelper;
+        private FormHelper TravelFormHelp;
         private EmailHelper TravelEmail;
         private Scribe Log;
 
         public TravelAuthController()
         {
             this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UITravelAuthController_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
-            TravelFormHelper = new FormHelp();
+            TravelFormHelp = new FormHelper();
             TravelEmail = new EmailHelper();
         }
 
@@ -58,8 +58,8 @@ namespace VeraAPI.Controllers
                     {
                         Log.WriteLogEntry("Inside Helper Task.");
                         // change number to constant once file is made
-                        TravelFormHelper.WebForm = travelAuthForm;
-                        if (TravelFormHelper.SubmitForm())
+                        TravelFormHelp.WebForm = travelAuthForm;
+                        if (TravelFormHelp.SubmitForm())
                         {
                             Log.WriteLogEntry("Success submitting travel form.");
                             /** Log.WriteLogEntry("Call Travel email helper load user with user email " + TravelFormHelper.userEmail);
@@ -81,7 +81,7 @@ namespace VeraAPI.Controllers
             }
             catch(Exception e)
             {
-                result = "Submit Failed " + e.Message;
+                result = "Failed Travel Authorization Submit " + e.Message;
             }
             return result;
         }

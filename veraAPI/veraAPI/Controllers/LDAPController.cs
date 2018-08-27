@@ -59,7 +59,13 @@ namespace VeraAPI.Controllers
                         if (LoginHelp.GetDomainToken())
                         {
                             Log.WriteLogEntry("Success getting domain json web token.");
-                            result = LoginHelp.JsonToken;
+                            if (LoginHelp.InsertDomainLoginUser())
+                            {
+                                Log.WriteLogEntry("Success inserting domain login user.");
+                                result = LoginHelp.JsonToken;
+                            }
+                            else
+                                Log.WriteLogEntry("Failed inserting domain login user!");
                         }
                         else
                             Log.WriteLogEntry("Failed getting domain json web token!");
