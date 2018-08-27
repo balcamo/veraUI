@@ -13,14 +13,15 @@ namespace VeraAPI.Models.DataHandler
 {
     public class FormDataHandler : SQLDataHandler
     {
-        private Scribe Log = null;
-        private string dataConnectionString = string.Empty;
-        private string dbServer = string.Empty;
-        private string dbName = string.Empty;
         public JobHeader Job { get; private set; }
         public JobTemplate Template { get; private set; }
         public BaseForm FormData { get; set; } = new BaseForm();
         public string userEmail { get; set; }
+
+        private Scribe Log = null;
+        private string dataConnectionString;
+        private string dbServer;
+        private string dbName;
 
         public FormDataHandler(string dbServer, string dbName) : base(dbServer)
         {

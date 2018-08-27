@@ -23,7 +23,7 @@ namespace VeraAPI.Models.OfficeHandler
 
         public ExchangeHandler()
         {
-            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             Emailer = new ExchangeService();
         }
 

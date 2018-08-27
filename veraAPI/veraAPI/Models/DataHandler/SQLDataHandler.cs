@@ -39,6 +39,9 @@ namespace VeraAPI.Models.DataHandler
                 case "Valhalla":
                     dataConnectionString = ConfigurationManager.ConnectionStrings["Valhalla"].ConnectionString;
                     break;
+                case "Bigfoot":
+                    dataConnectionString = ConfigurationManager.ConnectionStrings["Bigfoot"].ConnectionString;
+                    break;
             }
         }
 

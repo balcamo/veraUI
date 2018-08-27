@@ -36,7 +36,7 @@ namespace VeraAPI.Models.Security
 
         public bool AuthenticateUser(string userName, string userPwd)
         {
-            Log.WriteLogEntry("Begin LDAPHandler AuthenticateUser...");
+            Log.WriteLogEntry("Begin AuthenticateUser...");
             bool result = false;
             using (UserContext = new PrincipalContext(ContextType.Domain, domainName))
             {
@@ -45,6 +45,7 @@ namespace VeraAPI.Models.Security
                     UserAccount = UserPrincipal.FindByIdentity(UserContext, userName);
                     if (UserAccount != null)
                     {
+                        Log.WriteLogEntry("Success authenticating current user to the domain.");
                         DomainUser user = new DomainUser();
                         user.UserName = userName;
                         user.UserPwd = userPwd;
@@ -64,11 +65,15 @@ namespace VeraAPI.Models.Security
                             Log.WriteLogEntry("No department found.");
                         user.Authenicated = true;
                         user.UserType = User.DomainUser;
+                        CurrentUser = user;
+                        Log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3} {4}", CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.UserName, CurrentUser.DomainUpn, CurrentUser.UserEmail));
                         result = true;
                     }
+                    else
+                        Log.WriteLogEntry("Failed to authenticate current user to the domain!");
                 }
             }
-            Log.WriteLogEntry("End LDAPHandler AuthenticateUser.");
+            Log.WriteLogEntry("End AuthenticateUser.");
             return result;
         }
 

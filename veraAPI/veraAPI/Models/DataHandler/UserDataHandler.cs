@@ -14,15 +14,15 @@ namespace VeraAPI.Models.DataHandler
         public List<User> Users { get; set; }
 
         private Scribe Log;
-        private string dataConnectionString = string.Empty;
-        private string dbServer = string.Empty;
-        private string dbName = string.Empty;
+        private string dataConnectionString;
+        private string dbServer;
+        private string dbName;
 
         public UserDataHandler(string dbServer, string dbName) : base(dbServer)
         {
             this.dbServer = dbServer;
             this.dbName = dbName;
-            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserDataHandler_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserDataHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             this.dataConnectionString = GetDataConnectionString();
             CurrentUser = new User();
         }
@@ -52,7 +52,7 @@ namespace VeraAPI.Models.DataHandler
                         try
                         {
                             conn.Open();
-                            cmd.Parameters.AddWithValue("@upn", user.UserEmail);
+                            cmd.Parameters.AddWithValue("@upn", user.DomainUpn);
                             Log.WriteLogEntry(cmdString);
                             using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SingleResult))
                             {
@@ -459,14 +459,14 @@ namespace VeraAPI.Models.DataHandler
             if (CurrentUser.GetType() == typeof(DomainUser))
             {
                 Log.WriteLogEntry("Success user type is domain user.");
-                string cmdString = string.Format(@"insert into {0}.dbo.user_session (domain_username, domain_upn, user_employee_id, first_name, last_name, user_email, user_department, dept_head_name, dept_head_email, authenticated, user_type, login_name, login_token)
-                                            values (@userName, @upn, @empID, @firstName, @lastName, @email, @dept, @deptHead, @deptHeadEmail, @auth, @userType, @loginName, @token)", dbName);
+                string cmdString = string.Format(@"insert into {0}.dbo.user_session (domain_username, domain_upn, user_employee_id, first_name, last_name, user_email, user_department, authenticated, user_type, login_name, login_token)
+                                            values (@userName, @upn, @empID, @firstName, @lastName, @email, @dept, @auth, @userType, @loginName, @token)", dbName);
+                Log.WriteLogEntry(string.Format("Data connection string {0}", dataConnectionString));
                 using (SqlConnection conn = new SqlConnection(dataConnectionString))
                 {
                     try
                     {
                         conn.Open();
-                        Log.WriteLogEntry("Open SQL connection successful.");
                         using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                         {
                             DomainUser user = (DomainUser)CurrentUser;
@@ -478,8 +478,6 @@ namespace VeraAPI.Models.DataHandler
                             cmd.Parameters.AddWithValue("@lastName", user.LastName);
                             cmd.Parameters.AddWithValue("@email", user.UserEmail);
                             cmd.Parameters.AddWithValue("@dept", user.Department);
-                            cmd.Parameters.AddWithValue("@deptHead", user.DepartmentHead);
-                            cmd.Parameters.AddWithValue("@deptHeadEmail", user.DepartmentHeadEmail);
                             cmd.Parameters.AddWithValue("@auth", user.Authenicated);
                             cmd.Parameters.AddWithValue("@userType", user.UserType);
                             cmd.Parameters.AddWithValue("@loginName", user.UserName);
