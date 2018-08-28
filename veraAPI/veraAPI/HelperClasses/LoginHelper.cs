@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Configuration;
-using VeraAPI.Models;
 using VeraAPI.Models.DataHandler;
 using VeraAPI.Models.Security;
+using VeraAPI.Models.Forms;
+using VeraAPI.Models.Tools;
 using Newtonsoft.Json;
 
 namespace VeraAPI.HelperClasses
@@ -13,12 +14,11 @@ namespace VeraAPI.HelperClasses
     public class LoginHelper
     {
         public LoginForm LoginCredentials { get; set; }
-        public string JsonToken { get; private set; }
+        public User CurrentUser { get; private set; }
 
         private string DomainName;
         private string DbServer;
         private string DbName;
-        private User LoginUser;
         private LDAPHandler LDAPHandle;
         private TokenHandler TokenHandle;
         private UserDataHandler UserData;
@@ -41,8 +41,8 @@ namespace VeraAPI.HelperClasses
             {
                 if (LDAPHandle.AuthenticateUser(LoginCredentials.UserName, LoginCredentials.UserPwd))
                 {
-                    LoginUser = LDAPHandle.CurrentUser;
-                    Log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3}", LoginUser.FirstName, LoginUser.LastName, LoginUser.UserName, LoginUser.UserEmail));
+                    CurrentUser = LDAPHandle.CurrentUser;
+                    Log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3}", CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.UserName, CurrentUser.UserEmail));
                     result = true;
                 }
             }
@@ -57,20 +57,11 @@ namespace VeraAPI.HelperClasses
             Log.WriteLogEntry("Begin GetToken...");
             bool result = false;
             TokenHandle = new TokenHandler();
-            TokenHandle.CurrentUser = LoginUser;
+            TokenHandle.CurrentUser = CurrentUser;
             if (TokenHandle.GenerateDomainToken())
             {
-                Log.WriteLogEntry("Success generating domain token.");
-                Log.WriteLogEntry("Token string " + TokenHandle.SessionToken.SessionToken);
-                JsonToken = JsonConvert.SerializeObject(TokenHandle.SessionToken);
-                if (JsonToken != null)
-                {
-                    Log.WriteLogEntry("Success converting token string to json string");
-                    LoginUser.LoginToken = JsonToken;
-                    result = true;
-                }
-                else
-                    Log.WriteLogEntry("Failed to convert token string to json string!");
+                Log.WriteLogEntry("Success generating domain login token." + CurrentUser.LoginToken);
+                result = true;
             }
             Log.WriteLogEntry("End GetToken.");
             return result;
@@ -82,7 +73,7 @@ namespace VeraAPI.HelperClasses
             bool result = false;
             Log.WriteLogEntry(string.Format("DbServer {0} DbName {1}", DbServer, DbName));
             UserData = new UserDataHandler(DbServer, DbName);
-            UserData.CurrentUser = LoginUser;
+            UserData.CurrentUser = CurrentUser;
             if (UserData.InsertDomainLoginUser())
             {
                 Log.WriteLogEntry("Success inserting domain login user.");

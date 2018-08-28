@@ -14,8 +14,8 @@ namespace VeraAPI.Models.DataHandler
     {
         private string dataSource;
         private string dataConnectionString;
-        public string dataName { get; set; }
-        public string tableName { get; set; }
+        //public string dataName { get; set; }
+        //public string tableName { get; set; }
 
         public SQLDataHandler(string dataSource)
         {

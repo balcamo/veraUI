@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Configuration;
-using VeraAPI.Models;
+using VeraAPI.Models.Tools;
 using VeraAPI.Models.OfficeHandler;
 using VeraAPI.Models.Security;
 using VeraAPI.Models.DataHandler;

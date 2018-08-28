@@ -9,13 +9,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using Microsoft.IdentityModel;
+using Newtonsoft.Json;
+using VeraAPI.Models.Tools;
 
 namespace VeraAPI.Models.Security
 {
     public class TokenHandler : JwtSecurityTokenHandler
     {
         public User CurrentUser { get; set; }
-        public Token SessionToken { get; private set; }
 
         private Scribe Log;
 
@@ -62,8 +63,17 @@ namespace VeraAPI.Models.Security
                     Log.WriteLogEntry("Plain token " + plainToken.ToString());
                     string token = WriteToken(plainToken);
                     Log.WriteLogEntry("Encoded session token " + token);
-                    SessionToken = new Token(token, CurrentUser.UserType.ToString());
-                    result = true;
+
+                    Token SessionToken = new Token(token, CurrentUser.UserType.ToString());
+                    string JsonToken = JsonConvert.SerializeObject(SessionToken);
+                    if (JsonToken != null)
+                    {
+                        Log.WriteLogEntry("Success converting token string to json string");
+                        CurrentUser.LoginToken = JsonToken;
+                        result = true;
+                    }
+                    else
+                        Log.WriteLogEntry("Failed to convert token string to json string!");
                 }
                 catch (Exception ex)
                 {

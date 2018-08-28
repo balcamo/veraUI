@@ -5,7 +5,7 @@ using System.Web;
 using Microsoft.Exchange.WebServices;
 using Microsoft.Exchange.WebServices.Data;
 using System.Configuration;
-using VeraAPI.Models;
+using VeraAPI.Models.Tools;
 using VeraAPI.Models.Security;
 
 namespace VeraAPI.Models.OfficeHandler

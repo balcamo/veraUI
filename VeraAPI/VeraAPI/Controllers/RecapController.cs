@@ -6,8 +6,9 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Threading.Tasks;
 using VeraAPI.HelperClasses;
-using VeraAPI.Models;
+using VeraAPI.Models.Tools;
 using VeraAPI.Models.Forms;
+using VeraAPI.Models.Templates;
 
 namespace VeraAPI.Controllers
 {

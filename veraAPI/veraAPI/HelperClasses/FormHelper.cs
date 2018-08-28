@@ -5,13 +5,16 @@ using System.Web;
 using System.Web.Configuration;
 using VeraAPI.Models;
 using VeraAPI.Models.Forms;
+using VeraAPI.Models.Templates;
 using VeraAPI.Models.DataHandler;
+using VeraAPI.Models.Tools;
 
 namespace VeraAPI.HelperClasses
 {
     public class FormHelper
     {
         public BaseForm WebForm { get; set; }
+        public JobTemplate Template { get; private set; }
 
         private string dbServer;
         private string dbName;
@@ -21,11 +24,10 @@ namespace VeraAPI.HelperClasses
 
         public FormHelper()
         {
+            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIFormHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
             dbName = WebConfigurationManager.AppSettings.Get("DBName");
-            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIFormHelper_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
             WebForm = new BaseForm();
-            FormDataHandle = new FormDataHandler(dbServer, dbName);
         }
         /**
         * 
@@ -38,14 +40,20 @@ namespace VeraAPI.HelperClasses
         {
             Log.WriteLogEntry("Begin FormHelp SubmitForm...");
             bool result = false;
+            FormDataHandle = new FormDataHandler(dbServer, dbName);
+
             // Hold submitted form for comparison
             BaseForm SubmittedForm = WebForm;
+            
             // Set data handler form to submitted form
             FormDataHandle.FormData = WebForm;
+            
             // Load the job template corresponding to the templateID for the submitted form
-            if (FormDataHandle.LoadJobTemplate(FormDataHandle.FormData.TemplateID))
+            if (FormDataHandle.LoadFormTemplate())
             {
                 Log.WriteLogEntry("Success load submit form job template.");
+                Template = FormDataHandle.Template;
+
                 // Insert travel form data into the database
                 if (FormDataHandle.InsertFormData())
                 {

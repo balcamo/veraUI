@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using VeraAPI.Models;
+using VeraAPI.Models.Tools;
 using VeraAPI.Models.Security;
 using VeraAPI.Models.Forms;
 using VeraAPI.HelperClasses;
@@ -59,7 +59,7 @@ namespace VeraAPI.Controllers
                         if (LoginHelp.GetDomainToken())
                         {
                             Log.WriteLogEntry("Success getting domain json web token.");
-                            result = LoginHelp.JsonToken;
+                            result = LoginHelp.CurrentUser.LoginToken;
                             if (LoginHelp.InsertDomainLoginUser())
                             {
                                 Log.WriteLogEntry("Success inserting domain login user.");

@@ -7,27 +7,28 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using VeraAPI.Models.Forms;
+using VeraAPI.Models.Templates;
+using VeraAPI.Models.Tools;
 
 
 namespace VeraAPI.Models.DataHandler
 {
     public class FormDataHandler : SQLDataHandler
     {
-        public JobHeader Job { get; private set; }
-        public JobTemplate Template { get; private set; }
         public BaseForm FormData { get; set; } = new BaseForm();
+        public JobTemplate Template { get; set; }
         public string userEmail { get; set; }
 
-        private Scribe Log = null;
+        private Scribe Log;
         private string dataConnectionString;
         private string dbServer;
         private string dbName;
 
         public FormDataHandler(string dbServer, string dbName) : base(dbServer)
         {
+            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             this.dbServer = dbServer;
             this.dbName = dbName;
-            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIDataHandler_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
             this.dataConnectionString = GetDataConnectionString();
         }
 
@@ -37,59 +38,6 @@ namespace VeraAPI.Models.DataHandler
             this.dbName = dbName;
             this.Log = Log;
             this.dataConnectionString = GetDataConnectionString();
-        }
-
-        public bool InsertJob()
-        {
-            Log.WriteLogEntry("Begin InsertJob...");
-            bool result = false;
-            string cmdString = string.Format(@"insert into {0}.dbo.job_header (template_id, data_id, job_description, job_priority, job_weight, job_type, entry_dt) output inserted.job_id values (@templateID, @dataID, @jobDescription, @jobPriority, @jobWeight, @jobType, GETDATE())", dbName);
-            // Check JobTemplate and FormData objects for required ID data prior to calling SQL query
-            //      if TemplateID or FormDataID are missing skip the SQL call and log the reason
-            if (Template.TemplateID > 0 || FormData.FormDataID > 0)
-            {
-                using (SqlConnection conn = new SqlConnection(dataConnectionString))
-                {
-                    using (SqlCommand cmd = new SqlCommand(cmdString, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@templateID", Template.TemplateID);
-                        cmd.Parameters.AddWithValue("@dataID", FormData.FormDataID);
-                        cmd.Parameters.AddWithValue("@jobDescription", Template.JobDescription);
-                        cmd.Parameters.AddWithValue("@jobPriority", Template.JobPriority);
-                        cmd.Parameters.AddWithValue("@jobWeight", Template.JobWeight);
-                        cmd.Parameters.AddWithValue("@jobType", Template.JobType);
-                        try
-                        {
-                            conn.Open();
-                            int jobID = (int)cmd.ExecuteScalar();
-                            result = true;
-                            Log.WriteLogEntry("Successful insert job " + jobID);
-                        }
-                        catch (SqlException ex)
-                        {
-                            result = false;
-                            Log.WriteLogEntry("SQL error " + ex.Message);
-                        }
-                        catch (Exception ex)
-                        {
-                            result = false;
-                            Log.WriteLogEntry("General program error " + ex.Message);
-                        }
-                    }
-                }
-            }
-            else if (Template.TemplateID < 1)
-            {
-                result = false;
-                Log.WriteLogEntry("No job template loaded.");
-            }
-            else if (FormData.FormDataID < 1)
-            {
-                result = false;
-                Log.WriteLogEntry("No job template loaded.");
-            }
-            Log.WriteLogEntry("End InsertJob.");
-            return result;
         }
 
         public bool InsertFormData()
@@ -232,17 +180,17 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
-        public bool LoadJobTemplate(int templateID)
+        public bool LoadFormTemplate()
         {
-            Log.WriteLogEntry("Begin LoadJobTemplate...");
+            Log.WriteLogEntry("Begin LoadFormTemplate...");
             bool result = false;
-            string cmdString = string.Format(@"select * from {0}.dbo.job_template where template_id = @templateID", dbName);
+            string cmdString = string.Format(@"select * from {0}.dbo.form_template where template_id = @templateID", dbName);
             Log.WriteLogEntry("SQL command string: " + cmdString);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                 {
-                    cmd.Parameters.AddWithValue("@templateID", templateID);
+                    cmd.Parameters.AddWithValue("@templateID", FormData.TemplateID);
                     try
                     {
                         conn.Open();
@@ -250,14 +198,17 @@ namespace VeraAPI.Models.DataHandler
                         {
                             if (rdr.Read())
                             {
-                                Template = new JobTemplate(templateID);
-                                Template.TemplateName = rdr["template_name"].ToString();
-                                Template.TableName = rdr["table_name"].ToString();
-                                Template.JobDescription = rdr["job_description"].ToString();
-                                Template.JobPriority = (int)rdr["job_priority"];
-                                Template.JobWeight = (int)rdr["job_weight"];
-                                Template.JobType = rdr["job_type"].ToString();
-                                Log.WriteLogEntry("Retrieved job template " + templateID + " " + Template.TemplateName);
+                                JobTemplate template = new JobTemplate(FormData.TemplateID)
+                                {
+                                    TemplateName = rdr["template_name"].ToString(),
+                                    TableName = rdr["table_name"].ToString(),
+                                    JobDescription = rdr["job_description"].ToString(),
+                                    JobWeight = (int)rdr["job_weight"],
+                                    JobPriority = (int)rdr["job_priority"],
+                                    JobType = rdr["job_type"].ToString()
+                                };
+                                Log.WriteLogEntry("Retrieved form template " + template.TemplateID + " " + template.TemplateName);
+                                Template = template;
                                 result = true;
                             }
                         }
@@ -274,66 +225,7 @@ namespace VeraAPI.Models.DataHandler
                     }
                 }
             }
-            Log.WriteLogEntry("End LoadJobTemplate.");
-            return result;
-        }
-
-        public bool LoadJobHeader(int jobID)
-        {
-            Log.WriteLogEntry("Begin LoadJobHeader...");
-            bool result = false;
-            string cmdString = string.Format(@"select * from {0}.dbo.job_header where job_id = @jobID", dbName);
-            Log.WriteLogEntry("SQL command string: " + cmdString);
-            using (SqlConnection conn = new SqlConnection(dataConnectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand(cmdString, conn))
-                {
-                    cmd.Parameters.AddWithValue("@jobID", jobID);
-                    try
-                    {
-                        conn.Open();
-                        using (SqlDataReader rdr = cmd.ExecuteReader())
-                        {
-                            if (rdr.Read())
-                            {
-                                Job = new JobHeader(jobID);
-                                Job.TemplateID = (int)rdr["template_id"];
-                                Job.DataID = (int)rdr["data_id"];
-                                Job.JobDescription = rdr["job_description"].ToString();
-                                var entryDate = rdr["entry_dt"];
-                                if (entryDate != DBNull.Value)
-                                    Job.EntryDate = DateTime.Parse(entryDate.ToString());
-                                var completeDate = rdr["complete_dt"];
-                                if (completeDate != DBNull.Value)
-                                    Job.CompleteDate = DateTime.Parse(completeDate.ToString());
-                                var duration = rdr["duration"];
-                                if (duration != DBNull.Value)
-                                    Job.Duration = (int)duration;
-                                var jobPriority = rdr["job_priority"];
-                                if (jobPriority != DBNull.Value)
-                                    Job.JobPriority = (int)jobPriority;
-                                var jobWeight = rdr["job_weight"];
-                                if (jobWeight != DBNull.Value)
-                                    Job.JobWeight = (int)jobWeight;
-                                Job.JobType = rdr["job_type"].ToString();
-                                Log.WriteLogEntry("Job header retrieved " + jobID + " " + Job.JobDescription);
-                                result = true;
-                            }
-                        }
-                    }
-                    catch (SqlException ex)
-                    {
-                        result = false;
-                        Log.WriteLogEntry("SQL error " + ex.Message);
-                    }
-                    catch (Exception ex)
-                    {
-                        result = false;
-                        Log.WriteLogEntry("General program error " + ex.Message);
-                    }
-                }
-            }
-            Log.WriteLogEntry("End LoadJobHeader.");
+            Log.WriteLogEntry("End LoadFormTemplate.");
             return result;
         }
 

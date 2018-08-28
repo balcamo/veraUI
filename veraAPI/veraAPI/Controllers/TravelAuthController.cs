@@ -4,13 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using VeraAPI.Models;
-using VeraAPI.Models.Forms;
-using VeraAPI.HelperClasses;
-using VeraAPI.Models.Security;
-using VeraAPI.Models.DataHandler;
 using System.Threading;
 using System.Threading.Tasks;
+using VeraAPI.Models.Forms;
+using VeraAPI.Models.Templates;
+using VeraAPI.HelperClasses;
+using VeraAPI.Models.Tools;
 
 
 namespace VeraAPI.Controllers
@@ -18,14 +17,12 @@ namespace VeraAPI.Controllers
     public class TravelAuthController : ApiController
     {
         private FormHelper TravelFormHelp;
-        private EmailHelper TravelEmail;
+        private JobHelper JobHelp;
         private Scribe Log;
 
         public TravelAuthController()
         {
-            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UITravelAuthController_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
-            TravelFormHelp = new FormHelper();
-            TravelEmail = new EmailHelper();
+            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "TravelAuthController_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
         }
 
         // GET: api/API
@@ -46,13 +43,15 @@ namespace VeraAPI.Controllers
         {
             Log.WriteLogEntry("Begin Post TravelAuthForm...");
             string result = string.Empty;
+            TravelFormHelp = new FormHelper();
+            JobHelp = new JobHelper();
+
             // Get template ID for insert travel authorization from static class TemplateIndex
             travelAuthForm.TemplateID = TemplateIndex.InsertTravelAuth;
             try
             {
                 if (travelAuthForm.GetType() == typeof(TravelAuthForm))
                 {
-                    Log.WriteLogEntry("Success submitted form is the correct type.");
                     Log.WriteLogEntry("Start Task to submit the travel form.");
                     Task t = Task.Run(() =>
                     {
@@ -62,27 +61,25 @@ namespace VeraAPI.Controllers
                         if (TravelFormHelp.SubmitForm())
                         {
                             Log.WriteLogEntry("Success submitting travel form.");
-                            /** Log.WriteLogEntry("Call Travel email helper load user with user email " + TravelFormHelper.userEmail);
-                            if (TravelEmail.LoadUser(TravelFormHelper.userEmail))
+                            JobHelp.Template = TravelFormHelp.Template;
+                            JobHelp.Job.FormDataID = TravelFormHelp.WebForm.FormDataID;
+                            if (JobHelp.InsertFormJob())
                             {
-                                Log.WriteLogEntry("Success load email user from database.");
-                                if (TravelEmail.SendEmail())
-                                    Log.WriteLogEntry("Success send travel authorization email to department head.");
-                                else
-                                    Log.WriteLogEntry("Failed send travel authorization email.");
+                                Log.WriteLogEntry("Success inserting form job.");
                             }
-                            else
-                                Log.WriteLogEntry("Fail load user from database!"); **/
                         }
                         Log.WriteLogEntry("Fail FormHelp SubmitForm!");
                     });
                     result = "Travel Authorization Form Submitted.";
                 }
+                else
+                    Log.WriteLogEntry("Failed submitted form is the wrong type!");
             }
             catch(Exception e)
             {
                 result = "Failed Travel Authorization Submit " + e.Message;
             }
+            Log.WriteLogEntry("End Post TravelAuthForm.");
             return result;
         }
 

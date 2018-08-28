@@ -6,7 +6,7 @@ using System.Web.Configuration;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.Configuration;
-using VeraAPI.Models;
+using VeraAPI.Models.Tools;
 
 namespace VeraAPI.Models.Security
 {

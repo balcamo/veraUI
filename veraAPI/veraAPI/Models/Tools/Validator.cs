@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
-namespace VeraAPI.Models
+namespace VeraAPI.Models.Tools
 {
     public class Validator
     {

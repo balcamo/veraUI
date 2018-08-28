@@ -5,6 +5,7 @@ using System.Web;
 using System.Data;
 using System.Data.SqlClient;
 using VeraAPI.Models.Security;
+using VeraAPI.Models.Tools;
 
 namespace VeraAPI.Models.DataHandler
 {
