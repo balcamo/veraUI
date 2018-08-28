@@ -62,17 +62,18 @@ export class AppComponent {
   }
 
   waitForHttp(data: any) {
-    console.log(data.text());
-    var value = new Auth();
+    var value;
+    console.log(data.text())
     value = JSON.parse(data.text());
-    console.log(value.UserType);
+    //value = Object.setPrototypeOf(value, Auth.prototype)
+    console.log(value[value.length-3]);
     console.log("After reassignment:" + value);
     if (data == undefined) {
       alert("no data");
-    } else if (data.text()[1] != "0") {
-      this.user.EntryGroup = data.text()[1] as number;
+    } else if (value[value.length - 3] != "0") {
+      this.user.EntryGroup = value[value.length - 3] as number;
       this.user.token = data.text()[0] as string;
-      if (data.text()[1] == "1") { this.user.nav = this.consts.employee; }
+      if (value[value.length - 3] == "1") { this.user.nav = this.consts.employee; }
       this.userService.setUser(this.user);
       console.log("finishing waitForHttp");
       //this.nav = new NavComponent(this.userService);
