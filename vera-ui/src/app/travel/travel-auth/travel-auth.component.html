@@ -24,7 +24,6 @@
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0" for="email">Email</label>
-
     <input type="email" id="email" class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.String3"
            placeholder="Email" />
   </h6>
@@ -144,10 +143,10 @@
            placeholder="Miscellaneous*" [(ngModel)]="form.Decimal11" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="misc">Explination for miscellaneous costs:</label>
+    <label class="mr-sm-2 mb-0" for="misc">Explanation for miscellaneous costs:</label>
     <input [ngStyle]="{'border-color':miscBorder}" type="text" id="misc"
-           ngbTooltip="Explination for miscellaneous" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Explination for miscellaneous" [(ngModel)]="form.String6" required />
+           ngbTooltip="Explanation for miscellaneous" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           placeholder="Explanation for miscellaneous" [(ngModel)]="form.String6" required />
   </h6>
 
   <h6><b>Total Estimate: ${{total}}</b></h6>

@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions, Response } from '@angular/http';
 import { Constants } from '../classes/constants';
 import { AuthForm } from '../classes/travel-auth-form';
-import { User } from '../classes/user';
+import { User, Auth } from '../classes/user';
 import { UserService } from '../service/app.service.user';
 import { Router } from '@angular/router';
 
@@ -51,11 +51,15 @@ export class TravelComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-    var body = JSON.stringify(this.user.UserName);
-    console.log(this.consts.url + 'TravelAuth');
-    this.http.get(this.consts.url + 'TravelAuth?userEmail={' + this.user.UserEmail + '}')
+    let authInfo = new Auth();
+    authInfo.SessionToken = this.user.token;
+    authInfo.UserType = this.user.EntryGroup;
+    authInfo.Email = this.user.UserEmail;
+    var body = JSON.stringify(authInfo);
+    console.log(authInfo);
+    this.http.get(this.consts.url + 'TravelAuth', body)
       //.subscribe((data) => this.waitForHttp(data));
-      .subscribe((data) => console.log(data.text()));
+      .subscribe((data) => console.log(data));
 
     if (this.allAuthDisplay == "none") {
       this.allAuthDisplay = "block";

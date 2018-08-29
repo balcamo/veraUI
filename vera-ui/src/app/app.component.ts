@@ -6,7 +6,7 @@ import { UserService } from './service/app.service.user';
 import { Observable } from 'rxjs';
 import { Constants } from './classes/constants';
 import { NavComponent } from './nav/nav.component';
-
+import { Serialize, SerializeProperty, Serializable } from 'ts-serializer';
 
 
 @Component({
@@ -62,18 +62,26 @@ export class AppComponent {
   }
 
   waitForHttp(data: any) {
-    var value;
+    //var value;
     console.log(data.text())
-    value = JSON.parse(data.text());
-    //value = Object.setPrototypeOf(value, Auth.prototype)
-    console.log(value[value.length-3]);
-    console.log("After reassignment:" + value);
+    var value = JSON.parse(data.text());
+    this.user.EntryGroup = value[value.length - 3];
+    var count = 0;
+    var token = '';
+    for (var i = 0; i < value.length;i++) {
+      if (count == 3 && value[i] != '"') {
+        token += value[i];
+      } else if (count >= 4) { this.user.token = token; break; }
+      if (value[i] == '"') { count += 1; }
+    }
+    console.log(this.user.EntryGroup);
+    console.log(this.user.token);
     if (data == undefined) {
       alert("no data");
-    } else if (value[value.length - 3] != "0") {
-      this.user.EntryGroup = value[value.length - 3] as number;
+    } else if (this.user.EntryGroup != 0) {
+     // this.user.EntryGroup = value[value.length - 3] as number;
       this.user.token = data.text()[0] as string;
-      if (value[value.length - 3] == "1") { this.user.nav = this.consts.employee; }
+      if (this.user.EntryGroup == 1) { this.user.nav = this.consts.employee; }
       this.userService.setUser(this.user);
       console.log("finishing waitForHttp");
       //this.nav = new NavComponent(this.userService);
