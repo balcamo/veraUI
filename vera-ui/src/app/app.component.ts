@@ -62,14 +62,20 @@ export class AppComponent {
   }
 
   waitForHttp(data: any) {
+    console.log(data.text());
     var value = JSON.parse(data.text());
     this.user.EntryGroup = value[value.length - 3];
     var count = 0;
     var token = '';
+    var id;
     for (var i = 0; i < value.length;i++) {
       if (count == 3 && value[i] != '"') {
-        token += value[i];
-      } else if (count >= 4) { this.user.token = token; break; }
+        id += value[i];
+      } else if (count == 7 && value[i] != '"') {
+        this.user.token += value[i];
+      } else {
+        break;
+      }
       if (value[i] == '"') { count += 1; }
     }
     if (data == undefined) {
