@@ -11,7 +11,7 @@ using VeraAPI.Models.Templates;
 using VeraAPI.HelperClasses;
 using VeraAPI.Models.Tools;
 using VeraAPI.Models.JobService;
-using VeraAPI.Models.Security
+using VeraAPI.Models.Security;
 
 
 namespace VeraAPI.Controllers
@@ -35,7 +35,7 @@ namespace VeraAPI.Controllers
         }
 
         // GET: api/API/5
-        public string Get(string tokenHead, string )
+        public string Get(string tokenHead, int userID)
         {
             // call function to get active forms
             Log.WriteLogEntry("Starting Get active travel forms.");

@@ -69,7 +69,7 @@ export class TravelComponent implements OnInit {
     authInfo.Email = this.user.UserEmail;
     var body = JSON.stringify(authInfo);
     console.log(authInfo);
-    this.http.get(this.consts.url + 'TravelAuth?tokenHead={userEmail}', body)
+    this.http.get(this.consts.url + 'TravelAuth?tokenHead={' + authInfo.SessionToken +'}', body)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => console.log(data));
 
