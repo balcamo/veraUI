@@ -14,17 +14,26 @@ namespace VeraAPI.HelperClasses
     public class FormHelper
     {
         public BaseForm WebForm { get; private set; }
+        public List<BaseForm> WebForms { get; private set; }
         public JobTemplate Template { get; private set; }
 
         private string dbServer;
         private string dbName;
-        private FormDataHandler FormDataHandle;
-        private Validator FormValidator;
-        private Scribe Log;
+        private FormDataHandler formDataHandle;
+        private Validator formValidator;
+        private Scribe log;
+
+        public FormHelper()
+        {
+            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
+            dbName = WebConfigurationManager.AppSettings.Get("DBName");
+            this.WebForm = new BaseForm();
+        }
 
         public FormHelper(BaseForm webForm)
         {
-            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIFormHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
             dbName = WebConfigurationManager.AppSettings.Get("DBName");
             this.WebForm = webForm;
@@ -38,41 +47,38 @@ namespace VeraAPI.HelperClasses
         **/
         public bool SubmitForm()
         {
-            Log.WriteLogEntry("Begin FormHelp SubmitForm...");
+            log.WriteLogEntry("Begin FormHelp SubmitForm...");
             bool result = false;
-            FormDataHandle = new FormDataHandler(dbServer, dbName);
+            formDataHandle = new FormDataHandler(WebForm, dbServer, dbName);
 
             // Hold submitted form for comparison
             BaseForm SubmittedForm = WebForm;
             
-            // Set data handler form to submitted form
-            FormDataHandle.FormData = WebForm;
-            
             // Load the job template corresponding to the templateID for the submitted form
-            if (FormDataHandle.LoadFormTemplate())
+            if (formDataHandle.LoadFormTemplate())
             {
-                Log.WriteLogEntry("Success load submit form job template.");
-                Template = FormDataHandle.Template;
+                log.WriteLogEntry("Success load submit form job template.");
+                Template = formDataHandle.Template;
 
                 // Insert travel form data into the database
-                if (FormDataHandle.InsertFormData())
+                if (formDataHandle.InsertFormData())
                 {
-                    Log.WriteLogEntry("Success insert form data to database.");
+                    log.WriteLogEntry("Success insert form data to database.");
                     // Call UIDataHandler method to load the form data from SQL using the submitted form ID
-                    FormDataHandle.LoadTravelAuth(SubmittedForm.FormDataID);
-                    FormValidator = new Validator(SubmittedForm, FormDataHandle.FormData);
+                    formDataHandle.LoadTravelAuth(SubmittedForm.FormDataID);
+                    formValidator = new Validator(SubmittedForm, formDataHandle.FormData);
                     // Compare above stored SubmittedForm to loaded UIDataHandler form
-                    if (FormValidator.CompareAlphaBravo())
+                    if (formValidator.CompareAlphaBravo())
                     {
-                        Log.WriteLogEntry("Submitted form matches inserted form!");
+                        log.WriteLogEntry("Submitted form matches inserted form!");
                         result = true;
                     }
                     else
-                        Log.WriteLogEntry("Mismatch!!! Submitted form does not match inserted form!");
+                        log.WriteLogEntry("Mismatch!!! Submitted form does not match inserted form!");
                 }
-                Log.WriteLogEntry("Failed insert form data to database.");
+                log.WriteLogEntry("Failed insert form data to database.");
             }
-            Log.WriteLogEntry("End FormHelp SubmitForm result " + result);
+            log.WriteLogEntry("End FormHelp SubmitForm result " + result);
             return result;
         }
 
@@ -90,6 +96,27 @@ namespace VeraAPI.HelperClasses
             //set up for updating a specific record
             //
             
+        }
+
+        public bool LoadForm()
+        {
+            log.WriteLogEntry("Starting LoadForm.");
+            bool result = false;
+            formDataHandle = new FormDataHandler(dbServer, dbName);
+            formDataHandle.LoadTravelAuth(WebForm.FormDataID);
+            log.WriteLogEntry("End LoadForm.");
+            return result;
+        }
+
+        public int LoadActiveForms()
+        {
+            log.WriteLogEntry("Starting LoadActiveForms.");
+            int result = 0;
+            formDataHandle = new FormDataHandler(dbServer, dbName);
+            formDataHandle.LoadTravelAuthForms(WebForm.UserID);
+            WebForms = formDataHandle.WebForms;
+            log.WriteLogEntry("End LoadActiveForms.");
+            return result;
         }
     }
 }

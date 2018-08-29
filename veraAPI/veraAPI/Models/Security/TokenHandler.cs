@@ -63,7 +63,7 @@ namespace VeraAPI.Models.Security
                     string token = WriteToken(plainToken);
                     Log.WriteLogEntry("Encoded session token " + token);
 
-                    Token SessionToken = new Token(CurrentUser.UserEmail, token, CurrentUser.UserType);
+                    Token SessionToken = new Token(CurrentUser.UserID, token, CurrentUser.UserType);
                     string JsonToken = JsonConvert.SerializeObject(SessionToken);
                     if (JsonToken != null)
                     {
@@ -93,7 +93,7 @@ namespace VeraAPI.Models.Security
             try
             {
                 Token token = JsonConvert.DeserializeObject<Token>(CurrentUser.SessionToken);
-                CurrentUser.UserEmail = token.UserEmail;
+                CurrentUser.UserID = token.UserID;
                 CurrentUser.SessionKey = token.SessionKey;
                 CurrentUser.UserType = token.UserType;
                 if (token != null)

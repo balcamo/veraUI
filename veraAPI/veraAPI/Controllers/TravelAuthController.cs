@@ -32,14 +32,26 @@ namespace VeraAPI.Controllers
         }
 
         // POST: api/TravelAuth
-        public string Post([FromBody]Token sessionToken)
+        public string Post(string userID, string tokenHeader)
         {
             // call function to get active forms
             Log.WriteLogEntry("Starting Get active travel forms.");
             string result = string.Empty;
-
+            try
+            {
+                LoginHelper loginHelp = new LoginHelper();
+                if (loginHelp.CompareSessionToken())
+                {
+                    FormHelper formHelp = new FormHelper();
+                    formHelp.LoadActiveForms();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteLogEntry(ex.Message);
+            }
             Log.WriteLogEntry("End Get active travel forms.");
-            return sessionToken;
+            return "Token check.";
         }
 
         // POST: api/API

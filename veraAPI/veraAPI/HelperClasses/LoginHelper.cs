@@ -83,7 +83,7 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public bool ConvertSessionToken()
+        public bool CompareSessionToken()
         {
             Log.WriteLogEntry("Starting ConvertSessionToken.");
             bool result = false;

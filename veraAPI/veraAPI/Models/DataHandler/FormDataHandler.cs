@@ -15,7 +15,8 @@ namespace VeraAPI.Models.DataHandler
 {
     public class FormDataHandler : SQLDataHandler
     {
-        public BaseForm FormData { get; set; } = new BaseForm();
+        public BaseForm FormData { get; private set; }
+        public List<BaseForm> WebForms { get; private set; }
         public JobTemplate Template { get; set; }
         public string userEmail { get; set; }
 
@@ -27,14 +28,25 @@ namespace VeraAPI.Models.DataHandler
             this.dbServer = dbServer;
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
+            this.FormData = new BaseForm();
         }
 
-        public FormDataHandler(string dbServer, string dbName, Scribe Log) : base(dbServer)
+        public FormDataHandler(BaseForm webForm, string dbServer, string dbName) : base(dbServer)
         {
+            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             this.dbServer = dbServer;
             this.dbName = dbName;
-            this.Log = Log;
             this.dataConnectionString = GetDataConnectionString();
+            this.FormData = webForm;
+        }
+
+        public FormDataHandler(List<BaseForm> webForms, string dbServer, string dbName) : base(dbServer)
+        {
+            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            this.dbServer = dbServer;
+            this.dbName = dbName;
+            this.dataConnectionString = GetDataConnectionString();
+            this.WebForms = webForms;
         }
 
         public bool InsertFormData()
@@ -286,6 +298,70 @@ namespace VeraAPI.Models.DataHandler
                     }
                 }
             }
+            Log.WriteLogEntry("End LoadTravelAuth.");
+            return result;
+        }
+
+        public int LoadTravelAuthForms(int userID)
+        {
+            Log.WriteLogEntry("Begin LoadTravelAuth...");
+            int result = 0;
+            string cmdString = string.Format(@"select * from {0}.dbo.travel where submitter_id = @userID", dbName);
+            Log.WriteLogEntry("SQL command string: " + cmdString);
+            using (SqlConnection conn = new SqlConnection(dataConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(cmdString, conn))
+                {
+                    cmd.Parameters.AddWithValue("@userID", userID);
+                    try
+                    {
+                        conn.Open();
+                        using (SqlDataReader rdr = cmd.ExecuteReader())
+                        {
+                            while (rdr.Read())
+                            {
+                                TravelAuthForm travel = new TravelAuthForm();
+                                travel.FormDataID = (int)rdr["travel_id"];
+                                travel.String1 = rdr["first_name"].ToString();
+                                travel.String2 = rdr["last_name"].ToString();
+                                travel.Integer1 = rdr["phone"].ToString();
+                                travel.String3 = rdr["email"].ToString();
+                                travel.String4 = rdr["event_description"].ToString();
+                                travel.String5 = rdr["event_location"].ToString();
+                                travel.Date1 = rdr["depart_date"].ToString();
+                                travel.Date2 = rdr["return_date"].ToString();
+                                travel.Bool2 = rdr["district_vehicle"].ToString();
+                                travel.Decimal2 = rdr["registration_amt"].ToString();
+                                travel.Decimal3 = rdr["airfare_amt"].ToString();
+                                travel.Decimal4 = rdr["rental_amt"].ToString();
+                                travel.Decimal5 = rdr["fuel_parking_amt"].ToString();
+                                travel.Decimal7 = rdr["estimated_miles"].ToString();
+                                travel.Decimal8 = rdr["lodging_amt"].ToString();
+                                travel.Decimal9 = rdr["perdiem_amt"].ToString();
+                                travel.Decimal10 = rdr["travel_days"].ToString();
+                                travel.Decimal11 = rdr["misc_amt"].ToString();
+                                travel.Decimal12 = rdr["total_cost"].ToString();
+                                travel.Decimal13 = rdr["advance_amt"].ToString();
+                                travel.Bool3 = rdr["request_advance"].ToString();
+                                travel.Bool4 = rdr["travel_policy"].ToString();
+                                travel.Bool1 = rdr["preparer_name"].ToString();
+                                travel.String7 = rdr["submitter_approval"].ToString();
+                                Log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2}", travel.FormDataID, travel.String4, travel.String7));
+                                WebForms.Add(travel);
+                            }
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        Log.WriteLogEntry("SQL error " + ex.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.WriteLogEntry("General program error " + ex.Message);
+                    }
+                }
+            }
+            result = WebForms.Count;
             Log.WriteLogEntry("End LoadTravelAuth.");
             return result;
         }

@@ -205,8 +205,10 @@
     <Compile Include="HelperClasses\FormHelper.cs" />
     <Compile Include="HelperClasses\JobHelper.cs" />
     <Compile Include="HelperClasses\LoginHelper.cs" />
+    <Compile Include="HelperClasses\TokenHelper.cs" />
     <Compile Include="HelperClasses\UserHelper.cs" />
     <Compile Include="Models\DataHandler\JobDataHandler.cs" />
+    <Compile Include="Models\Forms\TokenForm.cs" />
     <Compile Include="Models\Templates\JobTemplate.cs" />
     <Compile Include="Models\DataHandler\UserDataHandler.cs" />
     <Compile Include="Models\Office365\ExchangeHandler.cs" />

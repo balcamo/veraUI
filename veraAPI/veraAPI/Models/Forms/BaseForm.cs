@@ -10,6 +10,7 @@ namespace VeraAPI.Models.Forms
     {
         public int FormDataID { get; set; }
         public int TemplateID { get; set; }
+        public int UserID { get; set; }
 
         public BaseForm() { }
 

@@ -16,13 +16,11 @@ namespace VeraAPI.Controllers
 {
     public class LDAPController : ApiController
     {
-        private LoginHelper LoginHelp;
         private Scribe Log;
 
         public LDAPController()
         {
             this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LDAPController_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            LoginHelp = new LoginHelper();
         }
 
         // GET: api/User
@@ -51,16 +49,17 @@ namespace VeraAPI.Controllers
             {
                 if (loginCredentials.GetType() == typeof(LoginForm))
                 {
+                    LoginHelper loginHelp = new LoginHelper();
                     Log.WriteLogEntry("Success login credentials are the correct type.");
-                    LoginHelp.LoginCredentials = loginCredentials;
-                    if (LoginHelp.AuthenticateDomainCredentials())
+                    loginHelp.LoginCredentials = loginCredentials;
+                    if (loginHelp.AuthenticateDomainCredentials())
                     {
                         Log.WriteLogEntry("Success authenticate domain credentials.");
-                        if (LoginHelp.GetDomainToken())
+                        if (loginHelp.GetDomainToken())
                         {
                             Log.WriteLogEntry("Success getting domain json web token.");
-                            result = LoginHelp.CurrentUser.SessionToken;
-                            if (LoginHelp.InsertDomainLoginUser())
+                            result = loginHelp.CurrentUser.SessionToken;
+                            if (loginHelp.InsertDomainLoginUser())
                             {
                                 Log.WriteLogEntry("Success inserting domain login user.");
                             }
