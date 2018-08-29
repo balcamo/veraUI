@@ -31,8 +31,8 @@ namespace VeraAPI.Controllers
             return "Submitted to the API";
         }
 
-        // POST: api/TravelAuth
-        public string Post(string userID, string tokenHeader)
+        // GET: api/API/5
+        public string Get(string tokenHeader, int userID)
         {
             // call function to get active forms
             Log.WriteLogEntry("Starting Get active travel forms.");
@@ -51,7 +51,7 @@ namespace VeraAPI.Controllers
                 Log.WriteLogEntry(ex.Message);
             }
             Log.WriteLogEntry("End Get active travel forms.");
-            return "Token check.";
+            return "Load Active Forms.";
         }
 
         // POST: api/API
