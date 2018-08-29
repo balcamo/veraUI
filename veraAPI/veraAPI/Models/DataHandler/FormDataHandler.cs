@@ -20,9 +20,6 @@ namespace VeraAPI.Models.DataHandler
         public string userEmail { get; set; }
 
         private Scribe Log;
-        private string dataConnectionString;
-        private string dbServer;
-        private string dbName;
 
         public FormDataHandler(string dbServer, string dbName) : base(dbServer)
         {
@@ -94,8 +91,8 @@ namespace VeraAPI.Models.DataHandler
                     registrationAmt = decimal.Parse(Travel.Decimal2);
                     Log.WriteLogEntry("Airfare: " + Travel.Decimal3);
                     airfareAmt = decimal.Parse(Travel.Decimal3);
-                    Log.WriteLogEntry("RentalCar: " + Travel.Decimal14);
-                    rentalAmt = decimal.Parse(Travel.Decimal14);
+                    Log.WriteLogEntry("RentalCar: " + Travel.Decimal4);
+                    rentalAmt = decimal.Parse(Travel.Decimal4);
                     Log.WriteLogEntry("FuelParking: " + Travel.Decimal5);
                     fuelParkingAmt = decimal.Parse(Travel.Decimal5);
                     Log.WriteLogEntry("Mileage: " + Travel.Decimal7);
@@ -132,7 +129,7 @@ namespace VeraAPI.Models.DataHandler
                         //      and converted data from above
                         cmd.Parameters.AddWithValue("@firstName", Travel.String1);
                         cmd.Parameters.AddWithValue("@lastName", Travel.String2);
-                        cmd.Parameters.AddWithValue("@phone", Travel.Int1);
+                        cmd.Parameters.AddWithValue("@phone", Travel.Integer1);
                         cmd.Parameters.AddWithValue("@email", Travel.String3);
                         cmd.Parameters.AddWithValue("@eventDescription", Travel.String4);
                         cmd.Parameters.AddWithValue("@eventLocation", Travel.String5);
@@ -184,7 +181,7 @@ namespace VeraAPI.Models.DataHandler
         {
             Log.WriteLogEntry("Begin LoadFormTemplate...");
             bool result = false;
-            string cmdString = string.Format(@"select * from {0}.dbo.form_template where template_id = @templateID", dbName);
+            string cmdString = string.Format(@"select * from {0}.dbo.job_template where template_id = @templateID", dbName);
             Log.WriteLogEntry("SQL command string: " + cmdString);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
@@ -250,7 +247,7 @@ namespace VeraAPI.Models.DataHandler
                                 TravelAuthForm Travel = new TravelAuthForm(dataID);
                                 Travel.String1 = rdr["first_name"].ToString();
                                 Travel.String2 = rdr["last_name"].ToString();
-                                Travel.Int1 = rdr["phone"].ToString();
+                                Travel.Integer1 = rdr["phone"].ToString();
                                 Travel.String3 = rdr["email"].ToString();
                                 Travel.String4 = rdr["event_description"].ToString();
                                 Travel.String5 = rdr["event_location"].ToString();

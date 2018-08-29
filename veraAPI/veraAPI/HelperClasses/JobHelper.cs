@@ -13,7 +13,6 @@ namespace VeraAPI.HelperClasses
     public class JobHelper
     {
         public JobHeader Job { get; set; }
-        public JobTemplate Template { private get; set; }
 
         private JobDataHandler JobDataHandle;
         private string dbServer;
@@ -32,19 +31,14 @@ namespace VeraAPI.HelperClasses
         {
             Log.WriteLogEntry("Begin InsertFormjob...");
             bool result = false;
-            if (Template != null && Job.FormDataID > 0)
+            JobDataHandle = new JobDataHandler(dbServer, dbName);
+            JobDataHandle.Job = Job;
+            if (JobDataHandle.InsertJob())
             {
-                JobDataHandle = new JobDataHandler(dbServer, dbName);
-                JobDataHandle.Template = Template;
-                if (JobDataHandle.InsertJob())
-                {
-
-                }
+                result = true;
             }
-            else if (Template == null)
-                Log.WriteLogEntry("Failed template not loaded!");
-            else if (Job.FormDataID < 1)
-                Log.WriteLogEntry("Failed form data not loaded!");
+            else
+                Log.WriteLogEntry("Failed insert job!");
             Log.WriteLogEntry("End InsertFormJob.");
             return result;
         }

@@ -10,12 +10,14 @@ using VeraAPI.Models.Forms;
 using VeraAPI.Models.Templates;
 using VeraAPI.HelperClasses;
 using VeraAPI.Models.Tools;
+using VeraAPI.Models.JobService;
 
 
 namespace VeraAPI.Controllers
 {
     public class TravelAuthController : ApiController
     {
+        private LoginHelper LoginHelp;
         private FormHelper TravelFormHelp;
         private JobHelper JobHelp;
         private Scribe Log;
@@ -32,10 +34,19 @@ namespace VeraAPI.Controllers
         }
 
         // GET: api/API/5
-        public string Get(string userEmail)
+        public string Get(string sessionToken)
         {
             // call function to get active forms
-            return userEmail;
+            Log.WriteLogEntry("Starting Get active travel forms.");
+            string result = string.Empty;
+            LoginHelp = new LoginHelper();
+            LoginHelp.CurrentUser.SessionToken = sessionToken;
+            if (LoginHelp.ConvertSessionToken())
+            {
+                TravelFormHelp = new FormHelper();
+            }
+            Log.WriteLogEntry("End Get active travel forms.");
+            return sessionToken;
         }
 
         // POST: api/API
@@ -45,6 +56,7 @@ namespace VeraAPI.Controllers
             string result = string.Empty;
             TravelFormHelp = new FormHelper();
             JobHelp = new JobHelper();
+            JobHeader job = new JobHeader();
 
             // Get template ID for insert travel authorization from static class TemplateIndex
             travelAuthForm.TemplateID = TemplateIndex.InsertTravelAuth;
@@ -53,23 +65,59 @@ namespace VeraAPI.Controllers
                 if (travelAuthForm.GetType() == typeof(TravelAuthForm))
                 {
                     Log.WriteLogEntry("Start Task to submit the travel form.");
-                    Task t = Task.Run(() =>
+                    TravelFormHelp.WebForm = travelAuthForm;
+                    if (TravelFormHelp.SubmitForm())
                     {
-                        Log.WriteLogEntry("Inside Helper Task.");
+                        Log.WriteLogEntry("Success submitting travel form.");
+                        job = (JobHeader)TravelFormHelp.Template;
+                        job.FormDataID = TravelFormHelp.WebForm.FormDataID;
+                    }
+                    else
+                        Log.WriteLogEntry("Fail FormHelp SubmitForm!");
+
+                    int jobID = 0;
+                    if (job != null)
+                    {
+                        JobHelp.Job = job;
+                        if (JobHelp.InsertFormJob())
+                        {
+                            Log.WriteLogEntry("Success inserting form job.");
+                            jobID = JobHelp.Job.JobID;
+                        }
+                    }
+                    Log.WriteLogEntry("Job ID " + jobID);
+                    /** var postForm = Task.Run(() =>
+                    {
+                        Log.WriteLogEntry("Inside post form helper task.");
                         // change number to constant once file is made
                         TravelFormHelp.WebForm = travelAuthForm;
                         if (TravelFormHelp.SubmitForm())
                         {
                             Log.WriteLogEntry("Success submitting travel form.");
-                            JobHelp.Template = TravelFormHelp.Template;
-                            JobHelp.Job.FormDataID = TravelFormHelp.WebForm.FormDataID;
+                            job = (JobHeader)TravelFormHelp.Template;
+                            job.FormDataID = TravelFormHelp.WebForm.FormDataID;
+                        }
+                        else
+                            Log.WriteLogEntry("Fail FormHelp SubmitForm!");
+                        return job;
+                    });
+
+                    var postJob = postForm.ContinueWith((x) => 
+                    {
+                        Log.WriteLogEntry("Inside post job helper task.");
+                        int jobID = 0;
+                        if (x.Result != null)
+                        {
+                            JobHelp.Job = x.Result;
                             if (JobHelp.InsertFormJob())
                             {
                                 Log.WriteLogEntry("Success inserting form job.");
+                                jobID = JobHelp.Job.JobID;
                             }
                         }
-                        Log.WriteLogEntry("Fail FormHelp SubmitForm!");
-                    });
+                        return jobID;
+                    }); **/
+
                     result = "Travel Authorization Form Submitted.";
                 }
                 else

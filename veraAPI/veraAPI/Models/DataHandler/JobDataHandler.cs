@@ -14,8 +14,7 @@ namespace VeraAPI.Models.DataHandler
 {
     public class JobDataHandler : SQLDataHandler
     {
-        public JobHeader Job { get; private set; }
-        public JobTemplate Template { private get; set; }
+        public JobHeader Job { get; set; }
 
         private Scribe log = null;
         private string dataConnectionString;
@@ -54,17 +53,23 @@ namespace VeraAPI.Models.DataHandler
                     using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                     {
                         cmd.Parameters.AddWithValue("@dataID", Job.FormDataID);
-                        cmd.Parameters.AddWithValue("@templateID", Template.TemplateID);
-                        cmd.Parameters.AddWithValue("@jobDescription", Template.JobDescription);
-                        cmd.Parameters.AddWithValue("@jobPriority", Template.JobPriority);
-                        cmd.Parameters.AddWithValue("@jobWeight", Template.JobWeight);
-                        cmd.Parameters.AddWithValue("@jobType", Template.JobType);
+                        cmd.Parameters.AddWithValue("@templateID", Job.TemplateID);
+                        cmd.Parameters.AddWithValue("@jobDescription", Job.JobDescription);
+                        cmd.Parameters.AddWithValue("@jobPriority", Job.JobPriority);
+                        cmd.Parameters.AddWithValue("@jobWeight", Job.JobWeight);
+                        cmd.Parameters.AddWithValue("@jobType", Job.JobType);
                         try
                         {
                             conn.Open();
                             int jobID = (int)cmd.ExecuteScalar();
-                            result = true;
-                            log.WriteLogEntry("Successful insert job " + jobID);
+                            if (jobID > 0)
+                            {
+                                log.WriteLogEntry("Successful insert job " + jobID);
+                                Job.JobID = jobID;
+                                result = true;
+                            }
+                            else
+                                log.WriteLogEntry("Failed insert job to database!");
                         }
                         catch (SqlException ex)
                         {

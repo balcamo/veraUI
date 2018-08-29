@@ -30,18 +30,19 @@ namespace VeraAPI.HelperClasses
             DomainName = "LocalDomain";
             DbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
             DbName = WebConfigurationManager.AppSettings.Get("LoginDB");
+            LoginCredentials = new LoginForm();
+            CurrentUser = new User();
         }
 
         public bool AuthenticateDomainCredentials()
         {
             Log.WriteLogEntry("Begin AuthenticateDomainCredentials...");
             bool result = false;
-            LDAPHandle = new LDAPHandler(DomainName);
+            LDAPHandle = new LDAPHandler(CurrentUser, DomainName);
             if (LDAPHandle.ValidateDomain())
             {
                 if (LDAPHandle.AuthenticateUser(LoginCredentials.UserName, LoginCredentials.UserPwd))
                 {
-                    CurrentUser = LDAPHandle.CurrentUser;
                     Log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3}", CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.UserName, CurrentUser.UserEmail));
                     result = true;
                 }
@@ -56,11 +57,10 @@ namespace VeraAPI.HelperClasses
         {
             Log.WriteLogEntry("Begin GetToken...");
             bool result = false;
-            TokenHandle = new TokenHandler();
-            TokenHandle.CurrentUser = CurrentUser;
+            TokenHandle = new TokenHandler(CurrentUser);
             if (TokenHandle.GenerateDomainToken())
             {
-                Log.WriteLogEntry("Success generating domain login token." + CurrentUser.LoginToken);
+                Log.WriteLogEntry("Success generating domain login token." + CurrentUser.SessionToken);
                 result = true;
             }
             Log.WriteLogEntry("End GetToken.");
@@ -71,9 +71,7 @@ namespace VeraAPI.HelperClasses
         {
             Log.WriteLogEntry("Begin InsertLoginUser...");
             bool result = false;
-            Log.WriteLogEntry(string.Format("DbServer {0} DbName {1}", DbServer, DbName));
-            UserData = new UserDataHandler(DbServer, DbName);
-            UserData.CurrentUser = CurrentUser;
+            UserData = new UserDataHandler(CurrentUser, DbServer, DbName);
             if (UserData.InsertDomainLoginUser())
             {
                 Log.WriteLogEntry("Success inserting domain login user.");
@@ -82,6 +80,22 @@ namespace VeraAPI.HelperClasses
             else
                 Log.WriteLogEntry("Failed inserting domain login user!");
             Log.WriteLogEntry("End InsertLoginUser.");
+            return result;
+        }
+
+        public bool ConvertSessionToken()
+        {
+            Log.WriteLogEntry("Starting ConvertSessionToken.");
+            bool result = false;
+            TokenHandle = new TokenHandler(CurrentUser);
+            if (TokenHandle.TokenToString())
+            {
+                Log.WriteLogEntry("Success converting session token.");
+                result = true;
+            }
+            else
+                Log.WriteLogEntry("Failed converting session token!");
+            Log.WriteLogEntry("End ConvertSessionToken.");
             return result;
         }
     }

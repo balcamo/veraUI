@@ -60,9 +60,9 @@ namespace VeraAPI.HelperClasses
                     Log.WriteLogEntry("Success insert form data to database.");
                     // Call UIDataHandler method to load the form data from SQL using the submitted form ID
                     FormDataHandle.LoadTravelAuth(SubmittedForm.FormDataID);
-                    FormValidator = new Validator(Log);
+                    FormValidator = new Validator(SubmittedForm, FormDataHandle.FormData);
                     // Compare above stored SubmittedForm to loaded UIDataHandler form
-                    if (FormValidator.CompareAlphaBravo(SubmittedForm, FormDataHandle.FormData))
+                    if (FormValidator.CompareAlphaBravo())
                     {
                         Log.WriteLogEntry("Submitted form matches inserted form!");
                         result = true;

@@ -12,10 +12,10 @@ namespace VeraAPI.Models.DataHandler
 {
     public class SQLDataHandler
     {
-        private string dataSource;
-        private string dataConnectionString;
-        //public string dataName { get; set; }
-        //public string tableName { get; set; }
+        protected string dataSource;
+        protected string dataConnectionString;
+        protected string dbServer;
+        protected string dbName;
 
         public SQLDataHandler(string dataSource)
         {

@@ -13,7 +13,8 @@ namespace VeraAPI.Models.Security
         public string UserEmail { get; set; }
         public int UserType { get; set; }
         public bool Authenicated { get; set; }
-        public string LoginToken { get; set; }
+        public string SessionToken { get; set; }
+        public string SessionKey { get; set; }      // JWT part of the session token
         public string FirstName { get; set; }
         public string LastName { get; set; }
 

@@ -59,7 +59,7 @@ namespace VeraAPI.Controllers
                         if (LoginHelp.GetDomainToken())
                         {
                             Log.WriteLogEntry("Success getting domain json web token.");
-                            result = LoginHelp.CurrentUser.LoginToken;
+                            result = LoginHelp.CurrentUser.SessionToken;
                             if (LoginHelp.InsertDomainLoginUser())
                             {
                                 Log.WriteLogEntry("Success inserting domain login user.");

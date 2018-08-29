@@ -9,12 +9,14 @@ namespace VeraAPI.Models.Security
 {
     public class Token
     {
-        public string SessionToken { get; private set; }
-        public string UserType { get; private set; }
+        public string UserEmail { get; private set; }
+        public string SessionKey { get; private set; }
+        public int UserType { get; private set; }
 
-        public Token(string sessionToken, string userType)
+        public Token(string email, string sessionKey, int userType)
         {
-            this.SessionToken = sessionToken;
+            this.UserEmail = email;
+            this.SessionKey = sessionKey;
             this.UserType = userType;
         }
     }

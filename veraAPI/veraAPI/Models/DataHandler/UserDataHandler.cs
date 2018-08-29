@@ -11,30 +11,27 @@ namespace VeraAPI.Models.DataHandler
 {
     public class UserDataHandler : SQLDataHandler
     {
-        public User CurrentUser { get; set; }
-        public List<User> Users { get; set; }
+        public User CurrentUser { get; private set; }
+        public List<User> Users { get; private set; }
 
         private Scribe Log;
-        private string dataConnectionString;
-        private string dbServer;
-        private string dbName;
 
-        public UserDataHandler(string dbServer, string dbName) : base(dbServer)
+        public UserDataHandler(User user, string dbServer, string dbName) : base(dbServer)
         {
             this.dbServer = dbServer;
             this.dbName = dbName;
-            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserDataHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             this.dataConnectionString = GetDataConnectionString();
-            CurrentUser = new User();
+            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserDataHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            CurrentUser = user;
         }
 
-        public UserDataHandler(string dbServer, string dbName, Scribe Log) : base(dbServer)
+        public UserDataHandler(User user, string dbServer, string dbName, Scribe Log) : base(dbServer)
         {
             this.dbServer = dbServer;
             this.dbName = dbName;
             this.Log = Log;
             this.dataConnectionString = GetDataConnectionString();
-            CurrentUser = new User();
+            CurrentUser = user;
         }
 
         public bool LoadDomainLoginUser()
@@ -435,7 +432,7 @@ namespace VeraAPI.Models.DataHandler
                         cmd.Parameters.AddWithValue("@auth", user.Authenicated);
                         cmd.Parameters.AddWithValue("@userType", user.UserType);
                         cmd.Parameters.AddWithValue("@loginName", user.UserName);
-                        cmd.Parameters.AddWithValue("@token", user.LoginToken);
+                        cmd.Parameters.AddWithValue("@token", user.SessionToken);
                         if (cmd.ExecuteNonQuery() > 0)
                             result = true;
                     }
@@ -459,7 +456,7 @@ namespace VeraAPI.Models.DataHandler
             bool result = false;
             if (CurrentUser.GetType() == typeof(DomainUser))
             {
-                Log.WriteLogEntry("Success user type is domain user.");
+                DomainUser user = (DomainUser)CurrentUser;
                 string cmdString = string.Format(@"insert into {0}.dbo.user_session (domain_username, domain_upn, user_employee_id, first_name, last_name, user_email, user_department, authenticated, user_type, login_name, login_token)
                                             values (@userName, @upn, @empID, @firstName, @lastName, @email, @dept, @auth, @userType, @loginName, @token)", dbName);
                 Log.WriteLogEntry(string.Format("Data connection string {0}", dataConnectionString));
@@ -470,7 +467,6 @@ namespace VeraAPI.Models.DataHandler
                         conn.Open();
                         using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                         {
-                            DomainUser user = (DomainUser)CurrentUser;
                             Log.WriteLogEntry(string.Format("Domain user {0} {1} {2} {3}", user.FirstName, user.LastName, user.DomainUserName, user.DomainUpn));
                             cmd.Parameters.AddWithValue("@userName", user.DomainUserName);
                             cmd.Parameters.AddWithValue("@upn", user.DomainUpn);
@@ -482,7 +478,7 @@ namespace VeraAPI.Models.DataHandler
                             cmd.Parameters.AddWithValue("@auth", user.Authenicated);
                             cmd.Parameters.AddWithValue("@userType", user.UserType);
                             cmd.Parameters.AddWithValue("@loginName", user.UserName);
-                            cmd.Parameters.AddWithValue("@token", user.LoginToken);
+                            cmd.Parameters.AddWithValue("@token", user.SessionToken);
                             if (cmd.ExecuteNonQuery() > 0)
                                 result = true;
                         }
