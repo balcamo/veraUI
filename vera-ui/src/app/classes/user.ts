@@ -1,7 +1,6 @@
 import { AuthForm } from './travel-auth-form';
 
 export class User {
-  public UserName: string;
   public AuthForms: AuthForm[];
   public UserEmail: string;
   public EntryGroup = 0;
@@ -38,6 +37,9 @@ export class User {
 }
 
 export class Auth {
-  public SessionToken: any;
-  public UserType: any;
+  public Email: string;
+  public SessionToken: string;
+  public UserType: number;
+
 }
+

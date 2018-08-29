@@ -11,6 +11,7 @@ using VeraAPI.Models.Templates;
 using VeraAPI.HelperClasses;
 using VeraAPI.Models.Tools;
 using VeraAPI.Models.JobService;
+using VeraAPI.Models.Security;
 
 
 namespace VeraAPI.Controllers
@@ -33,8 +34,8 @@ namespace VeraAPI.Controllers
             return "Submitted to the API";
         }
 
-        // GET: api/API/5
-        public string Get(string sessionToken)
+        // POST: api/TravelAuth
+        public string Post([FromBody]Token sessionToken)
         {
             // call function to get active forms
             Log.WriteLogEntry("Starting Get active travel forms.");
