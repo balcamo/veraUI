@@ -14,7 +14,8 @@ namespace VeraAPI.Controllers
 {
     public class RecapController : ApiController
     {
-        FormHelper helper = new FormHelper();
+        private Scribe log;
+
         // GET: api/Recap
         public IEnumerable<string> Get()
         {
@@ -30,6 +31,7 @@ namespace VeraAPI.Controllers
         // POST: api/Recap
         public string Post([FromBody]TravelAuthForm value)
         {
+            FormHelper recapHelp = new FormHelper(value);
             string result = string.Empty;
             string emailType = string.Empty;
             value.TemplateID = TemplateIndex.InsertTravelRecap;
@@ -43,7 +45,7 @@ namespace VeraAPI.Controllers
                     Task t = Task.Run(() =>
                     {
                         // change number to constant once file is made
-                        helper.UpdateForm(value, emailType);
+                        recapHelp.UpdateForm(value, emailType);
 
                     });
                     //Thread helpThread = new Thread(authHelper.UpdateForm);

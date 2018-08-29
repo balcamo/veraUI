@@ -14,29 +14,17 @@ namespace VeraAPI.Models.DataHandler
 {
     public class JobDataHandler : SQLDataHandler
     {
-        public JobHeader Job { get; set; }
+        public JobHeader Job { get; private set; }
 
         private Scribe log = null;
-        private string dataConnectionString;
-        private string dbServer;
-        private string dbName;
 
-        public JobDataHandler(string dbServer, string dbName) : base(dbServer)
+        public JobDataHandler(JobHeader job, string dbServer, string dbName) : base(dbServer)
         {
             this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "JobDataHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             this.dbServer = dbServer;
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
-            this.Job = new JobHeader();
-        }
-
-        public JobDataHandler(string dbServer, string dbName, Scribe log) : base(dbServer)
-        {
-            this.dbServer = dbServer;
-            this.dbName = dbName;
-            this.log = log;
-            this.dataConnectionString = GetDataConnectionString();
-            this.Job = new JobHeader();
+            this.Job = job;
         }
 
         public bool InsertJob()

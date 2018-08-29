@@ -12,19 +12,19 @@ namespace VeraAPI.HelperClasses
 {
     public class EmailHelper
     {
+        public User CurrentUser { get; private set; }
         private string dbServer;
         private string dbName;
         private ExchangeHandler ExchangeMail;
         private UserDataHandler UserData;
-        private User CurrentUser;
         private Scribe Log;
 
-        public EmailHelper()
+        public EmailHelper(User user)
         {
             Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
             dbName = WebConfigurationManager.AppSettings.Get("DBName");
-            UserData = new UserDataHandler(dbServer, dbName);
+            CurrentUser = user;
             ExchangeMail = new ExchangeHandler();
         }
 

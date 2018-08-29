@@ -13,7 +13,7 @@ namespace VeraAPI.HelperClasses
 {
     public class FormHelper
     {
-        public BaseForm WebForm { get; set; }
+        public BaseForm WebForm { get; private set; }
         public JobTemplate Template { get; private set; }
 
         private string dbServer;
@@ -22,12 +22,12 @@ namespace VeraAPI.HelperClasses
         private Validator FormValidator;
         private Scribe Log;
 
-        public FormHelper()
+        public FormHelper(BaseForm webForm)
         {
             Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIFormHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
             dbName = WebConfigurationManager.AppSettings.Get("DBName");
-            WebForm = new BaseForm();
+            this.WebForm = webForm;
         }
         /**
         * 
