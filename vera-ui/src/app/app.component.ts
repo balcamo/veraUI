@@ -62,8 +62,6 @@ export class AppComponent {
   }
 
   waitForHttp(data: any) {
-    //var value;
-    console.log(data.text())
     var value = JSON.parse(data.text());
     this.user.EntryGroup = value[value.length - 3];
     var count = 0;
@@ -74,24 +72,18 @@ export class AppComponent {
       } else if (count >= 4) { this.user.token = token; break; }
       if (value[i] == '"') { count += 1; }
     }
-    console.log(this.user.EntryGroup);
-    console.log(this.user.token);
     if (data == undefined) {
       alert("no data");
     } else if (this.user.EntryGroup != 0) {
-     // this.user.EntryGroup = value[value.length - 3] as number;
-      this.user.token = data.text()[0] as string;
       if (this.user.EntryGroup == 1) { this.user.nav = this.consts.employee; }
       this.userService.setUser(this.user);
-      console.log("finishing waitForHttp");
-      //this.nav = new NavComponent(this.userService);
-      console.log("changing view");
       this.emit_event("nav");
       this.userEntry = "none";
       this.mainPage = "block";
     } else {
       alert("Not a valid email. Please try again");
     }
+    console.log("waitForHttp is complete");
   }
   
 }

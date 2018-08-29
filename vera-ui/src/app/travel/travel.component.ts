@@ -18,6 +18,8 @@ export class TravelComponent implements OnInit {
   http: Http;
   authForms = [];
   user = new User();
+  auth1 = new AuthForm();
+  auth2 = new AuthForm();
   constructor(private router: Router, http: Http, userService: UserService) {
     this.http = http;
     this.user = userService.getUser();
@@ -25,6 +27,15 @@ export class TravelComponent implements OnInit {
   
 
   ngOnInit() {
+    this.auth1.String4 = "water and power conference";
+    this.auth1.String5 = "Washington";
+    this.auth1.String8 = "red";
+    this.auth2.String4 = "Event 2";
+    this.auth2.String5 = "Texas";
+    this.auth2.String8 = "green";
+
+    this.authForms.push(this.auth1);
+    this.authForms.push(this.auth2);
   }
   /**
    * This function will toggle the display of
@@ -52,12 +63,13 @@ export class TravelComponent implements OnInit {
       headers: pageHeaders
     });
     let authInfo = new Auth();
-    authInfo.SessionToken = this.user.token;
+    authInfo.SessionToken = this.user.token.substring(0,36);
+    console.log(authInfo.SessionToken);
     authInfo.UserType = this.user.EntryGroup;
     authInfo.Email = this.user.UserEmail;
     var body = JSON.stringify(authInfo);
     console.log(authInfo);
-    this.http.get(this.consts.url + 'TravelAuth', body)
+    this.http.get(this.consts.url + 'TravelAuth?tokenHead={userEmail}', body)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => console.log(data));
 
