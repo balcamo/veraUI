@@ -11,7 +11,7 @@ import { Constants } from '../../classes/constants';
   styleUrls: ['./view-auth-forms.component.scss']
 })
 export class ViewAuthFormsComponent implements OnInit {
-  //@Input() authForms;
+  @Input() authForms;
   http: Http;
   userService: UserService
   user: User;
@@ -23,9 +23,7 @@ export class ViewAuthFormsComponent implements OnInit {
   form = new AuthForm();
   oldForm: AuthForm;
   // temperary
-  authForms = [];
-  auth1 = new AuthForm();
-  auth2 = new AuthForm();
+
   constructor(http: Http, userService: UserService) {
     this.http = http;
     this.userService = userService;
@@ -33,15 +31,6 @@ export class ViewAuthFormsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.auth1.String4 = "water and power conference";
-    this.auth1.String5 = "Washington";
-    this.auth1.String8 = "red";
-    this.auth2.String4 = "Event 2";
-    this.auth2.String5 = "Texas";
-    this.auth2.String8 = "green";
-
-    this.authForms.push(this.auth1);
-    this.authForms.push(this.auth2);
   }
 
   /**
