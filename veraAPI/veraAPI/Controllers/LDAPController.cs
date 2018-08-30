@@ -16,11 +16,11 @@ namespace VeraAPI.Controllers
 {
     public class LDAPController : ApiController
     {
-        private Scribe Log;
+        private Scribe log;
 
         public LDAPController()
         {
-            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LDAPController_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LDAPController_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
         }
 
         // GET: api/User
@@ -43,44 +43,43 @@ namespace VeraAPI.Controllers
         // POST: api/User
         public string Post([FromBody]LoginForm loginCredentials)
         {
-            Log.WriteLogEntry("Begin Post authenticate user...");
+            log.WriteLogEntry("Starting Post login user...");
             string result = string.Empty;
-            try
+            if (loginCredentials.GetType() == typeof(LoginForm))
             {
-                if (loginCredentials.GetType() == typeof(LoginForm))
+                LoginHelper loginHelp = new LoginHelper(loginCredentials);
+                try
                 {
-                    LoginHelper loginHelp = new LoginHelper();
-                    Log.WriteLogEntry("Success login credentials are the correct type.");
-                    loginHelp.LoginCredentials = loginCredentials;
+                    log.WriteLogEntry("Login Credentials " + loginCredentials.UserName + " " + loginCredentials.UserPwd);
+                    log.WriteLogEntry("Starting LoginHelper...");
                     if (loginHelp.AuthenticateDomainCredentials())
                     {
-                        Log.WriteLogEntry("Success authenticate domain credentials.");
                         if (loginHelp.GetDomainToken())
                         {
-                            Log.WriteLogEntry("Success getting domain json web token.");
-                            result = loginHelp.CurrentUser.SessionToken;
+                            //result = loginHelp.CurrentUser.SessionToken;
                             if (loginHelp.InsertDomainLoginUser())
                             {
-                                Log.WriteLogEntry("Success inserting domain login user.");
+                                log.WriteLogEntry("Success inserting domain login user.");
+                                result = loginHelp.CurrentUser.SessionToken;
                             }
                             else
-                                Log.WriteLogEntry("Failed inserting domain login user!");
+                                log.WriteLogEntry("Failed inserting domain login user!");
                         }
                         else
-                            Log.WriteLogEntry("Failed getting domain json web token!");
+                            log.WriteLogEntry("Failed getting domain json web token!");
                     }
                     else
-                        Log.WriteLogEntry("Failed authenticate domain credentials!");
+                        log.WriteLogEntry("Failed authenticate domain credentials!");
                 }
-                else
-                    Log.WriteLogEntry("Failed login credentials are the wrong type!");
+                catch (Exception ex)
+                {
+                    log.WriteLogEntry("Error posting login " + ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                Log.WriteLogEntry("Post authentication failed! " + ex.Message);
-            }
-            Log.WriteLogEntry("Return result " + result);
-            Log.WriteLogEntry("End Post authenticate user.");
+            else
+                log.WriteLogEntry("Failed login credentials are the wrong type!");
+            log.WriteLogEntry("Return result " + result);
+            log.WriteLogEntry("End Post login user.");
             return result;
         }
 

@@ -13,89 +13,118 @@ namespace VeraAPI.HelperClasses
 {
     public class LoginHelper
     {
-        public LoginForm LoginCredentials { get; set; }
         public User CurrentUser { get; private set; }
 
         private string DomainName;
         private string DbServer;
         private string DbName;
+        private LoginForm loginCredentials;
         private LDAPHandler LDAPHandle;
         private TokenHandler TokenHandle;
         private UserDataHandler UserData;
-        private Scribe Log;
+        private Scribe log;
 
         public LoginHelper()
         {
-            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             DomainName = "LocalDomain";
             DbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
             DbName = WebConfigurationManager.AppSettings.Get("LoginDB");
-            LoginCredentials = new LoginForm();
             CurrentUser = new User();
+        }
+
+        public LoginHelper(LoginForm loginCredentials)
+        {
+            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            DomainName = "LocalDomain";
+            DbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
+            DbName = WebConfigurationManager.AppSettings.Get("LoginDB");
+            this.loginCredentials = loginCredentials;
+            CurrentUser = new User();
+        }
+
+        public LoginHelper(LoginForm loginCredentials, User user)
+        {
+            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            DomainName = "LocalDomain";
+            DbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
+            DbName = WebConfigurationManager.AppSettings.Get("LoginDB");
+            this.loginCredentials = loginCredentials;
+            this.CurrentUser = user;
         }
 
         public bool AuthenticateDomainCredentials()
         {
-            Log.WriteLogEntry("Begin AuthenticateDomainCredentials...");
+            log.WriteLogEntry("Starting AuthenticateDomainCredentials...");
             bool result = false;
-            LDAPHandle = new LDAPHandler(CurrentUser, DomainName);
+            DomainUser user = new DomainUser();
+            user.UserName = loginCredentials.UserName;
+            user.UserPwd = loginCredentials.UserPwd;
+            LDAPHandle = new LDAPHandler(user, DomainName);
+            log.WriteLogEntry("Starting LDAPHandler...");
             if (LDAPHandle.ValidateDomain())
             {
-                if (LDAPHandle.AuthenticateUser(LoginCredentials.UserName, LoginCredentials.UserPwd))
+                if (LDAPHandle.AuthenticateUser())
                 {
-                    Log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3}", CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.UserName, CurrentUser.UserEmail));
+                    log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3}", CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.UserName, CurrentUser.UserEmail));
+                    CurrentUser = user;
                     result = true;
                 }
             }
             else
-                Log.WriteLogEntry("Failed LDAPHandler ValidateDomain!");
-            Log.WriteLogEntry("End AuthenticateDomainCredentials.");
+                log.WriteLogEntry("Failed LDAPHandler ValidateDomain!");
+            log.WriteLogEntry("End AuthenticateDomainCredentials.");
             return result;
         }
 
         public bool GetDomainToken()
         {
-            Log.WriteLogEntry("Begin GetToken...");
+            log.WriteLogEntry("Starting GetDomainToken...");
             bool result = false;
-            TokenHandle = new TokenHandler(CurrentUser);
-            if (TokenHandle.GenerateDomainToken())
+            if (CurrentUser.GetType() == typeof(DomainUser))
             {
-                Log.WriteLogEntry("Success generating domain login token." + CurrentUser.SessionToken);
-                result = true;
+                TokenHandle = new TokenHandler(CurrentUser);
+                if (TokenHandle.GenerateDomainToken())
+                {
+                    log.WriteLogEntry("Success generating domain login token." + CurrentUser.SessionToken);
+                    result = true;
+                }
             }
-            Log.WriteLogEntry("End GetToken.");
+            else
+                log.WriteLogEntry("Failed current user is not a domain user!");
+            log.WriteLogEntry("End GetDomainToken.");
             return result;
         }
 
         public bool InsertDomainLoginUser()
         {
-            Log.WriteLogEntry("Begin InsertLoginUser...");
+            log.WriteLogEntry("Begin InsertDomainLoginUser...");
             bool result = false;
             UserData = new UserDataHandler(CurrentUser, DbServer, DbName);
             if (UserData.InsertDomainLoginUser())
             {
-                Log.WriteLogEntry("Success inserting domain login user.");
+                log.WriteLogEntry("Success inserting domain login user.");
                 result = true;
             }
             else
-                Log.WriteLogEntry("Failed inserting domain login user!");
-            Log.WriteLogEntry("End InsertLoginUser.");
+                log.WriteLogEntry("Failed inserting domain login user!");
+            log.WriteLogEntry("End InsertDomainLoginUser.");
             return result;
         }
 
         public bool CompareSessionToken()
         {
-            Log.WriteLogEntry("Starting ConvertSessionToken.");
+            log.WriteLogEntry("Starting ConvertSessionToken.");
             bool result = false;
             TokenHandle = new TokenHandler(CurrentUser);
             if (TokenHandle.TokenToString())
             {
-                Log.WriteLogEntry("Success converting session token.");
+                log.WriteLogEntry("Success converting session token.");
                 result = true;
             }
             else
-                Log.WriteLogEntry("Failed converting session token!");
-            Log.WriteLogEntry("End ConvertSessionToken.");
+                log.WriteLogEntry("Failed converting session token!");
+            log.WriteLogEntry("End ConvertSessionToken.");
             return result;
         }
     }

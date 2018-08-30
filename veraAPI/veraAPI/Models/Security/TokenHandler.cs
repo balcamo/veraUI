@@ -18,18 +18,19 @@ namespace VeraAPI.Models.Security
     {
         public User CurrentUser { get; private set; }
 
-        private Scribe Log;
+        private Scribe log;
 
         public TokenHandler(User user)
         {
-            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "TokenHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "TokenHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             CurrentUser = user;
         }
 
         public bool GenerateDomainToken()
         {
-            Log.WriteLogEntry("Begin GenerateToken...");
+            log.WriteLogEntry("Starting GenerateDomainToken...");
             bool result = false;
+
             if (CurrentUser.GetType() == typeof(DomainUser))
             {
                 DomainUser user = (DomainUser)CurrentUser;
@@ -39,16 +40,16 @@ namespace VeraAPI.Models.Security
                     byte[] rngKey = new byte[32];
                     rng.GetBytes(rngKey);
                     var signatureKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(rngKey);
-                    Log.WriteLogEntry("Success create security key.");
+                    log.WriteLogEntry("Success create security key.");
                     var signatureCreds = new Microsoft.IdentityModel.Tokens.SigningCredentials(signatureKey, SecurityAlgorithms.HmacSha256Signature, SecurityAlgorithms.Sha256Digest);
-                    Log.WriteLogEntry("Success create signing credentials.");
+                    log.WriteLogEntry("Success create signing credentials.");
                     var claimsID = new ClaimsIdentity(new List<Claim>()
-                {
-                    new Claim(ClaimTypes.NameIdentifier, user.DomainUpn),
-                    new Claim(ClaimTypes.Email, user.UserEmail),
-                    new Claim(ClaimTypes.Role, "DomainUser")
-                }, "DomainUser");
-                    Log.WriteLogEntry("Success create claims identity.");
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, user.DomainUpn),
+                        new Claim(ClaimTypes.Email, user.UserEmail),
+                        new Claim(ClaimTypes.Role, "DomainUser")
+                    }, "DomainUser");
+                    log.WriteLogEntry("Success create claims identity.");
                     var TokenDescriptor = new Microsoft.IdentityModel.Tokens.SecurityTokenDescriptor()
                     {
                         Issuer = "https://bigfoot.verawp.local",
@@ -56,39 +57,38 @@ namespace VeraAPI.Models.Security
                         Subject = claimsID,
                         SigningCredentials = signatureCreds,
                     };
-                    Log.WriteLogEntry("Success create security token descriptor.");
-                    //var jwtHandler = new JwtSecurityTokenHandler();
+                    log.WriteLogEntry("Success create security token descriptor.");
                     var plainToken = CreateToken(TokenDescriptor);
-                    Log.WriteLogEntry("Plain token " + plainToken.ToString());
+                    log.WriteLogEntry("Plain token " + plainToken.ToString());
                     string token = WriteToken(plainToken);
-                    Log.WriteLogEntry("Encoded session token " + token);
+                    log.WriteLogEntry("Encoded session token " + token);
 
-                    Token SessionToken = new Token(CurrentUser.UserID, token, CurrentUser.UserType);
+                    Token SessionToken = new Token(user.UserID, token, user.UserType);
                     string JsonToken = JsonConvert.SerializeObject(SessionToken);
                     if (JsonToken != null)
                     {
-                        Log.WriteLogEntry("Success converting token string to json string");
-                        CurrentUser.SessionToken = JsonToken;
+                        log.WriteLogEntry("Success converting token string to json string");
+                        user.SessionToken = JsonToken;
                         result = true;
                     }
                     else
-                        Log.WriteLogEntry("Failed to convert token string to json string!");
+                        log.WriteLogEntry("Failed to convert token string to json string!");
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLogEntry("ERROR generating JWT " + ex.Message);
+                    log.WriteLogEntry("ERROR generating JWT " + ex.Message);
                     result = false;
                 }
             }
             else
-                Log.WriteLogEntry("Failed current user not a domain user type!");
-            Log.WriteLogEntry("End GenerateToken.");
+                log.WriteLogEntry("Failed current user is not a domain user!");
+            log.WriteLogEntry("End GenerateDomainToken.");
             return result;
         }
 
         public bool TokenToString()
         {
-            Log.WriteLogEntry("Starting TokenToString.");
+            log.WriteLogEntry("Starting TokenToString.");
             bool result = false;
             try
             {
@@ -99,13 +99,13 @@ namespace VeraAPI.Models.Security
                 if (token != null)
                     result = true;
                 else
-                    Log.WriteLogEntry("");
+                    log.WriteLogEntry("");
             }
             catch (Exception ex)
             {
-                Log.WriteLogEntry(ex.Message);
+                log.WriteLogEntry(ex.Message);
             }
-            Log.WriteLogEntry("End TokenToString.");
+            log.WriteLogEntry("End TokenToString.");
             return result;
         }
     }
