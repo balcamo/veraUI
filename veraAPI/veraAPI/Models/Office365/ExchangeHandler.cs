@@ -19,11 +19,11 @@ namespace VeraAPI.Models.OfficeHandler
         private ExchangeService Emailer;
         private WebCredentials UserCredentials;
         private EmailMessage EmailMessage;
-        private Scribe Log;
+        private Scribe log;
 
         public ExchangeHandler()
         {
-            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UIEmailHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             Emailer = new ExchangeService();
         }
 
@@ -38,7 +38,7 @@ namespace VeraAPI.Models.OfficeHandler
 
         public bool ConnectExchangeService()
         {
-            Log.WriteLogEntry("Starting ConnectExchangeService.");
+            log.WriteLogEntry("Starting ConnectExchangeService.");
             bool result = false;
             if (CurrentUser.GetType() == typeof(DomainUser))
             {
@@ -51,20 +51,20 @@ namespace VeraAPI.Models.OfficeHandler
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLogEntry("Failed Connecting to Exchange Service.");
-                    Log.WriteLogEntry(ex.Message);
+                    log.WriteLogEntry("Failed Connecting to Exchange Service.");
+                    log.WriteLogEntry(ex.Message);
                     result = false;
                 }
             }
-            Log.WriteLogEntry("End ConnectExchangeService.");
+            log.WriteLogEntry("End ConnectExchangeService.");
             return result;
         }
 
         public bool SendMail()
         {
-            Log.WriteLogEntry("Begin SendMail...");
+            log.WriteLogEntry("Begin SendMail...");
             bool result = false;
-            Log.WriteLogEntry("Connection to Exchange service successful.");
+            log.WriteLogEntry("Connection to Exchange service successful.");
             if (CurrentUser.GetType() == typeof(DomainUser))
             {
                 DomainUser user = (DomainUser)CurrentUser;
@@ -81,12 +81,12 @@ namespace VeraAPI.Models.OfficeHandler
                 }
                 catch (Exception ex)
                 {
-                    Log.WriteLogEntry("Send email failed!");
-                    Log.WriteLogEntry(ex.Message);
+                    log.WriteLogEntry("Send email failed!");
+                    log.WriteLogEntry(ex.Message);
                     result = false;
                 }
             }
-            Log.WriteLogEntry("End SendMail.");
+            log.WriteLogEntry("End SendMail.");
             return result;
         }
     }

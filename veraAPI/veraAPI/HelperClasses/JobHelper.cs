@@ -17,11 +17,11 @@ namespace VeraAPI.HelperClasses
         private JobDataHandler JobDataHandle;
         private string dbServer;
         private string dbName;
-        private Scribe Log;
+        private Scribe log;
 
         public JobHelper(JobHeader job)
         {
-            Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "JobHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "JobHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
             dbName = WebConfigurationManager.AppSettings.Get("DBName");
             this.Job = job;
@@ -29,7 +29,7 @@ namespace VeraAPI.HelperClasses
 
         public bool InsertFormJob()
         {
-            Log.WriteLogEntry("Begin InsertFormjob...");
+            log.WriteLogEntry("Begin InsertFormjob...");
             bool result = false;
             JobDataHandle = new JobDataHandler(Job, dbServer, dbName);
             if (JobDataHandle.InsertJob())
@@ -37,8 +37,8 @@ namespace VeraAPI.HelperClasses
                 result = true;
             }
             else
-                Log.WriteLogEntry("Failed insert job!");
-            Log.WriteLogEntry("End InsertFormJob.");
+                log.WriteLogEntry("Failed insert job!");
+            log.WriteLogEntry("End InsertFormJob.");
             return result;
         }
     }

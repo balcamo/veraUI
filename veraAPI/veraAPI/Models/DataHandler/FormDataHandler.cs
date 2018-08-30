@@ -20,11 +20,11 @@ namespace VeraAPI.Models.DataHandler
         public JobTemplate Template { get; set; }
         public string userEmail { get; set; }
 
-        private Scribe Log;
+        private Scribe log;
 
         public FormDataHandler(string dbServer, string dbName) : base(dbServer)
         {
-            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             this.dbServer = dbServer;
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
@@ -33,7 +33,7 @@ namespace VeraAPI.Models.DataHandler
 
         public FormDataHandler(BaseForm webForm, string dbServer, string dbName) : base(dbServer)
         {
-            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             this.dbServer = dbServer;
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
@@ -42,7 +42,7 @@ namespace VeraAPI.Models.DataHandler
 
         public FormDataHandler(List<BaseForm> webForms, string dbServer, string dbName) : base(dbServer)
         {
-            this.Log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             this.dbServer = dbServer;
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
@@ -67,7 +67,7 @@ namespace VeraAPI.Models.DataHandler
         private bool InsertTravelAuth()
         {
             // Returns the SQL generated travel_id from the travel table
-            Log.WriteLogEntry("Starting InsertTravelAuth...");
+            log.WriteLogEntry("Starting InsertTravelAuth...");
             bool result = false;
             TravelAuthForm Travel = (TravelAuthForm)FormData;
             if (Travel.String7 != null)
@@ -85,50 +85,50 @@ namespace VeraAPI.Models.DataHandler
 
                 //Capture email address for notification
                 userEmail = Travel.String7;
-                Log.WriteLogEntry("Travel Auth user email set to submitter signature " + userEmail);
+                log.WriteLogEntry("Travel Auth user email set to submitter signature " + userEmail);
 
                 // Attempt data typing of required form fields prior to SQL call
                 // Set the result to false and return in the catch and do not insert the form data
                 // Verbose logging to assist debugging
                 try
                 {
-                    Log.WriteLogEntry("Try conversion of data form fields to correct types.");
-                    Log.WriteLogEntry("TravelBegin: " + Travel.Date1);
+                    log.WriteLogEntry("Try conversion of data form fields to correct types.");
+                    log.WriteLogEntry("TravelBegin: " + Travel.Date1);
                     departDate = DateTime.Parse(Travel.Date1);
-                    Log.WriteLogEntry("TravelEnd: " + Travel.Date2);
+                    log.WriteLogEntry("TravelEnd: " + Travel.Date2);
                     returnDate = DateTime.Parse(Travel.Date2);
-                    Log.WriteLogEntry("DistrictVehicle: " + Travel.Bool2);
+                    log.WriteLogEntry("DistrictVehicle: " + Travel.Bool2);
                     districtVehicle = Travel.Bool2 == "true" ? true : false;
-                    Log.WriteLogEntry("RegistrationCost: " + Travel.Decimal2);
+                    log.WriteLogEntry("RegistrationCost: " + Travel.Decimal2);
                     registrationAmt = decimal.Parse(Travel.Decimal2);
-                    Log.WriteLogEntry("Airfare: " + Travel.Decimal3);
+                    log.WriteLogEntry("Airfare: " + Travel.Decimal3);
                     airfareAmt = decimal.Parse(Travel.Decimal3);
-                    Log.WriteLogEntry("RentalCar: " + Travel.Decimal4);
+                    log.WriteLogEntry("RentalCar: " + Travel.Decimal4);
                     rentalAmt = decimal.Parse(Travel.Decimal4);
-                    Log.WriteLogEntry("FuelParking: " + Travel.Decimal5);
+                    log.WriteLogEntry("FuelParking: " + Travel.Decimal5);
                     fuelParkingAmt = decimal.Parse(Travel.Decimal5);
-                    Log.WriteLogEntry("Mileage: " + Travel.Decimal7);
+                    log.WriteLogEntry("Mileage: " + Travel.Decimal7);
                     estimatedMiles = int.Parse(Travel.Decimal7);
-                    Log.WriteLogEntry("Lodging: " + Travel.Decimal8);
+                    log.WriteLogEntry("Lodging: " + Travel.Decimal8);
                     lodgingAmt = decimal.Parse(Travel.Decimal8);
-                    Log.WriteLogEntry("PerDiem: " + Travel.Decimal9);
+                    log.WriteLogEntry("PerDiem: " + Travel.Decimal9);
                     perdiemAmt = decimal.Parse(Travel.Decimal9);
-                    Log.WriteLogEntry("TravelDays: " + Travel.Decimal10);
+                    log.WriteLogEntry("TravelDays: " + Travel.Decimal10);
                     travelDays = int.Parse(Travel.Decimal10);
-                    Log.WriteLogEntry("Misc: " + Travel.Decimal11);
+                    log.WriteLogEntry("Misc: " + Travel.Decimal11);
                     miscAmt = decimal.Parse(Travel.Decimal11);
-                    Log.WriteLogEntry("Advance: " + Travel.Bool3);
+                    log.WriteLogEntry("Advance: " + Travel.Bool3);
                     requestAdvance = Travel.Bool3 == "true" ? true : false;
-                    Log.WriteLogEntry("AdvanceAmount: " + Travel.Decimal13);
+                    log.WriteLogEntry("AdvanceAmount: " + Travel.Decimal13);
                     advanceAmt = decimal.Parse(Travel.Decimal13);
-                    Log.WriteLogEntry("Policy: " + Travel.Bool4);
+                    log.WriteLogEntry("Policy: " + Travel.Bool4);
                     travelPolicy = Travel.Bool4 == "true" ? true : false;
 
                 }
                 catch (Exception ex)
                 {
                     result = false;
-                    Log.WriteLogEntry("Form data conversion error: " + ex.Message);
+                    log.WriteLogEntry("Form data conversion error: " + ex.Message);
                     return result;
                 }
 
@@ -168,33 +168,33 @@ namespace VeraAPI.Models.DataHandler
                             conn.Open();
                             this.FormData.FormDataID = (int)cmd.ExecuteScalar();
                             result = true;
-                            Log.WriteLogEntry("Successful insert travel ID " + result);
+                            log.WriteLogEntry("Successful insert travel ID " + result);
                         }
                         catch (SqlException ex)
                         {
                             result = false;
-                            Log.WriteLogEntry("SQL error " + ex.Message);
+                            log.WriteLogEntry("SQL error " + ex.Message);
                         }
                         catch (Exception ex)
                         {
                             result = false;
-                            Log.WriteLogEntry("General program error " + ex.Message);
+                            log.WriteLogEntry("General program error " + ex.Message);
                         }
                     }
                 }
             }
             else
-                Log.WriteLogEntry("Missing submitter signature!");
-            Log.WriteLogEntry("End InsertTravelAuth.");
+                log.WriteLogEntry("Missing submitter signature!");
+            log.WriteLogEntry("End InsertTravelAuth.");
             return result;
         }
 
         public bool LoadFormTemplate()
         {
-            Log.WriteLogEntry("Begin LoadFormTemplate...");
+            log.WriteLogEntry("Begin LoadFormTemplate...");
             bool result = false;
             string cmdString = string.Format(@"select * from {0}.dbo.job_template where template_id = @templateID", dbName);
-            Log.WriteLogEntry("SQL command string: " + cmdString);
+            log.WriteLogEntry("SQL command string: " + cmdString);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
@@ -216,7 +216,7 @@ namespace VeraAPI.Models.DataHandler
                                     JobPriority = (int)rdr["job_priority"],
                                     JobType = rdr["job_type"].ToString()
                                 };
-                                Log.WriteLogEntry("Retrieved form template " + template.TemplateID + " " + template.TemplateName);
+                                log.WriteLogEntry("Retrieved form template " + template.TemplateID + " " + template.TemplateName);
                                 Template = template;
                                 result = true;
                             }
@@ -225,25 +225,25 @@ namespace VeraAPI.Models.DataHandler
                     catch (SqlException ex)
                     {
                         result = false;
-                        Log.WriteLogEntry("SQL error " + ex.Message);
+                        log.WriteLogEntry("SQL error " + ex.Message);
                     }
                     catch (Exception ex)
                     {
                         result = false;
-                        Log.WriteLogEntry("General program error " + ex.Message);
+                        log.WriteLogEntry("General program error " + ex.Message);
                     }
                 }
             }
-            Log.WriteLogEntry("End LoadFormTemplate.");
+            log.WriteLogEntry("End LoadFormTemplate.");
             return result;
         }
 
         public bool LoadTravelAuth(int dataID)
         {
-            Log.WriteLogEntry("Begin LoadTravelAuth...");
+            log.WriteLogEntry("Begin LoadTravelAuth...");
             bool result = false;
             string cmdString = string.Format(@"select * from {0}.dbo.travel where travel_id = @dataID", dbName);
-            Log.WriteLogEntry("SQL command string: " + cmdString);
+            log.WriteLogEntry("SQL command string: " + cmdString);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
@@ -281,7 +281,7 @@ namespace VeraAPI.Models.DataHandler
                                 Travel.Bool4 = rdr["travel_policy"].ToString();
                                 Travel.Bool1 = rdr["preparer_name"].ToString();
                                 Travel.String7 = rdr["submitter_approval"].ToString();
-                                Log.WriteLogEntry("Retrieved travel data " + dataID + " " + Travel.String4);
+                                log.WriteLogEntry("Retrieved travel data " + dataID + " " + Travel.String4);
                                 result = true;
                             }
                         }
@@ -289,25 +289,25 @@ namespace VeraAPI.Models.DataHandler
                     catch (SqlException ex)
                     {
                         result = false;
-                        Log.WriteLogEntry("SQL error " + ex.Message);
+                        log.WriteLogEntry("SQL error " + ex.Message);
                     }
                     catch (Exception ex)
                     {
                         result = false;
-                        Log.WriteLogEntry("General program error " + ex.Message);
+                        log.WriteLogEntry("General program error " + ex.Message);
                     }
                 }
             }
-            Log.WriteLogEntry("End LoadTravelAuth.");
+            log.WriteLogEntry("End LoadTravelAuth.");
             return result;
         }
 
         public int LoadTravelAuthForms(int userID)
         {
-            Log.WriteLogEntry("Begin LoadTravelAuth...");
+            log.WriteLogEntry("Begin LoadTravelAuth...");
             int result = 0;
             string cmdString = string.Format(@"select * from {0}.dbo.travel where submitter_id = @userID", dbName);
-            Log.WriteLogEntry("SQL command string: " + cmdString);
+            log.WriteLogEntry("SQL command string: " + cmdString);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
@@ -346,23 +346,23 @@ namespace VeraAPI.Models.DataHandler
                                 travel.Bool4 = rdr["travel_policy"].ToString();
                                 travel.Bool1 = rdr["preparer_name"].ToString();
                                 travel.String7 = rdr["submitter_approval"].ToString();
-                                Log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2}", travel.FormDataID, travel.String4, travel.String7));
+                                log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2}", travel.FormDataID, travel.String4, travel.String7));
                                 WebForms.Add(travel);
                             }
                         }
                     }
                     catch (SqlException ex)
                     {
-                        Log.WriteLogEntry("SQL error " + ex.Message);
+                        log.WriteLogEntry("SQL error " + ex.Message);
                     }
                     catch (Exception ex)
                     {
-                        Log.WriteLogEntry("General program error " + ex.Message);
+                        log.WriteLogEntry("General program error " + ex.Message);
                     }
                 }
             }
             result = WebForms.Count;
-            Log.WriteLogEntry("End LoadTravelAuth.");
+            log.WriteLogEntry("End LoadTravelAuth.");
             return result;
         }
     }
