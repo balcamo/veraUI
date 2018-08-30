@@ -30,7 +30,6 @@ namespace VeraAPI.Models.Security
         {
             log.WriteLogEntry("Starting AuthenticateUser...");
             bool result = false;
-            log.WriteLogEntry("Current User " + CurrentUser.UserName + " " + CurrentUser.UserPwd);
             if (CurrentUser.GetType() == typeof(DomainUser))
             {
                 DomainUser user = (DomainUser)CurrentUser;
