@@ -13,7 +13,7 @@ namespace VeraAPI.HelperClasses
 {
     public class FormHelper
     {
-        public BaseForm WebForm { get; private set; }
+        public BaseForm WebForm { get; set; }
         public List<BaseForm> WebForms { get; private set; }
         public JobTemplate Template { get; private set; }
 

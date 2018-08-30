@@ -16,7 +16,7 @@ namespace VeraAPI.Models.Security
 {
     public class TokenHandler : JwtSecurityTokenHandler
     {
-        public User CurrentUser { get; private set; }
+        public User CurrentUser { get; set; }
 
         private Scribe log;
 

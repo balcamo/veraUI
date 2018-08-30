@@ -12,7 +12,7 @@ namespace VeraAPI.Models.Security
 {
     public class LDAPHandler
     {
-        public User CurrentUser { get; private set; }
+        public User CurrentUser { get; set; }
 
         private PrincipalContext UserContext;
         private UserPrincipal UserAccount;

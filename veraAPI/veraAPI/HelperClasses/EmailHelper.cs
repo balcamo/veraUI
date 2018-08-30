@@ -60,7 +60,7 @@ namespace VeraAPI.HelperClasses
         {
             log.WriteLogEntry("Begin LoadEmailUser...");
             bool result = false;
-            if (UserData.LoadDataUser())
+            if (UserData.LoadUserData())
             {
                 log.WriteLogEntry("Success load email user from database.");
                 CurrentUser = UserData.CurrentUser;

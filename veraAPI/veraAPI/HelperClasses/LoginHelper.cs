@@ -7,13 +7,12 @@ using VeraAPI.Models.DataHandler;
 using VeraAPI.Models.Security;
 using VeraAPI.Models.Forms;
 using VeraAPI.Models.Tools;
-using Newtonsoft.Json;
 
 namespace VeraAPI.HelperClasses
 {
     public class LoginHelper
     {
-        public User CurrentUser { get; private set; }
+        public User CurrentUser { get; set; }
 
         private string DomainName;
         private string DbServer;
@@ -66,10 +65,12 @@ namespace VeraAPI.HelperClasses
             {
                 if (LDAPHandle.AuthenticateUser())
                 {
-                    log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3}", CurrentUser.FirstName, CurrentUser.LastName, CurrentUser.UserName, CurrentUser.UserEmail));
+                    log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3}", user.FirstName, user.LastName, user.UserName, user.UserEmail));
                     CurrentUser = user;
                     result = true;
                 }
+                else
+                    log.WriteLogEntry("Failed authenticate current user to domain!");
             }
             else
                 log.WriteLogEntry("Failed LDAPHandler ValidateDomain!");

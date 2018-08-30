@@ -47,23 +47,30 @@ namespace VeraAPI.Controllers
             string result = string.Empty;
             if (loginCredentials.GetType() == typeof(LoginForm))
             {
+                log.WriteLogEntry("Login Credentials " + loginCredentials.UserName + " " + loginCredentials.UserPwd);
                 LoginHelper loginHelp = new LoginHelper(loginCredentials);
                 try
                 {
-                    log.WriteLogEntry("Login Credentials " + loginCredentials.UserName + " " + loginCredentials.UserPwd);
                     log.WriteLogEntry("Starting LoginHelper...");
                     if (loginHelp.AuthenticateDomainCredentials())
                     {
                         if (loginHelp.GetDomainToken())
                         {
-                            //result = loginHelp.CurrentUser.SessionToken;
-                            if (loginHelp.InsertDomainLoginUser())
+                            result = loginHelp.CurrentUser.SessionToken;
+                            log.WriteLogEntry(string.Format("LoginHelper CurrentUser {0} {1} {2} {3}", loginHelp.CurrentUser.FirstName, loginHelp.CurrentUser.LastName, loginHelp.CurrentUser.UserEmail, loginHelp.CurrentUser.UserType));
+                            UserHelper userHelp = new UserHelper(loginHelp.CurrentUser);
+                            log.WriteLogEntry("Starting UserHelper...");
+                            if (userHelp.FillUserID())
                             {
-                                log.WriteLogEntry("Success inserting domain login user.");
-                                result = loginHelp.CurrentUser.SessionToken;
+                                if (loginHelp.InsertDomainLoginUser())
+                                {
+                                    log.WriteLogEntry("Success inserting domain login user.");
+                                }
+                                else
+                                    log.WriteLogEntry("Failed inserting domain login user!");
                             }
                             else
-                                log.WriteLogEntry("Failed inserting domain login user!");
+                                log.WriteLogEntry("Failed to fill user ID!");
                         }
                         else
                             log.WriteLogEntry("Failed getting domain json web token!");
