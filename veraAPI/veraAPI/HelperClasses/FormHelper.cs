@@ -108,13 +108,14 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public int LoadActiveForms()
+        public int LoadActiveForms(int userID)
         {
             log.WriteLogEntry("Starting LoadActiveForms.");
             int result = 0;
-            formDataHandle = new FormDataHandler(dbServer, dbName);
-            formDataHandle.LoadTravelAuthForms(WebForm.UserID);
-            WebForms = formDataHandle.WebForms;
+            WebForms = new List<BaseForm>();
+            formDataHandle = new FormDataHandler(WebForms, dbServer, dbName);
+            formDataHandle.LoadTravelAuthForms(userID);
+            log.WriteLogEntry("Count loaded forms " + WebForms.Count);
             log.WriteLogEntry("End LoadActiveForms.");
             return result;
         }

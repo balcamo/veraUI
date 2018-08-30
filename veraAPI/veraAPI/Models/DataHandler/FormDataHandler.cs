@@ -306,6 +306,7 @@ namespace VeraAPI.Models.DataHandler
         {
             log.WriteLogEntry("Begin LoadTravelAuth...");
             int result = 0;
+            List<TravelAuthForm> travelForms = new List<TravelAuthForm>();
             string cmdString = string.Format(@"select * from {0}.dbo.travel where submitter_id = @userID", dbName);
             log.WriteLogEntry("SQL command string: " + cmdString);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
