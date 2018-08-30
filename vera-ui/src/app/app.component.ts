@@ -62,7 +62,7 @@ export class AppComponent {
   }
 
   waitForHttp(data: any) {
-    console.log(data.text());
+    console.log("in the wait " + data.text());
     var value = JSON.parse(data.text());
     this.user.EntryGroup = value[value.length - 3];
     var count = 0;
