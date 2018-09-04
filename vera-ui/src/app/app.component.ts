@@ -54,6 +54,7 @@ export class AppComponent {
         search: params,
         headers: pageHeaders
       });
+      console.log("just before post");
       var body = JSON.stringify({ UserName:this.useremail, UserPwd:this.password });
       console.log(this.consts.url + 'LDAP');
       this.http.post(this.consts.url + 'LDAP', body, options)
@@ -62,18 +63,19 @@ export class AppComponent {
   }
 
   waitForHttp(data: any) {
-    console.log("in the wait " + data.text());
     var value = JSON.parse(data.text());
-    this.user.EntryGroup = value[value.length - 3];
+    console.log("in the wait " + value);
+    this.user.EntryGroup = value[value.length - 2];
     var count = 0;
-    var token = '';
-    var id;
-    for (var i = 0; i < value.length;i++) {
-      if (count == 3 && value[i] != '"') {
-        id += value[i];
-      } else if (count == 7 && value[i] != '"') {
+    this.user.token = '';
+    this.user.UserID = '';
+    for (var i = 0; i < value.length; i++) {
+      if (count == 2 && (value[i] == "0" || value[i] == "1" || value[i] == "2" || value[i] == "3" || value[i] == "4" ||
+        value[i] == "5" || value[i] == "6" || value[i] == "7" || value[i] == "8" || value[i] == "9")) {
+        this.user.UserID += value[i];
+      } else if (count == 5 && value[i] != '"') {
         this.user.token += value[i];
-      } else {
+      } else if (count > 5) {
         break;
       }
       if (value[i] == '"') { count += 1; }

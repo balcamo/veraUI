@@ -66,12 +66,12 @@ export class TravelComponent implements OnInit {
     authInfo.SessionToken = this.user.token.substring(0,36);
     console.log(authInfo.SessionToken);
     authInfo.UserType = this.user.EntryGroup;
-    authInfo.Email = this.user.UserEmail;
+    //authInfo.UserID = this.user.UserID;
     var body = JSON.stringify(authInfo);
-    console.log(authInfo);
-    this.http.get(this.consts.url + 'TravelAuth?tokenHead={' + authInfo.SessionToken +'}', body)
+    console.log(this.consts.url + 'TravelAuth?tokenHeader={' + authInfo.SessionToken + '}&userID={' + this.user.UserID + '}');
+    this.http.get(this.consts.url + 'TravelAuth?tokenHeader={' + authInfo.SessionToken + '}&userID={' + this.user.UserID + '}')
       //.subscribe((data) => this.waitForHttp(data));
-      .subscribe((data) => console.log(data));
+      .subscribe((data) => console.log("the return from the get "+data));
 
     if (this.allAuthDisplay == "none") {
       this.allAuthDisplay = "block";

@@ -12,7 +12,7 @@ using VeraAPI.HelperClasses;
 using VeraAPI.Models.Tools;
 using VeraAPI.Models.JobService;
 using VeraAPI.Models.Security;
-
+using System.Text;
 
 namespace VeraAPI.Controllers
 {
@@ -26,13 +26,13 @@ namespace VeraAPI.Controllers
         }
 
         // GET: api/API
-        public string Get()
+        /*public string Get(string tokenHeader, string userID)
         {
             return "Submitted to the API";
         }
-
+        */
         // GET: api/API/5
-        public BaseForm[] Get(string tokenHeader, int userID)
+        public BaseForm[] Get(string tokenHeader, string userID)
         {
             // call function to get active forms
             log.WriteLogEntry("Starting Get active travel forms.");
@@ -40,7 +40,7 @@ namespace VeraAPI.Controllers
             try
             {
                 FormHelper formHelp = new FormHelper();
-                formHelp.LoadActiveForms(userID);
+                formHelp.LoadActiveForms( Int32.Parse(userID));
                 result = formHelp.WebForms.ToArray();
             }
             catch (Exception ex)
@@ -50,7 +50,7 @@ namespace VeraAPI.Controllers
             log.WriteLogEntry("End Get active travel forms.");
             return result;
         }
-
+        
         // POST: api/API
         public string Post([FromBody]TravelAuthForm travelAuthForm)
         {
