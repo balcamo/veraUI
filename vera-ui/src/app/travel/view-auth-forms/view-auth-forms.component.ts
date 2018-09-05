@@ -22,7 +22,6 @@ export class ViewAuthFormsComponent implements OnInit {
   airfareComp = true;
   form = new AuthForm();
   oldForm: AuthForm;
-  // temperary
 
   constructor(http: Http, userService: UserService) {
     this.http = http;

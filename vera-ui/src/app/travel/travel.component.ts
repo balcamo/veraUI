@@ -12,31 +12,35 @@ import { Router } from '@angular/router';
   styleUrls: ['./travel.component.scss']
 })
 export class TravelComponent implements OnInit {
+  // variables needed for class 
   authDisplay = "none";
   allAuthDisplay = "none";
   consts = new Constants();
   http: Http;
   authForms = [];
   user = new User();
+  // temperary vars
   auth1 = new AuthForm();
   auth2 = new AuthForm();
+
   constructor(private router: Router, http: Http, userService: UserService) {
     this.http = http;
     this.user = userService.getUser();
   }
   
-
   ngOnInit() {
+    // temperary info to be place holder
     this.auth1.String4 = "water and power conference";
     this.auth1.String5 = "Washington";
     this.auth1.String8 = "red";
     this.auth2.String4 = "Event 2";
     this.auth2.String5 = "Texas";
     this.auth2.String8 = "green";
-
     this.authForms.push(this.auth1);
     this.authForms.push(this.auth2);
+    // end temp info
   }
+
   /**
    * This function will toggle the display of
    * the new travel authorization form
@@ -66,9 +70,6 @@ export class TravelComponent implements OnInit {
     authInfo.SessionToken = this.user.token.substring(0,36);
     console.log(authInfo.SessionToken);
     authInfo.UserType = this.user.EntryGroup;
-    //authInfo.UserID = this.user.UserID;
-    var body = JSON.stringify(authInfo);
-    console.log(this.consts.url + 'TravelAuth?tokenHeader={' + authInfo.SessionToken + '}&userID={' + this.user.UserID + '}');
     this.http.get(this.consts.url + 'TravelAuth?tokenHeader={' + authInfo.SessionToken + '}&userID={' + this.user.UserID + '}')
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => console.log("the return from the get "+data));
@@ -81,6 +82,11 @@ export class TravelComponent implements OnInit {
     }
   }
 
+  /**
+   * this function will allow necessary item to be done after
+   * the http request has returned data
+   * @param data : return from the http request
+   */
   waitForHttp(data: any) {
     if (data == undefined) {
       alert()

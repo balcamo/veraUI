@@ -26,11 +26,11 @@ namespace VeraAPI.Controllers
         }
 
         // GET: api/API
-        /*public string Get(string tokenHeader, string userID)
+        public string Get()
         {
             return "Submitted to the API";
         }
-        */
+        
         // GET: api/API/5
         public BaseForm[] Get(string tokenHeader, string userID)
         {
