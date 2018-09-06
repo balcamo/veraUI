@@ -27,7 +27,9 @@ namespace VeraAPI.HelperClasses
             CurrentUser = user;
             ExchangeMail = new ExchangeHandler();
         }
-
+        /**
+         * add function comment
+         * */
         public bool ExchangeSendMail()
         {
             log.WriteLogEntry("Begin SendEmail...");
@@ -55,7 +57,9 @@ namespace VeraAPI.HelperClasses
             log.WriteLogEntry("End SendEmail.");
             return result;
         }
-
+        /**
+        * add function comment
+        * */
         public bool LoadEmailUser()
         {
             log.WriteLogEntry("Begin LoadEmailUser...");

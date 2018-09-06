@@ -98,6 +98,7 @@ namespace VeraAPI.HelperClasses
             
         }
 
+        // WHAT FORMS ARE BEING LOADED?
         public bool LoadForm()
         {
             log.WriteLogEntry("Starting LoadForm.");

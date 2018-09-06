@@ -34,7 +34,7 @@ namespace VeraAPI.HelperClasses
             dbName = WebConfigurationManager.AppSettings.Get("DBName");
             this.CurrentUser = user;
         }
-
+        // WHAT DATA IS BEING LOADED?
         public bool LoadUserData()
         {
             log.WriteLogEntry("Begin LoadUserData...");
@@ -50,7 +50,7 @@ namespace VeraAPI.HelperClasses
             log.WriteLogEntry("End LoadUserData.");
             return result;
         }
-
+        // WHY ISN"T THIS DONE WHEN WE LOAD THE DATA
         public bool FillUserID()
         {
             log.WriteLogEntry("Begin FillUserID...");

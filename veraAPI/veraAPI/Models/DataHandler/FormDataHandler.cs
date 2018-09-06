@@ -66,6 +66,8 @@ namespace VeraAPI.Models.DataHandler
 
         private bool InsertTravelAuth()
         {
+            // DOES THIS INSERT THE USER ID NUMBER????
+
             // Returns the SQL generated travel_id from the travel table
             log.WriteLogEntry("Starting InsertTravelAuth...");
             bool result = false;
@@ -189,6 +191,7 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
+        // WHAT IS THIS FUNCTION FOR???
         public bool LoadFormTemplate()
         {
             log.WriteLogEntry("Begin LoadFormTemplate...");
