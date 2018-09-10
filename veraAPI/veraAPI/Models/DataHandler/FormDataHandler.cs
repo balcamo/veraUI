@@ -259,6 +259,7 @@ namespace VeraAPI.Models.DataHandler
                         {
                             if (rdr.Read())
                             {
+                                // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
                                 TravelAuthForm Travel = new TravelAuthForm(dataID);
                                 Travel.String1 = rdr["first_name"].ToString();
                                 Travel.String2 = rdr["last_name"].ToString();

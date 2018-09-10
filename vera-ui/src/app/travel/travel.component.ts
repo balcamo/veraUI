@@ -72,7 +72,7 @@ export class TravelComponent implements OnInit {
     authInfo.UserType = this.user.EntryGroup;
     this.http.get(this.consts.url + 'TravelAuth?tokenHeader={' + authInfo.SessionToken + '}&userID={' + this.user.UserID + '}')
       //.subscribe((data) => this.waitForHttp(data));
-      .subscribe((data) => console.log("the return from the get "+data));
+      .subscribe((data) => console.log("the return from the get "+data.text()));
 
     if (this.allAuthDisplay == "none") {
       this.allAuthDisplay = "block";
