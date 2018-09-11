@@ -111,7 +111,7 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public int LoadActiveForms(int userID)
+        public int LoadActiveForms(string userID)
         {
             log.WriteLogEntry("Starting LoadActiveForms.");
             int result = 0;

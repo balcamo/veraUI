@@ -310,7 +310,7 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
-        public int LoadTravelAuthForms(int userID)
+        public int LoadTravelAuthForms(string userID)
         {
             log.WriteLogEntry("Begin LoadTravelAuth...");
             int result = 0;

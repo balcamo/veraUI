@@ -32,7 +32,7 @@ namespace VeraAPI.Controllers
         }
 
         // GET: api/API/5
-        public BaseForm[] Get(string tokenHeader, int userID)
+        public BaseForm[] Get(string tokenHeader)
         {
             // call function to get active forms
             log.WriteLogEntry("Starting Get active travel forms...");
@@ -41,7 +41,7 @@ namespace VeraAPI.Controllers
             {
                 FormHelper formHelp = new FormHelper();
                 log.WriteLogEntry("Starting FormHelper...");
-                formHelp.LoadActiveForms(userID);
+                formHelp.LoadActiveForms(tokenHeader);
                 result = formHelp.WebForms.ToArray();
             }
             catch (Exception ex)
