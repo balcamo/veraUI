@@ -135,6 +135,7 @@ namespace VeraAPI.Models.DataHandler
                             {
                                 if (rdr.Read())
                                 {
+                                    // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
                                     user.UserID = (int)rdr["user_id"];
                                     user.FirstName = rdr["first_name"].ToString();
                                     user.LastName = rdr["last_name"].ToString();
@@ -265,6 +266,7 @@ namespace VeraAPI.Models.DataHandler
                 log.WriteLogEntry("Success user type is domain user.");
                 DomainUser user = (DomainUser)CurrentUser;
                 string depString = string.Format(@"select dept_head_emp_id from {0}.dbo.department where dept_name = @deptName", dbName);
+                // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
                 string empString = string.Format(@"select first_name, last_name, user_email from {0}.dbo.user_header where employee_id = @empID", dbName);
                 using (SqlConnection conn = new SqlConnection(dataConnectionString))
                 {
@@ -325,6 +327,7 @@ namespace VeraAPI.Models.DataHandler
                 log.WriteLogEntry("Success user type is domain user.");
                 DomainUser user = (DomainUser)CurrentUser;
                 string comString = string.Format(@"select general_manager_emp_id from {0}.dbo.company", dbName);
+                // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
                 string empString = string.Format(@"select first_name, last_name, user_email from {0}.dbo.user_header where employee_id = @empID", dbName);
                 using (SqlConnection conn = new SqlConnection(dataConnectionString))
                 {
@@ -415,6 +418,7 @@ namespace VeraAPI.Models.DataHandler
         {
             log.WriteLogEntry("Begin InsertLoginUser...");
             bool result = false;
+            // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
             string cmdString = string.Format(@"insert into {0}.dbo.user_session (first_name, last_name, user_email, authenticated, user_type, login_name, login_token)
                                             values (@firstName, @lastName, @email, @auth, @userType, @loginName, @token)", dbName);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
