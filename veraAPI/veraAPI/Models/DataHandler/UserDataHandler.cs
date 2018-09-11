@@ -387,7 +387,7 @@ namespace VeraAPI.Models.DataHandler
         {
             log.WriteLogEntry("Begin FillUserID...");
             bool result = false;
-            string cmdString = string.Format(@"select user_token from {0}.dbo.user_header where user_email = @email", dbName);
+            string cmdString = string.Format(@"select user_id_token from {0}.dbo.user_header where user_email = @email", dbName);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
