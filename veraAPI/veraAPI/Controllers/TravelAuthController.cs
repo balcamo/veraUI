@@ -53,6 +53,7 @@ namespace VeraAPI.Controllers
             log.WriteLogEntry("End Get active travel forms.");
 
             // return array of active travel auth forms
+            log.WriteLogEntry("Forms returned " + result.Count<BaseForm>() + " " + result[0].UserID + " " + result[0].FormDataID);
             return result;
         }
 
