@@ -8,6 +8,7 @@ using VeraAPI.Models.Forms;
 using VeraAPI.Models.Templates;
 using VeraAPI.Models.DataHandler;
 using VeraAPI.Models.Tools;
+using VeraAPI.Models.JobService;
 
 namespace VeraAPI.HelperClasses
 {
@@ -53,11 +54,10 @@ namespace VeraAPI.HelperClasses
 
             // Hold submitted form for comparison
             BaseForm SubmittedForm = WebForm;
-            
+
             // Load the job template corresponding to the templateID for the submitted form
             if (formDataHandle.LoadFormTemplate())
             {
-                log.WriteLogEntry("Success load submit form job template.");
                 Template = formDataHandle.Template;
 
                 // Insert travel form data into the database
@@ -65,8 +65,8 @@ namespace VeraAPI.HelperClasses
                 {
                     log.WriteLogEntry("Success insert form data to database.");
                     // Call UIDataHandler method to load the form data from SQL using the submitted form ID
-                    formDataHandle.LoadTravelAuth(SubmittedForm.FormDataID);
-                    formValidator = new Validator(SubmittedForm, formDataHandle.FormData);
+                    formDataHandle.LoadTravelAuth();
+                    formValidator = new Validator(SubmittedForm, WebForm);
                     // Compare above stored SubmittedForm to loaded UIDataHandler form
                     if (formValidator.CompareAlphaBravo())
                     {
@@ -78,6 +78,8 @@ namespace VeraAPI.HelperClasses
                 }
                 log.WriteLogEntry("Failed insert form data to database.");
             }
+            else
+                log.WriteLogEntry("Failed loading form template!");
             log.WriteLogEntry("End FormHelp SubmitForm result " + result);
             return result;
         }
@@ -102,8 +104,8 @@ namespace VeraAPI.HelperClasses
         {
             log.WriteLogEntry("Starting LoadForm.");
             bool result = false;
-            formDataHandle = new FormDataHandler(dbServer, dbName);
-            formDataHandle.LoadTravelAuth(WebForm.FormDataID);
+            formDataHandle = new FormDataHandler(WebForm, dbServer, dbName);
+            formDataHandle.LoadTravelAuth();
             log.WriteLogEntry("End LoadForm.");
             return result;
         }

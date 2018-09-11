@@ -9,13 +9,13 @@ using System.Data.SqlClient;
 using VeraAPI.Models.Forms;
 using VeraAPI.Models.Templates;
 using VeraAPI.Models.Tools;
-
+using VeraAPI.Models.JobService;
 
 namespace VeraAPI.Models.DataHandler
 {
     public class FormDataHandler : SQLDataHandler
     {
-        public BaseForm FormData { get; private set; }
+        public BaseForm WebForm { get; private set; }
         public List<BaseForm> WebForms { get; private set; }
         public JobTemplate Template { get; set; }
         public string userEmail { get; set; }
@@ -28,7 +28,7 @@ namespace VeraAPI.Models.DataHandler
             this.dbServer = dbServer;
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
-            this.FormData = new BaseForm();
+            this.WebForm = new BaseForm();
         }
 
         public FormDataHandler(BaseForm webForm, string dbServer, string dbName) : base(dbServer)
@@ -37,7 +37,7 @@ namespace VeraAPI.Models.DataHandler
             this.dbServer = dbServer;
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
-            this.FormData = webForm;
+            this.WebForm = webForm;
         }
 
         public FormDataHandler(List<BaseForm> webForms, string dbServer, string dbName) : base(dbServer)
@@ -53,7 +53,7 @@ namespace VeraAPI.Models.DataHandler
         {
             bool result = false;
 
-            switch (this.FormData.TemplateID)
+            switch (this.WebForm.TemplateID)
             {
                 case 1:
                     result = InsertTravelAuth();
@@ -69,122 +69,125 @@ namespace VeraAPI.Models.DataHandler
             // Returns the SQL generated travel_id from the travel table
             log.WriteLogEntry("Starting InsertTravelAuth...");
             bool result = false;
-            TravelAuthForm Travel = (TravelAuthForm)FormData;
-            if (Travel.String7 != null)
+            if (WebForm.GetType() == typeof(TravelAuthForm))
             {
-                string tableName = Template.TableName;
-                string cmdString = string.Format(@"insert into {0}.dbo.{1} (first_name, last_name, phone, email, event_description, event_location, depart_date, return_date, district_vehicle, district_vehicle_number, registration_amt, airfare_amt, rental_amt, 
+                TravelAuthForm travel = (TravelAuthForm)WebForm;
+                if (travel.String7 != null)
+                {
+                    string tableName = Template.TableName;
+                    string cmdString = string.Format(@"insert into {0}.dbo.{1} (first_name, last_name, phone, email, event_description, event_location, depart_date, return_date, district_vehicle, district_vehicle_number, registration_amt, airfare_amt, rental_amt, 
                                             fuel_parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, misc_amt, request_advance, advance_amt, travel_policy, submit_date, submitter_approval) output inserted.travel_id 
                                             values (@firstName, @lastName, @phone, @email, @eventDescription, @eventLocation, @departDate, @returnDate, @districtVehicle, @districtVehicleNumber, @registrationAmt, @airfareAmt, @rentalAmt, @fuelParkingAmt, @estimatedMiles, 
                                             @lodgingAmt, @perdiemAmt, @travelDays, @miscAmt, @requestAdvance, @advanceAmt, @travelPolicy, GETDATE(), @submitterSig)", dbName, tableName);
-                DateTime departDate = DateTime.MinValue, returnDate = DateTime.MinValue;
-                bool districtVehicle = false, requestAdvance = false, travelPolicy = false;
-                decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelParkingAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0, advanceAmt = 0;
-                int estimatedMiles = 0, travelDays = 0;
-                string districtVehicleNum = string.Empty;
+                    DateTime departDate = DateTime.MinValue, returnDate = DateTime.MinValue;
+                    bool districtVehicle = false, requestAdvance = false, travelPolicy = false;
+                    decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelParkingAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0, advanceAmt = 0;
+                    int estimatedMiles = 0, travelDays = 0;
+                    string districtVehicleNum = string.Empty;
 
-                //Capture email address for notification
-                userEmail = Travel.String7;
-                log.WriteLogEntry("Travel Auth user email set to submitter signature " + userEmail);
+                    //Capture email address for notification
+                    userEmail = travel.String7;
+                    log.WriteLogEntry("travel Auth user email set to submitter signature " + userEmail);
 
-                // Attempt data typing of required form fields prior to SQL call
-                // Set the result to false and return in the catch and do not insert the form data
-                // Verbose logging to assist debugging
-                try
-                {
-                    log.WriteLogEntry("Try conversion of data form fields to correct types.");
-                    log.WriteLogEntry("TravelBegin: " + Travel.Date1);
-                    departDate = DateTime.Parse(Travel.Date1);
-                    log.WriteLogEntry("TravelEnd: " + Travel.Date2);
-                    returnDate = DateTime.Parse(Travel.Date2);
-                    log.WriteLogEntry("DistrictVehicle: " + Travel.Bool2);
-                    districtVehicle = Travel.Bool2 == "true" ? true : false;
-                    log.WriteLogEntry("RegistrationCost: " + Travel.Decimal2);
-                    registrationAmt = decimal.Parse(Travel.Decimal2);
-                    log.WriteLogEntry("Airfare: " + Travel.Decimal3);
-                    airfareAmt = decimal.Parse(Travel.Decimal3);
-                    log.WriteLogEntry("RentalCar: " + Travel.Decimal4);
-                    rentalAmt = decimal.Parse(Travel.Decimal4);
-                    log.WriteLogEntry("FuelParking: " + Travel.Decimal5);
-                    fuelParkingAmt = decimal.Parse(Travel.Decimal5);
-                    log.WriteLogEntry("Mileage: " + Travel.Decimal7);
-                    estimatedMiles = int.Parse(Travel.Decimal7);
-                    log.WriteLogEntry("Lodging: " + Travel.Decimal8);
-                    lodgingAmt = decimal.Parse(Travel.Decimal8);
-                    log.WriteLogEntry("PerDiem: " + Travel.Decimal9);
-                    perdiemAmt = decimal.Parse(Travel.Decimal9);
-                    log.WriteLogEntry("TravelDays: " + Travel.Decimal10);
-                    travelDays = int.Parse(Travel.Decimal10);
-                    log.WriteLogEntry("Misc: " + Travel.Decimal11);
-                    miscAmt = decimal.Parse(Travel.Decimal11);
-                    log.WriteLogEntry("Advance: " + Travel.Bool3);
-                    requestAdvance = Travel.Bool3 == "true" ? true : false;
-                    log.WriteLogEntry("AdvanceAmount: " + Travel.Decimal13);
-                    advanceAmt = decimal.Parse(Travel.Decimal13);
-                    log.WriteLogEntry("Policy: " + Travel.Bool4);
-                    travelPolicy = Travel.Bool4 == "true" ? true : false;
-
-                }
-                catch (Exception ex)
-                {
-                    result = false;
-                    log.WriteLogEntry("Form data conversion error: " + ex.Message);
-                    return result;
-                }
-
-                // Define the SQL connection and construct SQL query parameters
-                using (SqlConnection conn = new SqlConnection(dataConnectionString))
-                {
-                    using (SqlCommand cmd = new SqlCommand(cmdString, conn))
+                    // Attempt data typing of required form fields prior to SQL call
+                    // Set the result to false and return in the catch and do not insert the form data
+                    // Verbose logging to assist debugging
+                    try
                     {
-                        // Construction of query parameters based on travel authorization form data
-                        //      and converted data from above
-                        cmd.Parameters.AddWithValue("@firstName", Travel.String1);
-                        cmd.Parameters.AddWithValue("@lastName", Travel.String2);
-                        cmd.Parameters.AddWithValue("@phone", Travel.Integer1);
-                        cmd.Parameters.AddWithValue("@email", Travel.String3);
-                        cmd.Parameters.AddWithValue("@eventDescription", Travel.String4);
-                        cmd.Parameters.AddWithValue("@eventLocation", Travel.String5);
-                        cmd.Parameters.AddWithValue("@departDate", departDate);
-                        cmd.Parameters.AddWithValue("@returnDate", returnDate);
-                        cmd.Parameters.AddWithValue("@districtVehicle", districtVehicle);
-                        cmd.Parameters.AddWithValue("@districtVehicleNumber", districtVehicleNum);
-                        cmd.Parameters.AddWithValue("@registrationAmt", registrationAmt);
-                        cmd.Parameters.AddWithValue("@airfareAmt", airfareAmt);
-                        cmd.Parameters.AddWithValue("@rentalAmt", rentalAmt);
-                        cmd.Parameters.AddWithValue("@fuelParkingAmt", fuelParkingAmt);
-                        cmd.Parameters.AddWithValue("@estimatedMiles", estimatedMiles);
-                        cmd.Parameters.AddWithValue("@lodgingAmt", lodgingAmt);
-                        cmd.Parameters.AddWithValue("@perdiemAmt", perdiemAmt);
-                        cmd.Parameters.AddWithValue("@travelDays", travelDays);
-                        cmd.Parameters.AddWithValue("@miscAmt", miscAmt);
-                        cmd.Parameters.AddWithValue("@requestAdvance", requestAdvance);
-                        cmd.Parameters.AddWithValue("@advanceAmt", advanceAmt);
-                        cmd.Parameters.AddWithValue("@travelPolicy", travelPolicy);
-                        cmd.Parameters.AddWithValue("@submitterSig", Travel.String7);
-                        try
+                        log.WriteLogEntry("Try conversion of data form fields to correct types.");
+                        log.WriteLogEntry("TravelBegin: " + travel.Date1);
+                        departDate = DateTime.Parse(travel.Date1);
+                        log.WriteLogEntry("TravelEnd: " + travel.Date2);
+                        returnDate = DateTime.Parse(travel.Date2);
+                        log.WriteLogEntry("DistrictVehicle: " + travel.Bool2);
+                        districtVehicle = travel.Bool2 == "true" ? true : false;
+                        log.WriteLogEntry("RegistrationCost: " + travel.Decimal2);
+                        registrationAmt = decimal.Parse(travel.Decimal2);
+                        log.WriteLogEntry("Airfare: " + travel.Decimal3);
+                        airfareAmt = decimal.Parse(travel.Decimal3);
+                        log.WriteLogEntry("RentalCar: " + travel.Decimal4);
+                        rentalAmt = decimal.Parse(travel.Decimal4);
+                        log.WriteLogEntry("FuelParking: " + travel.Decimal5);
+                        fuelParkingAmt = decimal.Parse(travel.Decimal5);
+                        log.WriteLogEntry("Mileage: " + travel.Decimal7);
+                        estimatedMiles = int.Parse(travel.Decimal7);
+                        log.WriteLogEntry("Lodging: " + travel.Decimal8);
+                        lodgingAmt = decimal.Parse(travel.Decimal8);
+                        log.WriteLogEntry("PerDiem: " + travel.Decimal9);
+                        perdiemAmt = decimal.Parse(travel.Decimal9);
+                        log.WriteLogEntry("TravelDays: " + travel.Decimal10);
+                        travelDays = int.Parse(travel.Decimal10);
+                        log.WriteLogEntry("Misc: " + travel.Decimal11);
+                        miscAmt = decimal.Parse(travel.Decimal11);
+                        log.WriteLogEntry("Advance: " + travel.Bool3);
+                        requestAdvance = travel.Bool3 == "true" ? true : false;
+                        log.WriteLogEntry("AdvanceAmount: " + travel.Decimal13);
+                        advanceAmt = decimal.Parse(travel.Decimal13);
+                        log.WriteLogEntry("Policy: " + travel.Bool4);
+                        travelPolicy = travel.Bool4 == "true" ? true : false;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        result = false;
+                        log.WriteLogEntry("Form data conversion error: " + ex.Message);
+                        return result;
+                    }
+
+                    // Define the SQL connection and construct SQL query parameters
+                    using (SqlConnection conn = new SqlConnection(dataConnectionString))
+                    {
+                        using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                         {
-                            // Try opening the SQL connection and executing the above constructed SQL query
-                            conn.Open();
-                            this.FormData.FormDataID = (int)cmd.ExecuteScalar();
-                            result = true;
-                            log.WriteLogEntry("Successful insert travel ID " + result);
-                        }
-                        catch (SqlException ex)
-                        {
-                            result = false;
-                            log.WriteLogEntry("SQL error " + ex.Message);
-                        }
-                        catch (Exception ex)
-                        {
-                            result = false;
-                            log.WriteLogEntry("General program error " + ex.Message);
+                            // Construction of query parameters based on travel authorization form data
+                            //      and converted data from above
+                            cmd.Parameters.AddWithValue("@firstName", travel.String1);
+                            cmd.Parameters.AddWithValue("@lastName", travel.String2);
+                            cmd.Parameters.AddWithValue("@phone", travel.Integer1);
+                            cmd.Parameters.AddWithValue("@email", travel.String3);
+                            cmd.Parameters.AddWithValue("@eventDescription", travel.String4);
+                            cmd.Parameters.AddWithValue("@eventLocation", travel.String5);
+                            cmd.Parameters.AddWithValue("@departDate", departDate);
+                            cmd.Parameters.AddWithValue("@returnDate", returnDate);
+                            cmd.Parameters.AddWithValue("@districtVehicle", districtVehicle);
+                            cmd.Parameters.AddWithValue("@districtVehicleNumber", districtVehicleNum);
+                            cmd.Parameters.AddWithValue("@registrationAmt", registrationAmt);
+                            cmd.Parameters.AddWithValue("@airfareAmt", airfareAmt);
+                            cmd.Parameters.AddWithValue("@rentalAmt", rentalAmt);
+                            cmd.Parameters.AddWithValue("@fuelParkingAmt", fuelParkingAmt);
+                            cmd.Parameters.AddWithValue("@estimatedMiles", estimatedMiles);
+                            cmd.Parameters.AddWithValue("@lodgingAmt", lodgingAmt);
+                            cmd.Parameters.AddWithValue("@perdiemAmt", perdiemAmt);
+                            cmd.Parameters.AddWithValue("@travelDays", travelDays);
+                            cmd.Parameters.AddWithValue("@miscAmt", miscAmt);
+                            cmd.Parameters.AddWithValue("@requestAdvance", requestAdvance);
+                            cmd.Parameters.AddWithValue("@advanceAmt", advanceAmt);
+                            cmd.Parameters.AddWithValue("@travelPolicy", travelPolicy);
+                            cmd.Parameters.AddWithValue("@submitterSig", travel.String7);
+                            try
+                            {
+                                // Try opening the SQL connection and executing the above constructed SQL query
+                                conn.Open();
+                                travel.FormDataID = (int)cmd.ExecuteScalar();
+                                result = true;
+                                log.WriteLogEntry("Successful insert travel ID " + result);
+                            }
+                            catch (SqlException ex)
+                            {
+                                result = false;
+                                log.WriteLogEntry("SQL error " + ex.Message);
+                            }
+                            catch (Exception ex)
+                            {
+                                result = false;
+                                log.WriteLogEntry("General program error " + ex.Message);
+                            }
                         }
                     }
                 }
+                else
+                    log.WriteLogEntry("Missing submitter signature!");
             }
-            else
-                log.WriteLogEntry("Missing submitter signature!");
             log.WriteLogEntry("End InsertTravelAuth.");
             return result;
         }
@@ -199,7 +202,7 @@ namespace VeraAPI.Models.DataHandler
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                 {
-                    cmd.Parameters.AddWithValue("@templateID", FormData.TemplateID);
+                    cmd.Parameters.AddWithValue("@templateID", WebForm.TemplateID);
                     try
                     {
                         conn.Open();
@@ -207,7 +210,7 @@ namespace VeraAPI.Models.DataHandler
                         {
                             if (rdr.Read())
                             {
-                                JobTemplate template = new JobTemplate(FormData.TemplateID)
+                                JobTemplate template = new JobTemplate(WebForm.TemplateID)
                                 {
                                     TemplateName = rdr["template_name"].ToString(),
                                     TableName = rdr["table_name"].ToString(),
@@ -238,7 +241,7 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
-        public bool LoadTravelAuth(int dataID)
+        public bool LoadTravelAuth()
         {
             log.WriteLogEntry("Begin LoadTravelAuth...");
             bool result = false;
@@ -248,7 +251,7 @@ namespace VeraAPI.Models.DataHandler
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                 {
-                    cmd.Parameters.AddWithValue("@dataID", dataID);
+                    cmd.Parameters.AddWithValue("@dataID", WebForm.FormDataID);
                     try
                     {
                         conn.Open();
@@ -256,32 +259,33 @@ namespace VeraAPI.Models.DataHandler
                         {
                             if (rdr.Read())
                             {
-                                TravelAuthForm Travel = new TravelAuthForm(dataID);
-                                Travel.String1 = rdr["first_name"].ToString();
-                                Travel.String2 = rdr["last_name"].ToString();
-                                Travel.Integer1 = rdr["phone"].ToString();
-                                Travel.String3 = rdr["email"].ToString();
-                                Travel.String4 = rdr["event_description"].ToString();
-                                Travel.String5 = rdr["event_location"].ToString();
-                                Travel.Date1 = rdr["depart_date"].ToString();
-                                Travel.Date2 = rdr["return_date"].ToString();
-                                Travel.Bool2 = rdr["district_vehicle"].ToString();
-                                Travel.Decimal2 = rdr["registration_amt"].ToString();
-                                Travel.Decimal3 = rdr["airfare_amt"].ToString();
-                                Travel.Decimal4 = rdr["rental_amt"].ToString();
-                                Travel.Decimal5 = rdr["fuel_parking_amt"].ToString();
-                                Travel.Decimal7 = rdr["estimated_miles"].ToString();
-                                Travel.Decimal8 = rdr["lodging_amt"].ToString();
-                                Travel.Decimal9 = rdr["perdiem_amt"].ToString();
-                                Travel.Decimal10 = rdr["travel_days"].ToString();
-                                Travel.Decimal11 = rdr["misc_amt"].ToString();
-                                Travel.Decimal12 = rdr["total_cost"].ToString();
-                                Travel.Decimal13 = rdr["advance_amt"].ToString();
-                                Travel.Bool3 = rdr["request_advance"].ToString();
-                                Travel.Bool4 = rdr["travel_policy"].ToString();
-                                Travel.Bool1 = rdr["preparer_name"].ToString();
-                                Travel.String7 = rdr["submitter_approval"].ToString();
-                                log.WriteLogEntry("Retrieved travel data " + dataID + " " + Travel.String4);
+                                TravelAuthForm travel = new TravelAuthForm(WebForm.FormDataID);
+                                travel.String1 = rdr["first_name"].ToString();
+                                travel.String2 = rdr["last_name"].ToString();
+                                travel.Integer1 = rdr["phone"].ToString();
+                                travel.String3 = rdr["email"].ToString();
+                                travel.String4 = rdr["event_description"].ToString();
+                                travel.String5 = rdr["event_location"].ToString();
+                                travel.Date1 = rdr["depart_date"].ToString();
+                                travel.Date2 = rdr["return_date"].ToString();
+                                travel.Bool2 = rdr["district_vehicle"].ToString();
+                                travel.Decimal2 = rdr["registration_amt"].ToString();
+                                travel.Decimal3 = rdr["airfare_amt"].ToString();
+                                travel.Decimal4 = rdr["rental_amt"].ToString();
+                                travel.Decimal5 = rdr["fuel_parking_amt"].ToString();
+                                travel.Decimal7 = rdr["estimated_miles"].ToString();
+                                travel.Decimal8 = rdr["lodging_amt"].ToString();
+                                travel.Decimal9 = rdr["perdiem_amt"].ToString();
+                                travel.Decimal10 = rdr["travel_days"].ToString();
+                                travel.Decimal11 = rdr["misc_amt"].ToString();
+                                travel.Decimal12 = rdr["total_cost"].ToString();
+                                travel.Decimal13 = rdr["advance_amt"].ToString();
+                                travel.Bool3 = rdr["request_advance"].ToString();
+                                travel.Bool4 = rdr["travel_policy"].ToString();
+                                travel.Bool1 = rdr["preparer_name"].ToString();
+                                travel.String7 = rdr["submitter_approval"].ToString();
+                                log.WriteLogEntry("Retrieved travel data " + travel.FormDataID + " " + travel.String4);
+                                WebForm = travel;
                                 result = true;
                             }
                         }
