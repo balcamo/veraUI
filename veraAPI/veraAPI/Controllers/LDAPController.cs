@@ -47,20 +47,31 @@ namespace VeraAPI.Controllers
             string result = string.Empty;
             if (loginCredentials.GetType() == typeof(LoginForm))
             {
+                // Pass login credentials from POST
                 LoginHelper loginHelp = new LoginHelper(loginCredentials);
                 try
                 {
                     log.WriteLogEntry("Starting LoginHelper...");
+
+                    // Validate login credentials against Active Directory
+                    // Load email, domain upn, first and last name, user name, employee id, and department
+                    // Set user type to internal user (1)
                     if (loginHelp.AuthenticateDomainCredentials())
                     {
                         UserHelper userHelp = new UserHelper(loginHelp.CurrentUser);
                         log.WriteLogEntry("Starting UserHelper...");
+
+                        // Load user id from local login database by user email
                         if (userHelp.FillUserID())
                         {
+                            // Generate JSON Web Token based on internal domain credentials
                             if (loginHelp.GetDomainToken())
                             {
+                                // Session Token includes user id from local user database, encoded JSON Web Token, and user type
                                 result = loginHelp.CurrentUser.SessionToken;
                                 log.WriteLogEntry(string.Format("LoginHelper CurrentUser {0} {1} {2} {3}", loginHelp.CurrentUser.UserName, loginHelp.CurrentUser.UserEmail, loginHelp.CurrentUser.UserID, loginHelp.CurrentUser.UserType));
+
+                                // Insert internal domain user into local session database
                                 if (loginHelp.InsertDomainLoginUser())
                                 {
                                     log.WriteLogEntry("Success inserting domain login user.");
@@ -86,6 +97,8 @@ namespace VeraAPI.Controllers
                 log.WriteLogEntry("Failed login credentials are the wrong type!");
             log.WriteLogEntry("Return result " + result);
             log.WriteLogEntry("End Post login user.");
+
+            // Return full session token
             return result;
         }
 

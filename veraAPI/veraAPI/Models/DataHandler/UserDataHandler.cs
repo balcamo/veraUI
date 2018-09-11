@@ -47,7 +47,7 @@ namespace VeraAPI.Models.DataHandler
                             {
                                 if (rdr.Read())
                                 {
-                                    user.UserID = (int)rdr["user_id"];
+                                    user.UserID = rdr["user_id_token"].ToString();
                                     user.FirstName = rdr["first_name"].ToString();
                                     user.LastName = rdr["last_name"].ToString();
                                     user.UserEmail = rdr["user_email"].ToString();
@@ -91,7 +91,7 @@ namespace VeraAPI.Models.DataHandler
                         {
                             if (rdr.Read())
                             {
-                                CurrentUser.UserID = (int)rdr["user_id"];
+                                CurrentUser.UserID = rdr["user_id_token"].ToString();
                                 CurrentUser.FirstName = rdr["first_name"].ToString();
                                 CurrentUser.LastName = rdr["last_name"].ToString();
                                 CurrentUser.UserEmail = rdr["email"].ToString();
@@ -136,7 +136,8 @@ namespace VeraAPI.Models.DataHandler
                                 if (rdr.Read())
                                 {
                                     // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
-                                    user.UserID = (int)rdr["user_id"];
+                                    // Database column names will remain descriptive for now and use schema field mapping
+                                    user.UserID = rdr["user_id_token"].ToString();
                                     user.FirstName = rdr["first_name"].ToString();
                                     user.LastName = rdr["last_name"].ToString();
                                     user.UserEmail = rdr["email"].ToString();
@@ -189,7 +190,7 @@ namespace VeraAPI.Models.DataHandler
                             {
                                 if (rdr.Read())
                                 {
-                                    user.UserID = (int)rdr["user_id"];
+                                    user.UserID = rdr["user_id_token"].ToString();
                                     user.FirstName = rdr["first_name"].ToString();
                                     user.LastName = rdr["last_name"].ToString();
                                     user.UserEmail = rdr["email"].ToString();
@@ -232,7 +233,7 @@ namespace VeraAPI.Models.DataHandler
                             while (rdr.Read())
                             {
                                 DomainUser user = new DomainUser();
-                                user.UserID = (int)rdr["user_id"];
+                                user.UserID = rdr["user_id_token"].ToString();
                                 user.UserName = rdr["username"].ToString();
                                 user.UserType = (int)rdr["user_type"];
                                 user.UserEmail = rdr["email"].ToString();
@@ -267,6 +268,7 @@ namespace VeraAPI.Models.DataHandler
                 DomainUser user = (DomainUser)CurrentUser;
                 string depString = string.Format(@"select dept_head_emp_id from {0}.dbo.department where dept_name = @deptName", dbName);
                 // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
+                // Database column names will remain descriptive for now and use schema field mapping
                 string empString = string.Format(@"select first_name, last_name, user_email from {0}.dbo.user_header where employee_id = @empID", dbName);
                 using (SqlConnection conn = new SqlConnection(dataConnectionString))
                 {
@@ -328,6 +330,7 @@ namespace VeraAPI.Models.DataHandler
                 DomainUser user = (DomainUser)CurrentUser;
                 string comString = string.Format(@"select general_manager_emp_id from {0}.dbo.company", dbName);
                 // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
+                // Database column names will remain descriptive for now and use schema field mapping
                 string empString = string.Format(@"select first_name, last_name, user_email from {0}.dbo.user_header where employee_id = @empID", dbName);
                 using (SqlConnection conn = new SqlConnection(dataConnectionString))
                 {
@@ -384,7 +387,7 @@ namespace VeraAPI.Models.DataHandler
         {
             log.WriteLogEntry("Begin FillUserID...");
             bool result = false;
-            string cmdString = string.Format(@"select user_id from {0}.dbo.user_header where user_email = @email", dbName);
+            string cmdString = string.Format(@"select user_token from {0}.dbo.user_header where user_email = @email", dbName);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
@@ -394,8 +397,8 @@ namespace VeraAPI.Models.DataHandler
                         conn.Open();
                         cmd.Parameters.AddWithValue("@email", CurrentUser.UserEmail);
                         log.WriteLogEntry(cmdString);
-                        CurrentUser.UserID = (int)cmd.ExecuteScalar();
-                        if (CurrentUser.UserID > 0)
+                        CurrentUser.UserID = cmd.ExecuteScalar().ToString();
+                        if (CurrentUser.UserID != null)
                             result = true;
                         else
                             log.WriteLogEntry("Failed getting user id from database!");
@@ -419,8 +422,9 @@ namespace VeraAPI.Models.DataHandler
             log.WriteLogEntry("Begin InsertLoginUser...");
             bool result = false;
             // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
-            string cmdString = string.Format(@"insert into {0}.dbo.user_session (first_name, last_name, user_email, authenticated, user_type, login_name, login_token)
-                                            values (@firstName, @lastName, @email, @auth, @userType, @loginName, @token)", dbName);
+            // Database column names will remain descriptive for now and use schema field mapping
+            string cmdString = string.Format(@"insert into {0}.dbo.user_session (user_id, first_name, last_name, user_email, authenticated, user_type, login_name, login_token)
+                                            values (@userID, @firstName, @lastName, @email, @auth, @userType, @loginName, @token)", dbName);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 try
@@ -431,6 +435,7 @@ namespace VeraAPI.Models.DataHandler
                     {
                         User user = CurrentUser;
                         log.WriteLogEntry("Domain user " + user.FirstName + " " + user.LastName + " ");
+                        cmd.Parameters.AddWithValue("@userID", user.UserID);
                         cmd.Parameters.AddWithValue("@firstName", user.FirstName);
                         cmd.Parameters.AddWithValue("@lastName", user.LastName);
                         cmd.Parameters.AddWithValue("@email", user.UserEmail);

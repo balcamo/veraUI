@@ -67,7 +67,8 @@ namespace VeraAPI.Models.DataHandler
         private bool InsertTravelAuth()
         {
             // DOES THIS INSERT THE USER ID NUMBER????
-
+            // This method does NOT insert the user id
+            // This method DOES insert the submitter signature from the travel auth form into submitter_approval in the system database
             // Returns the SQL generated travel_id from the travel table
             log.WriteLogEntry("Starting InsertTravelAuth...");
             bool result = false;
@@ -195,6 +196,7 @@ namespace VeraAPI.Models.DataHandler
         }
 
         // WHAT IS THIS FUNCTION FOR???
+        // Get table name and job header values for insert of form data and job service data
         public bool LoadFormTemplate()
         {
             log.WriteLogEntry("Begin LoadFormTemplate...");
@@ -263,6 +265,7 @@ namespace VeraAPI.Models.DataHandler
                             if (rdr.Read())
                             {
                                 // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
+                                // Database column names will remain descriptive for now and use schema field mapping
                                 TravelAuthForm travel = new TravelAuthForm(WebForm.FormDataID);
                                 travel.String1 = rdr["first_name"].ToString();
                                 travel.String2 = rdr["last_name"].ToString();
@@ -315,7 +318,9 @@ namespace VeraAPI.Models.DataHandler
             log.WriteLogEntry("Begin LoadTravelAuth...");
             int result = 0;
             List<TravelAuthForm> travelForms = new List<TravelAuthForm>();
-            string cmdString = string.Format(@"select * from {0}.dbo.travel where submitter_id = @userID", dbName);
+
+            // Load list of travel auth forms where submitter_approval = userID
+            string cmdString = string.Format(@"select * from {0}.dbo.travel where submitter_approval = @userID", dbName);
             log.WriteLogEntry("SQL command string: " + cmdString);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {

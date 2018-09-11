@@ -46,7 +46,7 @@ namespace VeraAPI.HelperClasses
         * @param FormData : this is the form that needs to be inserted
         * 
         **/
-        public bool SubmitForm()
+        public bool SubmitTravelAuthForm()
         {
             log.WriteLogEntry("Begin FormHelp SubmitForm...");
             bool result = false;
@@ -64,7 +64,7 @@ namespace VeraAPI.HelperClasses
                 if (formDataHandle.InsertFormData())
                 {
                     log.WriteLogEntry("Success insert form data to database.");
-                    // Call UIDataHandler method to load the form data from SQL using the submitted form ID
+                    // Call FormDataHandler method to load the form data from SQL using the submitted form ID
                     formDataHandle.LoadTravelAuth();
                     formValidator = new Validator(SubmittedForm, WebForm);
                     // Compare above stored SubmittedForm to loaded UIDataHandler form
@@ -101,7 +101,8 @@ namespace VeraAPI.HelperClasses
         }
 
         // WHAT FORMS ARE BEING LOADED?
-        public bool LoadForm()
+        // Load a travel auth form based on the form data ID
+        public bool LoadTravelAuthForm()
         {
             log.WriteLogEntry("Starting LoadForm.");
             bool result = false;
@@ -111,7 +112,7 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public int LoadActiveForms(string userID)
+        public int LoadActiveTravelAuthForms(string userID)
         {
             log.WriteLogEntry("Starting LoadActiveForms.");
             int result = 0;
