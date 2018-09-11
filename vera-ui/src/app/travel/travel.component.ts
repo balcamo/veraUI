@@ -70,9 +70,9 @@ export class TravelComponent implements OnInit {
     authInfo.SessionToken = this.user.token.substring(0,36);
     console.log(authInfo.SessionToken);
     authInfo.UserType = this.user.EntryGroup;
-    this.http.get(this.consts.url + 'TravelAuth?tokenHeader={' + authInfo.SessionToken )
-      //.subscribe((data) => this.waitForHttp(data));
-      .subscribe((data) => console.log("the return from the get "+data.text()));
+    this.http.get(this.consts.url + 'TravelAuth?tokenHeader=' + authInfo.SessionToken )
+      .subscribe((data) => this.waitForHttp(data));
+      //.subscribe((data) => console.log("the return from the get "+data.text()));
 
     if (this.allAuthDisplay == "none") {
       this.allAuthDisplay = "block";
@@ -88,8 +88,9 @@ export class TravelComponent implements OnInit {
    * @param data : return from the http request
    */
   waitForHttp(data: any) {
-    if (data == undefined) {
-      alert()
+    if (data.text() == '[]') {
+      console.log("Data returned is null");
+
     } else {
       this.authForms = data.text() as AuthForm[];
 

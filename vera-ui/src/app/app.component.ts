@@ -68,14 +68,10 @@ export class AppComponent {
     this.user.EntryGroup = value[value.length - 2];
     var count = 0;
     this.user.token = '';
-    this.user.UserID = '';
     for (var i = 0; i < value.length; i++) {
-      if (count == 2 && (value[i] == "0" || value[i] == "1" || value[i] == "2" || value[i] == "3" || value[i] == "4" ||
-        value[i] == "5" || value[i] == "6" || value[i] == "7" || value[i] == "8" || value[i] == "9")) {
-        this.user.UserID += value[i];
-      } else if (count == 5 && value[i] != '"') {
+      if (count == 3 && value[i] != '"') {
         this.user.token += value[i];
-      } else if (count > 5) {
+      } else if (count > 3) {
         break;
       }
       if (value[i] == '"') { count += 1; }
