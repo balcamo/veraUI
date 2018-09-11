@@ -70,7 +70,7 @@ export class TravelComponent implements OnInit {
     authInfo.SessionToken = this.user.token.substring(0,36);
     console.log(authInfo.SessionToken);
     authInfo.UserType = this.user.EntryGroup;
-    this.http.get(this.consts.url + 'TravelAuth?tokenHeader={' + authInfo.SessionToken + '}&userID={' + this.user.UserID + '}')
+    this.http.get(this.consts.url + 'TravelAuth?tokenHeader={' + authInfo.SessionToken )
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => console.log("the return from the get "+data.text()));
 
