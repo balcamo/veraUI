@@ -45,7 +45,7 @@ namespace VeraAPI.Models.Forms
         public string Decimal23 { get; set; } = string.Empty;   // RecapMisc
         public string Decimal24 { get; set; } = string.Empty;   // TotalRecap
         public string Decimal25 { get; set; } = string.Empty;   // TotalReimburse
-        public string String8 { get; set; } = string.Empty;     // Supervisor
+        public string Integer2 { get; set; } = string.Empty;     // Approval Status - sets color of box on front end
 
         public TravelAuthForm() { }
 

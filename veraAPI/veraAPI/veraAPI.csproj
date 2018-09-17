@@ -207,6 +207,7 @@
     <Compile Include="HelperClasses\LoginHelper.cs" />
     <Compile Include="HelperClasses\TokenHelper.cs" />
     <Compile Include="HelperClasses\UserHelper.cs" />
+    <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DataHandler\JobDataHandler.cs" />
     <Compile Include="Models\Forms\TokenForm.cs" />
     <Compile Include="Models\Templates\JobTemplate.cs" />
