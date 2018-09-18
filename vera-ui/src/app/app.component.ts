@@ -69,6 +69,7 @@ export class AppComponent {
     console.log("in the wait " + this.value);
     this.user.EntryGroup = this.value.UserType;
     this.user.token = this.value.SessionKey;
+    this.user.UserID = this.value.UserID;
     if (data == undefined) {
       alert("no data");
     } else if (this.user.EntryGroup != 0) {

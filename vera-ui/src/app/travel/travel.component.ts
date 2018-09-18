@@ -54,11 +54,8 @@ export class TravelComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-    let authInfo = new Auth();
-    authInfo.SessionKey = this.user.token.substring(0,36);
-    console.log(authInfo.SessionKey);
-    authInfo.UserType = this.user.EntryGroup;
-    this.http.get(this.consts.url + 'TravelAuth?tokenHeader=' + authInfo.SessionKey )
+
+    this.http.get(this.consts.url + 'TravelAuth?tokenHeader=' + this.user.UserID)
       .subscribe((data) => this.waitForHttp(data));
       //.subscribe((data) => console.log("the return from the get "+data.text()));
 
