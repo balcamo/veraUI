@@ -12,8 +12,7 @@ export class User {
 }
 
 export class Auth {
-  public UserID: number;
-  public SessionToken: string;
+  public SessionKey: string;
   public UserType: number;
 
 }

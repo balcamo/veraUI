@@ -25,6 +25,7 @@ export class AppComponent {
   notify: EventEmitter<string> = new EventEmitter<string>();
   nav: NavComponent;
   useremail: string;
+  value = new Auth()
   password: string;
 
   constructor(private router: Router, http: Http, userService: UserService) {
@@ -63,19 +64,11 @@ export class AppComponent {
   }
 
   waitForHttp(data: any) {
-    var value = JSON.parse(data.text());
-    console.log("in the wait " + value);
-    this.user.EntryGroup = value[value.length - 2];
-    var count = 0;
-    this.user.token = '';
-    for (var i = 0; i < value.length; i++) {
-      if (count == 3 && value[i] != '"') {
-        this.user.token += value[i];
-      } else if (count > 3) {
-        break;
-      }
-      if (value[i] == '"') { count += 1; }
-    }
+    console.log("data " + data.text());
+    this.value = JSON.parse(data.text()) as Auth;
+    console.log("in the wait " + this.value);
+    this.user.EntryGroup = this.value.UserType;
+    this.user.token = this.value.SessionKey;
     if (data == undefined) {
       alert("no data");
     } else if (this.user.EntryGroup != 0) {
