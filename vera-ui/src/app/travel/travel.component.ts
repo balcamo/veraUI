@@ -19,9 +19,6 @@ export class TravelComponent implements OnInit {
   http: Http;
   authForms = [];
   user = new User();
-  // temperary vars
-  auth1 = new AuthForm();
-  auth2 = new AuthForm();
 
   constructor(private router: Router, http: Http, userService: UserService) {
     this.http = http;
@@ -29,16 +26,7 @@ export class TravelComponent implements OnInit {
   }
   
   ngOnInit() {
-    // temperary info to be place holder
-    this.auth1.String4 = "water and power conference";
-    this.auth1.String5 = "Washington";
-    this.auth1.String8 = "red";
-    this.auth2.String4 = "Event 2";
-    this.auth2.String5 = "Texas";
-    this.auth2.String8 = "green";
-    this.authForms.push(this.auth1);
-    this.authForms.push(this.auth2);
-    // end temp info
+
   }
 
   /**

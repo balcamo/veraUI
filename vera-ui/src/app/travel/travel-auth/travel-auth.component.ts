@@ -84,7 +84,7 @@ export class TravelAuthComponent implements OnInit {
         search: params,
         headers: pageHeaders
       });
-      this.form.String7 = this.user.token.substring(0, 36);
+      this.form.String7 = this.user.token;
       this.form.String3 = (this.form.String3 == null ? this.user.UserEmail : this.form.String3);
       var body = JSON.stringify(this.form);
       console.log(this.consts.url +'TravelAuth');
