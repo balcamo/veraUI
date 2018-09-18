@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
+using VeraAPI.Models;
 using VeraAPI.Models.Forms;
 using VeraAPI.Models.Templates;
 using VeraAPI.Models.Tools;
@@ -79,13 +80,13 @@ namespace VeraAPI.Models.DataHandler
                 {
                     string tableName = Template.TableName;
                     string cmdString = string.Format(@"insert into {0}.dbo.{1} (first_name, last_name, phone, email, event_description, event_location, depart_date, return_date, district_vehicle, district_vehicle_number, registration_amt, airfare_amt, rental_amt, 
-                                            fuel_parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, misc_amt, request_advance, advance_amt, travel_policy, submit_date, submitter_approval) output inserted.travel_id 
+                                            fuel_parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, misc_amt, request_advance, advance_amt, travel_policy, submit_date, submitter_approval, approval_status) output inserted.travel_id 
                                             values (@firstName, @lastName, @phone, @email, @eventDescription, @eventLocation, @departDate, @returnDate, @districtVehicle, @districtVehicleNumber, @registrationAmt, @airfareAmt, @rentalAmt, @fuelParkingAmt, @estimatedMiles, 
-                                            @lodgingAmt, @perdiemAmt, @travelDays, @miscAmt, @requestAdvance, @advanceAmt, @travelPolicy, GETDATE(), @submitterSig)", dbName, tableName);
+                                            @lodgingAmt, @perdiemAmt, @travelDays, @miscAmt, @requestAdvance, @advanceAmt, @travelPolicy, GETDATE(), @submitterSig, @status)", dbName, tableName);
                     DateTime departDate = DateTime.MinValue, returnDate = DateTime.MinValue;
                     bool districtVehicle = false, requestAdvance = false, travelPolicy = false;
                     decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelParkingAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0, advanceAmt = 0;
-                    int estimatedMiles = 0, travelDays = 0;
+                    int estimatedMiles = 0, travelDays = 0, status = 0;
                     string districtVehicleNum = string.Empty;
 
                     //Capture email address for notification
@@ -167,6 +168,7 @@ namespace VeraAPI.Models.DataHandler
                             cmd.Parameters.AddWithValue("@advanceAmt", advanceAmt);
                             cmd.Parameters.AddWithValue("@travelPolicy", travelPolicy);
                             cmd.Parameters.AddWithValue("@submitterSig", travel.String7);
+                            cmd.Parameters.AddWithValue("@status", status);
                             try
                             {
                                 // Try opening the SQL connection and executing the above constructed SQL query
@@ -291,6 +293,22 @@ namespace VeraAPI.Models.DataHandler
                                 travel.Bool4 = rdr["travel_policy"].ToString();
                                 travel.Bool1 = rdr["preparer_name"].ToString();
                                 travel.String7 = rdr["submitter_approval"].ToString();
+                                int status = (int)rdr["approval_status"];
+                                switch (status)
+                                {
+                                    case 0:
+                                        travel.Integer2 = Constants.Denied;
+                                        break;
+                                    case 1:
+                                        travel.Integer2 = Constants.Approved;
+                                        break;
+                                    case 2:
+                                        travel.Integer2 = Constants.Pending;
+                                        break;
+                                    default:
+                                        travel.Integer2 = Constants.Denied;
+                                        break;
+                                }
                                 log.WriteLogEntry("Retrieved travel data " + travel.FormDataID + " " + travel.String4);
                                 WebForm = travel;
                                 result = true;
@@ -316,12 +334,12 @@ namespace VeraAPI.Models.DataHandler
         public int LoadTravelAuthForms(string userID)
         {
             log.WriteLogEntry("Begin LoadTravelAuth...");
+            log.WriteLogEntry("User ID (passed token header) " + userID);
             int result = 0;
             List<TravelAuthForm> travelForms = new List<TravelAuthForm>();
 
             // Load list of travel auth forms where submitter_approval = userID
             string cmdString = string.Format(@"select * from {0}.dbo.travel where submitter_approval = @userID", dbName);
-            log.WriteLogEntry("SQL command string: " + cmdString);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
@@ -330,12 +348,14 @@ namespace VeraAPI.Models.DataHandler
                     try
                     {
                         conn.Open();
+                        log.WriteLogEntry("SQL command string: " + cmdString);
                         using (SqlDataReader rdr = cmd.ExecuteReader())
                         {
                             while (rdr.Read())
                             {
                                 // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
                                 TravelAuthForm travel = new TravelAuthForm();
+                                travel.UserID = userID;
                                 travel.FormDataID = (int)rdr["travel_id"];
                                 travel.String1 = rdr["first_name"].ToString();
                                 travel.String2 = rdr["last_name"].ToString();
@@ -361,6 +381,22 @@ namespace VeraAPI.Models.DataHandler
                                 travel.Bool4 = rdr["travel_policy"].ToString();
                                 travel.Bool1 = rdr["preparer_name"].ToString();
                                 travel.String7 = rdr["submitter_approval"].ToString();
+                                int status = (int)rdr["approval_status"];
+                                switch (status)
+                                {
+                                    case 0:
+                                        travel.Integer2 = Constants.Denied;
+                                        break;
+                                    case 1:
+                                        travel.Integer2 = Constants.Approved;
+                                        break;
+                                    case 2:
+                                        travel.Integer2 = Constants.Pending;
+                                        break;
+                                    default:
+                                        travel.Integer2 = Constants.Denied;
+                                        break;
+                                }
                                 log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2}", travel.FormDataID, travel.String4, travel.String7));
                                 WebForms.Add(travel);
                             }

@@ -36,6 +36,7 @@ namespace VeraAPI.Controllers
         {
             // call function to get active forms
             log.WriteLogEntry("Starting Get active travel forms...");
+            log.WriteLogEntry("Token Header received " + tokenHeader);
             BaseForm[] result = null;
             try
             {
@@ -50,10 +51,10 @@ namespace VeraAPI.Controllers
             {
                 log.WriteLogEntry(ex.Message);
             }
-            log.WriteLogEntry("End Get active travel forms.");
 
             // return array of active travel auth forms
             log.WriteLogEntry("Forms returned " + result.Count<BaseForm>() + " " + result[0].UserID + " " + result[0].FormDataID);
+            log.WriteLogEntry("End Get active travel forms.");
             return result;
         }
 
