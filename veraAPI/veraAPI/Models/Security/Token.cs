@@ -12,6 +12,9 @@ namespace VeraAPI.Models.Security
         public string SessionKey { get; private set; }
         public int UserType { get; private set; }
 
+        private string privateKey;
+        private string publicKey;
+
         public Token(string sessionKey, int userType)
         {
             this.SessionKey = sessionKey;

@@ -52,8 +52,8 @@ namespace VeraAPI.Models.Security
                     log.WriteLogEntry("Success create claims identity.");
                     var TokenDescriptor = new Microsoft.IdentityModel.Tokens.SecurityTokenDescriptor()
                     {
-                        Issuer = "https://bigfoot.verawp.local",
-                        Audience = "https://bermuda.verawp.local",
+                        Issuer = Constants.Issuer,
+                        Audience = Constants.Audience,
                         Subject = claimsID,
                         SigningCredentials = signatureCreds,
                     };
@@ -62,17 +62,8 @@ namespace VeraAPI.Models.Security
                     log.WriteLogEntry("Plain token " + plainToken.ToString());
                     string token = WriteToken(plainToken);
                     log.WriteLogEntry("Encoded session token " + token);
-
-                    Token SessionToken = new Token(token, user.UserType);
-                    string JsonToken = JsonConvert.SerializeObject(SessionToken);
-                    if (JsonToken != null)
-                    {
-                        log.WriteLogEntry("Success converting token string to json string");
-                        user.SessionToken = JsonToken;
-                        result = true;
-                    }
-                    else
-                        log.WriteLogEntry("Failed to convert token string to json string!");
+                    user.Token = new Token(token, user.UserType);
+                    result = true;
                 }
                 catch (Exception ex)
                 {
@@ -86,25 +77,12 @@ namespace VeraAPI.Models.Security
             return result;
         }
 
-        public bool TokenToString()
+        public bool VerifyToken()
         {
-            log.WriteLogEntry("Starting TokenToString.");
+            log.WriteLogEntry("Starting VerifyToken...");
             bool result = false;
-            try
-            {
-                Token token = JsonConvert.DeserializeObject<Token>(CurrentUser.SessionToken);
-                CurrentUser.SessionKey = token.SessionKey;
-                CurrentUser.UserType = token.UserType;
-                if (token != null)
-                    result = true;
-                else
-                    log.WriteLogEntry("");
-            }
-            catch (Exception ex)
-            {
-                log.WriteLogEntry(ex.Message);
-            }
-            log.WriteLogEntry("End TokenToString.");
+
+            log.WriteLogEntry("End VerifyToken.");
             return result;
         }
     }

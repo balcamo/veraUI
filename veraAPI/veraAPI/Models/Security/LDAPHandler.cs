@@ -57,7 +57,7 @@ namespace VeraAPI.Models.Security
                                 log.WriteLogEntry("No department found.");
                             user.Authenicated = true;
                             user.UserType = User.DomainUser;
-                            log.WriteLogEntry(string.Format("Authenticated user {0} {1} {2} {3} {4}", user.FirstName, user.LastName, user.UserName, user.DomainUpn, user.UserEmail));
+                            log.WriteLogEntry(string.Format("Authenticated user {0} {1} {2} {3} {4} {5}", user.FirstName, user.LastName, user.EmployeeID, user.UserName, user.DomainUpn, user.UserEmail));
                             result = true;
                         }
                         else

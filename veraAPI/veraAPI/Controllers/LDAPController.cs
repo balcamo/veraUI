@@ -41,10 +41,10 @@ namespace VeraAPI.Controllers
         }
 
         // POST: api/User
-        public string Post([FromBody]LoginForm loginCredentials)
+        public Token Post([FromBody]LoginForm loginCredentials)
         {
             log.WriteLogEntry("Starting Post login user...");
-            string result = string.Empty;
+            Token result = null;
             if (loginCredentials.GetType() == typeof(LoginForm))
             {
                 // Pass login credentials from POST
@@ -68,7 +68,7 @@ namespace VeraAPI.Controllers
                             if (loginHelp.GetDomainToken())
                             {
                                 // Session Token includes user id from local user database, encoded JSON Web Token, and user type
-                                result = loginHelp.CurrentUser.SessionToken;
+                                result = loginHelp.CurrentUser.Token;
                                 log.WriteLogEntry(string.Format("LoginHelper CurrentUser {0} {1} {2} {3}", loginHelp.CurrentUser.UserName, loginHelp.CurrentUser.UserEmail, loginHelp.CurrentUser.UserID, loginHelp.CurrentUser.UserType));
 
                                 // Insert internal domain user into local session database
