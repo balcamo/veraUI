@@ -1,7 +1,7 @@
 
 <div class="topbar" *ngFor="let forms of authForms" >
   <div >
-      <button type="button" class="btn secondary" [ngStyle]="{'border-color':forms.Supervisor}"
+      <button type="button" class="btn secondary" [ngStyle]="{'border-color':forms.String8}"
               (click)="displaySelected(forms)">
         <h5>{{forms.String4}}</h5>
       </button>
@@ -11,19 +11,18 @@
 <br />
 
 <!-- Displayes overview of the selected Auth form -->
-<div [ngStyle]="{'display':displayForm}" style="border:solid 5px; max-width:80%;
-      min-width:50%; background-color:white;padding:5%;border-radius: 25px; margin-left:5%">
+<div [ngStyle]="{'display':displayForm}" class="overview">
   <h2 style="text-align:center">{{form.String4}} : {{form.String5}}</h2>
-  <h4>First Name: <b style="padding-left:8%;"><i>{{form.String1}}</i></b></h4>
-  <h4>Last Name: <b style="padding-left:8%;"><i>{{form.String2}}</i></b></h4>
-  <h4>Phone: <b style="padding-left:8%;"><i>{{form.Int1}}</i></b></h4>
-  <h4>Email: <b style="padding-left:8%;"><i>{{form.String3}}</i></b></h4>
-  <h4>Event Title:<b style="padding-left:8%;"> <i>{{form.String4}}</i> </b></h4>
-  <h4>Location:<b style="padding-left:8%;"> <i>{{form.String5}}</i></b></h4>
-  <h4>Travel Start Date: <b style="padding-left:8%;"><i>{{form.Date1}}</i></b></h4>
-  <h4>Travel End Date:<b style="padding-left:8%;"> <i>{{form.Date2}}</i></b></h4>
-  <h4>Total Estimate of Trip:<b style="padding-left:8%;"> <i>{{form.Decimal12}}</i></b></h4>
-  <h4>Advance Taken: <b style="padding-left:8%;"><i>{{form.Decimal13}}</i></b></h4>
+  <h5>First Name: <b><i>{{form.String1}}</i></b></h5>
+  <h5>Last Name: <b ><i>{{form.String2}}</i></b></h5>
+  <h5>Phone: <b><i>{{form.Int1}}</i></b></h5>
+  <h5>Email: <b><i>{{form.String3}}</i></b></h5>
+  <h5>Event Title:<b> <i>{{form.String4}}</i> </b></h5>
+  <h5>Location:<b> <i>{{form.String5}}</i></b></h5>
+  <h5>Travel Start Date: <b><i>{{form.Date1}}</i></b></h5>
+  <h5>Travel End Date:<b> <i>{{form.Date2}}</i></b></h5>
+  <h5>Total Estimate of Trip:<b> <i>{{form.Decimal12}}</i></b></h5>
+  <h5>Advance Taken: <b><i>{{form.Decimal13}}</i></b></h5>
 
   <button class="btn bg-success" (click)="showRecap()">Travel Recap</button>
 </div>

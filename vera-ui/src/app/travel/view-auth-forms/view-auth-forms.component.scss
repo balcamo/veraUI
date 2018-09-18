@@ -23,7 +23,20 @@ div {
   color: white;
 }
 
-
+.overview {
+  border: solid 5px;
+  max-width: 80%;
+  min-width: 50%;
+  background-color: white;
+  padding: 5%;
+  border-radius: 25px;
+  margin-left: 5%;
+  word-wrap: break-word;
+}
+b {
+  padding-left: 5%;
+  word-wrap: break-word;
+}
 .wrapper {
   max-width: 100%;
   margin: 0 auto;

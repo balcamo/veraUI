@@ -67,10 +67,10 @@ export class TravelComponent implements OnInit {
       headers: pageHeaders
     });
     let authInfo = new Auth();
-    authInfo.SessionToken = this.user.token.substring(0,36);
-    console.log(authInfo.SessionToken);
+    authInfo.SessionKey = this.user.token.substring(0,36);
+    console.log(authInfo.SessionKey);
     authInfo.UserType = this.user.EntryGroup;
-    this.http.get(this.consts.url + 'TravelAuth?tokenHeader=' + authInfo.SessionToken )
+    this.http.get(this.consts.url + 'TravelAuth?tokenHeader=' + authInfo.SessionKey )
       .subscribe((data) => this.waitForHttp(data));
       //.subscribe((data) => console.log("the return from the get "+data.text()));
 
@@ -88,11 +88,12 @@ export class TravelComponent implements OnInit {
    * @param data : return from the http request
    */
   waitForHttp(data: any) {
-    if (data.text() == '[]') {
+    console.log("the data : " + data.text());
+    if (JSON.parse(data.text()) == []) {
       console.log("Data returned is null");
 
     } else {
-      this.authForms = data.text() as AuthForm[];
+      this.authForms = JSON.parse(data.text()) as AuthForm[];
 
       console.log("finishing waitForHttp");
     }
