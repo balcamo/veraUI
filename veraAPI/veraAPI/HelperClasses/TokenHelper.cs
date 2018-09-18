@@ -37,7 +37,7 @@ namespace VeraAPI.HelperClasses
             TokenHandle = new TokenHandler(CurrentUser);
             if (TokenHandle.GenerateDomainToken())
             {
-                log.WriteLogEntry("Success generating domain login token." + CurrentUser.SessionToken);
+                log.WriteLogEntry("Success generating domain login token." + CurrentUser.Token.SessionKey);
                 result = true;
             }
             else
@@ -50,14 +50,7 @@ namespace VeraAPI.HelperClasses
         {
             log.WriteLogEntry("Starting ConvertSessionToken.");
             bool result = false;
-            TokenHandle = new TokenHandler(CurrentUser);
-            if (TokenHandle.TokenToString())
-            {
-                log.WriteLogEntry("Success converting session token.");
-                result = true;
-            }
-            else
-                log.WriteLogEntry("Failed converting session token!");
+
             log.WriteLogEntry("End ConvertSessionToken.");
             return result;
         }

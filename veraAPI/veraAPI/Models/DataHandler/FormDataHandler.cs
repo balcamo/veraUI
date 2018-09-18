@@ -297,16 +297,16 @@ namespace VeraAPI.Models.DataHandler
                                 switch (status)
                                 {
                                     case 0:
-                                        travel.Integer2 = Constants.Denied;
+                                        travel.String8 = Constants.Denied;
                                         break;
                                     case 1:
-                                        travel.Integer2 = Constants.Approved;
+                                        travel.String8 = Constants.Approved;
                                         break;
                                     case 2:
-                                        travel.Integer2 = Constants.Pending;
+                                        travel.String8 = Constants.Pending;
                                         break;
                                     default:
-                                        travel.Integer2 = Constants.Denied;
+                                        travel.String8 = Constants.Denied;
                                         break;
                                 }
                                 log.WriteLogEntry("Retrieved travel data " + travel.FormDataID + " " + travel.String4);
@@ -385,16 +385,16 @@ namespace VeraAPI.Models.DataHandler
                                 switch (status)
                                 {
                                     case 0:
-                                        travel.Integer2 = Constants.Denied;
+                                        travel.String8 = Constants.Denied;
                                         break;
                                     case 1:
-                                        travel.Integer2 = Constants.Approved;
+                                        travel.String8 = Constants.Approved;
                                         break;
                                     case 2:
-                                        travel.Integer2 = Constants.Pending;
+                                        travel.String8 = Constants.Pending;
                                         break;
                                     default:
-                                        travel.Integer2 = Constants.Denied;
+                                        travel.String8 = Constants.Denied;
                                         break;
                                 }
                                 log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2}", travel.FormDataID, travel.String4, travel.String7));
