@@ -26,7 +26,7 @@ export class AuthForm {
   Bool3: boolean;     // Advance
   Decimal13: number;  // AdvanceAmount
   Bool4: boolean;     // Policy
-  String7: string;    // SubmitterSig
+  String7: number;    // SubmitterSig
   Decimal14: number;  // RecapRegistrationCost
   Decimal15: number;  // RecapAirfare
   Decimal16: number;  // RecapRentalCar

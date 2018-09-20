@@ -3,7 +3,7 @@ import { AuthForm } from './travel-auth-form';
 export class User {
   public AuthForms: AuthForm[];
   public UserEmail: string;
-  public UserID: string;
+  public UserID: number;
   public EntryGroup = 0;
   public nav = [];
   public token: string;
@@ -12,6 +12,7 @@ export class User {
 }
 
 export class Auth {
+  public UserID: number;
   public SessionKey: string;
   public UserType: number;
 
