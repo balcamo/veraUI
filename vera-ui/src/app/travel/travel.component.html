@@ -1,16 +1,25 @@
+<!DOCTYPE html>
 <body>
   <!-- travel nevigation -->
   <div class="topbar">
-    <button class="btn bg-primary" (click)="displayAuth()">
+    <!-- <button class="btn bg-primary" (click)="displayAuth()">
       New Travel Authorization
     </button>
 
     <button class="btn bg-primary" (click)="displayAllAuth()">
       Active Authorization Forms
+    </button-->
+
+    <button class="btn bg-primary" [routerLink]="['authform']">
+      New Travel Authorization
+    </button>
+
+    <button class="btn bg-primary" [routerLink]="['activeAuth']" (click)="displayAllAuth()" [authForms]="authForms">
+      Active Authorization Forms
     </button>
 
   </div>
-
+  <router-outlet></router-outlet>
   <!-- display of button selected from the nav -->
   <div [ngStyle]="{'display':authDisplay}">
     <app-travel-auth></app-travel-auth>
