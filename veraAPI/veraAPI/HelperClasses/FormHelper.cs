@@ -8,7 +8,7 @@ using VeraAPI.Models.Forms;
 using VeraAPI.Models.Templates;
 using VeraAPI.Models.DataHandler;
 using VeraAPI.Models.Tools;
-using VeraAPI.Models.JobService;
+using VeraAPI.Models.OfficeHandler;
 
 namespace VeraAPI.HelperClasses
 {
@@ -39,6 +39,7 @@ namespace VeraAPI.HelperClasses
             dbName = WebConfigurationManager.AppSettings.Get("DBName");
             this.WebForm = webForm;
         }
+
         /**
         * 
         * SubmitForm will insert a new record into the database 
@@ -64,17 +65,7 @@ namespace VeraAPI.HelperClasses
                 if (formDataHandle.InsertFormData())
                 {
                     log.WriteLogEntry("Success insert form data to database.");
-                    // Call FormDataHandler method to load the form data from SQL using the submitted form ID
-                    formDataHandle.LoadTravelAuth();
-                    formValidator = new Validator(SubmittedForm, WebForm);
-                    // Compare above stored SubmittedForm to loaded UIDataHandler form
-                    if (formValidator.CompareAlphaBravo())
-                    {
-                        log.WriteLogEntry("Submitted form matches inserted form!");
-                        result = true;
-                    }
-                    else
-                        log.WriteLogEntry("Mismatch!!! Submitted form does not match inserted form!");
+                    result = true;
                 }
                 log.WriteLogEntry("Failed insert form data to database.");
             }

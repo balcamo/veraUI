@@ -72,7 +72,6 @@ namespace VeraAPI.Controllers
                 if (travelAuthForm.GetType() == typeof(TravelAuthForm))
                 {
                     FormHelper travelFormHelp = new FormHelper(travelAuthForm);
-                    JobHeader job = new JobHeader();
                     log.WriteLogEntry("Starting FormHelper...");
 
                     // SubmitForm loads the template for the travel auth form
@@ -81,57 +80,12 @@ namespace VeraAPI.Controllers
                     if (travelFormHelp.SubmitTravelAuthForm())
                     {
                         log.WriteLogEntry("Success submitting travel form.");
-                        /** Functionality not needed at this time.
-                         * 
-                        // JobHeader inherits from template and adds job specific information
-                        job = (JobHeader)travelFormHelp.Template;
-                        job.FormDataID = travelFormHelp.WebForm.FormDataID;
-                        JobHelper jobHelp = new JobHelper(job);
-
-                        // Insert into job database t
-                        if (jobHelp.InsertFormJob())
-                        {
-                            log.WriteLogEntry("Success inserting form job.");
-                            jobID = jobHelp.Job.JobID;
-                        }
-                        **/
+                        EmailHelper emailer = new EmailHelper();
+                        emailer.LoadDomainEmailUser(travelAuthForm.String3);
+                        emailer.NotifyDepartmentHead();
                     }
                     else
                         log.WriteLogEntry("Fail FormHelp SubmitForm!");
-                    //log.WriteLogEntry("Job ID " + jobID);
-
-                    /** var postForm = Task.Run(() =>
-                    {
-                        log.WriteLogEntry("Inside post form helper task.");
-                        // change number to constant once file is made
-                        TravelFormHelp.WebForm = travelAuthForm;
-                        if (TravelFormHelp.SubmitForm())
-                        {
-                            log.WriteLogEntry("Success submitting travel form.");
-                            job = (JobHeader)TravelFormHelp.Template;
-                            job.FormDataID = TravelFormHelp.WebForm.FormDataID;
-                        }
-                        else
-                            log.WriteLogEntry("Fail FormHelp SubmitForm!");
-                        return job;
-                    });
-
-                    var postJob = postForm.ContinueWith((x) => 
-                    {
-                        log.WriteLogEntry("Inside post job helper task.");
-                        int jobID = 0;
-                        if (x.Result != null)
-                        {
-                            JobHelp.Job = x.Result;
-                            if (JobHelp.InsertFormJob())
-                            {
-                                log.WriteLogEntry("Success inserting form job.");
-                                jobID = JobHelp.Job.JobID;
-                            }
-                        }
-                        return jobID;
-                    }); **/
-
                     result = "Travel Authorization Form Submitted.";
                 }
                 else

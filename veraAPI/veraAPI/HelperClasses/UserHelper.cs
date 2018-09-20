@@ -12,10 +12,9 @@ namespace VeraAPI.HelperClasses
 {
     public class UserHelper
     {
-        public User CurrentUser { get; set; }
-
         private string dbServer;
         private string dbName;
+        private User CurrentUser;
         private UserDataHandler userData;
         private Scribe log;
 
@@ -24,7 +23,7 @@ namespace VeraAPI.HelperClasses
             log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
             dbName = WebConfigurationManager.AppSettings.Get("DBName");
-            CurrentUser = new User();
+            this.CurrentUser = new User();
         }
 
         public UserHelper(User user)
@@ -36,12 +35,12 @@ namespace VeraAPI.HelperClasses
         }
 
         // WHAT DATA IS BEING LOADED?
-        public bool LoadUserData()
+        public bool LoadUserData(string email)
         {
             log.WriteLogEntry("Begin LoadUserData...");
             bool result = false;
             userData = new UserDataHandler(CurrentUser, dbServer, dbName);
-            if (userData.LoadUserData())
+            if (userData.LoadUserData(email))
             {
                 log.WriteLogEntry("Success loading user data.");
                 result = true;
@@ -53,6 +52,9 @@ namespace VeraAPI.HelperClasses
         }
 
         // WHY ISN"T THIS DONE WHEN WE LOAD THE DATA
+        // This method allows for specifically retrieving the user ID
+        // When a new user logs in, their information is retrieved from active directory and does not include user ID
+        // There is no corresponding user id in active directory
         public bool FillUserID()
         {
             log.WriteLogEntry("Begin FillUserID...");
@@ -66,6 +68,22 @@ namespace VeraAPI.HelperClasses
             else
                 log.WriteLogEntry("Failed filling user ID!");
             log.WriteLogEntry("End FillUserID.");
+            return result;
+        }
+
+        public bool FillDepartmentHead()
+        {
+            log.WriteLogEntry("Begin FillDepartmentHead...");
+            bool result = false;
+            userData = new UserDataHandler(CurrentUser, dbServer, dbName);
+            if (userData.FillDepartmentHead())
+            {
+                log.WriteLogEntry("Success filling user department head.");
+                result = true;
+            }
+            else
+                log.WriteLogEntry("Failed filling user department head!");
+            log.WriteLogEntry("End FillDepartmentHead.");
             return result;
         }
     }

@@ -11,15 +11,18 @@ namespace VeraAPI.Models.Tools
     {
         private object Alpha;
         private object Bravo;
+        private Scribe log;
 
         public Validator(object alpha, object bravo)
         {
+            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "Validator_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             this.Alpha = alpha;
             this.Bravo = bravo;
         }
 
         public bool CompareAlphaBravo()
         {
+            log.WriteLogEntry("Starting CompareAlphaBravo...");
             bool result = false;
             Type AlphaType = Alpha.GetType();
             Type BravoType = Bravo.GetType();
@@ -29,6 +32,7 @@ namespace VeraAPI.Models.Tools
                 FieldInfo[] BravoFields = BravoType.GetFields();
                 foreach (FieldInfo Field in AlphaFields)
                 {
+                    log.WriteLogEntry("Compare values " + Field.GetValue(Alpha) + " " + Field.GetValue(Bravo));
                     if (object.Equals(Field.GetValue(Alpha), Field.GetValue(Bravo)))
                     {
                         result = true;
@@ -43,6 +47,8 @@ namespace VeraAPI.Models.Tools
             }
             else
                 result = false;
+            log.WriteLogEntry("Compare Result " + result);
+            log.WriteLogEntry("End CompareAlphaBravo.");
             return result;
         }
     }

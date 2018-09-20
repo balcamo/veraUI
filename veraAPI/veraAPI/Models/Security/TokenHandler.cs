@@ -18,6 +18,7 @@ namespace VeraAPI.Models.Security
     {
         public User CurrentUser { get; set; }
 
+        private Token token;
         private Scribe log;
 
         public TokenHandler(User user)
@@ -62,7 +63,7 @@ namespace VeraAPI.Models.Security
                     log.WriteLogEntry("Plain token " + plainToken.ToString());
                     string token = WriteToken(plainToken);
                     log.WriteLogEntry("Encoded session token " + token);
-                    user.Token = new Token(token, user.UserType);
+                    user.Token = new Token(user.UserID, token, user.UserType);
                     result = true;
                 }
                 catch (Exception ex)
