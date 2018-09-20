@@ -16,7 +16,7 @@ namespace VeraAPI.HelperClasses
         public TokenForm SessionToken { get; private set; }
         public User CurrentUser { get; private set; }
 
-        private string DomainName;
+        private string DomainName = "LocalDomain";
         private string DbServer;
         private string DbName;
         private TokenHandler TokenHandle;
@@ -25,7 +25,6 @@ namespace VeraAPI.HelperClasses
         public TokenHelper()
         {
             log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            DomainName = "LocalDomain";
             DbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
             DbName = WebConfigurationManager.AppSettings.Get("LoginDB");
         }

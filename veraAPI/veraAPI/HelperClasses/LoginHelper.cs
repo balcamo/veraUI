@@ -63,7 +63,7 @@ namespace VeraAPI.HelperClasses
             log.WriteLogEntry("Starting LDAPHandler...");
             if (LDAPHandle.ValidateDomain())
             {
-                if (LDAPHandle.AuthenticateUser())
+                if (LDAPHandle.AuthenticateDomainUser())
                 {
                     log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3}", user.FirstName, user.LastName, user.UserName, user.UserEmail));
                     CurrentUser = user;
@@ -104,7 +104,7 @@ namespace VeraAPI.HelperClasses
             log.WriteLogEntry("Begin InsertDomainLoginUser...");
             bool result = false;
             UserData = new UserDataHandler(CurrentUser, DbServer, DbName);
-            if (UserData.InsertDomainLoginUser())
+            if (UserData.InsertLoginUser())
             {
                 log.WriteLogEntry("Success inserting domain login user.");
                 result = true;

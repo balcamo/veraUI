@@ -26,7 +26,7 @@ namespace VeraAPI.Models.Security
             CurrentUser = user;
         }
 
-        public bool AuthenticateUser()
+        public bool AuthenticateDomainUser()
         {
             log.WriteLogEntry("Starting AuthenticateUser...");
             bool result = false;
@@ -110,7 +110,7 @@ namespace VeraAPI.Models.Security
             return result;
         }
 
-        public int LoadAllUsers()
+        public int LoadAllDomainUsers()
         {
             int result = 0;
             List<DomainUser> Users = new List<DomainUser>();
@@ -151,7 +151,7 @@ namespace VeraAPI.Models.Security
             return result;
         }
 
-        public bool LoadUser()
+        public bool LoadDomainUser(string domainUpn)
         {
             log.WriteLogEntry("Begin LoadUser...");
             bool result = false;
@@ -161,8 +161,8 @@ namespace VeraAPI.Models.Security
                 using (UserContext = new PrincipalContext(ContextType.Domain, domainName))
                 {
                     UserAccount = new UserPrincipal(UserContext);
-                    UserAccount.UserPrincipalName = user.DomainUpn;
-                    log.WriteLogEntry("User UPN " + UserAccount.UserPrincipalName);
+                    UserAccount.UserPrincipalName = domainUpn;
+                    log.WriteLogEntry("User UPN " + domainUpn);
                     using (PrincipalSearcher UserSearch = new PrincipalSearcher())
                     {
                         UserSearch.QueryFilter = UserAccount;

@@ -7,9 +7,13 @@ namespace VeraAPI.Models
 {
     public class Constants
     {
-        public static readonly string Approved = "green";
-        public static readonly string Pending = "yellow";
-        public static readonly string Denied = "red";
+        public static readonly string ApprovedColor = "green";
+        public static readonly string PendingColor = "yellow";
+        public static readonly string DeniedColor = "red";
+
+        public static readonly int ApprovedValue = 1;
+        public static readonly int PendingValue = 2;
+        public static readonly int DeniedValue = 0;
 
         public static readonly string Issuer = "Vera Water and Power";
         public static readonly string Audience = "https://bermuda.verawp.local";

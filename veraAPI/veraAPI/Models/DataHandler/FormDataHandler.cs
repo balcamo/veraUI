@@ -86,7 +86,8 @@ namespace VeraAPI.Models.DataHandler
                     DateTime departDate = DateTime.MinValue, returnDate = DateTime.MinValue;
                     bool districtVehicle = false, requestAdvance = false, travelPolicy = false;
                     decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelParkingAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0, advanceAmt = 0;
-                    int estimatedMiles = 0, travelDays = 0, status = 0;
+                    int estimatedMiles = 0, travelDays = 0;
+                    int status = Constants.PendingValue;
                     string districtVehicleNum = string.Empty;
 
                     //Capture email address for notification
@@ -297,16 +298,16 @@ namespace VeraAPI.Models.DataHandler
                                 switch (status)
                                 {
                                     case 0:
-                                        travel.String8 = Constants.Denied;
+                                        travel.String8 = Constants.DeniedColor;
                                         break;
                                     case 1:
-                                        travel.String8 = Constants.Approved;
+                                        travel.String8 = Constants.ApprovedColor;
                                         break;
                                     case 2:
-                                        travel.String8 = Constants.Pending;
+                                        travel.String8 = Constants.PendingColor;
                                         break;
                                     default:
-                                        travel.String8 = Constants.Denied;
+                                        travel.String8 = Constants.DeniedColor;
                                         break;
                                 }
                                 log.WriteLogEntry("Retrieved travel data " + travel.FormDataID + " " + travel.String4);
@@ -385,16 +386,16 @@ namespace VeraAPI.Models.DataHandler
                                 switch (status)
                                 {
                                     case 0:
-                                        travel.String8 = Constants.Denied;
+                                        travel.String8 = Constants.DeniedColor;
                                         break;
                                     case 1:
-                                        travel.String8 = Constants.Approved;
+                                        travel.String8 = Constants.ApprovedColor;
                                         break;
                                     case 2:
-                                        travel.String8 = Constants.Pending;
+                                        travel.String8 = Constants.PendingColor;
                                         break;
                                     default:
-                                        travel.String8 = Constants.Denied;
+                                        travel.String8 = Constants.DeniedColor;
                                         break;
                                 }
                                 log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2}", travel.FormDataID, travel.String4, travel.String7));
