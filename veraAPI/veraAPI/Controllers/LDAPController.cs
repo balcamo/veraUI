@@ -51,15 +51,13 @@ namespace VeraAPI.Controllers
                 LoginHelper loginHelp = new LoginHelper(loginCredentials);
                 try
                 {
-                    log.WriteLogEntry("Starting LoginHelper...");
-
                     // Validate login credentials against Active Directory
                     // Load email, domain upn, first and last name, user name, employee id, and department
                     // Set user type to internal user (1)
                     if (loginHelp.AuthenticateDomainCredentials())
                     {
-                        UserHelper userHelp = new UserHelper(loginHelp.CurrentUser);
-                        log.WriteLogEntry("Starting UserHelper...");
+                        User user = loginHelp.CurrentUser;
+                        UserHelper userHelp = new UserHelper(user);
 
                         // Load user id from local login database by user email
                         if (userHelp.FillUserID())
@@ -70,7 +68,7 @@ namespace VeraAPI.Controllers
                                 if (loginHelp.GetDomainToken())
                                 {
                                     // Session Token includes user id from local user database, encoded JSON Web Token, and user type
-                                    result = loginHelp.CurrentUser.Token;
+                                    result = user.Token;
                                     log.WriteLogEntry(string.Format("LoginHelper CurrentUser {0} {1} {2} {3}", loginHelp.CurrentUser.UserName, loginHelp.CurrentUser.UserEmail, loginHelp.CurrentUser.UserID, loginHelp.CurrentUser.UserType));
 
                                     // Insert internal domain user into local session database
