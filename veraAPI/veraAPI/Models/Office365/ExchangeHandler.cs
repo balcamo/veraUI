@@ -13,7 +13,6 @@ namespace VeraAPI.Models.OfficeHandler
 {
     public class ExchangeHandler
     {
-        public User CurrentUser { get; set; }
         public string EmailSubject { get; set; } = "Subject line test";
         public string EmailBody { get; set; } = @"Testing send email. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nibh eros, commodo efficitur tellus vitae, 
             malesuada finibus elit. Nulla vel odio metus. Nulla mi mauris, efficitur at cursus semper, pellentesque eu mi. Praesent maximus imperdiet dui, nec hendrerit turpis 
@@ -21,6 +20,7 @@ namespace VeraAPI.Models.OfficeHandler
             sagittis. Nunc ac ornare tellus, a faucibus dolor. Curabitur a magna eget erat vestibulum imperdiet.";
         public string RecipientEmailAddress { get; set; }
 
+        private User CurrentUser;
         private ExchangeService emailer;
         private EmailMessage emailMessage;
         private Scribe log;
@@ -39,6 +39,8 @@ namespace VeraAPI.Models.OfficeHandler
         public ExchangeHandler(User user)
         {
             log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "ExchangeHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+            mailService = WebConfigurationManager.AppSettings.Get("MailService");
+            mailServicePwd = WebConfigurationManager.AppSettings.Get("MailServicePwd");
             emailer = new ExchangeService();
             CurrentUser = user;
         }

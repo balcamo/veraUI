@@ -80,7 +80,7 @@ namespace VeraAPI.HelperClasses
                 emailHandle = new ExchangeHandler(user);
                 emailHandle.EmailSubject = "Notify Department Head";
                 emailHandle.RecipientEmailAddress = user.DepartmentHeadEmail;
-                emailHandle.EmailBody = "<html><body><p>There has been a request to travel</p><p>go <a href=\"https://bermuda.verawp.local\"> here to approve</a></p></body></html>";
+                emailHandle.EmailBody = "<html><body><p>There has been a request to travel</p><p>go <a href=\"https://bermuda.verawp.local/?route=travel\"> here to approve</a></p></body></html>";
                 try
                 {
                     if (emailHandle.ConnectExchangeService())
