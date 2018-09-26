@@ -7,9 +7,9 @@
   background: $primary;
   border-radius: 6px;
   clear: both;
-  width: 80vw;
+  width: 92vw;
   height: auto;
-  margin: 0 1.5% 24px 1.5%;
+  margin: 24px 1.5% 24px 1.5%;
   overflow: hidden;
   list-style: none;
 
@@ -35,9 +35,9 @@
 .code {
   background: $success;
   border-radius: 6px;
-  color: #fff;
+  color: $primary;
   display: block;
-  font: 14px/24px "Source Code Pro", Inconsolata, "Lucida Console", Terminal, "Courier New", Courier;
+  font: 14px/24px;
   padding: 10px;
   text-align: center;
   flex: auto;

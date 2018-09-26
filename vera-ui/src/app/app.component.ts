@@ -1,8 +1,9 @@
 import { Component, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Headers, Http, URLSearchParams, RequestOptions, Response } from '@angular/http';
 import { User, Auth } from './classes/user';
 import { UserService } from './service/app.service.user';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Constants } from './classes/constants';
 import { NavComponent } from './nav/nav.component';
@@ -27,11 +28,15 @@ export class AppComponent {
   useremail: string;
   value = new Auth()
   password: string;
+  url: URL;
+  param: string;
 
-  constructor(private router: Router, http: Http, userService: UserService) {
+  constructor(private router: Router, private route: ActivatedRoute, http: Http, userService: UserService, private httpClient: HttpClient) {
     this.userService = userService;
     this.http = http;
-
+    this.url = new URL(window.location.href);
+    this.param = this.url.searchParams.get("route");
+    console.log("current param: " + this.param);
   }
 
   public emit_event(location: string) {
@@ -77,7 +82,7 @@ export class AppComponent {
       this.userService.setUser(this.user);
       this.emit_event("nav");
       this.userEntry = "none";
-      this.mainPage = "block";
+      this.mainPage = "block";      
     } else {
       alert("Not a valid email. Please try again");
     }

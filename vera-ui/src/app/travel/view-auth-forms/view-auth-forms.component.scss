@@ -13,13 +13,13 @@ div {
   margin: 10px;
 }
 .secondary {
-  border-color: $secondary;
-  color: $secondary;
+  border-color: $info;
+  color: $info;
 
 }
 
 .secondary:hover {
-  background-color: $secondary;
+  background-color: $info;
   color: white;
 }
 

@@ -18,11 +18,12 @@ export class TravelComponent implements OnInit {
   consts = new Constants();
   http: Http;
   authForms = [];
-  user = new User();
+  @Input() user;
+  userService: UserService;
 
   constructor(private router: Router, http: Http, userService: UserService) {
     this.http = http;
-    this.user = userService.getUser();
+    this.userService = userService;
   }
   
   ngOnInit() {
@@ -34,6 +35,7 @@ export class TravelComponent implements OnInit {
    * the new travel authorization form
    **/
   displayAuth() {
+    this.user = this.userService.getUser();
     if (this.authDisplay == "none") {
       this.authDisplay = "block";
       this.allAuthDisplay = "none";
@@ -46,6 +48,7 @@ export class TravelComponent implements OnInit {
    * this displays all active authforms found on in the database
    * */
   displayAllAuth() {
+    this.user = this.userService.getUser();
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({
       'Content-Type': 'application/json'

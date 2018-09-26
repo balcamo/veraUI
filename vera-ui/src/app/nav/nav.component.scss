@@ -12,15 +12,13 @@
   position: fixed;
   top: 0px;
   left: 0vw;
-  opacity:0.75;
+  opacity:0.95;
 }
 
-button{
-  opacity:2;
-}
+img{
+  width:35px;
+  height:auto;
 
-.wrapper button {
-  margin: auto;
 }
 
 .sidebar-header {
@@ -30,3 +28,48 @@ a{
   text-decoration:none;
   color:$primary;
 }
+
+i {
+  margin-top: -4.5px;
+}
+
+.nav li {
+  position: relative;
+  display: block;
+  margin-left: 4px;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+
+nav li:before {
+  content: " ";
+  width: 0;
+  height: 0;
+  border-bottom: 15px solid $success;
+  border-left: 26px solid transparent;
+  border-right: 26px solid transparent;
+  position: absolute;
+  top: -15px;
+  left: 0;
+}
+
+nav li {
+  margin-top: 30px;
+  width: 52px;
+  height: 30px;
+  background-color: $success;
+  position: relative;
+  text-align: center;
+}
+
+nav li:after {
+  content: "";
+  width: 0;
+  position: absolute;
+  bottom: -15px;
+  left: 0px;
+  border-top: 15px solid $success;
+  border-left: 26px solid transparent;
+  border-right: 26px solid transparent;
+}
+

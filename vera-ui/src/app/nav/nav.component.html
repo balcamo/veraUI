@@ -1,13 +1,19 @@
 <!DOCTYPE html>
+<script src="path/to/hexagons.min.js"></script>
+
 <!-- icon side menu with use of routing -->
 <div class="sidebar">
+  <nav>
+    <ul *ngFor="let opt of nav" class="nav">
 
-  <div *ngFor="let opt of nav">
-    <a class="btn bg-success mr-2" placement="right" ngbTooltip="{{opt.name}}" routerLink="{{opt.route}}">
-      <i class="{{opt.icon}}" aria-hidden="true"></i>
-    </a>
-  </div>
+      <li placement="right" ngbTooltip="{{opt.name}}" routerLink="{{opt.route}}">
+        <a>
+          <img src="{{opt.icon}}" aria-hidden="true"/>
+        </a>
+      </li>
 
+    </ul>
+  </nav>
 </div>
 
 

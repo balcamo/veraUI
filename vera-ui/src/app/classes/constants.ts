@@ -5,8 +5,8 @@ export class Constants {
   firstLastDayFood = .75 * 2;
   customer = [];
   employee = [
-    { name: "Home", route: "./home", icon: "fa fa-home" },
-    { name: "Travel", route: "./travel", icon: "fa fa-plane" },
+    { name: "Home", route: "./home", icon: "../../assets/HomeBrown.png" },
+    { name: "Travel", route: "./travel", icon: "../../assets/TravelIconBrown.png" },
   ];
   crew = [];
 

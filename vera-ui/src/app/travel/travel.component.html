@@ -19,7 +19,9 @@
     </button>
 
   </div>
-  <router-outlet></router-outlet>
+  <div style="padding-left:3%">
+    <router-outlet></router-outlet>
+  </div>
   <!-- display of button selected from the nav -->
   <div [ngStyle]="{'display':authDisplay}">
     <app-travel-auth></app-travel-auth>
