@@ -13,14 +13,18 @@ div {
   margin: 10px;
 }
 .secondary {
-  border-color: $info;
-  color: $info;
+  border-color: $success;
+  color: $primary;
 
 }
 
 .secondary:hover {
-  background-color: $info;
-  color: white;
+  color: $primary;
+}
+
+.forms{
+  margin-left:25px;
+  align-content:center;
 }
 
 .overview {
@@ -30,7 +34,8 @@ div {
   background-color: white;
   padding: 5%;
   border-radius: 25px;
-  margin-left: 5%;
+  margin-left: 12%;
+  align-content:center;
   word-wrap: break-word;
 }
 b {

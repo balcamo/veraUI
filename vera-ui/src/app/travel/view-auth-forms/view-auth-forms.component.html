@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<div class="topbar" *ngFor="let forms of authForms" >
+
+<div class="topbar forms" *ngFor="let forms of authForms">
   <div >
       <button type="button" class="btn secondary" [ngStyle]="{'border-color':forms.String8}"
+              ng-mouseover="style={'background-color':'{{forms.String8}}'}"
               (click)="displaySelected(forms)">
         <h5>{{forms.String4}}</h5>
       </button>
@@ -29,7 +31,7 @@
 
 <!-- Displays recap information in a table -->
 <div [ngStyle]="{'display':displayRecap}" style="border:solid 5px; max-width:80%;
-      min-width:50%; background-color:white;padding:5%;border-radius: 25px; margin-left:5%">
+      min-width:50%; background-color:white;padding:5%;border-radius: 25px; margin-left:50px">
   <h2 style="text-align:center">{{form.String4}} : {{form.String5}}</h2>
   <table class="table">
     <thead>
