@@ -6,6 +6,7 @@ import { TravelComponent } from './travel/travel.component';
 import { HomeComponent } from './home/home.component';
 import { TravelAuthComponent } from './travel/travel-auth/travel-auth.component';
 import { ViewAuthFormsComponent } from './travel/view-auth-forms/view-auth-forms.component';
+import { TavelAuthApproveComponent } from './travel/tavel-auth-approve/tavel-auth-approve.component';
 import { NavComponent } from './nav/nav.component';
 
 const routes: Routes = [
@@ -14,7 +15,8 @@ const routes: Routes = [
     component: TravelComponent,
     children: [
       { path: 'authform', component: TravelAuthComponent },
-      { path: 'activeAuth', component: ViewAuthFormsComponent }
+      { path: 'activeAuth', component: ViewAuthFormsComponent },
+      { path: 'approveAuth', component: TavelAuthApproveComponent }
     ] 
   },
   {

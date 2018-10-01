@@ -1,0 +1,63 @@
+@import '../../../theme.scss';
+
+div {
+  display: inline-flex;
+}
+
+.btn {
+  border: 2px solid black;
+  background-color: white;
+  color: black;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.secondary {
+  border-color: $success;
+  color: $primary;
+}
+
+.secondary:hover {
+  color: $primary;
+}
+
+.forms {
+  margin-left: 25px;
+  align-content: center;
+}
+
+.overview {
+  border: solid 5px;
+  max-width: 80%;
+  min-width: 50%;
+  background-color: white;
+  padding: 5%;
+  border-radius: 25px;
+  margin-left: 12%;
+  align-content: center;
+  word-wrap: break-word;
+}
+
+b {
+  padding-left: 5%;
+  word-wrap: break-word;
+}
+
+.wrapper {
+  max-width: 100%;
+  margin: 0 auto;
+  display: inherit;
+}
+
+.wrapper ul {
+  overflow: hidden;
+  margin: 0 -10px;
+  padding: 0;
+  list-style: none;
+}
+
+.wrapper li {
+  display: inherit;
+}

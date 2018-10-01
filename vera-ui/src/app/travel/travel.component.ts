@@ -15,6 +15,7 @@ export class TravelComponent implements OnInit {
   // variables needed for class 
   authDisplay = "none";
   allAuthDisplay = "none";
+  approveAuthDisplay = "none";
   consts = new Constants();
   http: Http;
   authForms = [];
@@ -39,8 +40,9 @@ export class TravelComponent implements OnInit {
     if (this.authDisplay == "none") {
       this.authDisplay = "block";
       this.allAuthDisplay = "none";
+      this.approveAuthDisplay = "none";
     } else {
-      this.authDisplay = "none"
+      this.authDisplay = "none";
     }
   }
 
@@ -65,8 +67,34 @@ export class TravelComponent implements OnInit {
     if (this.allAuthDisplay == "none") {
       this.allAuthDisplay = "block";
       this.authDisplay = "none";
+      this.approveAuthDisplay = "none";
     } else {
-      this.allAuthDisplay = "none"
+      this.allAuthDisplay = "none";
+    }
+  }  /**
+   * this displays all active authforms to be approved found on in the database
+   * */
+  displayApproveAuth() {
+    this.user = this.userService.getUser();
+    let params: URLSearchParams = new URLSearchParams();
+    var pageHeaders = new Headers({
+      'Content-Type': 'application/json'
+    });
+    let options = new RequestOptions({
+      search: params,
+      headers: pageHeaders
+    });
+
+    this.http.get(this.consts.url + 'TravelAuth?tokenHeader=' + this.user.UserID)
+      .subscribe((data) => this.waitForHttp(data));
+      //.subscribe((data) => console.log("the return from the get "+data.text()));
+
+    if (this.allAuthDisplay == "none") {
+      this.allAuthDisplay = "none";
+      this.authDisplay = "none";
+      this.approveAuthDisplay = "block";
+    } else {
+      this.approveAuthDisplay = "none";
     }
   }
 

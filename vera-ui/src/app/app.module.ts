@@ -18,6 +18,7 @@ import { HomeComponent } from './home/home.component';
 import { TravelAuthComponent } from './travel/travel-auth/travel-auth.component';
 import { ViewAuthFormsComponent } from './travel/view-auth-forms/view-auth-forms.component';
 import { UserService } from './service/app.service.user';
+import { TavelAuthApproveComponent } from './travel/tavel-auth-approve/tavel-auth-approve.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { UserService } from './service/app.service.user';
     HomeComponent,
     TravelAuthComponent,
     ViewAuthFormsComponent,
+    TavelAuthApproveComponent,
     
   ],
   imports: [
