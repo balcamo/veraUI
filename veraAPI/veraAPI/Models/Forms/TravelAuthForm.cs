@@ -47,9 +47,9 @@ namespace VeraAPI.Models.Forms
         public string Decimal25 { get; set; } = string.Empty;   // TotalReimburse
         public string String8 { get; set; } = string.Empty;     // Approval Status - sets color of box on front end
         public string Bool5 { get; set; } = string.Empty;     // Department head approval
-        public string String9 { get; set; } = string.Empty;    // Department head email
+        public string Decimal26 { get; set; } = string.Empty;    // Department head ID
         public string Bool6 { get; set; } = string.Empty;     // GM approval
-        public string String10 { get; set; } = string.Empty;  // GM email
+        public string Decimal27 { get; set; } = string.Empty;  // GM ID
 
         public TravelAuthForm() { }
 

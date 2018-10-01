@@ -41,7 +41,7 @@ export class AuthForm {
   Decimal25: number;  // TotalReimburse
   String8: string;    // Approval status
   Bool5: boolean;     // Department head approval
-  String9: string;    // Department head email
+  Decimal26: number;    // Department head ID
   Bool6: boolean;     // GM approval
-  String10: string;   // GM email
+  Decimal27: number;   // GM ID
 }
