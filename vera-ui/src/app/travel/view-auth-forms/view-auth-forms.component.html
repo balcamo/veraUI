@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <div class="topbar forms" *ngFor="let forms of authForms">
-  <div >
+  <div class="list">
       <button type="button" class="btn secondary" [ngStyle]="{'border-color':forms.String8}"
               ng-mouseover="style={'background-color':'{{forms.String8}}'}"
               (click)="displaySelected(forms)">

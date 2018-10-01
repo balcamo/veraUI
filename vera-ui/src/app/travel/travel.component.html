@@ -2,7 +2,7 @@
 <body>
   <!-- travel nevigation -->
   <div class="topbar" style="text-align:center;margin-left:50px;">
-    <button class="btn bg-primary" [routerLink]="['authform']">
+    <button class="btn bg-primary" [routerLink]="['authform']"  (click)="displayAuth()">
       New Travel Authorization
     </button>
 
@@ -11,13 +11,11 @@
     </button>
 
     <button class="btn bg-primary" [routerLink]="['approveAuth']" (click)="displayApproveAuth()" [authForms]="authForms">
-      Active Authorization Forms
+      Approve Authorization Forms
     </button>
 
   </div>
-  <div style="padding-left:3%">
-    <router-outlet></router-outlet>
-  </div>
+
   <!-- display of button selected from the nav -->
   <div [ngStyle]="{'display':authDisplay}">
     <app-travel-auth></app-travel-auth>

@@ -38,9 +38,9 @@ export class TravelComponent implements OnInit {
   displayAuth() {
     this.user = this.userService.getUser();
     if (this.authDisplay == "none") {
-      this.authDisplay = "block";
       this.allAuthDisplay = "none";
       this.approveAuthDisplay = "none";
+      this.authDisplay = "block";
     } else {
       this.authDisplay = "none";
     }
@@ -65,9 +65,9 @@ export class TravelComponent implements OnInit {
       //.subscribe((data) => console.log("the return from the get "+data.text()));
 
     if (this.allAuthDisplay == "none") {
-      this.allAuthDisplay = "block";
       this.authDisplay = "none";
       this.approveAuthDisplay = "none";
+      this.allAuthDisplay = "block";
     } else {
       this.allAuthDisplay = "none";
     }
@@ -89,7 +89,7 @@ export class TravelComponent implements OnInit {
       .subscribe((data) => this.waitForHttp(data));
       //.subscribe((data) => console.log("the return from the get "+data.text()));
 
-    if (this.allAuthDisplay == "none") {
+    if (this.approveAuthDisplay == "none") {
       this.allAuthDisplay = "none";
       this.authDisplay = "none";
       this.approveAuthDisplay = "block";
