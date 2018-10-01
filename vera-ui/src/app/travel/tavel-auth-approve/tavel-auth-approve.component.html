@@ -15,19 +15,26 @@
 <!-- Displayes overview of the selected Auth form -->
 <div [ngStyle]="{'display':displayForm}" class="overview">
   <h2 style="text-align:center">{{form.String4}} : {{form.String5}}</h2>
-  <h5>First Name: <b><i>{{form.String1}}</i></b></h5>
-  <h5>Last Name: <b><i>{{form.String2}}</i></b></h5>
-  <h5>Phone: <b><i>{{form.Int1}}</i></b></h5>
-  <h5>Email: <b><i>{{form.String3}}</i></b></h5>
+  <h5>Name: <b><i>{{form.String1}} {{form.String2}}</i></b></h5>
   <h5>Event Title:<b> <i>{{form.String4}}</i> </b></h5>
   <h5>Location:<b> <i>{{form.String5}}</i></b></h5>
   <h5>Travel Start Date: <b><i>{{form.Date1}}</i></b></h5>
   <h5>Travel End Date:<b> <i>{{form.Date2}}</i></b></h5>
-  <h5>Total Estimate of Trip:<b> <i>{{form.Decimal12}}</i></b></h5>
-  <h5>Advance Taken: <b><i>{{form.Decimal13}}</i></b></h5>
+  <!-- Cost breakdown of the trip -->
+  <h5>Estimated Registration Cost:<b> <i>{{form.Decimal2}}</i></b></h5>
+  <h5>Estimated Airfare:<b> <i>{{form.Decimal3}}</i></b></h5>
+  <h5>Estimated RentalCar:<b> <i>{{form.Decimal4}}</i></b></h5>
+  <h5>Estimated Fuel:<b> <i>{{form.Decimal5}}</i></b></h5>
+  <h5>Estimated Parking and Tolls:<b> <i>{{form.Decimal6}}</i></b></h5>
+  <h5>Estimated Mileage:<b> <i>{{form.Decimal7}}</i></b></h5>
+  <h5>Estimated Lodging:<b> <i>{{form.Decimal8}}</i></b></h5>
+  <h5>Estimated Food:<b> <i>{{form.Decimal9}}</i></b></h5>
+  <h5>Estimated Misc:<b> <i>{{form.Decimal11}}</i></b></h5>
 
-  <button class="bg-info sup" (click)="submitApproveStatus()">Approve</button>
-  <button class="bg-warning sup" (click)="submitDenyStatus()">Deny</button>
+  <h5>Total Estimate of Trip:<b> <i>{{form.Decimal12}}</i></b></h5>
+
+  <button class="bg-info sup" (click)="submitApproveStatus()" ng-disabled="submitted">Approve</button>
+  <button class="bg-warning sup" (click)="submitDenyStatus()" ng-disabled="submitted">Deny</button>
 </div>
 
 

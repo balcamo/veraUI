@@ -174,7 +174,8 @@ export class TravelAuthComponent implements OnInit {
     this.form.Bool4 = null;
     this.form.Bool1 = false;
     this.form.String7 = null;
-    this.form.String8 = "yellow";
+    this.form.Bool5 = null;
+    this.form.Bool6 = null;
     this.total = 0; 
   }
 }
