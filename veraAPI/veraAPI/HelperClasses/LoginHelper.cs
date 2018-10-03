@@ -14,40 +14,28 @@ namespace VeraAPI.HelperClasses
     {
         public User CurrentUser { get; set; }
 
-        private string DomainName;
-        private string DbServer;
-        private string DbName;
+        private string DomainName = "LocalDomain";
+        private string DbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
+        private string DbName = WebConfigurationManager.AppSettings.Get("LoginDB");
         private LoginForm loginCredentials;
         private LDAPHandler LDAPHandle;
         private TokenHandler TokenHandle;
         private UserDataHandler UserData;
-        private Scribe log;
+        private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         public LoginHelper()
         {
-            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            DomainName = "LocalDomain";
-            DbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
-            DbName = WebConfigurationManager.AppSettings.Get("LoginDB");
             CurrentUser = new User();
         }
 
         public LoginHelper(LoginForm loginCredentials)
         {
-            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            DomainName = "LocalDomain";
-            DbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
-            DbName = WebConfigurationManager.AppSettings.Get("LoginDB");
             this.loginCredentials = loginCredentials;
             CurrentUser = new User();
         }
 
         public LoginHelper(LoginForm loginCredentials, User user)
         {
-            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            DomainName = "LocalDomain";
-            DbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
-            DbName = WebConfigurationManager.AppSettings.Get("LoginDB");
             this.loginCredentials = loginCredentials;
             this.CurrentUser = user;
         }
@@ -56,9 +44,11 @@ namespace VeraAPI.HelperClasses
         {
             log.WriteLogEntry("Starting AuthenticateDomainCredentials...");
             bool result = false;
-            DomainUser user = new DomainUser();
-            user.UserName = loginCredentials.UserName;
-            user.UserPwd = loginCredentials.UserPwd;
+            DomainUser user = new DomainUser
+            {
+                UserName = loginCredentials.UserName,
+                UserPwd = loginCredentials.UserPwd
+            };
             LDAPHandle = new LDAPHandler(user, DomainName);
             log.WriteLogEntry("Starting LDAPHandler...");
             if (LDAPHandle.ValidateDomain())

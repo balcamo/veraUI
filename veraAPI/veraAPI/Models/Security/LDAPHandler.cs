@@ -17,11 +17,10 @@ namespace VeraAPI.Models.Security
         private PrincipalContext UserContext;
         private UserPrincipal UserAccount;
         private string domainName;
-        private Scribe log;
+        private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LDAPHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         public LDAPHandler(User user, string domainName)
         {
-            this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LDAPHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             this.domainName = WebConfigurationManager.AppSettings.Get(domainName);
             CurrentUser = user;
         }

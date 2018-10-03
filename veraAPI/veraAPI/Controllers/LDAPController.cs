@@ -23,6 +23,11 @@ namespace VeraAPI.Controllers
             this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LDAPController_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
         }
 
+        public LDAPController(Scribe log)
+        {
+            this.log = log;
+        }
+
         // GET: api/User
         public IEnumerable<string> Get()
         {
@@ -43,7 +48,7 @@ namespace VeraAPI.Controllers
         // POST: api/User
         public Token Post([FromBody]LoginForm loginCredentials)
         {
-            log.WriteLogEntry("Starting Post login user...");
+            log.WriteLogEntry("Starting Post for login credentials...");
             Token result = null;
             if (loginCredentials.GetType() == typeof(LoginForm))
             {
