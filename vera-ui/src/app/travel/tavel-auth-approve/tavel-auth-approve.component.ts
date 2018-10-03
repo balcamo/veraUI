@@ -23,30 +23,16 @@ export class TavelAuthApproveComponent implements OnInit {
   form = new AuthForm();
   oldForm: AuthForm;
   submitted = false;
-
+  transType: string;
   constructor(http: Http, userService: UserService) {
     this.http = http;
     this.userService = userService;
     this.user = this.userService.getUser();
-
-    
   }
 
   ngOnInit() {
-
   }
 
-  waitForHttp(data: any) {
-    console.log("the data : " + data.text());
-    if (JSON.parse(data.text()) == []) {
-      console.log("Data returned is null");
-
-    } else {
-      this.authForms = JSON.parse(data.text()) as AuthForm[];
-
-      console.log("finishing waitForHttp");
-    }
-  }
   /**
    * 
    * DisplaySelected will show information form the selected authform
@@ -59,6 +45,14 @@ export class TavelAuthApproveComponent implements OnInit {
       this.submitted = true;
     } else {
       this.submitted = false;
+    }
+
+    if (this.form.Bool2 == true) {
+      this.transType = "District Vehicle";
+    } else if (this.form.Decimal3 != 0) {
+      this.transType = "Plane";
+    } else {
+      this.transType = "Personal Vehicle"
     }
     //console.log(this.form);
     if (this.displayForm == "none") {

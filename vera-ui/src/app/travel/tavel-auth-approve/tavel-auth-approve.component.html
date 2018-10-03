@@ -14,10 +14,11 @@
 
 <!-- Displayes overview of the selected Auth form -->
 <div [ngStyle]="{'display':displayForm}" class="overview">
-  <h2 style="text-align:center">{{form.String4}} : {{form.String5}}</h2>
+  <h2 style="text-align:center">{{form.String1}} {{form.String2}} : {{form.String4}}</h2>
   <h5>Name: <b><i>{{form.String1}} {{form.String2}}</i></b></h5>
   <h5>Event Title:<b> <i>{{form.String4}}</i> </b></h5>
   <h5>Location:<b> <i>{{form.String5}}</i></b></h5>
+  <h5>Type of Transportation:<b> <i>{{transType}}</i></b></h5>
   <h5>Travel Start Date: <b><i>{{form.Date1}}</i></b></h5>
   <h5>Travel End Date:<b> <i>{{form.Date2}}</i></b></h5>
   <!-- Cost breakdown of the trip -->
