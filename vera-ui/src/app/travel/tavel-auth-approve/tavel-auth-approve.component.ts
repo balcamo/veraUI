@@ -17,7 +17,6 @@ export class TavelAuthApproveComponent implements OnInit {
   userService: UserService
   user: User;
   displayForm = "none";
-  displayRecap = "none";
   consts = new Constants();
   registrationComp = true;
   airfareComp = true;
@@ -56,7 +55,11 @@ export class TavelAuthApproveComponent implements OnInit {
    */
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
-    this.displayRecap = "none";
+    if ((this.user.EntryGroup[3] == 1 && this.form.Bool5 != undefined) || (this.user.EntryGroup[3] == 2 && this.form.Bool6 != undefined)) {
+      this.submitted = true;
+    } else {
+      this.submitted = false;
+    }
     //console.log(this.form);
     if (this.displayForm == "none") {
       this.displayForm = "block";
@@ -72,9 +75,6 @@ export class TavelAuthApproveComponent implements OnInit {
    * submit the recap to the server to get approval
    * */
   submitApproveStatus() {
-    this.submitted = true;
-    console.log(this.submitted);
-
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({
       'Content-Type': 'application/json'
@@ -83,15 +83,17 @@ export class TavelAuthApproveComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-    if (!this.form.Bool5) {
+    if (this.user.EntryGroup[3] == 1) {
       this.form.Bool5 = true;
       this.form.Decimal26 = this.user.UserID;
-    } else if (this.form.Bool5 && !this.form.Bool6) {
+    } else if (this.user.EntryGroup[3] == 2) {
       this.form.Bool6 = true;
       this.form.Decimal27 = this.user.UserID;
     }
     var body = JSON.stringify(this.form);
     console.log(this.form);
+
+    this.submitted = true;
 
     console.log(this.consts.url + 'Recap');
     this.http.post(this.consts.url + 'Recap', body, options)
