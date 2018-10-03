@@ -39,5 +39,9 @@ export class AuthForm {
   Decimal23: number;  // RecapMisc
   Decimal24: number;  // TotalRecap
   Decimal25: number;  // TotalReimburse
-  String8: string;    // Supervisor
+  String8: string;    // Approval status
+  Bool5: boolean;     // Department head approval
+  Decimal26: number;    // Department head ID
+  Bool6: boolean;     // GM approval
+  Decimal27: number;   // GM ID
 }

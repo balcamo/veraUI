@@ -23,6 +23,7 @@ export class TavelAuthApproveComponent implements OnInit {
   airfareComp = true;
   form = new AuthForm();
   oldForm: AuthForm;
+  submitted = false;
 
   constructor(http: Http, userService: UserService) {
     this.http = http;
@@ -54,48 +55,10 @@ export class TavelAuthApproveComponent implements OnInit {
   }
 
   /**
-   * checkTot will calculate the total spent on the trip
-   * and the total the traveler is owed for reimbursement 
-   * */
-  checkTot() {
-    if (this.airfareComp) { this.form.Decimal15 = 0; }
-    if (this.registrationComp) { this.form.Decimal14 = 0; }
-    this.form.Decimal24 = 0;
-    var mileage = this.form.Decimal19 * this.consts.mileageRate;
-    var foodTravel = this.form.Decimal21 * this.consts.firstLastDayFood;
-    var foodFull = this.form.Decimal21 * this.form.Decimal22
-    this.form.Decimal24 = this.form.Decimal14 + this.form.Decimal15 + this.form.Decimal16 + foodFull +
-      this.form.Decimal17 + this.form.Decimal18 + mileage + this.form.Decimal20 + foodTravel + this.form.Decimal23;
-    this.form.Decimal25 = this.form.Decimal24 - this.form.Decimal13;
-  }
-
-  /**
-   * show recap uses the form from selected to update the recap fields  
-   * */
-  showRecap() {
-    this.displayForm = "none";
-    this.form.Decimal15 = 0;
-    this.form.Decimal14 = 0;
-    this.form.Decimal16 = 0;
-    this.form.Decimal17 = 0;
-    this.form.Decimal18 = 0;
-    this.form.Decimal19 = 0;
-    this.form.Decimal20 = 0;
-    this.form.Decimal22 = 0;
-    this.form.Decimal21 = 0;
-    this.form.Decimal23 = 0;
-    this.form.Decimal24 = 0;
-    this.form.Decimal25 = 0;
-
-    console.log("Form" + this.form);
-    this.displayRecap = "block";
-
-  }
-
-  /**
    * submit the recap to the server to get approval
    * */
-  submitRecap() {
+  submitApproveStatus() {
+    this.submitted = true;
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({
       'Content-Type': 'application/json'
@@ -104,11 +67,46 @@ export class TavelAuthApproveComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
+    if (!this.form.Bool5) {
+      this.form.Bool5 = true;
+      this.form.Decimal26 = this.user.UserID;
+    } else if (this.form.Bool5 && !this.form.Bool6) {
+      this.form.Bool6 = true;
+      this.form.Decimal27 = this.user.UserID;
+    }
     var body = JSON.stringify(this.form);
+    console.log(this.form);
+
     console.log(this.consts.url + 'Recap');
     this.http.post(this.consts.url + 'Recap', body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert(data.text()));
   }
-
+  /**
+ * submit the recap to the server to get approval
+ * */
+  submitDenyStatus() {
+    this.submitted = true;
+    let params: URLSearchParams = new URLSearchParams();
+    var pageHeaders = new Headers({
+      'Content-Type': 'application/json'
+    });
+    let options = new RequestOptions({
+      search: params,
+      headers: pageHeaders
+    });
+    if (!this.form.Bool5 && !this.form.Bool6) {
+      this.form.Bool5 = false;
+      this.form.Decimal26 = this.user.UserID;
+    } else if (this.form.Bool5 && !this.form.Bool6) {
+      this.form.Bool6 = false;
+      this.form.Decimal27 = this.user.UserID;
+    }
+    console.log(this.form);
+      var body = JSON.stringify(this.form);
+    console.log(this.consts.url + 'Recap');
+    this.http.post(this.consts.url + 'Recap', body, options)
+      //.subscribe((data) => this.waitForHttp(data));
+      .subscribe((data) => alert(data.text()));
+  }
 }

@@ -15,156 +15,27 @@
 <!-- Displayes overview of the selected Auth form -->
 <div [ngStyle]="{'display':displayForm}" class="overview">
   <h2 style="text-align:center">{{form.String4}} : {{form.String5}}</h2>
-  <h5>First Name: <b><i>{{form.String1}}</i></b></h5>
-  <h5>Last Name: <b><i>{{form.String2}}</i></b></h5>
-  <h5>Phone: <b><i>{{form.Int1}}</i></b></h5>
-  <h5>Email: <b><i>{{form.String3}}</i></b></h5>
+  <h5>Name: <b><i>{{form.String1}} {{form.String2}}</i></b></h5>
   <h5>Event Title:<b> <i>{{form.String4}}</i> </b></h5>
   <h5>Location:<b> <i>{{form.String5}}</i></b></h5>
   <h5>Travel Start Date: <b><i>{{form.Date1}}</i></b></h5>
   <h5>Travel End Date:<b> <i>{{form.Date2}}</i></b></h5>
+  <!-- Cost breakdown of the trip -->
+  <h5>Estimated Registration Cost:<b> <i>{{form.Decimal2}}</i></b></h5>
+  <h5>Estimated Airfare:<b> <i>{{form.Decimal3}}</i></b></h5>
+  <h5>Estimated RentalCar:<b> <i>{{form.Decimal4}}</i></b></h5>
+  <h5>Estimated Fuel:<b> <i>{{form.Decimal5}}</i></b></h5>
+  <h5>Estimated Parking and Tolls:<b> <i>{{form.Decimal6}}</i></b></h5>
+  <h5>Estimated Mileage:<b> <i>{{form.Decimal7}}</i></b></h5>
+  <h5>Estimated Lodging:<b> <i>{{form.Decimal8}}</i></b></h5>
+  <h5>Estimated Food:<b> <i>{{form.Decimal9}}</i></b></h5>
+  <h5>Estimated Misc:<b> <i>{{form.Decimal11}}</i></b></h5>
+
   <h5>Total Estimate of Trip:<b> <i>{{form.Decimal12}}</i></b></h5>
-  <h5>Advance Taken: <b><i>{{form.Decimal13}}</i></b></h5>
 
-  <button class="btn bg-success" (click)="showRecap()">Travel Recap</button>
+  <button class="bg-info sup" (click)="submitApproveStatus()" ng-disabled="submitted">Approve</button>
+  <button class="bg-warning sup" (click)="submitDenyStatus()" ng-disabled="submitted">Deny</button>
 </div>
 
-<!-- Displays recap information in a table -->
-<div [ngStyle]="{'display':displayRecap}" style="border:solid 5px; max-width:80%;
-      min-width:50%; background-color:white;padding:5%;border-radius: 25px; margin-left:50px">
-  <h2 style="text-align:center">{{form.String4}} : {{form.String5}}</h2>
-  <table class="table">
-    <thead>
-      <tr>
-        <th><h5></h5></th>
-        <th><h5>Info From Advance</h5></th>
-        <th><h5>Recap Form</h5></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th>
-          <h5>
-            <b>Registration Cost</b>
-          </h5>
-          <h8>Company paid: <input type="checkbox" [(ngModel)]="registrationComp" (change)="checkTot()" /></h8>
-        </th>
-        <th><h5>{{form.Decimal2}}</h5></th>
-        <th>
-          <input type="number" ngbTooltip="Registration Cost" (change)="checkTot()"
-                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Registration Cost*"
-                 [(ngModel)]="form.Decimal14" required [disabled]="registrationComp" />
-        </th>
-      </tr>
-      <tr>
-        <th>
-          <h5>
-            <b>Airfare</b>
-          </h5>
-          <h8>Company paid: <input type="checkbox" [(ngModel)]="airfareComp" (change)="checkTot()" /></h8>
-        </th>
-        <th><h5>{{form.Decimal3}}</h5></th>
-        <th>
-          <input type="number" ngbTooltip="Airfare" (change)="checkTot()"
-                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Airfare*"
-                 [(ngModel)]="form.Decimal15" required [disabled]="airfareComp" />
-        </th>
-      </tr>
-      <tr>
-        <th><h5><b>Rental Car</b></h5></th>
-        <th><h5>{{form.Decimal4}}</h5></th>
-        <th>
-          <input type="number" ngbTooltip="Rental Car" (change)="checkTot()"
-                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Rental Car*"
-                 [(ngModel)]="form.Decimal16" required />
-        </th>
-      </tr>
-      <tr>
-        <th><h5><b>Miles Driven</b></h5></th>
-        <th><h5>{{form.Decimal7}}</h5></th>
-        <th>
-          <input type="number" ngbTooltip="Miles Driven" (change)="checkTot()"
-                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Miles Driven*"
-                 [(ngModel)]="form.Decimal19" required />
-        </th>
-      </tr>
-      <tr>
-        <th><h5><b>Parking and Tolls</b></h5></th>
-        <th><h5>{{form.Decimal6}}</h5></th>
-        <th>
-          <input type="number" ngbTooltip="Fuel and Parking" (change)="checkTot()"
-                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Parking and tolls*"
-                 [(ngModel)]="form.Decimal18" required />
-        </th>
-      </tr>
-      <tr>
-        <th><h5><b>Fuel</b></h5></th>
-        <th><h5>{{form.Decimal5}}</h5></th>
-        <th>
-          <input type="number" ngbTooltip="Fuel and Parking" (change)="checkTot()"
-                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Fuel*"
-                 [(ngModel)]="form.Decimal17" required />
-        </th>
-      </tr>
-      <tr>
-        <th><h5><b>Lodging</b></h5></th>
-        <th><h5>{{form.Decimal8}}</h5></th>
-        <th>
-          <input type="number" ngbTooltip="Lodging" (change)="checkTot()"
-                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Lodging*"
-                 [(ngModel)]="form.Decimal20" required />
-        </th>
-      </tr>
-      <tr>
-        <th>
-          <h5>
-            <a href="https://www.gsa.gov/" target="_blank" placement="right"
-               ngbTooltip="Find your city to find the Per Diem">
-              <b>Per Diem</b>
-            </a>
-          </h5>
-        </th>
-        <th><h5>{{form.Decimal9}}</h5></th>
-        <th>
-          <input type="number" ngbTooltip="Find your city to find the Per Diem at https://www.gsa.gov/" (change)="checkTot()"
-                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Per Diem*"
-                 [(ngModel)]="form.Decimal21" required />
-        </th>
-      </tr>
-      <tr>
-        <th><h5><b>Full Days of Travel</b></h5></th>
-        <th><h5>{{form.Decimal10}}</h5></th>
-        <th>
-          <input type="number" ngbTooltip="Full Days of Travel" (change)="checkTot()"
-                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Days of travel*"
-                 [(ngModel)]="form.Decimal22" required />
-        </th>
-      </tr>
-      <tr>
-        <th><h5><b>Miscellaneous</b></h5></th>
-        <th><h5>{{form.Decimal11}}</h5></th>
-        <th>
-          <input type="number" ngbTooltip="Miscellaneous" (change)="checkTot()"
-                 class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Miscellaneous*"
-                 [(ngModel)]="form.Decimal23" required />
-        </th>
-      </tr>
-      <tr>
-        <th><h6><b>Total</b></h6></th>
-        <th><h6>{{form.Decimal12}}</h6></th>
-        <th><h6>{{form.Decimal24}}</h6></th>
-      </tr>
-      <tr>
-        <th><h6><b>Advance Taken</b></h6></th>
-        <th><h6></h6></th>
-        <th><h6>{{form.Decimal13}}</h6></th>
-      </tr>
-      <tr>
-        <th><h5><b>Total for Reimbursement</b></h5></th>
-        <th><h5></h5></th>
-        <th><h5>{{form.Decimal25}}</h5></th>
-      </tr>
-    </tbody>
-  </table>
-  <button type="submit" (click)="submitRecap()">Submit</button>
-</div>
+
+
