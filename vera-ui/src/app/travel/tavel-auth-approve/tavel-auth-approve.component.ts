@@ -75,6 +75,7 @@ export class TavelAuthApproveComponent implements OnInit {
    * submit the recap to the server to get approval
    * */
   submitApproveStatus() {
+    this.submitted = true;
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({
       'Content-Type': 'application/json'
@@ -92,8 +93,6 @@ export class TavelAuthApproveComponent implements OnInit {
     }
     var body = JSON.stringify(this.form);
     console.log(this.form);
-
-    this.submitted = true;
 
     console.log(this.consts.url + 'Recap');
     this.http.post(this.consts.url + 'Recap', body, options)
