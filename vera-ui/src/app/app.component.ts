@@ -65,6 +65,7 @@ export class AppComponent {
       console.log(this.consts.url + 'LDAP');
       this.http.post(this.consts.url + 'LDAP', body, options)
         .subscribe((data) => this.waitForHttp(data));
+      
     }
   }
 
@@ -77,16 +78,19 @@ export class AppComponent {
     this.user.UserID = this.value.UserID;
     if (data == undefined) {
       alert("no data");
-    } else if (this.user.EntryGroup != 0) {
-      if (this.user.EntryGroup == 1) { this.user.nav = this.consts.employee; }
+    } else if (this.user.EntryGroup[0] == 0) {
+      alert("Not a valid email. Please try again");
+    } else {
+      if (this.user.EntryGroup[0] == 1 || this.user.EntryGroup[0] == 99) { this.user.nav = this.consts.employee; }
       this.userService.setUser(this.user);
+      console.log("waitForHttp is complete");
       this.emit_event("nav");
       this.userEntry = "none";
-      this.mainPage = "block";      
-    } else {
-      alert("Not a valid email. Please try again");
+      this.mainPage = "block";
+      this.emit_event(this.param);
+
     }
-    console.log("waitForHttp is complete");
+    
   }
   
 }

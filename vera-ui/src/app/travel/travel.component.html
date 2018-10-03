@@ -10,7 +10,7 @@
       Active Authorization Forms
     </button>
 
-    <button class="btn bg-primary" [routerLink]="['approveAuth']" (click)="displayApproveAuth()" [authForms]="authForms">
+    <button *ngIf="approver;" class="btn bg-primary" [routerLink]="['approveAuth']" (click)="displayApproveAuth()" [authForms]="authForms">
       Approve Authorization Forms
     </button>
 
@@ -28,4 +28,5 @@
   <div [ngStyle]="{'display':approveAuthDisplay}">
     <app-tavel-auth-approve [authForms]="authForms"></app-tavel-auth-approve>
   </div>
+
 </body>

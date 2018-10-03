@@ -33,8 +33,8 @@
 
   <h5>Total Estimate of Trip:<b> <i>{{form.Decimal12}}</i></b></h5>
 
-  <button class="bg-info sup" (click)="submitApproveStatus()" ng-disabled="submitted">Approve</button>
-  <button class="bg-warning sup" (click)="submitDenyStatus()" ng-disabled="submitted">Deny</button>
+  <button class="bg-info sup" (click)="submitApproveStatus()" [ngDisabled]="submitted">Approve</button>
+  <button class="bg-warning sup" (click)="submitDenyStatus()" [ngDisabled]="submitted">Deny</button>
 </div>
 
 
