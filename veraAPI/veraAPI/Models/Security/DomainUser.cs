@@ -7,19 +7,24 @@ namespace VeraAPI.Models.Security
 {
     public class DomainUser : User
     {
-        public string DomainName { get; set; }
-        public string DomainUpn { get; set; }
+        public int DomainNumber { get; set; }
         public string DomainUserName { get; set; }
+        public string DomainUpn { get; set; }
         public string EmployeeID { get; set; }
-        public string Department { get; set; }
         public string SupervisorName { get; set; }
         public string SupervisorEmpID { get; set; }
         public string SupervisorEmail { get; set; }
-        public string DepartmentHead { get; set; }
-        public string DepartmentHeadEmpID { get; set; }
-        public string DepartmentHeadEmail { get; set; }
-        public string GeneralManager { get; set; }
-        public string GeneralManagerEmpID { get; set; }
-        public string GeneralManagerEmail { get; set; }
+
+        public Department Department { get; set; } = new Department();
+        public Position Position { get; set; } = new Position();
+        public List<Role> SecurityRoles { get; set; } = new List<Role>();
+        public List<Access> SecurityAccess { get; set; } = new List<Access>();
+        public Domain Domain { get; set; } = new Domain();
+
+        public DomainUser()
+        {
+            SecurityRoles.Add(new Role { RoleNumber = 0, RoleTitle = "Public", RoleDescription = "Public Role" });
+            SecurityAccess.Add(new Access { AccessNumber = 0, AccessTitle = "None", AccessDescription = "No Access" });
+        }
     }
 }

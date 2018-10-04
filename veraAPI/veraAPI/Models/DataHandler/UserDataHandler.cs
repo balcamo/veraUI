@@ -14,14 +14,13 @@ namespace VeraAPI.Models.DataHandler
         public User CurrentUser { get; set; }
         public List<User> Users { get; private set; }
 
-        private Scribe log;
+        private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserDataHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         public UserDataHandler(User user, string dbServer, string dbName) : base(dbServer)
         {
             this.dbServer = dbServer;
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
-            this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserDataHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             CurrentUser = user;
         }
 
@@ -30,7 +29,6 @@ namespace VeraAPI.Models.DataHandler
             this.dbServer = dbServer;
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
-            this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserDataHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             CurrentUser = new User();
         }
 
@@ -60,6 +58,16 @@ namespace VeraAPI.Models.DataHandler
                                     DomainUser user = (DomainUser)CurrentUser;
                                     log.WriteLogEntry("User ID " + rdr["user_id"].ToString());
                                     user.UserID = (int)rdr["user_id"];
+                                    log.WriteLogEntry("Company number " + rdr["company_number"].ToString());
+                                    user.CompanyNumber = (int)rdr["company_number"];
+                                    log.WriteLogEntry("Department number " + rdr["department_number"].ToString());
+                                    user.CompanyNumber = (int)rdr["department_number"];
+                                    log.WriteLogEntry("Position number " + rdr["position_number"].ToString());
+                                    user.CompanyNumber = (int)rdr["position_number"];
+                                    log.WriteLogEntry("Role number " + rdr["role_number"].ToString());
+                                    user.CompanyNumber = (int)rdr["role_number"];
+                                    log.WriteLogEntry("Domain number " + rdr["domain_number"].ToString());
+                                    user.CompanyNumber = (int)rdr["domain_number"];
                                     log.WriteLogEntry("UserName " + rdr["username"].ToString());
                                     user.UserName = rdr["username"].ToString();
                                     log.WriteLogEntry("First Name " + rdr["first_name"].ToString());
@@ -68,24 +76,32 @@ namespace VeraAPI.Models.DataHandler
                                     user.LastName = rdr["last_name"].ToString();
                                     log.WriteLogEntry("User Email " + rdr["user_email"].ToString());
                                     user.UserEmail = rdr["user_email"].ToString();
-                                    log.WriteLogEntry("User Type " + rdr["user_type"].ToString());
-                                    user.UserType = (int)rdr["user_type"];
                                     log.WriteLogEntry("Employee ID " + rdr["user_employee_id"].ToString());
                                     user.EmployeeID = rdr["user_employee_id"].ToString();
-                                    log.WriteLogEntry("Department " + rdr["user_department"].ToString());
-                                    user.Department = rdr["user_department"].ToString();
-                                    log.WriteLogEntry("Dept Head " + rdr["dept_head_name"].ToString());
-                                    user.DepartmentHead = rdr["dept_head_name"].ToString();
-                                    log.WriteLogEntry("Dept Head Email " + rdr["dept_head_email"].ToString());
-                                    user.DepartmentHeadEmail = rdr["dept_head_email"].ToString();
-                                    log.WriteLogEntry("Supervisor " + rdr["user_supervisor"].ToString());
-                                    user.SupervisorName = rdr["user_supervisor"].ToString();
-                                    log.WriteLogEntry("Authenticated " + rdr["authenticated"].ToString());
-                                    user.Authenicated = (bool)rdr["authenticated"];
+                                    log.WriteLogEntry("Department " + rdr["dept_name"].ToString());
+                                    user.Department.DeptName = rdr["dept_name"].ToString();
+                                    log.WriteLogEntry("Department head " + rdr["dept_head_name"].ToString());
+                                    user.Department.DeptHeadName = rdr["dept_head_name"].ToString();
+                                    log.WriteLogEntry("Department head email" + rdr["dept_head_email"].ToString());
+                                    user.Department.DeptHeadEmail = rdr["dept_head_email"].ToString();
+                                    log.WriteLogEntry("Supervisor " + rdr["supervisor"].ToString());
+                                    user.SupervisorName = rdr["supervisor"].ToString();
+                                    log.WriteLogEntry("Supervisor " + rdr["supervisor_email"].ToString());
+                                    user.SupervisorEmail = rdr["supervisor_email"].ToString();
                                     log.WriteLogEntry("Domain UPN " + rdr["domain_upn"].ToString());
                                     user.DomainUpn = rdr["domain_upn"].ToString();
                                     log.WriteLogEntry("Domain UserName " + rdr["domain_username"].ToString());
                                     user.DomainUserName = rdr["domain_username"].ToString();
+                                    log.WriteLogEntry("Session key " + rdr["session_key"].ToString());
+                                    user.Token.SessionKey = rdr["session_key"].ToString();
+                                    log.WriteLogEntry("Authenticated " + rdr["authenticated"].ToString());
+                                    user.Authenicated = (bool)rdr["authenticated"];
+                                    user.Token.UserID = user.UserID;
+                                    user.Token.AccessKey[0] = user.CompanyNumber;
+                                    user.Token.AccessKey[1] = user.DeptNumber;
+                                    user.Token.AccessKey[2] = user.PositionNumber;
+                                    user.Token.AccessKey[3] = user.SecurityRoles.FirstOrDefault().RoleNumber;
+                                    user.Token.AccessKey[4] = user.SecurityAccess.FirstOrDefault().AccessNumber;
                                     result = true;
                                 }
                                 else
@@ -94,6 +110,16 @@ namespace VeraAPI.Models.DataHandler
                                     User user = CurrentUser;
                                     log.WriteLogEntry("User ID " + rdr["user_id"].ToString());
                                     user.UserID = (int)rdr["user_id"];
+                                    log.WriteLogEntry("Company number " + rdr["company_number"].ToString());
+                                    user.CompanyNumber = (int)rdr["company_number"];
+                                    log.WriteLogEntry("Department number " + rdr["department_number"].ToString());
+                                    user.CompanyNumber = (int)rdr["department_number"];
+                                    log.WriteLogEntry("Position number " + rdr["position_number"].ToString());
+                                    user.CompanyNumber = (int)rdr["position_number"];
+                                    log.WriteLogEntry("Role number " + rdr["role_number"].ToString());
+                                    user.CompanyNumber = (int)rdr["role_number"];
+                                    log.WriteLogEntry("Domain number " + rdr["domain_number"].ToString());
+                                    user.CompanyNumber = (int)rdr["domain_number"];
                                     log.WriteLogEntry("UserName " + rdr["username"].ToString());
                                     user.UserName = rdr["username"].ToString();
                                     log.WriteLogEntry("First Name " + rdr["first_name"].ToString());
@@ -102,8 +128,16 @@ namespace VeraAPI.Models.DataHandler
                                     user.LastName = rdr["last_name"].ToString();
                                     log.WriteLogEntry("User Email " + rdr["user_email"].ToString());
                                     user.UserEmail = rdr["user_email"].ToString();
-                                    log.WriteLogEntry("User Type " + rdr["user_type"].ToString());
-                                    user.UserType = (int)rdr["user_type"];
+                                    log.WriteLogEntry("Session key " + rdr["session_key"].ToString());
+                                    user.Token.SessionKey = rdr["session_key"].ToString();
+                                    log.WriteLogEntry("Authenticated " + rdr["authenticated"].ToString());
+                                    user.Authenicated = (bool)rdr["authenticated"];
+                                    user.Token.UserID = user.UserID;
+                                    user.Token.AccessKey[0] = user.CompanyNumber;
+                                    user.Token.AccessKey[1] = user.DeptNumber;
+                                    user.Token.AccessKey[2] = user.PositionNumber;
+                                    user.Token.AccessKey[3] = 0;
+                                    user.Token.AccessKey[4] = 0;
                                     result = true;
                                 }
                             }
@@ -119,15 +153,17 @@ namespace VeraAPI.Models.DataHandler
                     }
                 }
             }
-            log.WriteLogEntry(string.Format("Current User {0} {1} {2}", CurrentUser.UserID, CurrentUser.UserEmail, CurrentUser.UserType));
+            log.WriteLogEntry(string.Format("Current User {0} {1} {2}", CurrentUser.UserID, CurrentUser.UserEmail, CurrentUser.Authenicated));
             log.WriteLogEntry("End LoadLoginUser.");
             return result;
         }
 
-        public bool LoadUserData(string email)
+        public bool LoadUserData()
         {
             log.WriteLogEntry("Begin LoadUserData...");
             bool result = false;
+            User user = CurrentUser;
+            string email = user.UserEmail;
             string cmdString = string.Format(@"select * from {0}.dbo.user_header where user_email = @email", dbName);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
@@ -137,24 +173,27 @@ namespace VeraAPI.Models.DataHandler
                     {
                         conn.Open();
                         cmd.Parameters.AddWithValue("@email", email);
-                        log.WriteLogEntry(cmdString);
                         using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SingleResult))
                         {
                             if (rdr.Read())
                             {
-                                User user = CurrentUser;
                                 log.WriteLogEntry("User ID " + rdr["user_id"].ToString());
                                 user.UserID = (int)rdr["user_id"];
+                                log.WriteLogEntry("Company number " + rdr["company_number"].ToString());
+                                user.CompanyNumber = (int)rdr["company_number"];
+                                log.WriteLogEntry("Department number " + rdr["dept_number"].ToString());
+                                user.DeptNumber = (int)rdr["dept_number"];
+                                log.WriteLogEntry("Position number " + rdr["position_number"].ToString());
+                                user.PositionNumber = (int)rdr["position_number"];
                                 log.WriteLogEntry("UserName " + rdr["username"].ToString());
                                 user.UserName = rdr["username"].ToString();
+                                log.WriteLogEntry("User Email " + rdr["user_email"].ToString());
+                                user.UserEmail = rdr["user_email"].ToString();
                                 log.WriteLogEntry("First Name " + rdr["first_name"].ToString());
                                 user.FirstName = rdr["first_name"].ToString();
                                 log.WriteLogEntry("Last Name " + rdr["last_name"].ToString());
                                 user.LastName = rdr["last_name"].ToString();
-                                log.WriteLogEntry("User Email " + rdr["user_email"].ToString());
-                                user.UserEmail = rdr["user_email"].ToString();
-                                log.WriteLogEntry("User Type " + rdr["user_type"].ToString());
-                                user.UserType = (int)rdr["user_type"];
+                                user.Token.UserID = user.UserID;
                                 result = true;
                             }
                         }
@@ -173,80 +212,34 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
-        public int LoadAllUserData()
+        public bool LoadDepartment()
         {
-            log.WriteLogEntry("Begin LoadAllUserData...");
-            int result = 0;
-            string cmdString = string.Format(@"select * from {0}.dbo.user_header", dbName);
-            using (SqlConnection conn = new SqlConnection(dataConnectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand(cmdString, conn))
-                {
-                    try
-                    {
-                        conn.Open();
-                        using (SqlDataReader rdr = cmd.ExecuteReader())
-                        {
-                            while (rdr.Read())
-                            {
-                                User user = new User();
-                                log.WriteLogEntry("User ID " + rdr["user_id"].ToString());
-                                user.UserID = (int)rdr["user_id"];
-                                log.WriteLogEntry("UserName " + rdr["username"].ToString());
-                                user.UserName = rdr["username"].ToString();
-                                log.WriteLogEntry("First Name " + rdr["first_name"].ToString());
-                                user.FirstName = rdr["first_name"].ToString();
-                                log.WriteLogEntry("Last Name " + rdr["last_name"].ToString());
-                                user.LastName = rdr["last_name"].ToString();
-                                log.WriteLogEntry("User Email " + rdr["user_email"].ToString());
-                                user.UserEmail = rdr["user_email"].ToString();
-                                log.WriteLogEntry("User Type " + rdr["user_type"].ToString());
-                                user.UserType = (int)rdr["user_type"];
-                                Users.Add(user);
-                            }
-                        }
-                    }
-                    catch (SqlException ex)
-                    {
-                        log.WriteLogEntry("SQL error " + ex.Message);
-                    }
-                    catch (Exception ex)
-                    {
-                        log.WriteLogEntry("General program error " + ex.Message);
-                    }
-                }
-            }
-            result = Users.Count;
-            log.WriteLogEntry("End LoadAllUserData.");
-            return result;
-        }
-
-        public bool FillDepartmentHead()
-        {
-            log.WriteLogEntry("Begin FillDepartmentHead...");
+            log.WriteLogEntry("Begin LoadDepartment...");
             bool result = false;
             if (CurrentUser.GetType() == typeof(DomainUser))
             {
-                log.WriteLogEntry("Success user type is domain user.");
                 DomainUser user = (DomainUser)CurrentUser;
-                string depString = string.Format(@"select dept_head_emp_id, dept_head_name, dept_head_email from {0}.dbo.department where dept_name = @deptName", dbName);
-                // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
-                // Database column names will remain descriptive for now and use schema field mapping
+                int dept = user.DeptNumber;
+                log.WriteLogEntry("Loading department number " + dept);
+                string cmdString = string.Format(@"select * from {0}.dbo.department where dept_number = @deptNumber", dbName);
+
                 using (SqlConnection conn = new SqlConnection(dataConnectionString))
                 {
                     try
                     {
                         conn.Open();
-                        using (SqlCommand deptCmd = new SqlCommand(depString, conn))
+                        using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                         {
-                            deptCmd.Parameters.AddWithValue("@deptName", user.Department);
-                            using (SqlDataReader rdr = deptCmd.ExecuteReader(CommandBehavior.SingleResult))
+                            cmd.Parameters.AddWithValue("@deptNumber", dept);
+                            using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SingleResult))
                             {
                                 if (rdr.Read())
                                 {
-                                    user.DepartmentHeadEmpID = rdr["dept_head_emp_id"].ToString();
-                                    user.DepartmentHead = rdr["dept_head_name"].ToString();
-                                    user.DepartmentHeadEmail = rdr["dept_head_email"].ToString();
+                                    user.Department.DeptNumber = (int)rdr["dept_number"];
+                                    user.Department.DeptName = rdr["dept_name"].ToString();
+                                    user.Department.DeptHeadEmpID = rdr["dept_head_emp_id"].ToString();
+                                    user.Department.DeptEmail = rdr["dept_email"].ToString();
+                                    log.WriteLogEntry(string.Format("Department loaded {0} {1} {2} {3}", user.Department.DeptNumber, user.Department.DeptName, user.Department.DeptHeadEmpID, user.Department.DeptEmail));
                                     result = true;
                                 }
                             }
@@ -263,54 +256,87 @@ namespace VeraAPI.Models.DataHandler
                 }
             }
             else
-                log.WriteLogEntry("Failed not a domain user!");
-            log.WriteLogEntry("End FillDepartmentHead.");
+                log.WriteLogEntry("FAILED not a domain user!");
+            log.WriteLogEntry("End LoadDepartment.");
             return result;
         }
 
-        public bool FillGeneralManager()
+        public bool LoadCompany()
         {
-            log.WriteLogEntry("Begin FillGeneralManager...");
+            log.WriteLogEntry("Begin LoadCompany...");
+            bool result = false;
+            User user = CurrentUser;
+            int company = user.CompanyNumber;
+            log.WriteLogEntry("Loading company " + company);
+            string cmdString = string.Format(@"select * from {0}.dbo.company where company_number = @companyNumber", dbName);
+
+            using (SqlConnection conn = new SqlConnection(dataConnectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(cmdString, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@companyNumber", company);
+                        using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SingleResult))
+                        {
+                            if (rdr.Read())
+                            {
+                                user.Company.CompanyNumber = (int)rdr["company_number"];
+                                user.Company.CompanyName = rdr["company_name"].ToString();
+                                user.Company.CompanyEmail = rdr["company_email"].ToString();
+                                user.Company.GeneralManagerEmpID = rdr["general_manager_emp_id"].ToString();
+                                log.WriteLogEntry(string.Format("Company loaded {0} {1} {2} {3}", user.Company.CompanyNumber, user.Company.CompanyName, user.Company.CompanyEmail,  user.Company.GeneralManagerEmpID));
+                                result = true;
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    log.WriteLogEntry("SQL error " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    log.WriteLogEntry("General program error " + ex.Message);
+                }
+            }
+            log.WriteLogEntry("End LoadCompany.");
+            return result;
+        }
+
+        public bool LoadSecurityRoles()
+        {
+            log.WriteLogEntry("Begin LoadSecurityRoles...");
             bool result = false;
             if (CurrentUser.GetType() == typeof(DomainUser))
             {
-                log.WriteLogEntry("Success user type is domain user.");
                 DomainUser user = (DomainUser)CurrentUser;
-                string comString = string.Format(@"select general_manager_emp_id from {0}.dbo.company", dbName);
-                // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
-                // Database column names will remain descriptive for now and use schema field mapping
-                string empString = string.Format(@"select first_name, last_name, user_email from {0}.dbo.user_header where employee_id = @empID", dbName);
+                user.SecurityRoles = new List<Role>();
+                log.WriteLogEntry("Loading roles for user id " + user.UserID);
+                string cmdString = string.Format(@"select rol.* from {0}.dbo.user_role as urol left join Valhalla.dbo.security_role as rol on urol.role_number = rol.role_number where urol.user_id = @userID", dbName);
+
                 using (SqlConnection conn = new SqlConnection(dataConnectionString))
                 {
                     try
                     {
                         conn.Open();
-                        using (SqlCommand comCmd = new SqlCommand(comString, conn))
+                        using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                         {
-                            var emp = comCmd.ExecuteScalar();
-                            if (emp != null)
+                            cmd.Parameters.AddWithValue("@userID", user.UserID);
+                            using (SqlDataReader rdr = cmd.ExecuteReader())
                             {
-                                user.GeneralManagerEmpID = emp.ToString();
-                                result = true;
-                            }
-                        }
-                        if (result)
-                        {
-                            using (SqlCommand empCmd = new SqlCommand(empString, conn))
-                            {
-                                empCmd.Parameters.AddWithValue("@empID", user.GeneralManagerEmpID);
-                                using (SqlDataReader rdr = empCmd.ExecuteReader(CommandBehavior.SingleResult))
+                                while (rdr.Read())
                                 {
-                                    if (rdr.Read())
+                                    Role role = new Role
                                     {
-                                        string empName = string.Format("{0} {1}", rdr["first_name"].ToString(), rdr["last_name"].ToString());
-                                        user.GeneralManager = empName;
-                                        user.GeneralManagerEmail = rdr["email"].ToString();
-                                        CurrentUser = user;
-                                        result = true;
-                                    }
-                                    else
-                                        result = false;
+                                        RoleNumber = (int)rdr["rol.role_number"],
+                                        RoleTitle = rdr["rol.role_title"].ToString(),
+                                        RoleDescription = rdr["rol.role_description"].ToString()
+                                    };
+                                    log.WriteLogEntry(string.Format("Role loaded {0} {1} {2}", role.RoleNumber, role.RoleTitle, role.RoleDescription));
+                                    user.SecurityRoles.Add(role);
+                                    result = true;
                                 }
                             }
                         }
@@ -326,34 +352,43 @@ namespace VeraAPI.Models.DataHandler
                 }
             }
             else
-                log.WriteLogEntry("Failed not a domain user!");
-            log.WriteLogEntry("End FillGeneralManager.");
+                log.WriteLogEntry("FAILED not a domain user!");
+            log.WriteLogEntry("End LoadSecurityRoles.");
             return result;
         }
 
-        public bool FillUserID()
+        public bool LoadPosition()
         {
-            log.WriteLogEntry("Begin FillUserID...");
+            log.WriteLogEntry("Begin LoadPosition...");
             bool result = false;
-            string cmdString = string.Format(@"select user_id from {0}.dbo.user_header where user_email = @email", dbName);
-            using (SqlConnection conn = new SqlConnection(dataConnectionString))
+            if (CurrentUser.GetType() == typeof(DomainUser))
             {
-                using (SqlCommand cmd = new SqlCommand(cmdString, conn))
+                DomainUser user = (DomainUser)CurrentUser;
+                int position = user.PositionNumber;
+                log.WriteLogEntry("Loading position number " + position);
+                string cmdString = string.Format(@"select * from {0}.dbo.position where position_number = @positionNumber", dbName);
+
+                using (SqlConnection conn = new SqlConnection(dataConnectionString))
                 {
                     try
                     {
                         conn.Open();
-                        cmd.Parameters.AddWithValue("@email", CurrentUser.UserEmail);
-                        log.WriteLogEntry(cmdString);
-                        int userID = (int)cmd.ExecuteScalar();
-                        if (userID > 0)
+                        using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                         {
-                            User user = CurrentUser;
-                            user.UserID = userID;
-                            result = true;
+                            cmd.Parameters.AddWithValue("@positionNumber", position);
+                            using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SingleResult))
+                            {
+                                if (rdr.Read())
+                                {
+                                    user.Position.PositionNumber = (int)rdr["position_number"];
+                                    user.Position.PostiionTitle = rdr["position_title"].ToString();
+                                    user.Position.PositionDescription = rdr["position_description"].ToString();
+                                    user.Position.PositionEmail = rdr["position_email"].ToString();
+                                    log.WriteLogEntry(string.Format("Position loaded {0} {1} {2} {3}", user.Position.PositionNumber, user.Position.PostiionTitle, user.Position.PositionDescription, user.Position.PositionEmail));
+                                    result = true;
+                                }
+                            }
                         }
-                        else
-                            log.WriteLogEntry("Failed getting user id from database!");
                     }
                     catch (SqlException ex)
                     {
@@ -365,7 +400,9 @@ namespace VeraAPI.Models.DataHandler
                     }
                 }
             }
-            log.WriteLogEntry("End FillUserID.");
+            else
+                log.WriteLogEntry("FAILED not a domain user!");
+            log.WriteLogEntry("End LoadPosition.");
             return result;
         }
 
@@ -384,25 +421,35 @@ namespace VeraAPI.Models.DataHandler
                     if (CurrentUser.GetType() == typeof(DomainUser))
                     {
                         DomainUser user = (DomainUser)CurrentUser;
-                        string cmdString = string.Format(@"insert into {0}.dbo.user_session (user_id, domain_username, domain_upn, user_employee_id, first_name, last_name, user_email, user_department, dept_head_name, dept_head_email, authenticated, user_type, username, session_key)
-                                            values (@userID, @domainUser, @upn, @empID, @firstName, @lastName, @email, @dept, @deptHead, @deptHeadEmail, @auth, @userType, @userName, @key)", dbName);
+                        string cmdString = string.Format(@"insert into {0}.dbo.user_session (user_id, company_number, dept_number, position_number, role_number, domain_number, 
+	                                                        username, user_email, first_name, last_name, user_employee_id, dept_name, dept_head_name, dept_head_email, 
+	                                                        supervisor, supervisor_email, domain_upn, domain_username, session_key, authenticated)
+                                                            values (@userID, @companyNumber, @deptNumber, @positionNumber, @roleNumber, @domainNumber, 
+	                                                        @userName, @userEmail, @firstName, @lastName, @userEmpID, @deptName, @deptHead, @deptHeadEmail, 
+	                                                        @supervisorName, @supervisorEmail, @domainUpn, @domainUserName, @sessionKey, @authenticated)", dbName);
                         using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                         {
                             log.WriteLogEntry(string.Format("Domain user {0} {1} {2} {3}", user.FirstName, user.LastName, user.DomainUserName, user.DomainUpn));
                             cmd.Parameters.AddWithValue("@userID", user.UserID);
-                            cmd.Parameters.AddWithValue("@domainUser", user.DomainUserName);
-                            cmd.Parameters.AddWithValue("@upn", user.DomainUpn);
-                            cmd.Parameters.AddWithValue("@empID", user.EmployeeID);
+                            cmd.Parameters.AddWithValue("@companyNumber", user.CompanyNumber);
+                            cmd.Parameters.AddWithValue("@deptNumber", user.DeptNumber);
+                            cmd.Parameters.AddWithValue("@positionNumber", user.PositionNumber);
+                            cmd.Parameters.AddWithValue("@roleNumber", user.SecurityRoles.FirstOrDefault().RoleNumber);
+                            cmd.Parameters.AddWithValue("@domainNumber", user.DeptNumber);
+                            cmd.Parameters.AddWithValue("@userName", user.UserName);
+                            cmd.Parameters.AddWithValue("@userEmail", user.UserEmail);
                             cmd.Parameters.AddWithValue("@firstName", user.FirstName);
                             cmd.Parameters.AddWithValue("@lastName", user.LastName);
-                            cmd.Parameters.AddWithValue("@email", user.UserEmail);
-                            cmd.Parameters.AddWithValue("@dept", user.Department);
-                            cmd.Parameters.AddWithValue("@deptHead", user.DepartmentHead);
-                            cmd.Parameters.AddWithValue("@deptHeadEmail", user.DepartmentHeadEmail);
-                            cmd.Parameters.AddWithValue("@auth", user.Authenicated);
-                            cmd.Parameters.AddWithValue("@userType", user.UserType);
-                            cmd.Parameters.AddWithValue("@userName", user.UserName);
-                            cmd.Parameters.AddWithValue("@key", user.Token.SessionKey);
+                            cmd.Parameters.AddWithValue("@userEmpID", user.EmployeeID);
+                            cmd.Parameters.AddWithValue("@dept", user.Department.DeptName);
+                            cmd.Parameters.AddWithValue("@deptHead", user.Department.DeptHeadName);
+                            cmd.Parameters.AddWithValue("@deptHeadEmail", user.Department.DeptHeadEmail);
+                            cmd.Parameters.AddWithValue("@supervisorName", user.SupervisorName);
+                            cmd.Parameters.AddWithValue("@supervisorEmail", user.SupervisorEmail);
+                            cmd.Parameters.AddWithValue("@domainUpn", user.DomainUpn);
+                            cmd.Parameters.AddWithValue("@domainUserName", user.DomainUserName);
+                            cmd.Parameters.AddWithValue("@sessionKey", user.Token.SessionKey);
+                            cmd.Parameters.AddWithValue("@authenticated", user.Authenicated);
                             if (cmd.ExecuteNonQuery() > 0)
                                 result = true;
                         }
@@ -410,19 +457,24 @@ namespace VeraAPI.Models.DataHandler
                     else
                     {
                         User user = CurrentUser;
-                        string cmdString = string.Format(@"insert into {0}.dbo.user_session (user_id, first_name, last_name, user_email, authenticated, user_type, username, session_key)
-                                            values (@userID, @firstName, @lastName, @email, @auth, @userType, @userName, @key)", dbName);
+                        string cmdString = string.Format(@"insert into {0}.dbo.user_session (user_id, company_number, dept_number, position_number, role_number, domain_number, 
+                                                            username, user_email, first_name, last_name, session_key, authenticated)
+                                                            values (@userID, @companyNumber, @deptNumber, @positionNumber, @roleNumber, @domainNumber, 
+                                                            @username, @userEmail, @firstName, @lastName, @sessionKey, @authenticated)", dbName);
                         using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                         {
                             log.WriteLogEntry(string.Format("User {0} {1} {2} {3}", user.FirstName, user.LastName, user.UserName, user.UserEmail));
                             cmd.Parameters.AddWithValue("@userID", user.UserID);
+                            cmd.Parameters.AddWithValue("@companyNumber", user.CompanyNumber);
+                            cmd.Parameters.AddWithValue("@deptNumber", user.DeptNumber);
+                            cmd.Parameters.AddWithValue("@positionNumber", user.PositionNumber);
+                            cmd.Parameters.AddWithValue("@domainNumber", user.DeptNumber);
+                            cmd.Parameters.AddWithValue("@userName", user.UserName);
+                            cmd.Parameters.AddWithValue("@userEmail", user.UserEmail);
                             cmd.Parameters.AddWithValue("@firstName", user.FirstName);
                             cmd.Parameters.AddWithValue("@lastName", user.LastName);
-                            cmd.Parameters.AddWithValue("@email", user.UserEmail);
-                            cmd.Parameters.AddWithValue("@auth", user.Authenicated);
-                            cmd.Parameters.AddWithValue("@userType", user.UserType);
-                            cmd.Parameters.AddWithValue("@userName", user.UserName);
-                            cmd.Parameters.AddWithValue("@key", user.Token.SessionKey);
+                            cmd.Parameters.AddWithValue("@sessionKey", user.Token.SessionKey);
+                            cmd.Parameters.AddWithValue("@authenticated", user.Authenicated);
                             if (cmd.ExecuteNonQuery() > 0)
                                 result = true;
                         }
@@ -438,135 +490,6 @@ namespace VeraAPI.Models.DataHandler
                 }
             }
             log.WriteLogEntry("End InsertLoginUser.");
-            return result;
-        }
-
-        public int InsertAllUsers()
-        {
-            log.WriteLogEntry("Begin InsertAllUsers...");
-            int result = 0;
-            string cmdString = string.Format(@"insert into {0}.dbo.user_header (first_name, last_name, user_email, user_sam, user_upn, employee_id)
-                                            values (@firstName, @lastName, @email, @sam, @upn, @empID)", dbName);
-            using (SqlConnection conn = new SqlConnection(dataConnectionString))
-            {
-                try
-                {
-                    conn.Open();
-                    log.WriteLogEntry("Open SQL connection successful.");
-                    foreach (DomainUser user in Users)
-                    {
-                        if (user.EmployeeID != null)
-                        {
-                            using (SqlCommand cmd = new SqlCommand(cmdString, conn))
-                            {
-                                log.WriteLogEntry("AD User " + user.FirstName + " " + user.LastName + " " + user.DomainUpn + " " + user.EmployeeID);
-                                cmd.Parameters.AddWithValue("@firstName", user.FirstName);
-                                cmd.Parameters.AddWithValue("@lastName", user.LastName);
-                                cmd.Parameters.AddWithValue("@email", user.UserEmail);
-                                cmd.Parameters.AddWithValue("@sam", user.DomainUserName);
-                                cmd.Parameters.AddWithValue("@upn", user.DomainUpn);
-                                cmd.Parameters.AddWithValue("@empID", user.EmployeeID);
-                                cmd.ExecuteNonQuery();
-                                result++;
-                            }
-                        }
-                    }
-                }
-                catch (SqlException ex)
-                {
-                    log.WriteLogEntry("SQL error " + ex.Message);
-                }
-                catch (Exception ex)
-                {
-                    log.WriteLogEntry("General program error " + ex.Message);
-                }
-            }
-            log.WriteLogEntry("Inserted users " + result);
-            log.WriteLogEntry("End InsertAllUsers.");
-            return result;
-        }
-
-        public int UpdateAllDepartment()
-        {
-            log.WriteLogEntry("Begin UpdateAllDepartment...");
-            int result = 0;
-            string depString = string.Format(@"update {0}.dbo.user_header set department = @depName where employee_id = @empID", dbName);
-            using (SqlConnection conn = new SqlConnection(dataConnectionString))
-            {
-                try
-                {
-                    conn.Open();
-                    log.WriteLogEntry("Open SQL connection successful.");
-                    foreach (DomainUser ADUser in Users)
-                    {
-                        if (ADUser.EmployeeID != null)
-                        {
-                            if (ADUser.Department != null)
-                            {
-                                using (SqlCommand depCmd = new SqlCommand(depString, conn))
-                                {
-                                    depCmd.Parameters.AddWithValue("@depName", ADUser.Department);
-                                    depCmd.Parameters.AddWithValue("@empID", ADUser.EmployeeID);
-                                    depCmd.ExecuteNonQuery();
-                                    result++;
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (SqlException ex)
-                {
-                    log.WriteLogEntry("SQL error " + ex.Message);
-                }
-                catch (Exception ex)
-                {
-                    log.WriteLogEntry("General program error " + ex.Message);
-                }
-            }
-            log.WriteLogEntry("Updated user departments " + result);
-            log.WriteLogEntry("End UpdateAllDepartment.");
-            return result;
-        }
-
-        public int UpdateAllSupervisor()
-        {
-            log.WriteLogEntry("Begin UpdateAllSupervisor...");
-            int result = 0;
-            string depString = string.Format(@"update {0}.dbo.user_header set supervisor = @supName where employee_id = @empID", dbName);
-            using (SqlConnection conn = new SqlConnection(dataConnectionString))
-            {
-                try
-                {
-                    conn.Open();
-                    log.WriteLogEntry("Open SQL connection successful.");
-                    foreach (DomainUser ADUser in Users)
-                    {
-                        if (ADUser.EmployeeID != null)
-                        {
-                            if (ADUser.SupervisorName != null)
-                            {
-                                using (SqlCommand depCmd = new SqlCommand(depString, conn))
-                                {
-                                    depCmd.Parameters.AddWithValue("@supName", ADUser.SupervisorName);
-                                    depCmd.Parameters.AddWithValue("@empID", ADUser.EmployeeID);
-                                    depCmd.ExecuteNonQuery();
-                                    result++;
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (SqlException ex)
-                {
-                    log.WriteLogEntry("SQL error " + ex.Message);
-                }
-                catch (Exception ex)
-                {
-                    log.WriteLogEntry("General program error " + ex.Message);
-                }
-            }
-            log.WriteLogEntry("Updated user supervisors " + result);
-            log.WriteLogEntry("End UpdateAllSupervisor.");
             return result;
         }
     }

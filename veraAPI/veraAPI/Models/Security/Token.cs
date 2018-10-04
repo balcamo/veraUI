@@ -11,7 +11,7 @@ namespace VeraAPI.Models.Security
     {
         public int UserID { get; set; }
         public string SessionKey { get; set; }
-        public int[] UserType { get; set; } = new int[4];
+        public int[] AccessKey { get; set; } = new int[] { 0, 0, 0, 0, 0 };
 
         public Token()
         {

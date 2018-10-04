@@ -16,12 +16,10 @@ namespace VeraAPI.Models.Security
 
         private PrincipalContext UserContext;
         private UserPrincipal UserAccount;
-        private string domainName;
         private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LDAPHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
-        public LDAPHandler(User user, string domainName)
+        public LDAPHandler(User user)
         {
-            this.domainName = WebConfigurationManager.AppSettings.Get(domainName);
             CurrentUser = user;
         }
 
@@ -32,6 +30,7 @@ namespace VeraAPI.Models.Security
             if (CurrentUser.GetType() == typeof(DomainUser))
             {
                 DomainUser user = (DomainUser)CurrentUser;
+                string domainName = WebConfigurationManager.AppSettings.Get(user.Domain.DomainName);
                 using (UserContext = new PrincipalContext(ContextType.Domain, domainName))
                 {
                     if (UserContext.ValidateCredentials(user.UserName, user.UserPwd))
@@ -40,22 +39,13 @@ namespace VeraAPI.Models.Security
                         if (UserAccount != null)
                         {
                             log.WriteLogEntry("Success authenticating current user to the domain.");
-                            user.DomainUpn = UserAccount.UserPrincipalName;
-                            user.UserEmail = UserAccount.EmailAddress;
-                            user.DomainUserName = UserAccount.SamAccountName;
+                            user.EmployeeID = UserAccount.EmployeeId;
                             user.FirstName = UserAccount.GivenName;
                             user.LastName = UserAccount.Surname;
-                            user.EmployeeID = UserAccount.EmployeeId;
-                            DirectoryEntry entry = UserAccount.GetUnderlyingObject() as DirectoryEntry;
-                            if (entry.Properties.Contains("department"))
-                            {
-                                user.Department = entry.Properties["department"].Value.ToString();
-                                log.WriteLogEntry("Department " + user.Department);
-                            }
-                            else
-                                log.WriteLogEntry("No department found.");
+                            user.UserEmail = UserAccount.EmailAddress;
+                            user.DomainUpn = UserAccount.UserPrincipalName;
+                            user.DomainUserName = UserAccount.SamAccountName;
                             user.Authenicated = true;
-                            user.UserType = User.DomainUser;
                             log.WriteLogEntry(string.Format("Authenticated user {0} {1} {2} {3} {4} {5}", user.FirstName, user.LastName, user.EmployeeID, user.UserName, user.DomainUpn, user.UserEmail));
                             result = true;
                         }
@@ -70,7 +60,7 @@ namespace VeraAPI.Models.Security
             return result;
         }
 
-        public bool ValidateDomain()
+        public bool ValidateDomain(string domainName)
         {
             log.WriteLogEntry("Starting ValidateDomain...");
             bool result = false;
@@ -82,7 +72,7 @@ namespace VeraAPI.Models.Security
             return result;
         }
 
-        public bool ValidateDomainUpn()
+        public bool ValidateDomainUpn(string domainName)
         {
             log.WriteLogEntry("Begin ValidateDomainUpn...");
             bool result = false;
@@ -109,7 +99,7 @@ namespace VeraAPI.Models.Security
             return result;
         }
 
-        public int LoadAllDomainUsers()
+        public int LoadAllDomainUsers(string domainName)
         {
             int result = 0;
             List<DomainUser> Users = new List<DomainUser>();
@@ -130,7 +120,7 @@ namespace VeraAPI.Models.Security
                             user.EmployeeID = ADUser.EmployeeId;
                             DirectoryEntry entry = ADUser.GetUnderlyingObject() as DirectoryEntry;
                             if (entry.Properties.Contains("department"))
-                                user.Department = entry.Properties["department"].Value.ToString();
+                                user.Department.DeptName = entry.Properties["department"].Value.ToString();
                             if (entry.Properties.Contains("manager"))
                             {
                                 string supName = entry.Properties["manager"].Value.ToString();
@@ -150,7 +140,7 @@ namespace VeraAPI.Models.Security
             return result;
         }
 
-        public bool LoadDomainUser(string domainUpn)
+        public bool LoadDomainUser(string domainName, string domainUpn)
         {
             log.WriteLogEntry("Begin LoadUser...");
             bool result = false;
@@ -177,13 +167,11 @@ namespace VeraAPI.Models.Security
                             DirectoryEntry entry = UserAccount.GetUnderlyingObject() as DirectoryEntry;
                             if (entry.Properties.Contains("department"))
                             {
-                                user.Department = entry.Properties["department"].Value.ToString();
+                                user.Department.DeptName = entry.Properties["department"].Value.ToString();
                                 log.WriteLogEntry("Department " + user.Department);
                             }
                             else
                                 log.WriteLogEntry("No department found.");
-                            if (entry.Properties.Contains("manager"))
-                                user.Department = entry.Properties["manager"].Value.ToString();
                             result = true;
                         }
                     }

@@ -12,35 +12,28 @@ namespace VeraAPI.HelperClasses
 {
     public class UserHelper
     {
-        private string dbServer;
-        private string dbName;
-        private User CurrentUser;
+        private readonly string dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
+        private readonly string dbName = WebConfigurationManager.AppSettings.Get("DBName");
+        private readonly User CurrentUser;
         private UserDataHandler userData;
-        private Scribe log;
+        private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         public UserHelper()
         {
-            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
-            dbName = WebConfigurationManager.AppSettings.Get("DBName");
             this.CurrentUser = new User();
         }
 
         public UserHelper(User user)
         {
-            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "UserHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
-            dbName = WebConfigurationManager.AppSettings.Get("DBName");
             this.CurrentUser = user;
         }
 
-        // WHAT DATA IS BEING LOADED?
-        public bool LoadUserData(string email)
+        public bool LoadPublicUser()
         {
             log.WriteLogEntry("Begin LoadUserData...");
             bool result = false;
             userData = new UserDataHandler(CurrentUser, dbServer, dbName);
-            if (userData.LoadUserData(email))
+            if (userData.LoadUserData())
             {
                 log.WriteLogEntry("Success loading user data.");
                 result = true;
@@ -51,39 +44,45 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        // WHY ISN"T THIS DONE WHEN WE LOAD THE DATA
-        // This method allows for specifically retrieving the user ID
-        // When a new user logs in, their information is retrieved from active directory and does not include user ID
-        // There is no corresponding user id in active directory
-        public bool FillUserID()
+        public bool LoadDomainUser()
         {
-            log.WriteLogEntry("Begin FillUserID...");
+            log.WriteLogEntry("Begin LoadDomainUser...");
             bool result = false;
-            userData = new UserDataHandler(CurrentUser, dbServer, dbName);
-            if (userData.FillUserID())
+            if (CurrentUser.GetType() == typeof(DomainUser))
             {
-                log.WriteLogEntry("Success filling user ID.");
-                result = true;
+                DomainUser user = (DomainUser)CurrentUser;
+                userData = new UserDataHandler(user, dbServer, dbName);
+                if (userData.LoadUserData())
+                {
+                    if (userData.LoadCompany())
+                    {
+                        if (userData.LoadDepartment())
+                        {
+                            if (userData.LoadPosition())
+                            {
+                                if (userData.LoadSecurityRoles())
+                                {
+                                    user.Token.AccessKey[0] = user.CompanyNumber;
+                                    user.Token.AccessKey[1] = user.DeptNumber;
+                                    user.Token.AccessKey[2] = user.PositionNumber;
+                                    user.Token.AccessKey[3] = user.SecurityRoles.FirstOrDefault().RoleNumber;
+                                    log.WriteLogEntry(string.Format("User token {0} {1} {2}", user.Token.UserID, user.Token.SessionKey, string.Join(",", user.UserAccessKey)));
+                                    result = true;
+                                }
+                            }
+                        }
+                        else
+                            log.WriteLogEntry("FAILED to load department!");
+                    }
+                    else
+                        log.WriteLogEntry("FAILED to load company!");
+                }
+                else
+                    log.WriteLogEntry("FAILED loading user data!");
             }
             else
-                log.WriteLogEntry("Failed filling user ID!");
-            log.WriteLogEntry("End FillUserID.");
-            return result;
-        }
-
-        public bool FillDepartmentHead()
-        {
-            log.WriteLogEntry("Begin FillDepartmentHead...");
-            bool result = false;
-            userData = new UserDataHandler(CurrentUser, dbServer, dbName);
-            if (userData.FillDepartmentHead())
-            {
-                log.WriteLogEntry("Success filling user department head.");
-                result = true;
-            }
-            else
-                log.WriteLogEntry("Failed filling user department head!");
-            log.WriteLogEntry("End FillDepartmentHead.");
+                log.WriteLogEntry("FAILED not a domain user!");
+            log.WriteLogEntry("End LoadDomainUser.");
             return result;
         }
     }

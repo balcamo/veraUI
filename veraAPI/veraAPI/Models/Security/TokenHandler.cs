@@ -16,14 +16,14 @@ namespace VeraAPI.Models.Security
 {
     public class TokenHandler : JwtSecurityTokenHandler
     {
-        public User CurrentUser { get; set; }
+        public User CurrentUser { get; private set; }
 
-        private Token token;
-        private Scribe log;
+        private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "TokenHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
+
+        public TokenHandler() { }
 
         public TokenHandler(User user)
         {
-            this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "TokenHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             CurrentUser = user;
         }
 
@@ -63,12 +63,7 @@ namespace VeraAPI.Models.Security
                     log.WriteLogEntry("Plain token " + plainToken.ToString());
                     string token = WriteToken(plainToken);
                     log.WriteLogEntry("Encoded session token " + token);
-                    user.Token = new Token
-                    {
-                        UserID = user.UserID,
-                        SessionKey = token
-                    };
-                    user.Token.UserType[0] = User.DomainUser;
+                    user.Token.SessionKey = token;
                     result = true;
                 }
                 catch (Exception ex)

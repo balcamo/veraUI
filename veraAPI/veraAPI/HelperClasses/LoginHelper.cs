@@ -14,9 +14,9 @@ namespace VeraAPI.HelperClasses
     {
         public User CurrentUser { get; set; }
 
-        private string DomainName = "LocalDomain";
-        private string DbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
-        private string DbName = WebConfigurationManager.AppSettings.Get("LoginDB");
+        private readonly string domainName = "LocalDomain";
+        private readonly string dbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
+        private readonly string dbName = WebConfigurationManager.AppSettings.Get("LoginDB");
         private LoginForm loginCredentials;
         private LDAPHandler LDAPHandle;
         private TokenHandler TokenHandle;
@@ -40,67 +40,23 @@ namespace VeraAPI.HelperClasses
             this.CurrentUser = user;
         }
 
-        public bool AuthenticateDomainCredentials()
-        {
-            log.WriteLogEntry("Starting AuthenticateDomainCredentials...");
-            bool result = false;
-            DomainUser user = new DomainUser
-            {
-                UserName = loginCredentials.UserName,
-                UserPwd = loginCredentials.UserPwd
-            };
-            LDAPHandle = new LDAPHandler(user, DomainName);
-            log.WriteLogEntry("Starting LDAPHandler...");
-            if (LDAPHandle.ValidateDomain())
-            {
-                if (LDAPHandle.AuthenticateDomainUser())
-                {
-                    log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3}", user.FirstName, user.LastName, user.UserName, user.UserEmail));
-                    CurrentUser = user;
-                    result = true;
-                }
-                else
-                    log.WriteLogEntry("Failed authenticate current user to domain!");
-            }
-            else
-                log.WriteLogEntry("Failed LDAPHandler ValidateDomain!");
-            log.WriteLogEntry("End AuthenticateDomainCredentials.");
-            return result;
-        }
-
-        public bool GetDomainToken()
-        {
-            log.WriteLogEntry("Starting GetDomainToken...");
-            bool result = false;
-            if (CurrentUser.GetType() == typeof(DomainUser))
-            {
-                TokenHandle = new TokenHandler(CurrentUser);
-                if (TokenHandle.GenerateDomainToken())
-                {
-                    log.WriteLogEntry("Success generating domain session token.");
-                    log.WriteLogEntry("Session key " + CurrentUser.Token.SessionKey);
-                    log.WriteLogEntry("User type " + CurrentUser.Token.UserType);
-                    result = true;
-                }
-            }
-            else
-                log.WriteLogEntry("Failed current user is not a domain user!");
-            log.WriteLogEntry("End GetDomainToken.");
-            return result;
-        }
-
         public bool InsertDomainLoginUser()
         {
             log.WriteLogEntry("Begin InsertDomainLoginUser...");
             bool result = false;
-            UserData = new UserDataHandler(CurrentUser, DbServer, DbName);
-            if (UserData.InsertLoginUser())
+            if (CurrentUser.GetType() == typeof(DomainUser))
             {
-                log.WriteLogEntry("Success inserting domain login user.");
-                result = true;
+                DomainUser user = (DomainUser)CurrentUser;
+                UserData = new UserDataHandler(user, dbServer, dbName);
+                if (UserData.InsertLoginUser())
+                {
+                    result = true;
+                }
+                else
+                    log.WriteLogEntry("Failed inserting domain login user!");
             }
             else
-                log.WriteLogEntry("Failed inserting domain login user!");
+                log.WriteLogEntry("FAILED not a domain user!");
             log.WriteLogEntry("End InsertDomainLoginUser.");
             return result;
         }
@@ -118,6 +74,44 @@ namespace VeraAPI.HelperClasses
             else
                 log.WriteLogEntry("Failed converting session token!");
             log.WriteLogEntry("End ConvertSessionToken.");
+            return result;
+        }
+
+        public bool LoginDomainUser()
+        {
+            log.WriteLogEntry("Starting LoginDomainUser...");
+            bool result = false;
+            if (CurrentUser.GetType() == typeof(DomainUser))
+            {
+                DomainUser user = (DomainUser)CurrentUser;
+                user.UserName = loginCredentials.UserName;
+                user.UserPwd = loginCredentials.UserPwd;
+                LDAPHandle = new LDAPHandler(user);
+                log.WriteLogEntry("Starting LDAPHandler...");
+                if (LDAPHandle.ValidateDomain(domainName))
+                {
+                    user.Domain.DomainName = domainName;
+                    if (LDAPHandle.AuthenticateDomainUser())
+                    {
+                        TokenHandle = new TokenHandler(user);
+                        log.WriteLogEntry("Starting TokenHandler...");
+                        if (TokenHandle.GenerateDomainToken())
+                        {
+                            result = true;
+                        }
+                        else
+                            log.WriteLogEntry("FAILED to generate domain session key!");
+                    }
+                    else
+                        log.WriteLogEntry("FAILED authenticate current user to domain!");
+                }
+                else
+                    log.WriteLogEntry("FAILED to validate the domain!");
+                log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3} {4}", user.FirstName, user.LastName, user.UserName, user.UserEmail, user.Token.SessionKey));
+            }
+            else
+                log.WriteLogEntry("FAILED not a domain user!");
+            log.WriteLogEntry("End LoginDomainUser.");
             return result;
         }
     }

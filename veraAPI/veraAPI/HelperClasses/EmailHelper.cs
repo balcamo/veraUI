@@ -76,10 +76,10 @@ namespace VeraAPI.HelperClasses
             if (CurrentUser.GetType() == typeof(DomainUser))
             {
                 DomainUser user = (DomainUser)CurrentUser;
-                log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3} {4}", user.UserID, user.DomainUpn, user.EmployeeID, user.Department, user.DepartmentHeadEmail));
+                log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3} {4}", user.UserID, user.DomainUpn, user.EmployeeID, user.Department, user.Department.DeptHeadEmail));
                 emailHandle = new ExchangeHandler(user);
                 emailHandle.EmailSubject = "Notify Department Head";
-                emailHandle.RecipientEmailAddress = user.DepartmentHeadEmail;
+                emailHandle.RecipientEmailAddress = user.Department.DeptHeadEmail;
                 emailHandle.EmailBody = "<html><body><p>There has been a request to travel</p><p>go <a href=\"https://bermuda.verawp.local/?route=travel\"> here to approve</a></p></body></html>";
                 try
                 {
@@ -112,7 +112,7 @@ namespace VeraAPI.HelperClasses
             DomainUser user = new DomainUser();
             UserDataHandler userDataHandle = new UserDataHandler(user, dbServer, dbName);
             userDataHandle.LoadLoginUser(email);
-            log.WriteLogEntry(string.Format("User loaded {0} {1} {2} {3} {4}", user.UserID, user.DomainUpn, user.EmployeeID, user.Department, user.DepartmentHeadEmail));
+            log.WriteLogEntry(string.Format("User loaded {0} {1} {2} {3} {4}", user.UserID, user.DomainUpn, user.EmployeeID, user.Department, user.Department.DeptHeadEmail));
             CurrentUser = user;
             log.WriteLogEntry("End LoadDomainEmailUser.");
             return result;

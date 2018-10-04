@@ -21,11 +21,10 @@ namespace VeraAPI.Models.DataHandler
         public JobTemplate Template { get; set; }
         public string userEmail { get; set; }
 
-        private Scribe log;
+        private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         public FormDataHandler(string dbServer, string dbName) : base(dbServer)
         {
-            this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             this.dbServer = dbServer;
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
@@ -34,7 +33,6 @@ namespace VeraAPI.Models.DataHandler
 
         public FormDataHandler(BaseForm webForm, string dbServer, string dbName) : base(dbServer)
         {
-            this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             this.dbServer = dbServer;
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
@@ -43,7 +41,6 @@ namespace VeraAPI.Models.DataHandler
 
         public FormDataHandler(List<BaseForm> webForms, string dbServer, string dbName) : base(dbServer)
         {
-            this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
             this.dbServer = dbServer;
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
