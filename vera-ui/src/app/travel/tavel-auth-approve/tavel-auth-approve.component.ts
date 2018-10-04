@@ -17,14 +17,13 @@ export class TavelAuthApproveComponent implements OnInit {
   userService: UserService
   user: User;
   displayForm = "none";
-  displayRecap = "none";
   consts = new Constants();
   registrationComp = true;
   airfareComp = true;
   form = new AuthForm();
   oldForm: AuthForm;
   submitted = false;
-
+  transType: string;
   constructor(http: Http, userService: UserService) {
     this.http = http;
     this.userService = userService;
@@ -42,7 +41,20 @@ export class TavelAuthApproveComponent implements OnInit {
    */
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
-    this.displayRecap = "none";
+    if ((this.user.EntryGroup[2] == 99 && this.form.Bool5 != undefined) ||
+        (this.user.EntryGroup[2] == 3 && this.form.Bool6 != undefined)) {
+      this.submitted = true;
+    } else {
+      this.submitted = false;
+    }
+
+    if (this.form.Bool2 == true) {
+      this.transType = "District Vehicle";
+    } else if (this.form.Decimal3 != 0) {
+      this.transType = "Plane";
+    } else {
+      this.transType = "Personal Vehicle"
+    }
     //console.log(this.form);
     if (this.displayForm == "none") {
       this.displayForm = "block";
@@ -67,10 +79,10 @@ export class TavelAuthApproveComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-    if (!this.form.Bool5) {
+    if (this.user.EntryGroup[2] == 99) {
       this.form.Bool5 = true;
       this.form.Decimal26 = this.user.UserID;
-    } else if (this.form.Bool5 && !this.form.Bool6) {
+    } else if (this.user.EntryGroup[2] == 2) {
       this.form.Bool6 = true;
       this.form.Decimal27 = this.user.UserID;
     }
@@ -87,6 +99,7 @@ export class TavelAuthApproveComponent implements OnInit {
  * */
   submitDenyStatus() {
     this.submitted = true;
+    console.log(this.submitted);
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({
       'Content-Type': 'application/json'
@@ -95,10 +108,10 @@ export class TavelAuthApproveComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-    if (!this.form.Bool5 && !this.form.Bool6) {
+    if (this.user.EntryGroup[2] == 99) {
       this.form.Bool5 = false;
       this.form.Decimal26 = this.user.UserID;
-    } else if (this.form.Bool5 && !this.form.Bool6) {
+    } else if (this.user.EntryGroup[2] == 2) {
       this.form.Bool6 = false;
       this.form.Decimal27 = this.user.UserID;
     }

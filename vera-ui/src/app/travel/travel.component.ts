@@ -21,14 +21,18 @@ export class TravelComponent implements OnInit {
   authForms = [];
   @Input() user;
   userService: UserService;
+  approver = false;
 
   constructor(private router: Router, http: Http, userService: UserService) {
     this.http = http;
     this.userService = userService;
+    this.user = this.userService.getUser();
   }
   
   ngOnInit() {
-
+    if (this.user.EntryGroup[3] != 0) {
+      this.approver = true;
+    }
   }
 
   /**
