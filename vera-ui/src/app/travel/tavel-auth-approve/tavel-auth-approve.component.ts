@@ -41,7 +41,8 @@ export class TavelAuthApproveComponent implements OnInit {
    */
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
-    if ((this.user.EntryGroup[3] == 1 && this.form.Bool5 != undefined) || (this.user.EntryGroup[3] == 2 && this.form.Bool6 != undefined)) {
+    if ((this.user.EntryGroup[2] == 99 && this.form.Bool5 != undefined) ||
+        (this.user.EntryGroup[2] == 3 && this.form.Bool6 != undefined)) {
       this.submitted = true;
     } else {
       this.submitted = false;
@@ -78,10 +79,10 @@ export class TavelAuthApproveComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-    if (this.user.EntryGroup[3] == 1) {
+    if (this.user.EntryGroup[2] == 99) {
       this.form.Bool5 = true;
       this.form.Decimal26 = this.user.UserID;
-    } else if (this.user.EntryGroup[3] == 2) {
+    } else if (this.user.EntryGroup[2] == 2) {
       this.form.Bool6 = true;
       this.form.Decimal27 = this.user.UserID;
     }
@@ -107,10 +108,10 @@ export class TavelAuthApproveComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-    if (!this.form.Bool5 && !this.form.Bool6) {
+    if (this.user.EntryGroup[2] == 99) {
       this.form.Bool5 = false;
       this.form.Decimal26 = this.user.UserID;
-    } else if (this.form.Bool5 && !this.form.Bool6) {
+    } else if (this.user.EntryGroup[2] == 2) {
       this.form.Bool6 = false;
       this.form.Decimal27 = this.user.UserID;
     }
