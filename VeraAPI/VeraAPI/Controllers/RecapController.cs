@@ -29,7 +29,7 @@ namespace VeraAPI.Controllers
         }
 
         // POST: api/Recap
-        public string Post([FromBody]TravelAuthForm value)
+        public string Post(int userID, [FromBody]TravelAuthForm value)
         {
             FormHelper recapHelp = new FormHelper(value);
             string result = string.Empty;
