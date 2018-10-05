@@ -86,7 +86,7 @@ export class TravelAuthComponent implements OnInit {
       });
       this.form.String7 = this.user.UserID;
       this.form.String3 = (this.form.String3 == null ? this.user.UserEmail : this.form.String3);
-      if (this.user.EntryGroup[2] == 1) {
+      if (this.user.EntryGroup[3] == 1) {
         this.form.Bool5 = true;
         this.form.Decimal26 = this.user.UserID;
       }

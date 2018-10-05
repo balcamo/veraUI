@@ -73,7 +73,7 @@ export class AppComponent {
     console.log("data " + data.text());
     this.value = JSON.parse(data.text()) as Auth;
     console.log("in the wait " + this.value);
-    this.user.EntryGroup = this.value.UserType;
+    this.user.EntryGroup = this.value.AccessKey;
     this.user.token = this.value.SessionKey;
     this.user.UserID = this.value.UserID;
     if (data == undefined) {

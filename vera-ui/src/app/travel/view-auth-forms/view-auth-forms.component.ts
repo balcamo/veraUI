@@ -22,6 +22,8 @@ export class ViewAuthFormsComponent implements OnInit {
   airfareComp = true;
   form = new AuthForm();
   oldForm: AuthForm;
+  dhApprove: string;
+  gmApprove: string;
 
   constructor(http: Http, userService: UserService) {
     this.http = http;
@@ -41,6 +43,22 @@ export class ViewAuthFormsComponent implements OnInit {
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
     this.displayRecap = "none";
+    if (this.form.Bool5.toString() == '') {
+      this.dhApprove = "Pending";
+      this.gmApprove = "Pending";
+    } else if (this.form.Bool5.toString() == "true") {
+      this.dhApprove = "Approved";
+      if (this.form.Bool6.toString() == '') {
+        this.gmApprove = "Pending";
+      } else if (this.form.Bool6.toString() == 'true') {
+        this.gmApprove = "Approved";
+      } else {
+        this.gmApprove = "Denied";
+      }
+    } else if (this.form.Bool5.toString() == "false") {
+      this.dhApprove = "Denied";
+      this.gmApprove = "Form will not be sent to the GM";
+    }
     //console.log(this.form);
     if (this.displayForm == "none") {
       this.displayForm = "block";

@@ -41,8 +41,9 @@ export class TavelAuthApproveComponent implements OnInit {
    */
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
-    if ((this.user.EntryGroup[2] == 99 && this.form.Bool5 != undefined) ||
-        (this.user.EntryGroup[2] == 3 && this.form.Bool6 != undefined)) {
+
+    if ((this.user.EntryGroup[3] == 99 && this.form.Bool5.toString() != '') ||
+      (this.user.EntryGroup[3] == 3 && this.form.Bool6.toString() != '')) {
       this.submitted = true;
     } else {
       this.submitted = false;
@@ -79,10 +80,10 @@ export class TavelAuthApproveComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-    if (this.user.EntryGroup[2] == 99) {
+    if (this.user.EntryGroup[3] == 99) {
       this.form.Bool5 = true;
       this.form.Decimal26 = this.user.UserID;
-    } else if (this.user.EntryGroup[2] == 2) {
+    } else if (this.user.EntryGroup[3] == 2) {
       this.form.Bool6 = true;
       this.form.Decimal27 = this.user.UserID;
     }
@@ -93,6 +94,7 @@ export class TavelAuthApproveComponent implements OnInit {
     this.http.post(this.consts.url + 'Recap', body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert(data.text()));
+    this.form.String8 = 'green'
   }
   /**
  * submit the recap to the server to get approval
@@ -108,10 +110,10 @@ export class TavelAuthApproveComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-    if (this.user.EntryGroup[2] == 99) {
+    if (this.user.EntryGroup[3] == 99) {
       this.form.Bool5 = false;
       this.form.Decimal26 = this.user.UserID;
-    } else if (this.user.EntryGroup[2] == 2) {
+    } else if (this.user.EntryGroup[3] == 2) {
       this.form.Bool6 = false;
       this.form.Decimal27 = this.user.UserID;
     }
@@ -121,5 +123,6 @@ export class TavelAuthApproveComponent implements OnInit {
     this.http.post(this.consts.url + 'Recap', body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert(data.text()));
+    this.form.String8 = 'red'
   }
 }
