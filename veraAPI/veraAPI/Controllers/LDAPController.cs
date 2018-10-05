@@ -16,17 +16,7 @@ namespace VeraAPI.Controllers
 {
     public class LDAPController : ApiController
     {
-        private Scribe log;
-
-        public LDAPController()
-        {
-            this.log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LDAPController_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-        }
-
-        public LDAPController(Scribe log)
-        {
-            this.log = log;
-        }
+        private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LDAPController_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         // GET: api/User
         public IEnumerable<string> Get()
@@ -94,7 +84,7 @@ namespace VeraAPI.Controllers
             }
             else
                 log.WriteLogEntry("Failed login credentials are the wrong type!");
-            log.WriteLogEntry(string.Format("Return result {0} {1} {2}", result.UserID, result.SessionKey, string.Join(",", user.UserAccessKey)));
+            log.WriteLogEntry(string.Format("Return result {0} {1} {2}", result.UserID, result.SessionKey, string.Join(",", user.Token.AccessKey)));
             log.WriteLogEntry("End Post login user.");
 
             // Return full session token

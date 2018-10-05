@@ -14,7 +14,7 @@ namespace VeraAPI.HelperClasses
     {
         public User CurrentUser { get; set; }
 
-        private readonly string domainName = "LocalDomain";
+        private readonly string domainName = WebConfigurationManager.AppSettings.Get("LocalDomain");
         private readonly string dbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
         private readonly string dbName = WebConfigurationManager.AppSettings.Get("LoginDB");
         private LoginForm loginCredentials;
@@ -86,6 +86,7 @@ namespace VeraAPI.HelperClasses
                 DomainUser user = (DomainUser)CurrentUser;
                 user.UserName = loginCredentials.UserName;
                 user.UserPwd = loginCredentials.UserPwd;
+                log.WriteLogEntry("Current User " + user.UserName);
                 LDAPHandle = new LDAPHandler(user);
                 log.WriteLogEntry("Starting LDAPHandler...");
                 if (LDAPHandle.ValidateDomain(domainName))

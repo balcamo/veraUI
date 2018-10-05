@@ -17,7 +17,7 @@ namespace VeraAPI.Models.Security
         public bool Authenicated { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int[] UserAccessKey { get; set; } = new int[] { 0, 0, 0, 0, 0 };
+        //public int[] UserAccessKey { get; set; }
 
         public Token Token { get; set; } = new Token();
         public Company Company { get; set; } = new Company();

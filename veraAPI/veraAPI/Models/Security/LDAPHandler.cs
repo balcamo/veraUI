@@ -64,10 +64,18 @@ namespace VeraAPI.Models.Security
         {
             log.WriteLogEntry("Starting ValidateDomain...");
             bool result = false;
-            if (new PrincipalContext(ContextType.Domain, domainName) != null)
-                result = true;
-            else
-                log.WriteLogEntry("Failed to validate domain!");
+            log.WriteLogEntry("Checking domain " + domainName);
+            try
+            {
+                if (new PrincipalContext(ContextType.Domain, domainName) != null)
+                    result = true;
+                else
+                    log.WriteLogEntry("Failed to validate domain!");
+            }
+            catch (Exception ex)
+            {
+                log.WriteLogEntry(ex.Message);
+            }
             log.WriteLogEntry("End ValidateDomain.");
             return result;
         }
@@ -96,47 +104,6 @@ namespace VeraAPI.Models.Security
                 }
             }
             log.WriteLogEntry("End ValidateDomainUpn.");
-            return result;
-        }
-
-        public int LoadAllDomainUsers(string domainName)
-        {
-            int result = 0;
-            List<DomainUser> Users = new List<DomainUser>();
-            using (UserContext = new PrincipalContext(ContextType.Domain, domainName))
-            {
-                using (PrincipalSearcher UserSearch = new PrincipalSearcher(new UserPrincipal(UserContext)))
-                {
-                    using (PrincipalSearchResult<Principal> SearchResult = UserSearch.FindAll())
-                    {
-                        foreach (UserPrincipal ADUser in SearchResult)
-                        {
-                            DomainUser user = new DomainUser();
-                            user.FirstName = ADUser.GivenName;
-                            user.LastName = ADUser.Surname;
-                            user.DomainUserName = ADUser.SamAccountName;
-                            user.DomainUpn = ADUser.UserPrincipalName;
-                            user.UserEmail = ADUser.EmailAddress;
-                            user.EmployeeID = ADUser.EmployeeId;
-                            DirectoryEntry entry = ADUser.GetUnderlyingObject() as DirectoryEntry;
-                            if (entry.Properties.Contains("department"))
-                                user.Department.DeptName = entry.Properties["department"].Value.ToString();
-                            if (entry.Properties.Contains("manager"))
-                            {
-                                string supName = entry.Properties["manager"].Value.ToString();
-                                string[] fields = supName.Split(',');
-                                foreach (string field in fields)
-                                {
-                                    if (field.Substring(0, 3).ToUpper() == "CN=")
-                                        user.SupervisorName = field.Substring(3);
-                                }
-                            }
-                            Users.Add(user);
-                        }
-                    }
-                }
-            }
-            result = Users.Count;
             return result;
         }
 

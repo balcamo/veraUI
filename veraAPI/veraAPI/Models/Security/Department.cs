@@ -10,7 +10,7 @@ namespace VeraAPI.Models.Security
         public int DeptNumber { get; set; }
         public string DeptName { get; set; }
         public string DeptEmail { get; set; }
-        public string DeptHeadEmpID { get; set; }
+        public int DeptHeadUserID { get; set; }
         public string DeptHeadName { get; set; }
         public string DeptHeadEmail { get; set; }
     }
