@@ -32,11 +32,11 @@ namespace VeraAPI.Controllers
         }
 
         // GET: api/API/5
-        public BaseForm[] Get(string tokenHeader)
+        public BaseForm[] Get(string userID)
         {
             // call function to get active forms
             log.WriteLogEntry("Starting Get active travel forms...");
-            log.WriteLogEntry("Token Header received " + tokenHeader);
+            log.WriteLogEntry("Token Header received " + userID);
             BaseForm[] result = null;
             try
             {
@@ -44,7 +44,7 @@ namespace VeraAPI.Controllers
                 log.WriteLogEntry("Starting FormHelper...");
 
                 // Load active forms from system form database by user id = token header
-                formHelp.LoadActiveTravelAuthForms(tokenHeader);
+                formHelp.LoadActiveTravelAuthForms(userID);
                 result = formHelp.WebForms.ToArray();
             }
             catch (Exception ex)
@@ -63,7 +63,6 @@ namespace VeraAPI.Controllers
         {
             log.WriteLogEntry("Begin Post TravelAuthForm...");
             string result = string.Empty;
-            //int jobID = 0;
 
             // Get template ID for insert travel authorization from static class TemplateIndex
             travelAuthForm.TemplateID = TemplateIndex.InsertTravelAuth;

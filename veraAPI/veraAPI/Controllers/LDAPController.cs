@@ -44,13 +44,13 @@ namespace VeraAPI.Controllers
             if (loginCredentials.GetType() == typeof(LoginForm))
             {
                 // Pass login credentials from POST
-                LoginHelper loginHelp = new LoginHelper(loginCredentials, user);
+                LoginHelper loginHelp = new LoginHelper(user);
                 try
                 {
                     // Validate login credentials against Active Directory
                     // Load email, domain upn, first and last name, user name, employee id, and department
                     log.WriteLogEntry("Starting LoginHelper...");
-                    if (loginHelp.LoginDomainUser())
+                    if (loginHelp.LoginDomainUser(loginCredentials.UserName, loginCredentials.UserPwd))
                     {
                         UserHelper userHelp = new UserHelper(user);
 

@@ -21,7 +21,7 @@ namespace VeraAPI.HelperClasses
         private string dbServer;
         private string dbName;
         private FormDataHandler formDataHandle;
-        private Validator formValidator;
+        //private Validator formValidator;
         private Scribe log;
 
         public FormHelper()

@@ -10,6 +10,6 @@ namespace VeraAPI.Models.Security
         public int PositionNumber { get; set; }
         public string PostiionTitle { get; set; }
         public string PositionDescription { get; set; }
-        public string PositionEmail { get; set; }
+        //public string PositionEmail { get; set; }
     }
 }

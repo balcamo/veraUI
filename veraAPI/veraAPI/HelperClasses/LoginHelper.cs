@@ -17,26 +17,18 @@ namespace VeraAPI.HelperClasses
         private readonly string domainName = WebConfigurationManager.AppSettings.Get("LocalDomain");
         private readonly string dbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
         private readonly string dbName = WebConfigurationManager.AppSettings.Get("LoginDB");
-        private LoginForm loginCredentials;
+        private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
         private LDAPHandler LDAPHandle;
         private TokenHandler TokenHandle;
         private UserDataHandler UserData;
-        private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         public LoginHelper()
         {
             CurrentUser = new User();
         }
 
-        public LoginHelper(LoginForm loginCredentials)
+        public LoginHelper(User user)
         {
-            this.loginCredentials = loginCredentials;
-            CurrentUser = new User();
-        }
-
-        public LoginHelper(LoginForm loginCredentials, User user)
-        {
-            this.loginCredentials = loginCredentials;
             this.CurrentUser = user;
         }
 
@@ -77,16 +69,16 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public bool LoginDomainUser()
+        public bool LoginDomainUser(string userName, string userPwd)
         {
             log.WriteLogEntry("Starting LoginDomainUser...");
             bool result = false;
             if (CurrentUser.GetType() == typeof(DomainUser))
             {
                 DomainUser user = (DomainUser)CurrentUser;
-                user.UserName = loginCredentials.UserName;
-                user.UserPwd = loginCredentials.UserPwd;
-                log.WriteLogEntry("Current User " + user.UserName);
+                user.UserName = userName;
+                user.UserPwd = userPwd;
+                log.WriteLogEntry("Login username " + userName);
                 LDAPHandle = new LDAPHandler(user);
                 log.WriteLogEntry("Starting LDAPHandler...");
                 if (LDAPHandle.ValidateDomain(domainName))

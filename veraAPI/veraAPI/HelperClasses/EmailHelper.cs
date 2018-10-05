@@ -14,24 +14,18 @@ namespace VeraAPI.HelperClasses
     {
         public User CurrentUser { get; private set; }
 
-        private string dbServer;
-        private string dbName;
+        private string dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
+        private string dbName = WebConfigurationManager.AppSettings.Get("DBName");
         private ExchangeHandler emailHandle;
-        private Scribe log;
+        private Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "EmailHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         public EmailHelper()
         {
-            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "EmailHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            dbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
-            dbName = WebConfigurationManager.AppSettings.Get("LoginDB");
             CurrentUser = new User();
         }
 
         public EmailHelper(User user)
         {
-            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "EmailHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
-            dbName = WebConfigurationManager.AppSettings.Get("DBName");
             CurrentUser = user;
         }
 

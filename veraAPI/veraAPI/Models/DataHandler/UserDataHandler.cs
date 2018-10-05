@@ -154,12 +154,11 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
-        public bool LoadUserData()
+        public bool LoadUserData(string email)
         {
             log.WriteLogEntry("Begin LoadUserData...");
             bool result = false;
             User user = CurrentUser;
-            string email = user.UserEmail;
             string cmdString = string.Format(@"select * from {0}.dbo.user_header where user_email = @email", dbName);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
@@ -235,6 +234,7 @@ namespace VeraAPI.Models.DataHandler
                                     user.Department.DeptName = rdr["dept_name"].ToString();
                                     user.Department.DeptHeadUserID = (int)rdr["dept_head_user_id"];
                                     user.Department.DeptEmail = rdr["dept_email"].ToString();
+                                    user.Department.DeptHeadEmail = rdr["dept_head_email"].ToString();
                                     log.WriteLogEntry(string.Format("Department loaded {0} {1} {2} {3}", user.Department.DeptNumber, user.Department.DeptName, user.Department.DeptHeadUserID, user.Department.DeptEmail));
                                     result = true;
                                 }
@@ -380,8 +380,7 @@ namespace VeraAPI.Models.DataHandler
                                     user.Position.PositionNumber = (int)rdr["position_number"];
                                     user.Position.PostiionTitle = rdr["position_title"].ToString();
                                     user.Position.PositionDescription = rdr["position_description"].ToString();
-                                    user.Position.PositionEmail = rdr["position_email"].ToString();
-                                    log.WriteLogEntry(string.Format("Position loaded {0} {1} {2} {3}", user.Position.PositionNumber, user.Position.PostiionTitle, user.Position.PositionDescription, user.Position.PositionEmail));
+                                    log.WriteLogEntry(string.Format("Position loaded {0} {1} {2}", user.Position.PositionNumber, user.Position.PostiionTitle, user.Position.PositionDescription));
                                     result = true;
                                 }
                             }

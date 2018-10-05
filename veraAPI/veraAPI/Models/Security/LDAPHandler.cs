@@ -40,13 +40,10 @@ namespace VeraAPI.Models.Security
                         {
                             log.WriteLogEntry("Success authenticating current user to the domain.");
                             user.EmployeeID = UserAccount.EmployeeId;
-                            user.FirstName = UserAccount.GivenName;
-                            user.LastName = UserAccount.Surname;
-                            user.UserEmail = UserAccount.EmailAddress;
                             user.DomainUpn = UserAccount.UserPrincipalName;
                             user.DomainUserName = UserAccount.SamAccountName;
                             user.Authenicated = true;
-                            log.WriteLogEntry(string.Format("Authenticated user {0} {1} {2} {3} {4} {5}", user.FirstName, user.LastName, user.EmployeeID, user.UserName, user.DomainUpn, user.UserEmail));
+                            log.WriteLogEntry(string.Format("Authenticated user {0} {1} {2} {3}", user.DomainUserName, user.DomainUpn, user.EmployeeID, user.Authenicated));
                             result = true;
                         }
                         else
