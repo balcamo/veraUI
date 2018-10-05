@@ -41,7 +41,7 @@ namespace VeraAPI.Controllers
                 {
                     //TravelAuthForm authForm = new TravelAuthForm(value);
                     result = "Submitted Successfully";
-                    if(value.Decimal25 != null) { emailType = "recap"; }
+                    if(value.TotalReimburse != null) { emailType = "recap"; }
                     Task t = Task.Run(() =>
                     {
                         // change number to constant once file is made

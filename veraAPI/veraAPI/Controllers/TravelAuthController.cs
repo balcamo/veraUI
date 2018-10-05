@@ -81,7 +81,7 @@ namespace VeraAPI.Controllers
                     {
                         log.WriteLogEntry("Success submitting travel form.");
                         EmailHelper emailer = new EmailHelper();
-                        emailer.LoadDomainEmailUser(travelAuthForm.String3);
+                        emailer.LoadDomainEmailUser(travelAuthForm.Email);
                         emailer.NotifyDepartmentHead();
                     }
                     else
