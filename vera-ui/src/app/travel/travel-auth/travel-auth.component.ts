@@ -90,9 +90,9 @@ export class TravelAuthComponent implements OnInit {
         this.form.DHApproval = true;
         this.form.DHID = this.user.UserID;
       }
-      var body = JSON.stringify( this.form);
+      var body = JSON.stringify({ userID: this.user.UserID, value: this.form });
       console.log(this.consts.url +'TravelAuth');
-      this.http.post(this.consts.url + 'TravelAuth',this.user.UserID+body, options)
+      this.http.post(this.consts.url + 'TravelAuth', body, options)
           .subscribe((data) => alert(data.text()));
       this.setFormDefaults();
     } else {
