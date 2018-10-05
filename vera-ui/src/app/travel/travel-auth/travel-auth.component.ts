@@ -59,13 +59,13 @@ export class TravelAuthComponent implements OnInit {
   // calculate the estimated total 
   checkTot() {
     this.total = 0;
-    var mileage = this.form.Decimal7 * this.consts.mileageRate;
-    var foodTravel = this.form.Decimal9 * this.consts.firstLastDayFood;
-    var foodFull = this.form.Decimal9 * this.form.Decimal10;
-    this.total = this.form.Decimal2 + this.form.Decimal3 + this.form.Decimal4 +
-      this.form.Decimal5 + this.form.Decimal6 + mileage + this.form.Decimal8 +
-      foodTravel + foodFull + this.form.Decimal11;
-    this.form.Decimal12 = this.total;
+    var mileage = this.form.Mileage * this.consts.mileageRate;
+    var foodTravel = this.form.PerDiem * this.consts.firstLastDayFood;
+    var foodFull = this.form.PerDiem * this.form.FullDays;
+    this.total = this.form.RegistrationCost + this.form.Airfare + this.form.RentalCar +
+      this.form.Fuel + this.form.ParkingTolls + mileage + this.form.Lodging +
+      foodTravel + foodFull + this.form.Misc;
+    this.form.TotalEstimate = this.total;
   }
 
   // function to contact API and submit the form
@@ -84,15 +84,15 @@ export class TravelAuthComponent implements OnInit {
         search: params,
         headers: pageHeaders
       });
-      this.form.String7 = this.user.UserID;
-      this.form.String3 = (this.form.String3 == null ? this.user.UserEmail : this.form.String3);
+      this.form.SubmitterSig = this.user.UserID;
+      this.form.Email = (this.form.Email == null ? this.user.UserEmail : this.form.Email);
       if (this.user.EntryGroup[3] == 1) {
-        this.form.Bool5 = true;
-        this.form.Decimal26 = this.user.UserID;
+        this.form.DHApproval = true;
+        this.form.DHID = this.user.UserID;
       }
-      var body = JSON.stringify(this.form);
+      var body = JSON.stringify( this.form);
       console.log(this.consts.url +'TravelAuth');
-      this.http.post(this.consts.url + 'TravelAuth', body, options)
+      this.http.post(this.consts.url + 'TravelAuth',this.user.UserID+body, options)
           .subscribe((data) => alert(data.text()));
       this.setFormDefaults();
     } else {
@@ -109,39 +109,39 @@ export class TravelAuthComponent implements OnInit {
   checkRequired() {
     var valid = true;
 
-    if (this.form.String1 == null || this.form.Int1 == null || this.form.String4 == null
-      || this.form.String5 == null || this.form.Date1 == null || this.form.Decimal10 == null
-      || this.form.Decimal7 == null || this.form.Decimal8 == null || this.form.Decimal9 == null
-      || this.form.Decimal4 == null || this.form.Decimal5 == null || this.form.Decimal11 == null
-      || this.form.Date2 == null || this.form.Bool2 == null || this.form.Decimal3 == null
-      || this.form.Decimal2 == null || this.form.Bool3 == null || this.form.Bool2 == null
-      || this.form.Bool4 == null || this.form.String2 == null || this.form.Decimal6 == null
+    if (this.form.FirstName == null || this.form.Phone == null || this.form.EventTitle == null
+      || this.form.Location == null || this.form.TravelBegin == null || this.form.FullDays == null
+      || this.form.Mileage == null || this.form.Lodging == null || this.form.PerDiem == null
+      || this.form.RentalCar == null || this.form.Fuel == null || this.form.Misc == null
+      || this.form.TravelEnd == null || this.form.DistVehicle == null || this.form.Airfare == null
+      || this.form.RegistrationCost == null || this.form.Advance == null || this.form.DistVehicle == null
+      || this.form.Policy == null || this.form.LastName == null || this.form.ParkingTolls == null
       ) {
       valid = false;
     }
 
-    this.firstNameBorder = (this.form.String1 == null ? "red" : "black");
-    this.lastNameBorder = (this.form.String2 == null ? "red" : "black");
-    this.phoneBorder = (this.form.Int1 == null ? "red" : "black");
-    this.eventTitleBorder = (this.form.String4 == null ? "red" : "black");
-    this.eventLocBorder = (this.form.String5 == null ? "red" : "black");
-    this.travelStartBorder = (this.form.Date1 == null ? "red" : "black");
-    this.travelEndBorder = (this.form.Date2 == null ? "red" : "black");
-    this.distVehColor = (this.form.Bool2 == null ? "red" : "black");
-    this.registrationBorder = (this.form.Decimal2 == null ? "red" : "black");
-    this.airfareBorder = (this.form.Decimal3 == null ? "red" : "black");
-    this.rentalBorder = (this.form.Decimal4 == null ? "red" : "black");
-    this.fuelBorder = (this.form.Decimal5 == null ? "red" : "black");
-    this.parkingBorder = (this.form.Decimal6 == null ? "red" : "black");
-    this.mileageBorder = (this.form.Decimal7 == null ? "red" : "black");
-    this.lodgingBorder = (this.form.Decimal8 == null ? "red" : "black");
-    this.perDiemBorder = (this.form.Decimal9 == null ? "red" : "black");
-    this.daysBorder = (this.form.Decimal10 == null ? "red" : "black");
-    this.miscBorder = (this.form.Decimal11 == null ? "red" : "black");
-    this.advanceColor = (this.form.Bool3 == null ? "red" : "black");
-    this.policyColor = (this.form.Bool4 == null ? "red" : "black");
+    this.firstNameBorder = (this.form.FirstName == null ? "red" : "black");
+    this.lastNameBorder = (this.form.LastName == null ? "red" : "black");
+    this.phoneBorder = (this.form.Phone == null ? "red" : "black");
+    this.eventTitleBorder = (this.form.EventTitle == null ? "red" : "black");
+    this.eventLocBorder = (this.form.Location == null ? "red" : "black");
+    this.travelStartBorder = (this.form.TravelBegin == null ? "red" : "black");
+    this.travelEndBorder = (this.form.TravelEnd == null ? "red" : "black");
+    this.distVehColor = (this.form.DistVehicle == null ? "red" : "black");
+    this.registrationBorder = (this.form.RegistrationCost == null ? "red" : "black");
+    this.airfareBorder = (this.form.Airfare == null ? "red" : "black");
+    this.rentalBorder = (this.form.RentalCar == null ? "red" : "black");
+    this.fuelBorder = (this.form.Fuel == null ? "red" : "black");
+    this.parkingBorder = (this.form.ParkingTolls == null ? "red" : "black");
+    this.mileageBorder = (this.form.Mileage == null ? "red" : "black");
+    this.lodgingBorder = (this.form.Lodging == null ? "red" : "black");
+    this.perDiemBorder = (this.form.PerDiem == null ? "red" : "black");
+    this.daysBorder = (this.form.FullDays == null ? "red" : "black");
+    this.miscBorder = (this.form.Misc == null ? "red" : "black");
+    this.advanceColor = (this.form.Advance == null ? "red" : "black");
+    this.policyColor = (this.form.Policy == null ? "red" : "black");
 
-    if (this.form.Bool4 == false) {
+    if (this.form.Policy == false) {
       valid = false;
       alert("Please read the district policy on travel.");
     }
@@ -152,34 +152,34 @@ export class TravelAuthComponent implements OnInit {
    * This function will reset the forms values
    **/
   setFormDefaults() {
-    this.form.String1 = null;
-    this.form.String2 = null;
-    this.form.Int1 = null;
-    this.form.String3 = null;
-    this.form.String4 = null;
-    this.form.String5 = null;
-    this.form.Date1 = null;
-    this.form.Date2 = null;
-    this.form.Bool2 = null;
-    this.form.Decimal2 = 0;
-    this.form.Decimal3 = 0;
-    this.form.Decimal4 = 0;
-    this.form.Decimal5 = 0;
-    this.form.Decimal6 = 0;
-    this.form.Decimal7 = 0;
-    this.form.Decimal8 = 0;
-    this.form.Decimal9 = 0;
-    this.form.Decimal10 = 0;
-    this.form.Decimal11 = 0;
-    this.form.String6 = null;
-    this.form.Decimal12 = null;
-    this.form.Bool3 = null;
-    this.form.Decimal13 = 0;
-    this.form.Bool4 = null;
-    this.form.Bool1 = false;
-    this.form.String7 = null;
-    this.form.Bool5 = null;
-    this.form.Bool6 = null;
+    this.form.FirstName = null;
+    this.form.LastName = null;
+    this.form.Phone = null;
+    this.form.Email = null;
+    this.form.EventTitle = null;
+    this.form.Location = null;
+    this.form.TravelBegin = null;
+    this.form.TravelEnd = null;
+    this.form.DistVehicle = null;
+    this.form.RegistrationCost = 0;
+    this.form.Airfare = 0;
+    this.form.RentalCar = 0;
+    this.form.Fuel = 0;
+    this.form.ParkingTolls = 0;
+    this.form.Mileage = 0;
+    this.form.Lodging = 0;
+    this.form.PerDiem = 0;
+    this.form.FullDays = 0;
+    this.form.Misc = 0;
+    this.form.MiscExplain = null;
+    this.form.TotalEstimate = null;
+    this.form.Advance = null;
+    this.form.AdvanceAmount = 0;
+    this.form.Policy = null;
+    this.form.Preparer = false;
+    this.form.SubmitterSig = null;
+    this.form.DHApproval = null;
+    this.form.GMApproval = null;
     this.total = 0; 
   }
 }
