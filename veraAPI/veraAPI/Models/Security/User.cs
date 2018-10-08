@@ -21,5 +21,12 @@ namespace VeraAPI.Models.Security
 
         public Token Token { get; set; } = new Token();
         public Company Company { get; set; } = new Company();
+
+        public User() { }
+
+        public User(int userID)
+        {
+            this.UserID = userID;
+        }
     }
 }

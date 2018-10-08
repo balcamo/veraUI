@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using VeraAPI.Models.Tools;
 
 namespace VeraAPI.Models.Forms
 {
     public class TravelAuthForm : BaseForm
     {
-        public string Preparer { get; set; } = string.Empty;       // Preparer
-        public string FirstName { get; set; } = string.Empty;     // FirstName
-        public string LastName { get; set; } = string.Empty;     // LastName
-        public string Phone { get; set; } = string.Empty;        // Phone
+        public string Preparer { get; set; } = string.Empty;       // String
+        public string FirstName { get; set; } = string.Empty;     // String
+        public string LastName { get; set; } = string.Empty;     // String
+        public string Phone { get; set; } = string.Empty;        // Int
         public string Email { get; set; } = string.Empty;     // Email
         public string EventTitle { get; set; } = string.Empty;     // EventTitle
         public string Location { get; set; } = string.Empty;     // Location

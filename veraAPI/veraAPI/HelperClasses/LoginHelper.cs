@@ -107,5 +107,26 @@ namespace VeraAPI.HelperClasses
             log.WriteLogEntry("End LoginDomainUser.");
             return result;
         }
+
+        public bool LoadDomainLoginUser()
+        {
+            log.WriteLogEntry("Begin LoadDomainLoginUser...");
+            bool result = false;
+            if (CurrentUser.GetType() == typeof(DomainUser))
+            {
+                DomainUser user = (DomainUser)CurrentUser;
+                UserData = new UserDataHandler(user, dbServer, dbName);
+                if (UserData.InsertLoginUser())
+                {
+                    result = true;
+                }
+                else
+                    log.WriteLogEntry("Failed loading domain login user!");
+            }
+            else
+                log.WriteLogEntry("FAILED not a domain user!");
+            log.WriteLogEntry("End LoadDomainLoginUser.");
+            return result;
+        }
     }
 }

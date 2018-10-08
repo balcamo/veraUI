@@ -1,11 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+    "\\vera-ui",
+    "\\vera-ui\\src",
+    "\\vera-ui\\src\\app",
+    "\\vera-ui\\src\\app\\classes",
+    "\\vera-ui\\src\\app\\travel",
+    "\\vera-ui\\src\\app\\travel\\view-auth-forms",
     "\\veraAPI",
-    "\\veraAPI\\veraAPI",
     "\\veraAPI\\veraAPI\\HelperClasses",
     "\\veraAPI\\veraAPI\\Models"
   ],
-  "SelectedNode": "\\veraAPI\\veraAPI\\Models\\UIDataHandler.cs",
+  "SelectedNode": "\\vera-ui\\src\\app\\classes\\travel-auth-form.ts",
   "PreviewInSolutionExplorer": false
 }

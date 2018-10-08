@@ -18,25 +18,19 @@ namespace VeraAPI.HelperClasses
         public List<BaseForm> WebForms { get; private set; }
         public JobTemplate Template { get; private set; }
 
-        private string dbServer;
-        private string dbName;
+        private readonly string dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
+        private readonly string dbName = WebConfigurationManager.AppSettings.Get("DBName");
+        private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
         private FormDataHandler formDataHandle;
         //private Validator formValidator;
-        private Scribe log;
 
         public FormHelper()
         {
-            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
-            dbName = WebConfigurationManager.AppSettings.Get("DBName");
             this.WebForm = new BaseForm();
         }
 
         public FormHelper(BaseForm webForm)
         {
-            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
-            dbName = WebConfigurationManager.AppSettings.Get("DBName");
             this.WebForm = webForm;
         }
 

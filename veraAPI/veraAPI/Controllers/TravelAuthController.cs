@@ -59,10 +59,12 @@ namespace VeraAPI.Controllers
         }
 
         // POST: api/API
-        public string Post(int userID,[FromBody]TravelAuthForm travelAuthForm)
+        public string Post(int userID, [FromBody]TravelAuthForm travelAuthForm)
         {
             log.WriteLogEntry("Begin Post TravelAuthForm...");
             string result = string.Empty;
+            User user = new User(userID);
+            UserHelper userHelp = new UserHelper(user);
 
             // Get template ID for insert travel authorization from static class TemplateIndex
             travelAuthForm.TemplateID = TemplateIndex.InsertTravelAuth;
@@ -80,7 +82,7 @@ namespace VeraAPI.Controllers
                     {
                         log.WriteLogEntry("Success submitting travel form.");
                         EmailHelper emailer = new EmailHelper();
-                        emailer.LoadDomainEmailUser(travelAuthForm.String3);
+                        emailer.LoadDomainEmailUser(travelAuthForm.Email);
                         emailer.NotifyDepartmentHead();
                     }
                     else
@@ -90,7 +92,7 @@ namespace VeraAPI.Controllers
                 else
                     log.WriteLogEntry("Failed submitted form is the wrong type!");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result = "Failed Travel Authorization Submit " + e.Message;
             }
