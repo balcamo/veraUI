@@ -26,6 +26,7 @@ export class TavelAuthApproveComponent implements OnInit {
   transType: string;
   food: number;
   mileage: number;
+
   constructor(http: Http, userService: UserService) {
     this.http = http;
     this.userService = userService;
@@ -59,7 +60,6 @@ export class TavelAuthApproveComponent implements OnInit {
     } else {
       this.transType = "Personal Vehicle"
     }
-    //console.log(this.form);
     if (this.displayForm == "none") {
       this.displayForm = "block";
     } else if (this.form !== this.oldForm) {
@@ -71,7 +71,7 @@ export class TavelAuthApproveComponent implements OnInit {
   }
 
   /**
-   * submit the recap to the server to get approval
+   * submit the updated form to reflect approval
    * */
   submitApproveStatus() {
     this.submitted = true;
@@ -91,16 +91,13 @@ export class TavelAuthApproveComponent implements OnInit {
       this.form.GMID = this.user.UserID;
     }
     var body = JSON.stringify({ userID: this.user.UserID, value: this.form });
-    console.log(this.form);
-
     console.log(this.consts.url + 'Recap');
     this.http.post(this.consts.url + 'Recap', body, options)
-      //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert(data.text()));
     this.form.ApprovalStatus = 'green'
   }
   /**
- * submit the recap to the server to get approval
+ * submit the updated form to reflect denied
  * */
   submitDenyStatus() {
     this.submitted = true;
@@ -120,11 +117,9 @@ export class TavelAuthApproveComponent implements OnInit {
       this.form.GMApproval = false;
       this.form.GMID = this.user.UserID;
     }
-    console.log(this.form);
     var body = JSON.stringify({ userID: this.user.UserID, value: this.form });
     console.log(this.consts.url + 'Recap');
     this.http.post(this.consts.url + 'Recap', body, options)
-      //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert(data.text()));
     this.form.ApprovalStatus = 'red'
   }

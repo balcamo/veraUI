@@ -121,9 +121,9 @@ export class ViewAuthFormsComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-    var body = JSON.stringify(this.form);
+    var body = JSON.stringify({ userID: this.user.UserID, value: this.form });
     console.log(this.consts.url + 'Recap');
-    this.http.post(this.consts.url + 'Recap', this.user.UserID+body, options)
+    this.http.post(this.consts.url + 'Recap', body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert(data.text()));
   }
