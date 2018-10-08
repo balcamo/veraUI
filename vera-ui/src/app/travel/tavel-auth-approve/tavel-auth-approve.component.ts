@@ -24,6 +24,8 @@ export class TavelAuthApproveComponent implements OnInit {
   oldForm: AuthForm;
   submitted = false;
   transType: string;
+  food: number;
+  mileage: number;
   constructor(http: Http, userService: UserService) {
     this.http = http;
     this.userService = userService;
@@ -41,17 +43,18 @@ export class TavelAuthApproveComponent implements OnInit {
    */
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
-
-    if ((this.user.EntryGroup[3] == 99 && this.form.Bool5.toString() != '') ||
-      (this.user.EntryGroup[3] == 3 && this.form.Bool6.toString() != '')) {
+    this.food = (this.form.PerDiem * this.form.FullDays) + (this.form.PerDiem * this.consts.firstLastDayFood);
+    this.mileage = this.form.Mileage * this.consts.mileageRate;
+    if ((this.user.EntryGroup[3] == 99 && this.form.DHApproval.toString() != '') ||
+      (this.user.EntryGroup[3] == 3 && this.form.GMApproval.toString() != '')) {
       this.submitted = true;
     } else {
       this.submitted = false;
     }
 
-    if (this.form.Bool2 == true) {
+    if (this.form.DistVehicle == true) {
       this.transType = "District Vehicle";
-    } else if (this.form.Decimal3 != 0) {
+    } else if (this.form.Airfare != 0) {
       this.transType = "Plane";
     } else {
       this.transType = "Personal Vehicle"
@@ -81,20 +84,20 @@ export class TavelAuthApproveComponent implements OnInit {
       headers: pageHeaders
     });
     if (this.user.EntryGroup[3] == 99) {
-      this.form.Bool5 = true;
-      this.form.Decimal26 = this.user.UserID;
+      this.form.DHApproval = true;
+      this.form.DHID = this.user.UserID;
     } else if (this.user.EntryGroup[3] == 2) {
-      this.form.Bool6 = true;
-      this.form.Decimal27 = this.user.UserID;
+      this.form.GMApproval = true;
+      this.form.GMID = this.user.UserID;
     }
-    var body = JSON.stringify(this.form);
+    var body = JSON.stringify({ userID: this.user.UserID, value: this.form });
     console.log(this.form);
 
     console.log(this.consts.url + 'Recap');
     this.http.post(this.consts.url + 'Recap', body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert(data.text()));
-    this.form.String8 = 'green'
+    this.form.ApprovalStatus = 'green'
   }
   /**
  * submit the recap to the server to get approval
@@ -111,18 +114,18 @@ export class TavelAuthApproveComponent implements OnInit {
       headers: pageHeaders
     });
     if (this.user.EntryGroup[3] == 99) {
-      this.form.Bool5 = false;
-      this.form.Decimal26 = this.user.UserID;
+      this.form.DHApproval = false;
+      this.form.DHID = this.user.UserID;
     } else if (this.user.EntryGroup[3] == 2) {
-      this.form.Bool6 = false;
-      this.form.Decimal27 = this.user.UserID;
+      this.form.GMApproval = false;
+      this.form.GMID = this.user.UserID;
     }
     console.log(this.form);
-      var body = JSON.stringify(this.form);
+    var body = JSON.stringify({ userID: this.user.UserID, value: this.form });
     console.log(this.consts.url + 'Recap');
     this.http.post(this.consts.url + 'Recap', body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert(data.text()));
-    this.form.String8 = 'red'
+    this.form.ApprovalStatus = 'red'
   }
 }
