@@ -62,7 +62,7 @@ namespace VeraAPI.Controllers
         }
 
         // POST: api/API
-        public string Post(string restUserID, [FromBody]TravelAuthForm travelAuthForm)
+        public string Post([FromBody]string restUserID, [FromBody]TravelAuthForm travelAuthForm)
         {
             log.WriteLogEntry("Begin TravelAuthController POST...");
             string result = string.Empty;

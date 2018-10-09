@@ -63,8 +63,8 @@ export class TravelComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-
-    this.http.get(this.consts.url + 'TravelAuth?tokenHeader=' + this.user.UserID)
+    console.log(this.consts.url + 'TravelAuth?restUserID=' + this.user.UserID);
+    this.http.get(this.consts.url + 'TravelAuth?restUserID=' + this.user.UserID)
       .subscribe((data) => this.waitForHttp(data));
 
     if (this.allAuthDisplay == "none") {
@@ -88,7 +88,7 @@ export class TravelComponent implements OnInit {
       headers: pageHeaders
     });
 
-    this.http.get(this.consts.url + 'TravelApproval?tokenHeader=' + this.user.UserID)
+    this.http.get(this.consts.url + 'TravelApproval?restUserID=' + this.user.UserID)
       .subscribe((data) => this.waitForHttp(data));
 
     if (this.approveAuthDisplay == "none") {
