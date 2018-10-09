@@ -138,6 +138,7 @@ namespace VeraAPI.HelperClasses
             TokenHandler tokenHandle = new TokenHandler();
             if (tokenHandle.GenerateDomainToken(user))
             {
+                user.Token.UserID = user.UserID;
                 result = true;
                 log.WriteLogEntry(string.Format("Current user {0} {1} {2} {3} {4}", user.UserID, user.UserName, user.DomainUpn, user.Token.SessionKey, user.Authenicated));
             }
