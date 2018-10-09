@@ -14,25 +14,19 @@ namespace VeraAPI.HelperClasses
     {
         public User CurrentUser { get; private set; }
 
-        private string dbServer;
-        private string dbName;
+        private string dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
+        private string dbName = WebConfigurationManager.AppSettings.Get("DBName");
         private ExchangeHandler emailHandle;
-        private Scribe log;
+        private Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "EmailHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         public EmailHelper()
         {
-            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "EmailHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            dbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
-            dbName = WebConfigurationManager.AppSettings.Get("LoginDB");
-            CurrentUser = new User();
+            this.CurrentUser = new User();
         }
 
         public EmailHelper(User user)
         {
-            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "EmailHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
-            dbName = WebConfigurationManager.AppSettings.Get("DBName");
-            CurrentUser = user;
+            this.CurrentUser = user;
         }
 
         public bool ExchangeSendMail()
@@ -102,19 +96,6 @@ namespace VeraAPI.HelperClasses
                 }
             }
             log.WriteLogEntry("End NotifyDepartmentHead.");
-            return result;
-        }
-
-        public bool LoadDomainEmailUser(string email)
-        {
-            log.WriteLogEntry("Starting LoadDomainEmailUser...");
-            bool result = false;
-            DomainUser user = new DomainUser();
-            UserDataHandler userDataHandle = new UserDataHandler(user, dbServer, dbName);
-            userDataHandle.LoadLoginUser(email);
-            log.WriteLogEntry(string.Format("User loaded {0} {1} {2} {3} {4}", user.UserID, user.DomainUpn, user.EmployeeID, user.Department, user.Department.DeptHeadEmail));
-            CurrentUser = user;
-            log.WriteLogEntry("End LoadDomainEmailUser.");
             return result;
         }
     }

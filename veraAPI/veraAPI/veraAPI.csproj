@@ -206,7 +206,6 @@
     <Compile Include="HelperClasses\FormHelper.cs" />
     <Compile Include="HelperClasses\JobHelper.cs" />
     <Compile Include="HelperClasses\LoginHelper.cs" />
-    <Compile Include="HelperClasses\TokenHelper.cs" />
     <Compile Include="HelperClasses\UserHelper.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DataHandler\JobDataHandler.cs" />
@@ -217,6 +216,7 @@
     <Compile Include="Models\Security\Domain.cs" />
     <Compile Include="Models\Security\Position.cs" />
     <Compile Include="Models\Security\Role.cs" />
+    <Compile Include="Models\Security\UserSession.cs" />
     <Compile Include="Models\Templates\JobTemplate.cs" />
     <Compile Include="Models\DataHandler\UserDataHandler.cs" />
     <Compile Include="Models\Office365\ExchangeHandler.cs" />

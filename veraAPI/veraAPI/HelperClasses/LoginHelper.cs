@@ -12,15 +12,10 @@ namespace VeraAPI.HelperClasses
 {
     public class LoginHelper
     {
-        public User CurrentUser { get; set; }
+        public User CurrentUser { get; private set; }
+        public UserSession CurrentSession { get; private set; }
 
         private readonly string domainName = WebConfigurationManager.AppSettings.Get("LocalDomain");
-        private readonly string dbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
-        private readonly string dbName = WebConfigurationManager.AppSettings.Get("LoginDB");
-        private LoginForm loginCredentials;
-        private LDAPHandler LDAPHandle;
-        private TokenHandler TokenHandle;
-        private UserDataHandler UserData;
         private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         public LoginHelper()
@@ -28,35 +23,47 @@ namespace VeraAPI.HelperClasses
             CurrentUser = new User();
         }
 
-        public LoginHelper(LoginForm loginCredentials)
+        public LoginHelper(User user)
         {
-            this.loginCredentials = loginCredentials;
-            CurrentUser = new User();
-        }
-
-        public LoginHelper(LoginForm loginCredentials, User user)
-        {
-            this.loginCredentials = loginCredentials;
             this.CurrentUser = user;
         }
 
-        public bool InsertDomainLoginUser()
+        public bool InsertDomainUserSession(DomainUser user)
         {
             log.WriteLogEntry("Begin InsertDomainLoginUser...");
             bool result = false;
-            if (CurrentUser.GetType() == typeof(DomainUser))
+            string dbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
+            string dbName = WebConfigurationManager.AppSettings.Get("LoginDB");
+
+            UserSession session = new UserSession(user.UserID)
             {
-                DomainUser user = (DomainUser)CurrentUser;
-                UserData = new UserDataHandler(user, dbServer, dbName);
-                if (UserData.InsertLoginUser())
-                {
-                    result = true;
-                }
-                else
-                    log.WriteLogEntry("Failed inserting domain login user!");
+                CompanyNumber = user.CompanyNumber,
+                DeptNumber = user.DepartmentNumber,
+                PositionNumber = user.PositionNumber,
+                DomainNumber = user.CompanyNumber,
+                RoleNumber = user.SecurityRoles.FirstOrDefault().RoleNumber,
+                AccessLevel = user.SecurityAccess.FirstOrDefault().AccessNumber,
+                UserName = user.UserName,
+                UserEmail = user.UserEmail,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                EmployeeID = user.EmployeeID,
+                DeptName = user.Department.DeptName,
+                DeptHeadName = user.Department.DeptHeadName,
+                DeptHeadEmail = user.Department.DeptHeadEmail,
+                DomainUpn = user.DomainUpn,
+                SessionKey = user.Token.SessionKey,
+                Authenicated = user.Authenicated
+            };
+
+            log.WriteLogEntry("Starting UserDataHandler...");
+            UserDataHandler userData = new UserDataHandler(dbServer, dbName);
+            if (userData.InsertUserSession(session))
+            {
+                result = true;
             }
             else
-                log.WriteLogEntry("FAILED not a domain user!");
+                log.WriteLogEntry("Failed inserting domain login user!");
             log.WriteLogEntry("End InsertDomainLoginUser.");
             return result;
         }
@@ -65,8 +72,8 @@ namespace VeraAPI.HelperClasses
         {
             log.WriteLogEntry("Starting ConvertSessionToken.");
             bool result = false;
-            TokenHandle = new TokenHandler(CurrentUser);
-            if (TokenHandle.VerifyToken())
+            TokenHandler tokenHandle = new TokenHandler();
+            if (tokenHandle.VerifyToken())
             {
                 log.WriteLogEntry("Success converting session token.");
                 result = true;
@@ -77,42 +84,54 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public bool LoginDomainUser()
+        public bool LoginDomainUser(DomainUser user)
         {
             log.WriteLogEntry("Starting LoginDomainUser...");
             bool result = false;
-            if (CurrentUser.GetType() == typeof(DomainUser))
+            string dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
+            string dbName = WebConfigurationManager.AppSettings.Get("DBName");
+
+            log.WriteLogEntry("Starting LDAPHandler...");
+            LDAPHandler ldapHandle = new LDAPHandler();
+            if (ldapHandle.ValidateDomain(domainName))
             {
-                DomainUser user = (DomainUser)CurrentUser;
-                user.UserName = loginCredentials.UserName;
-                user.UserPwd = loginCredentials.UserPwd;
-                log.WriteLogEntry("Current User " + user.UserName);
-                LDAPHandle = new LDAPHandler(user);
-                log.WriteLogEntry("Starting LDAPHandler...");
-                if (LDAPHandle.ValidateDomain(domainName))
+                if (ldapHandle.AuthenticateDomainUser(user))
                 {
-                    user.Domain.DomainName = domainName;
-                    if (LDAPHandle.AuthenticateDomainUser())
+                    log.WriteLogEntry("Starting TokenHandler...");
+                    TokenHandler tokenHandle = new TokenHandler();
+                    if (tokenHandle.GenerateDomainToken(user))
                     {
-                        TokenHandle = new TokenHandler(user);
-                        log.WriteLogEntry("Starting TokenHandler...");
-                        if (TokenHandle.GenerateDomainToken())
-                        {
-                            result = true;
-                        }
-                        else
-                            log.WriteLogEntry("FAILED to generate domain session key!");
+                        log.WriteLogEntry("Starting UserDataHandler...");
+                        UserDataHandler userData = new UserDataHandler(dbServer, dbName);
+                        user.UserID = userData.GetUserID(user.DomainUpn);
+                        log.WriteLogEntry(string.Format("Current user {0} {1} {2} {3} {4}", user.UserID, user.UserName, user.DomainUpn, user.Token.SessionKey, user.Authenicated));
+                        result = true;
                     }
                     else
-                        log.WriteLogEntry("FAILED authenticate current user to domain!");
+                        log.WriteLogEntry("FAILED to generate domain session key!");
                 }
                 else
-                    log.WriteLogEntry("FAILED to validate the domain!");
-                log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3} {4}", user.FirstName, user.LastName, user.UserName, user.UserEmail, user.Token.SessionKey));
+                    log.WriteLogEntry("FAILED authenticate current user to domain!");
             }
             else
-                log.WriteLogEntry("FAILED not a domain user!");
+                log.WriteLogEntry("FAILED to validate the domain!");
             log.WriteLogEntry("End LoginDomainUser.");
+            return result;
+        }
+
+        public bool LoadUserSession(int userID)
+        {
+            log.WriteLogEntry("Starting LoadUserSession...");
+            bool result = false;
+            string dbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
+            string dbName = WebConfigurationManager.AppSettings.Get("LoginDB");
+
+            log.WriteLogEntry("Starting UserDataHandler...");
+            UserSession session = new UserSession(userID);
+            UserDataHandler userData = new UserDataHandler(session, dbServer, dbName);
+            userData.LoadUserSession(userID);
+
+            log.WriteLogEntry("End LoadUserSession.");
             return result;
         }
     }

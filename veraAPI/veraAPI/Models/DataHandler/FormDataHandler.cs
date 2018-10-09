@@ -246,7 +246,7 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
-        public bool LoadTravelAuth()
+        public bool LoadTravelAuthForm()
         {
             log.WriteLogEntry("Begin LoadTravelAuth...");
             bool result = false;
@@ -329,7 +329,7 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
-        public int LoadTravelAuthForms(string userID)
+        public int LoadUserTravelAuthForms(int userID)
         {
             log.WriteLogEntry("Begin LoadTravelAuth...");
             log.WriteLogEntry("User ID (passed token header) " + userID);
@@ -353,7 +353,7 @@ namespace VeraAPI.Models.DataHandler
                             {
                                 // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
                                 TravelAuthForm travel = new TravelAuthForm();
-                                travel.UserID = userID;
+                                travel.UserID = userID.ToString();
                                 travel.FormDataID = (int)rdr["travel_id"];
                                 travel.FirstName = rdr["first_name"].ToString();
                                 travel.LastName = rdr["last_name"].ToString();

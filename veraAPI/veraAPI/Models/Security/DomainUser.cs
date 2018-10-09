@@ -7,7 +7,6 @@ namespace VeraAPI.Models.Security
 {
     public class DomainUser : User
     {
-        public int DomainNumber { get; set; }
         public string DomainUserName { get; set; }
         public string DomainUpn { get; set; }
         public string EmployeeID { get; set; }
@@ -23,7 +22,13 @@ namespace VeraAPI.Models.Security
 
         public DomainUser()
         {
-            SecurityRoles.Add(new Role { RoleNumber = 0, RoleTitle = "Public", RoleDescription = "Public Role" });
+            SecurityRoles.Add(new Role { RoleNumber = 0, RoleTitle = "None", RoleDescription = "Unknown Role" });
+            SecurityAccess.Add(new Access { AccessNumber = 0, AccessTitle = "None", AccessDescription = "No Access" });
+        }
+
+        public DomainUser(int userID) : base(userID)
+        {
+            SecurityRoles.Add(new Role { RoleNumber = 0, RoleTitle = "None", RoleDescription = "Unknown Role" });
             SecurityAccess.Add(new Access { AccessNumber = 0, AccessTitle = "None", AccessDescription = "No Access" });
         }
     }

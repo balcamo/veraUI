@@ -39,31 +39,29 @@ namespace VeraAPI.Controllers
         public Token Post([FromBody]LoginForm loginCredentials)
         {
             log.WriteLogEntry("Starting Post for login credentials...");
-            DomainUser user = new DomainUser();
             Token result = null;
             if (loginCredentials.GetType() == typeof(LoginForm))
             {
-                // Pass login credentials from POST
-                LoginHelper loginHelp = new LoginHelper(loginCredentials, user);
+                DomainUser user = new DomainUser
+                {
+                    UserName = loginCredentials.UserName,
+                    UserPwd = loginCredentials.UserPwd
+                };
                 try
                 {
-                    // Validate login credentials against Active Directory
-                    // Load email, domain upn, first and last name, user name, employee id, and department
                     log.WriteLogEntry("Starting LoginHelper...");
-                    if (loginHelp.LoginDomainUser())
+                    LoginHelper loginHelp = new LoginHelper();
+                    if (loginHelp.LoginDomainUser(user))
                     {
-                        UserHelper userHelp = new UserHelper(user);
-
-                        // Load user id from local login database by user email
                         log.WriteLogEntry("Starting UserHelper...");
-                        if (userHelp.LoadDomainUser())
+                        UserHelper userHelp = new UserHelper(user);
+                        if (userHelp.LoadDomainUser(user.UserID))
                         {
-                            // Session Token includes user id from local user database, encoded JSON Web Token, and user type
                             log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3} {4}", user.UserName, user.UserEmail, user.UserID, user.Department.DeptName, user.Company.CompanyName));
 
                             // Insert internal domain user into local session database
                             log.WriteLogEntry("Starting LoginHelper...");
-                            if (loginHelp.InsertDomainLoginUser())
+                            if (loginHelp.InsertDomainUserSession(user))
                             {
                                 log.WriteLogEntry("Success inserting domain login user.");
                                 result = user.Token;
@@ -81,10 +79,10 @@ namespace VeraAPI.Controllers
                 {
                     log.WriteLogEntry("Error posting login " + ex.Message);
                 }
+                log.WriteLogEntry(string.Format("Return result {0} {1} {2}", result.UserID, result.SessionKey, string.Join(",", user.Token.AccessKey)));
             }
             else
                 log.WriteLogEntry("Failed login credentials are the wrong type!");
-            log.WriteLogEntry(string.Format("Return result {0} {1} {2}", result.UserID, result.SessionKey, string.Join(",", user.Token.AccessKey)));
             log.WriteLogEntry("End Post login user.");
 
             // Return full session token

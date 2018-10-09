@@ -18,25 +18,19 @@ namespace VeraAPI.HelperClasses
         public List<BaseForm> WebForms { get; private set; }
         public JobTemplate Template { get; private set; }
 
-        private string dbServer;
-        private string dbName;
+        private readonly string dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
+        private readonly string dbName = WebConfigurationManager.AppSettings.Get("DBName");
+        private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
         private FormDataHandler formDataHandle;
-        private Validator formValidator;
-        private Scribe log;
+        //private Validator formValidator;
 
         public FormHelper()
         {
-            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
-            dbName = WebConfigurationManager.AppSettings.Get("DBName");
             this.WebForm = new BaseForm();
         }
 
         public FormHelper(BaseForm webForm)
         {
-            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
-            dbName = WebConfigurationManager.AppSettings.Get("DBName");
             this.WebForm = webForm;
         }
 
@@ -98,19 +92,19 @@ namespace VeraAPI.HelperClasses
             log.WriteLogEntry("Starting LoadTravelAuthForm...");
             bool result = false;
             formDataHandle = new FormDataHandler(WebForm, dbServer, dbName);
-            formDataHandle.LoadTravelAuth();
+            formDataHandle.LoadTravelAuthForm();
             log.WriteLogEntry("End LoadTravelAuthForm.");
             return result;
         }
 
-        public int LoadActiveTravelAuthForms(string userID)
+        public int LoadActiveTravelAuthForms(int userID)
         {
             log.WriteLogEntry("Starting LoadActiveTravelAuthForms...");
             log.WriteLogEntry("User ID (passed token header) " + userID);
             int result = 0;
             WebForms = new List<BaseForm>();
             formDataHandle = new FormDataHandler(WebForms, dbServer, dbName);
-            formDataHandle.LoadTravelAuthForms(userID);
+            formDataHandle.LoadUserTravelAuthForms(userID);
             log.WriteLogEntry("Count loaded forms " + WebForms.Count);
             log.WriteLogEntry("End LoadActiveTravelAuthForms.");
             return result;
