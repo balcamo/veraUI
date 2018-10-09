@@ -44,43 +44,47 @@ namespace VeraAPI.HelperClasses
         {
             log.WriteLogEntry("Begin LoadDomainUser...");
             bool result = false;
-            DomainUser user = new DomainUser();
-            userData = new UserDataHandler(user, dbServer, dbName);
-            log.WriteLogEntry("Starting UserDataHandler...");
-            if (userData.LoadUserData(userID))
+            if (CurrentUser.GetType() == typeof(DomainUser))
             {
-                if (userData.LoadCompany())
+                DomainUser user = (DomainUser)CurrentUser;
+                log.WriteLogEntry("Starting UserDataHandler...");
+                userData = new UserDataHandler(user, dbServer, dbName);
+                if (userData.LoadUserData(userID))
                 {
-                    if (userData.LoadDepartment())
+                    if (userData.LoadCompany())
                     {
-                        if (userData.LoadPosition())
+                        if (userData.LoadDepartment())
                         {
-                            if (userData.LoadSecurityRoles() > 0)
+                            if (userData.LoadPosition())
                             {
-                                user.Token.AccessKey[0] = user.CompanyNumber;
-                                user.Token.AccessKey[1] = user.DepartmentNumber;
-                                user.Token.AccessKey[2] = user.PositionNumber;
-                                user.Token.AccessKey[3] = user.SecurityRoles.FirstOrDefault().RoleNumber;
-                                user.Token.AccessKey[4] = user.SecurityAccess.FirstOrDefault().AccessNumber;
-                                log.WriteLogEntry(string.Format("User access key array values {0} {1} {2} {3} {4}", user.CompanyNumber, user.DepartmentNumber, user.PositionNumber, user.SecurityRoles.FirstOrDefault().RoleNumber, user.SecurityAccess.FirstOrDefault().AccessNumber));
-                                log.WriteLogEntry(string.Format("User token {0} {1} {2}", user.Token.UserID, user.Token.SessionKey, string.Join(",", user.Token.AccessKey)));
-                                this.CurrentUser = user;
-                                result = true;
+                                if (userData.LoadSecurityRoles() > 0)
+                                {
+                                    user.Token.AccessKey[0] = user.CompanyNumber;
+                                    user.Token.AccessKey[1] = user.DepartmentNumber;
+                                    user.Token.AccessKey[2] = user.PositionNumber;
+                                    user.Token.AccessKey[3] = user.SecurityRoles.FirstOrDefault().RoleNumber;
+                                    user.Token.AccessKey[4] = user.SecurityAccess.FirstOrDefault().AccessNumber;
+                                    log.WriteLogEntry(string.Format("User access key array values {0} {1} {2} {3} {4}", user.CompanyNumber, user.DepartmentNumber, user.PositionNumber, user.SecurityRoles.FirstOrDefault().RoleNumber, user.SecurityAccess.FirstOrDefault().AccessNumber));
+                                    log.WriteLogEntry(string.Format("User token {0} {1} {2}", user.Token.UserID, user.Token.SessionKey, string.Join(",", user.Token.AccessKey)));
+                                    result = true;
+                                }
+                                else
+                                    log.WriteLogEntry("FAILED to load security roles!");
                             }
                             else
-                                log.WriteLogEntry("FAILED to load security roles!");
+                                log.WriteLogEntry("FAILED to load position!");
                         }
                         else
-                            log.WriteLogEntry("FAILED to load position!");
+                            log.WriteLogEntry("FAILED to load department!");
                     }
                     else
-                        log.WriteLogEntry("FAILED to load department!");
+                        log.WriteLogEntry("FAILED to load company!");
                 }
                 else
-                    log.WriteLogEntry("FAILED to load company!");
+                    log.WriteLogEntry("FAILED loading user data!");
             }
             else
-                log.WriteLogEntry("FAILED loading user data!");
+                log.WriteLogEntry("FAILED not a domain user!");
             log.WriteLogEntry("End LoadDomainUser.");
             return result;
         }

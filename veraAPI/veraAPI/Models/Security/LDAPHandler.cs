@@ -30,6 +30,7 @@ namespace VeraAPI.Models.Security
                     UserAccount = UserPrincipal.FindByIdentity(UserContext, user.UserName);
                     if (UserAccount != null)
                     {
+                        user.DomainUserName = UserAccount.SamAccountName;
                         user.DomainUpn = UserAccount.UserPrincipalName;
                         user.Authenicated = true;
                         log.WriteLogEntry(string.Format("Authenticated user {0} {1} {2}", user.UserName, user.DomainUpn, user.Authenicated));

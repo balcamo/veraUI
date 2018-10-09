@@ -46,6 +46,7 @@ namespace VeraAPI.Models.DataHandler
             log.WriteLogEntry("Begin LoadUserSession...");
             bool result = false;
             string cmdString = string.Format(@"select * from {0}.dbo.user_session where user_id = @userID", dbName);
+            UserSession session = this.CurrentSession;
 
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
@@ -59,8 +60,8 @@ namespace VeraAPI.Models.DataHandler
                         {
                             if (rdr.Read())
                             {
-                                UserSession session = new UserSession(userID);
                                 log.WriteLogEntry("UserID " + rdr["user_id"].ToString());
+                                session.UserID = (int)rdr["user_id"];
                                 log.WriteLogEntry("Company number " + rdr["company_number"].ToString());
                                 session.CompanyNumber = (int)rdr["company_number"];
                                 log.WriteLogEntry("Department number " + rdr["department_number"].ToString());
@@ -126,7 +127,7 @@ namespace VeraAPI.Models.DataHandler
             log.WriteLogEntry("Begin LoadUserData...");
             bool result = false;
             string cmdString = string.Format(@"select * from {0}.dbo.user_header where user_id = @userID", dbName);
-            User user = new User(userID);
+            User user = this.CurrentUser;
 
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
@@ -141,6 +142,7 @@ namespace VeraAPI.Models.DataHandler
                             if (rdr.Read())
                             {
                                 log.WriteLogEntry("User ID " + rdr["user_id"].ToString());
+                                user.UserID = (int)rdr["user_id"];
                                 log.WriteLogEntry("Company number " + rdr["company_number"].ToString());
                                 user.CompanyNumber = (int)rdr["company_number"];
                                 log.WriteLogEntry("Department number " + rdr["dept_number"].ToString());
@@ -155,7 +157,8 @@ namespace VeraAPI.Models.DataHandler
                                 user.FirstName = rdr["first_name"].ToString();
                                 log.WriteLogEntry("Last Name " + rdr["last_name"].ToString());
                                 user.LastName = rdr["last_name"].ToString();
-                                this.CurrentUser = user;
+                                log.WriteLogEntry("Employee ID " + rdr["employee_id"]);
+                                user.EmployeeID = rdr["employee_id"].ToString();
                                 result = true;
                             }
                         }
@@ -377,10 +380,10 @@ namespace VeraAPI.Models.DataHandler
                 {
                     conn.Open();
                     string cmdString = string.Format(@"insert into {0}.dbo.user_session (user_id, company_number, dept_number, position_number, role_number, domain_number, 
-	                                                    username, user_email, first_name, last_name, user_employee_id, dept_name, dept_head_name, dept_head_email, 
+	                                                    username, user_email, first_name, last_name, user_employee_id, dept_name, dept_head_email, 
 	                                                    domain_upn, domain_username, session_key, authenticated)
                                                         values (@userID, @companyNumber, @deptNumber, @positionNumber, @roleNumber, @domainNumber, 
-	                                                    @userName, @userEmail, @firstName, @lastName, @userEmpID, @deptName, @deptHeadName, @deptHeadEmail, 
+	                                                    @userName, @userEmail, @firstName, @lastName, @userEmpID, @deptName, @deptHeadEmail, 
 	                                                    @domainUpn, @domainUserName, @sessionKey, @authenticated)", dbName);
                     using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                     {
@@ -397,7 +400,7 @@ namespace VeraAPI.Models.DataHandler
                         cmd.Parameters.AddWithValue("@lastName", session.LastName);
                         cmd.Parameters.AddWithValue("@userEmpID", session.EmployeeID);
                         cmd.Parameters.AddWithValue("@deptName", session.DeptName);
-                        cmd.Parameters.AddWithValue("@deptHeadName", session.DeptHeadName);
+                        //cmd.Parameters.AddWithValue("@deptHeadName", session.DeptHeadName);
                         cmd.Parameters.AddWithValue("@deptHeadEmail", session.DeptHeadEmail);
                         cmd.Parameters.AddWithValue("@domainUpn", session.DomainUpn);
                         cmd.Parameters.AddWithValue("@domainUserName", session.DomainUserName);

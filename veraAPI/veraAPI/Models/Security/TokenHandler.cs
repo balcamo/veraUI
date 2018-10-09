@@ -27,6 +27,7 @@ namespace VeraAPI.Models.Security
             log.WriteLogEntry("Starting GenerateDomainToken...");
             bool result = false;
 
+            log.WriteLogEntry(string.Format("Current user {0} {1}", user.DomainUpn, user.UserEmail));
             try
             {
                 RandomNumberGenerator rng = RandomNumberGenerator.Create();

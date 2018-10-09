@@ -17,6 +17,7 @@ namespace VeraAPI.Models.Security
         public string UserEmail { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string EmployeeID { get; set; }
         public bool Authenicated { get; set; }
 
         public Token Token { get; set; } = new Token();

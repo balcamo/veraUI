@@ -20,33 +20,38 @@ namespace VeraAPI.Controllers
         private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "TravelApprovalController_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         // GET: api/TravelApproval
-        public BaseForm[] Get(int userID)
+        public BaseForm[] Get(string restUserID)
         {
             // call function to get active forms
             log.WriteLogEntry("Starting Get active travel forms for approval...");
             BaseForm[] result = null;
-            LoginHelper loginHelp = new LoginHelper();
-            log.WriteLogEntry("Starting LoginHelper...");
-            if (loginHelp.LoadUserSession(userID))
+            if (int.TryParse(restUserID, out int userID))
             {
-                try
+                log.WriteLogEntry("Starting LoginHelper...");
+                LoginHelper loginHelp = new LoginHelper();
+                if (loginHelp.LoadUserSession(userID))
                 {
-                    FormHelper formHelp = new FormHelper();
-                    log.WriteLogEntry("Starting FormHelper...");
+                    try
+                    {
+                        FormHelper formHelp = new FormHelper();
+                        log.WriteLogEntry("Starting FormHelper...");
 
-                    // Load active forms from system form database by user id = token header
-                    formHelp.LoadActiveTravelAuthForms(userID);
-                    result = formHelp.WebForms.ToArray();
+                        // Load active forms from system form database by user id = token header
+                        formHelp.LoadActiveTravelAuthForms(userID);
+                        result = formHelp.WebForms.ToArray();
+                    }
+                    catch (Exception ex)
+                    {
+                        log.WriteLogEntry(ex.Message);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    log.WriteLogEntry(ex.Message);
+                    log.WriteLogEntry("FAILED to load active user session!");
                 }
             }
             else
-            {
-                log.WriteLogEntry("FAILED to load active user session!");
-            }
+                log.WriteLogEntry("FAILED invalid user id!");
             // return array of active travel auth forms
             log.WriteLogEntry("Forms returned " + result.Count<BaseForm>() + " " + result[0].UserID + " " + result[0].FormDataID);
             log.WriteLogEntry("End Get active travel forms.");
@@ -54,47 +59,52 @@ namespace VeraAPI.Controllers
         }
 
         // POST: api/TravelApproval
-        public string Post(int userID, [FromBody]TravelAuthForm travelAuthForm)
+        public string Post(string restUserID, [FromBody]TravelAuthForm travelAuthForm)
         {
             log.WriteLogEntry("Begin Post TravelAuthForm...");
             string result = string.Empty;
-            LoginHelper loginHelp = new LoginHelper();
-            log.WriteLogEntry("Starting LoginHelper...");
-            if (loginHelp.LoadUserSession(userID))
+            if (int.TryParse(restUserID, out int userID))
             {
-                // Get template ID for insert travel authorization from static class TemplateIndex
-                travelAuthForm.TemplateID = TemplateIndex.InsertTravelAuth;
-                try
+                log.WriteLogEntry("Starting LoginHelper...");
+                LoginHelper loginHelp = new LoginHelper();
+                if (loginHelp.LoadUserSession(userID))
                 {
-                    if (travelAuthForm.GetType() == typeof(TravelAuthForm))
+                    // Get template ID for insert travel authorization from static class TemplateIndex
+                    travelAuthForm.TemplateID = TemplateIndex.InsertTravelAuth;
+                    try
                     {
-                        FormHelper travelFormHelp = new FormHelper(travelAuthForm);
-                        log.WriteLogEntry("Starting FormHelper...");
-
-                        // SubmitForm loads the template for the travel auth form
-                        // this provides database table information
-                        // insert the form data into the system form database
-                        if (travelFormHelp.SubmitTravelAuthForm())
+                        if (travelAuthForm.GetType() == typeof(TravelAuthForm))
                         {
-                            log.WriteLogEntry("Success submitting travel form.");
+                            FormHelper travelFormHelp = new FormHelper(travelAuthForm);
+                            log.WriteLogEntry("Starting FormHelper...");
+
+                            // SubmitForm loads the template for the travel auth form
+                            // this provides database table information
+                            // insert the form data into the system form database
+                            if (travelFormHelp.SubmitTravelAuthForm())
+                            {
+                                log.WriteLogEntry("Success submitting travel form.");
+                            }
+                            else
+                                log.WriteLogEntry("Fail FormHelp SubmitForm!");
+                            result = "Travel Authorization Form Submitted.";
                         }
                         else
-                            log.WriteLogEntry("Fail FormHelp SubmitForm!");
-                        result = "Travel Authorization Form Submitted.";
+                            log.WriteLogEntry("Failed submitted form is the wrong type!");
                     }
-                    else
-                        log.WriteLogEntry("Failed submitted form is the wrong type!");
+                    catch (Exception e)
+                    {
+                        result = "Failed Travel Authorization Submit " + e.Message;
+                    }
                 }
-                catch (Exception e)
+                else
                 {
-                    result = "Failed Travel Authorization Submit " + e.Message;
+                    log.WriteLogEntry("FAILED to load active user session!");
+                    result = "Failed to submit travel authorization! User not recognized!";
                 }
             }
             else
-            {
-                log.WriteLogEntry("FAILED to load active user session!");
-                result = "Failed to submit travel authorization! User not recognized!";
-            }
+                log.WriteLogEntry("FAILED invalid user id!");
             log.WriteLogEntry("End Post TravelAuthForm.");
             return result;
         }
@@ -105,12 +115,12 @@ namespace VeraAPI.Controllers
         }
 
         // PUT: api/TravelApproval/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(string id, [FromBody]string value)
         {
         }
 
         // DELETE: api/TravelApproval/5
-        public void Delete(int id)
+        public void Delete(string id)
         {
         }
     }
