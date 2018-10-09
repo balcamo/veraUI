@@ -244,7 +244,8 @@ namespace VeraAPI.Models.DataHandler
                                 user.Company.CompanyEmail = rdr["company_email"].ToString();
                                 user.Company.CompanyAccessLevel = (int)rdr["company_access"];
                                 user.Company.GeneralManagerUserID = (int)rdr["general_manager_user_id"];
-                                log.WriteLogEntry(string.Format("Company loaded {0} {1} {2} {3} {4}", user.Company.CompanyNumber, user.Company.CompanyName, user.Company.CompanyEmail, user.Company.CompanyAccessLevel, user.Company.GeneralManagerUserID));
+                                user.Company.GeneralManagerEmail = rdr["general_manager_email"].ToString();
+                                log.WriteLogEntry(string.Format("Company loaded {0} {1} {2} {3} {4} {5}", user.Company.CompanyNumber, user.Company.CompanyName, user.Company.CompanyEmail, user.Company.CompanyAccessLevel, user.Company.GeneralManagerUserID, user.Company.GeneralManagerEmail));
                                 result = true;
                             }
                         }

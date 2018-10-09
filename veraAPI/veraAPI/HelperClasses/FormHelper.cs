@@ -106,13 +106,24 @@ namespace VeraAPI.HelperClasses
         public int LoadActiveTravelAuthForms(int userID)
         {
             log.WriteLogEntry("Starting LoadActiveTravelAuthForms...");
-            log.WriteLogEntry("User ID " + userID);
             int result = 0;
-            WebForms = new List<BaseForm>();
-            formDataHandle = new FormDataHandler(WebForms, dbServer, dbName);
+            formDataHandle = new FormDataHandler(dbServer, dbName);
             formDataHandle.LoadUserTravelAuthForms(userID);
+            WebForms = formDataHandle.WebForms;
             log.WriteLogEntry("Count loaded forms " + WebForms.Count);
             log.WriteLogEntry("End LoadActiveTravelAuthForms.");
+            return result;
+        }
+
+        public int LoadApproverTravelAuthForms(int userID)
+        {
+            log.WriteLogEntry("Starting LoadApproverTravelAuthForms...");
+            int result = 0;
+            formDataHandle = new FormDataHandler(dbServer, dbName);
+            formDataHandle.LoadApproverTravelAuthForms(userID);
+            WebForms = formDataHandle.WebForms;
+            log.WriteLogEntry("Count loaded forms " + WebForms.Count);
+            log.WriteLogEntry("End LoadApproverTravelAuthForms.");
             return result;
         }
     }

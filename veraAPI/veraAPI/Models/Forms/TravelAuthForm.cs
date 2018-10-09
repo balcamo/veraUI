@@ -33,7 +33,7 @@ namespace VeraAPI.Models.Forms
         public string Advance { get; set; } = string.Empty;       // Advance
         public string AdvanceAmount { get; set; } = string.Empty;   // AdvanceAmount
         public string Policy { get; set; } = string.Empty;       // Policy
-        public string SubmitterEmail { get; set; } = string.Empty;     // SubmitterSig
+        public string SubmitterSig { get; set; } = string.Empty;     // SubmitterSig
         public string RecapRegistrationCost { get; set; } = string.Empty;   // RecapRegistrationCost
         public string RecapAirfare { get; set; } = string.Empty;   // RecapAirfare
         public string RecapRentalCar { get; set; } = string.Empty;   // RecapRentalCar

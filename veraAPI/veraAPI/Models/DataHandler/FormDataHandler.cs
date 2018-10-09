@@ -19,7 +19,6 @@ namespace VeraAPI.Models.DataHandler
         public BaseForm WebForm { get; private set; }
         public List<BaseForm> WebForms { get; private set; }
         public FormTemplate Template { get; private set; }
-        //public string userEmail { get; set; }
 
         private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
@@ -37,14 +36,6 @@ namespace VeraAPI.Models.DataHandler
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
             this.WebForm = webForm;
-        }
-
-        public FormDataHandler(List<BaseForm> webForms, string dbServer, string dbName) : base(dbServer)
-        {
-            this.dbServer = dbServer;
-            this.dbName = dbName;
-            this.dataConnectionString = GetDataConnectionString();
-            this.WebForms = webForms;
         }
 
         public bool InsertTravelAuth(TravelAuthForm travelForm)
@@ -134,7 +125,7 @@ namespace VeraAPI.Models.DataHandler
                     cmd.Parameters.AddWithValue("@advanceAmt", advanceAmt);
                     cmd.Parameters.AddWithValue("@travelPolicy", travelPolicy);
                     cmd.Parameters.AddWithValue("@submitterID", travelForm.UserID);
-                    cmd.Parameters.AddWithValue("@submitterEmail", travelForm.SubmitterEmail);
+                    cmd.Parameters.AddWithValue("@submitterEmail", travelForm.SubmitterSig);
                     cmd.Parameters.AddWithValue("@supervisorID", travelForm.DeptHeadID);
                     cmd.Parameters.AddWithValue("@supervisorEmail", travelForm.DeptHeadEmail);
                     cmd.Parameters.AddWithValue("@managerID", travelForm.GeneralManagerID);
@@ -230,8 +221,6 @@ namespace VeraAPI.Models.DataHandler
                         {
                             if (rdr.Read())
                             {
-                                // SINCE WE CHANGED VARIABLE NAMES DO WE NEED TO CHANGE THESE???
-                                // Database column names will remain descriptive for now and use schema field mapping
                                 TravelAuthForm travel = new TravelAuthForm(WebForm.FormDataID);
                                 travel.FirstName = rdr["first_name"].ToString();
                                 travel.LastName = rdr["last_name"].ToString();
@@ -256,7 +245,7 @@ namespace VeraAPI.Models.DataHandler
                                 travel.Advance = rdr["request_advance"].ToString();
                                 travel.Policy = rdr["travel_policy"].ToString();
                                 travel.Preparer = rdr["preparer_name"].ToString();
-                                travel.SubmitterEmail = rdr["submitter_approval"].ToString();
+                                travel.SubmitterSig = rdr["submitter_approval"].ToString();
                                 int status = (int)rdr["approval_status"];
                                 switch (status)
                                 {
@@ -317,7 +306,7 @@ namespace VeraAPI.Models.DataHandler
                             while (rdr.Read())
                             {
                                 TravelAuthForm travel = new TravelAuthForm();
-                                travel.UserID = userID;
+                                travel.UserID = (int)rdr["submitter_id"];
                                 travel.FormDataID = (int)rdr["travel_id"];
                                 travel.FirstName = rdr["first_name"].ToString();
                                 travel.LastName = rdr["last_name"].ToString();
@@ -342,7 +331,7 @@ namespace VeraAPI.Models.DataHandler
                                 travel.Advance = rdr["request_advance"].ToString();
                                 travel.Policy = rdr["travel_policy"].ToString();
                                 travel.Preparer = rdr["preparer_name"].ToString();
-                                travel.SubmitterEmail = rdr["submitter_approval"].ToString();
+                                travel.SubmitterSig = rdr["submitter_approval"].ToString();
                                 int status = (int)rdr["approval_status"];
                                 switch (status)
                                 {
@@ -359,7 +348,7 @@ namespace VeraAPI.Models.DataHandler
                                         travel.ApprovalStatus = Constants.DeniedColor;
                                         break;
                                 }
-                                log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2} {3}", travel.FormDataID, travel.EventTitle, travel.SubmitterEmail, travel.UserID));
+                                log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2} {3}", travel.FormDataID, travel.EventTitle, travel.SubmitterSig, travel.UserID));
                                 travelForms.Add(travel);
                             }
                         }
@@ -387,7 +376,6 @@ namespace VeraAPI.Models.DataHandler
             int result = 0;
             List<BaseForm> travelForms = new List<BaseForm>();
 
-            // Load list of travel auth forms where submitter_approval = userID
             string cmdString = string.Format(@"select * from {0}.dbo.travel where supervisor_id = @userID or manager_id = @userID", dbName);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
@@ -402,7 +390,7 @@ namespace VeraAPI.Models.DataHandler
                             while (rdr.Read())
                             {
                                 TravelAuthForm travel = new TravelAuthForm();
-                                travel.UserID = userID;
+                                travel.UserID = (int)rdr["submitter_id"];
                                 travel.FormDataID = (int)rdr["travel_id"];
                                 travel.FirstName = rdr["first_name"].ToString();
                                 travel.LastName = rdr["last_name"].ToString();
@@ -427,7 +415,7 @@ namespace VeraAPI.Models.DataHandler
                                 travel.Advance = rdr["request_advance"].ToString();
                                 travel.Policy = rdr["travel_policy"].ToString();
                                 travel.Preparer = rdr["preparer_name"].ToString();
-                                travel.SubmitterEmail = rdr["submitter_approval"].ToString();
+                                travel.SubmitterSig = rdr["submitter_approval"].ToString();
                                 int status = (int)rdr["approval_status"];
                                 switch (status)
                                 {
@@ -444,7 +432,7 @@ namespace VeraAPI.Models.DataHandler
                                         travel.ApprovalStatus = Constants.DeniedColor;
                                         break;
                                 }
-                                log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2} {3}", travel.FormDataID, travel.EventTitle, travel.SubmitterEmail, travel.UserID));
+                                log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2} {3}", travel.FormDataID, travel.EventTitle, travel.SubmitterSig, travel.UserID));
                                 travelForms.Add(travel);
                             }
                         }
