@@ -66,7 +66,6 @@ export class TravelComponent implements OnInit {
 
     this.http.get(this.consts.url + 'TravelAuth?tokenHeader=' + this.user.UserID)
       .subscribe((data) => this.waitForHttp(data));
-      //.subscribe((data) => console.log("the return from the get "+data.text()));
 
     if (this.allAuthDisplay == "none") {
       this.authDisplay = "none";
@@ -91,7 +90,6 @@ export class TravelComponent implements OnInit {
 
     this.http.get(this.consts.url + 'TravelApproval?tokenHeader=' + this.user.UserID)
       .subscribe((data) => this.waitForHttp(data));
-      //.subscribe((data) => console.log("the return from the get "+data.text()));
 
     if (this.approveAuthDisplay == "none") {
       this.allAuthDisplay = "none";

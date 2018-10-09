@@ -108,7 +108,7 @@ export class TravelAuthComponent implements OnInit {
    **/
   checkRequired() {
     var valid = true;
-
+    // make sure all needed fields are filled in
     if (this.form.FirstName == null || this.form.Phone == null || this.form.EventTitle == null
       || this.form.Location == null || this.form.TravelBegin == null || this.form.FullDays == null
       || this.form.Mileage == null || this.form.Lodging == null || this.form.PerDiem == null
@@ -119,7 +119,7 @@ export class TravelAuthComponent implements OnInit {
       ) {
       valid = false;
     }
-
+    // change border colors to show which fields need to be filled in
     this.firstNameBorder = (this.form.FirstName == null ? "red" : "black");
     this.lastNameBorder = (this.form.LastName == null ? "red" : "black");
     this.phoneBorder = (this.form.Phone == null ? "red" : "black");
@@ -140,7 +140,7 @@ export class TravelAuthComponent implements OnInit {
     this.miscBorder = (this.form.Misc == null ? "red" : "black");
     this.advanceColor = (this.form.Advance == null ? "red" : "black");
     this.policyColor = (this.form.Policy == null ? "red" : "black");
-
+    // ensure traveler is aware of travel policy
     if (this.form.Policy == false) {
       valid = false;
       alert("Please read the district policy on travel.");
