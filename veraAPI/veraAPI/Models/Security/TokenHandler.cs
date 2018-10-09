@@ -16,64 +16,53 @@ namespace VeraAPI.Models.Security
 {
     public class TokenHandler : JwtSecurityTokenHandler
     {
-        public User CurrentUser { get; private set; }
+        public Token SessionToken { get; private set; }
 
         private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "TokenHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         public TokenHandler() { }
 
-        public TokenHandler(User user)
-        {
-            CurrentUser = user;
-        }
-
-        public bool GenerateDomainToken()
+        public bool GenerateDomainToken(DomainUser user)
         {
             log.WriteLogEntry("Starting GenerateDomainToken...");
             bool result = false;
 
-            if (CurrentUser.GetType() == typeof(DomainUser))
+            try
             {
-                DomainUser user = (DomainUser)CurrentUser;
-                try
+                RandomNumberGenerator rng = RandomNumberGenerator.Create();
+                byte[] rngKey = new byte[32];
+                rng.GetBytes(rngKey);
+                var signatureKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(rngKey);
+                log.WriteLogEntry("Success create security key.");
+                var signatureCreds = new Microsoft.IdentityModel.Tokens.SigningCredentials(signatureKey, SecurityAlgorithms.HmacSha256Signature, SecurityAlgorithms.Sha256Digest);
+                log.WriteLogEntry("Success create signing credentials.");
+                var claimsID = new ClaimsIdentity(new List<Claim>()
                 {
-                    RandomNumberGenerator rng = RandomNumberGenerator.Create();
-                    byte[] rngKey = new byte[32];
-                    rng.GetBytes(rngKey);
-                    var signatureKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(rngKey);
-                    log.WriteLogEntry("Success create security key.");
-                    var signatureCreds = new Microsoft.IdentityModel.Tokens.SigningCredentials(signatureKey, SecurityAlgorithms.HmacSha256Signature, SecurityAlgorithms.Sha256Digest);
-                    log.WriteLogEntry("Success create signing credentials.");
-                    var claimsID = new ClaimsIdentity(new List<Claim>()
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, user.DomainUpn),
-                        new Claim(ClaimTypes.Email, user.UserEmail),
-                        new Claim(ClaimTypes.Role, "DomainUser")
-                    }, "DomainUser");
-                    log.WriteLogEntry("Success create claims identity.");
-                    var TokenDescriptor = new Microsoft.IdentityModel.Tokens.SecurityTokenDescriptor()
-                    {
-                        Issuer = Constants.Issuer,
-                        Audience = Constants.Audience,
-                        Subject = claimsID,
-                        SigningCredentials = signatureCreds,
-                    };
-                    log.WriteLogEntry("Success create security token descriptor.");
-                    var plainToken = CreateToken(TokenDescriptor);
-                    log.WriteLogEntry("Plain token " + plainToken.ToString());
-                    string token = WriteToken(plainToken);
-                    log.WriteLogEntry("Encoded session token " + token);
-                    user.Token.SessionKey = token;
-                    result = true;
-                }
-                catch (Exception ex)
+                    new Claim(ClaimTypes.NameIdentifier, user.DomainUpn),
+                    new Claim(ClaimTypes.Email, user.UserEmail),
+                    new Claim(ClaimTypes.Role, "DomainUser")
+                }, "DomainUser");
+                log.WriteLogEntry("Success create claims identity.");
+                var TokenDescriptor = new Microsoft.IdentityModel.Tokens.SecurityTokenDescriptor()
                 {
-                    log.WriteLogEntry("ERROR generating JWT " + ex.Message);
-                    result = false;
-                }
+                    Issuer = Constants.Issuer,
+                    Audience = Constants.Audience,
+                    Subject = claimsID,
+                    SigningCredentials = signatureCreds,
+                };
+                log.WriteLogEntry("Success create security token descriptor.");
+                var plainToken = CreateToken(TokenDescriptor);
+                log.WriteLogEntry("Plain token " + plainToken.ToString());
+                string token = WriteToken(plainToken);
+                log.WriteLogEntry("Encoded session token " + token);
+                user.Token.SessionKey = token;
+                result = true;
             }
-            else
-                log.WriteLogEntry("Failed current user is not a domain user!");
+            catch (Exception ex)
+            {
+                log.WriteLogEntry("ERROR generating JWT " + ex.Message);
+                result = false;
+            }
             log.WriteLogEntry("End GenerateDomainToken.");
             return result;
         }
@@ -82,6 +71,8 @@ namespace VeraAPI.Models.Security
         {
             log.WriteLogEntry("Starting VerifyToken...");
             bool result = false;
+            
+            // Code goes here
 
             log.WriteLogEntry("End VerifyToken.");
             return result;

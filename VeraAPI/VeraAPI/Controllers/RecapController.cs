@@ -14,7 +14,7 @@ namespace VeraAPI.Controllers
 {
     public class RecapController : ApiController
     {
-        private Scribe log;
+        private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "RecapController_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         // GET: api/Recap
         public IEnumerable<string> Get()

@@ -21,12 +21,12 @@ namespace VeraAPI.HelperClasses
 
         public EmailHelper()
         {
-            CurrentUser = new User();
+            this.CurrentUser = new User();
         }
 
         public EmailHelper(User user)
         {
-            CurrentUser = user;
+            this.CurrentUser = user;
         }
 
         public bool ExchangeSendMail()
@@ -96,19 +96,6 @@ namespace VeraAPI.HelperClasses
                 }
             }
             log.WriteLogEntry("End NotifyDepartmentHead.");
-            return result;
-        }
-
-        public bool LoadDomainEmailUser(string email)
-        {
-            log.WriteLogEntry("Starting LoadDomainEmailUser...");
-            bool result = false;
-            DomainUser user = new DomainUser();
-            UserDataHandler userDataHandle = new UserDataHandler(user, dbServer, dbName);
-            userDataHandle.LoadLoginUser(email);
-            log.WriteLogEntry(string.Format("User loaded {0} {1} {2} {3} {4}", user.UserID, user.DomainUpn, user.EmployeeID, user.Department, user.Department.DeptHeadEmail));
-            CurrentUser = user;
-            log.WriteLogEntry("End LoadDomainEmailUser.");
             return result;
         }
     }
