@@ -53,21 +53,25 @@ namespace VeraAPI.Controllers
                     LoginHelper loginHelp = new LoginHelper();
                     if (loginHelp.LoginDomainUser(user))
                     {
+                        log.WriteLogEntry(string.Format("Result from LoginDomainUser {0} {1} {2}", user.UserName, user.DomainUpn, user.Authenicated));
                         log.WriteLogEntry("Starting UserHelper...");
                         UserHelper userHelp = new UserHelper(user);
                         if (userHelp.LoadDomainUser(user.UserID))
                         {
-                            log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3} {4}", user.UserName, user.UserEmail, user.UserID, user.Department.DeptName, user.Company.CompanyName));
-
-                            // Insert internal domain user into local session database
+                            log.WriteLogEntry(string.Format("Result from LoadDomainUser {0} {1} {2} {3} {4} {5} {6}", user.UserName, user.DomainUpn, user.UserEmail, user.Company.CompanyName, user.Department.DeptName, user.Position.PostiionTitle, user.Authenicated));
                             log.WriteLogEntry("Starting LoginHelper...");
-                            if (loginHelp.InsertDomainUserSession(user))
+                            if (loginHelp.GetSessionToken(user))
                             {
-                                log.WriteLogEntry("Success inserting domain login user.");
-                                result = user.Token;
+                                // Insert internal domain user into local session database
+                                log.WriteLogEntry("Starting LoginHelper...");
+                                if (loginHelp.InsertDomainUserSession(user))
+                                {
+                                    result = user.Token;
+                                    log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3} {4}", user.UserName, user.UserEmail, user.UserID, user.Department.DeptName, user.Company.CompanyName));
+                                }
+                                else
+                                    log.WriteLogEntry("FAILED inserting domain login user!");
                             }
-                            else
-                                log.WriteLogEntry("FAILED inserting domain login user!");
                         }
                         else
                             log.WriteLogEntry("FAILED to load domain user!");
@@ -90,12 +94,12 @@ namespace VeraAPI.Controllers
         }
 
         // PUT: api/User/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(string id, [FromBody]string value)
         {
         }
 
         // DELETE: api/User/5
-        public void Delete(int id)
+        public void Delete(string id)
         {
         }
     }

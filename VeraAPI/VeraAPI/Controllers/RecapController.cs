@@ -23,50 +23,55 @@ namespace VeraAPI.Controllers
         }
 
         // GET: api/Recap/5
-        public string Get(int id)
+        public string Get(string userID)
         {
             return "value";
         }
 
         // POST: api/Recap
-        public string Post(int userID, [FromBody]TravelAuthForm value)
+        public string Post(string restUserID, [FromBody]TravelAuthForm value)
         {
             FormHelper recapHelp = new FormHelper(value);
             string result = string.Empty;
-            string emailType = string.Empty;
-            value.TemplateID = TemplateIndex.InsertTravelRecap;
-            try
+            if (int.TryParse(restUserID, out int userID))
             {
-                if (value.GetType() == typeof(TravelAuthForm))
+                string emailType = string.Empty;
+                value.TemplateID = TemplateIndex.InsertTravelRecap;
+                try
                 {
-                    //TravelAuthForm authForm = new TravelAuthForm(value);
-                    result = "Submitted Successfully";
-                    if(value.TotalReimburse != null) { emailType = "recap"; }
-                    Task t = Task.Run(() =>
+                    if (value.GetType() == typeof(TravelAuthForm))
                     {
-                        // change number to constant once file is made
-                        recapHelp.UpdateForm(value, emailType);
+                        //TravelAuthForm authForm = new TravelAuthForm(value);
+                        result = "Submitted Successfully";
+                        if (value.TotalReimburse != null) { emailType = "recap"; }
+                        Task t = Task.Run(() =>
+                        {
+                            // change number to constant once file is made
+                            recapHelp.UpdateForm(value, emailType);
 
-                    });
-                    //Thread helpThread = new Thread(authHelper.UpdateForm);
+                        });
+                        //Thread helpThread = new Thread(authHelper.UpdateForm);
 
-                    //helpThread.Start(authForm);
+                        //helpThread.Start(authForm);
+                    }
+                }
+                catch (Exception e)
+                {
+                    result = "Submit Failed " + e;
                 }
             }
-            catch (Exception e)
-            {
-                result = "Submit Failed " + e;
-            }
+            else
+                log.WriteLogEntry("FAILED invalid user id!");
             return result;
         }
 
         // PUT: api/Recap/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(string id, [FromBody]string value)
         {
         }
 
         // DELETE: api/Recap/5
-        public void Delete(int id)
+        public void Delete(string id)
         {
         }
     }

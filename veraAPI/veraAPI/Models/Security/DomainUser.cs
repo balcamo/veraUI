@@ -9,7 +9,6 @@ namespace VeraAPI.Models.Security
     {
         public string DomainUserName { get; set; }
         public string DomainUpn { get; set; }
-        public string EmployeeID { get; set; }
         public string SupervisorName { get; set; }
         public string SupervisorEmpID { get; set; }
         public string SupervisorEmail { get; set; }

@@ -14,6 +14,7 @@ namespace VeraAPI.HelperClasses
     {
         public User CurrentUser { get; private set; }
         public UserSession CurrentSession { get; private set; }
+        public Token CurrentToken { get; set; }
 
         private readonly string domainName = WebConfigurationManager.AppSettings.Get("LocalDomain");
         private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
@@ -51,6 +52,7 @@ namespace VeraAPI.HelperClasses
                 DeptName = user.Department.DeptName,
                 DeptHeadName = user.Department.DeptHeadName,
                 DeptHeadEmail = user.Department.DeptHeadEmail,
+                DomainUserName = user.DomainUserName,
                 DomainUpn = user.DomainUpn,
                 SessionKey = user.Token.SessionKey,
                 Authenicated = user.Authenicated
@@ -97,18 +99,11 @@ namespace VeraAPI.HelperClasses
             {
                 if (ldapHandle.AuthenticateDomainUser(user))
                 {
-                    log.WriteLogEntry("Starting TokenHandler...");
-                    TokenHandler tokenHandle = new TokenHandler();
-                    if (tokenHandle.GenerateDomainToken(user))
-                    {
-                        log.WriteLogEntry("Starting UserDataHandler...");
-                        UserDataHandler userData = new UserDataHandler(dbServer, dbName);
-                        user.UserID = userData.GetUserID(user.DomainUpn);
-                        log.WriteLogEntry(string.Format("Current user {0} {1} {2} {3} {4}", user.UserID, user.UserName, user.DomainUpn, user.Token.SessionKey, user.Authenicated));
-                        result = true;
-                    }
-                    else
-                        log.WriteLogEntry("FAILED to generate domain session key!");
+                    log.WriteLogEntry("Starting UserDataHandler...");
+                    UserDataHandler userData = new UserDataHandler(dbServer, dbName);
+                    user.UserID = userData.GetUserID(user.DomainUpn);
+                    log.WriteLogEntry(string.Format("Current user {0} {1} {2} {3}", user.UserID, user.UserName, user.DomainUpn, user.Authenicated));
+                    result = true;
                 }
                 else
                     log.WriteLogEntry("FAILED authenticate current user to domain!");
@@ -132,6 +127,23 @@ namespace VeraAPI.HelperClasses
             userData.LoadUserSession(userID);
 
             log.WriteLogEntry("End LoadUserSession.");
+            return result;
+        }
+
+        public bool GetSessionToken(DomainUser user)
+        {
+            log.WriteLogEntry("Starting GetSessionToken...");
+            bool result = false;
+            log.WriteLogEntry("Starting TokenHandler...");
+            TokenHandler tokenHandle = new TokenHandler();
+            if (tokenHandle.GenerateDomainToken(user))
+            {
+                result = true;
+                log.WriteLogEntry(string.Format("Current user {0} {1} {2} {3} {4}", user.UserID, user.UserName, user.DomainUpn, user.Token.SessionKey, user.Authenicated));
+            }
+            else
+                log.WriteLogEntry("FAILED to generate domain session key!");
+            log.WriteLogEntry("End GetSessionToken.");
             return result;
         }
     }

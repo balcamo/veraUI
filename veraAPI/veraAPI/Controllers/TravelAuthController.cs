@@ -27,30 +27,33 @@ namespace VeraAPI.Controllers
         }
 
         // GET: api/API/5
-        public BaseForm[] Get(int userID)
+        public BaseForm[] Get(string restUserID)
         {
             // call function to get active forms
             log.WriteLogEntry("Starting Get active travel forms...");
-            log.WriteLogEntry("Token Header received " + userID);
             BaseForm[] result = null;
-            try
+            if (int.TryParse(restUserID, out int userID))
             {
-                LoginHelper loginHelp = new LoginHelper();
-                if (loginHelp.LoadUserSession(userID))
+                try
                 {
-                    log.WriteLogEntry("Starting FormHelper...");
-                    FormHelper formHelp = new FormHelper();
+                    LoginHelper loginHelp = new LoginHelper();
+                    if (loginHelp.LoadUserSession(userID))
+                    {
+                        log.WriteLogEntry("Starting FormHelper...");
+                        FormHelper formHelp = new FormHelper();
 
-                    // Load active forms from system form database by user id = token header
-                    formHelp.LoadActiveTravelAuthForms(userID);
-                    result = formHelp.WebForms.ToArray();
+                        // Load active forms from system form database by user id = token header
+                        formHelp.LoadActiveTravelAuthForms(userID);
+                        result = formHelp.WebForms.ToArray();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.WriteLogEntry(ex.Message);
                 }
             }
-            catch (Exception ex)
-            {
-                log.WriteLogEntry(ex.Message);
-            }
-
+            else
+                log.WriteLogEntry("FAILED invalid user id!");
             // return array of active travel auth forms
             log.WriteLogEntry("Forms returned " + result.Count<BaseForm>() + " " + result[0].UserID + " " + result[0].FormDataID);
             log.WriteLogEntry("End Get active travel forms.");
@@ -58,59 +61,63 @@ namespace VeraAPI.Controllers
         }
 
         // POST: api/API
-        public string Post(int userID, [FromBody]TravelAuthForm travelAuthForm)
+        public string Post(string restUserID, [FromBody]TravelAuthForm travelAuthForm)
         {
             log.WriteLogEntry("Begin Post TravelAuthForm...");
             string result = string.Empty;
-
-            log.WriteLogEntry("Starting LoginHelper...");
-            LoginHelper loginHelp = new LoginHelper();
-            if (loginHelp.LoadUserSession(userID))
+            if (int.TryParse(restUserID, out int userID))
             {
-                travelAuthForm.TemplateID = TemplateIndex.InsertTravelAuth;
-                try
+                log.WriteLogEntry("Starting LoginHelper...");
+                LoginHelper loginHelp = new LoginHelper();
+                if (loginHelp.LoadUserSession(userID))
                 {
-                    if (travelAuthForm.GetType() == typeof(TravelAuthForm))
+                    travelAuthForm.TemplateID = TemplateIndex.InsertTravelAuth;
+                    try
                     {
-                        log.WriteLogEntry("Starting FormHelper...");
-                        FormHelper travelFormHelp = new FormHelper(travelAuthForm);
-                        if (travelFormHelp.SubmitTravelAuthForm())
+                        if (travelAuthForm.GetType() == typeof(TravelAuthForm))
                         {
-                            EmailHelper emailer = new EmailHelper(loginHelp.CurrentUser);
-                            emailer.NotifyDepartmentHead();
+                            log.WriteLogEntry("Starting FormHelper...");
+                            FormHelper travelFormHelp = new FormHelper(travelAuthForm);
+                            if (travelFormHelp.SubmitTravelAuthForm())
+                            {
+                                EmailHelper emailer = new EmailHelper(loginHelp.CurrentUser);
+                                emailer.NotifyDepartmentHead();
+                            }
+                            else
+                                log.WriteLogEntry("Fail FormHelp SubmitForm!");
+                            result = "Travel Authorization Form Submitted.";
                         }
                         else
-                            log.WriteLogEntry("Fail FormHelp SubmitForm!");
-                        result = "Travel Authorization Form Submitted.";
+                        {
+                            log.WriteLogEntry("FAILED submitted form is the wrong type!");
+                            result = "Failed to submit travel authorization form! Form not recognized!";
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        log.WriteLogEntry("FAILED submitted form is the wrong type!");
-                        result = "Failed to submit travel authorization form! Form not recognized!";
+                        log.WriteLogEntry("FAILED to submit travel authorization form! " + ex.Message);
+                        result = "Failed Travel Authorization Submit " + ex.Message;
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    log.WriteLogEntry("FAILED to submit travel authorization form! " + ex.Message);
-                    result = "Failed Travel Authorization Submit " + ex.Message;
+                    log.WriteLogEntry("FAILED to load active user session!");
+                    result = "Failed to submit travel authorization! User not recognized!";
                 }
             }
             else
-            {
-                log.WriteLogEntry("FAILED to load active user session!");
-                result = "Failed to submit travel authorization! User not recognized!";
-            }
+                log.WriteLogEntry("FAILED invalid user id!");
             log.WriteLogEntry("End Post TravelAuthForm.");
             return result;
         }
 
         // PUT: api/API/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(string id, [FromBody]string value)
         {
         }
 
         // DELETE: api/API/5
-        public void Delete(int id)
+        public void Delete(string id)
         {
         }
     }
