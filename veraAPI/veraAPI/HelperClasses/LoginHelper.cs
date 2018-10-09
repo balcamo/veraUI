@@ -22,11 +22,15 @@ namespace VeraAPI.HelperClasses
         public LoginHelper()
         {
             CurrentUser = new User();
+            CurrentSession = new UserSession();
+            CurrentToken = new Token();
         }
 
         public LoginHelper(User user)
         {
             this.CurrentUser = user;
+            CurrentSession = new UserSession();
+            CurrentToken = new Token();
         }
 
         public bool InsertDomainUserSession(DomainUser user)
@@ -122,9 +126,10 @@ namespace VeraAPI.HelperClasses
             string dbName = WebConfigurationManager.AppSettings.Get("LoginDB");
 
             log.WriteLogEntry("Starting UserDataHandler...");
-            UserSession session = new UserSession(userID);
+            UserSession session = CurrentSession;
             UserDataHandler userData = new UserDataHandler(session, dbServer, dbName);
-            userData.LoadUserSession(userID);
+            if (userData.LoadUserSession(userID))
+                result = true;
 
             log.WriteLogEntry("End LoadUserSession.");
             return result;

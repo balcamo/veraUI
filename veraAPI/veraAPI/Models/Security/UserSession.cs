@@ -29,6 +29,8 @@ namespace VeraAPI.Models.Security
         public string SessionKey { get; set; }
         public bool Authenicated { get; set; }
 
+        public UserSession() { }
+
         public UserSession(int userID)
         {
             this.UserID = userID;

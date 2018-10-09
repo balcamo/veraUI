@@ -30,12 +30,13 @@ namespace VeraAPI.Controllers
         public BaseForm[] Get(string restUserID)
         {
             // call function to get active forms
-            log.WriteLogEntry("Starting Get active travel forms...");
+            log.WriteLogEntry("Starting TravelAuthController GET...");
             BaseForm[] result = null;
             if (int.TryParse(restUserID, out int userID))
             {
                 try
                 {
+                    log.WriteLogEntry("Starting LoginHelper...");
                     LoginHelper loginHelp = new LoginHelper();
                     if (loginHelp.LoadUserSession(userID))
                     {
@@ -49,21 +50,21 @@ namespace VeraAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    log.WriteLogEntry(ex.Message);
+                    log.WriteLogEntry("General program error! " + ex.Message);
                 }
             }
             else
                 log.WriteLogEntry("FAILED invalid user id!");
             // return array of active travel auth forms
             log.WriteLogEntry("Forms returned " + result.Count<BaseForm>() + " " + result[0].UserID + " " + result[0].FormDataID);
-            log.WriteLogEntry("End Get active travel forms.");
+            log.WriteLogEntry("End TravelAuthController GET.");
             return result;
         }
 
         // POST: api/API
         public string Post(string restUserID, [FromBody]TravelAuthForm travelAuthForm)
         {
-            log.WriteLogEntry("Begin Post TravelAuthForm...");
+            log.WriteLogEntry("Begin TravelAuthController POST...");
             string result = string.Empty;
             if (int.TryParse(restUserID, out int userID))
             {
@@ -107,7 +108,7 @@ namespace VeraAPI.Controllers
             }
             else
                 log.WriteLogEntry("FAILED invalid user id!");
-            log.WriteLogEntry("End Post TravelAuthForm.");
+            log.WriteLogEntry("End TravelAuthController POST.");
             return result;
         }
 
