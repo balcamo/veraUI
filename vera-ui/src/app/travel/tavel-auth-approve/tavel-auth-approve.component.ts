@@ -117,9 +117,9 @@ export class TavelAuthApproveComponent implements OnInit {
       this.form.GMApproval = false;
       this.form.GMID = this.user.UserID;
     }
-    var body = JSON.stringify({ userID: this.user.UserID, value: this.form });
+    var body = JSON.stringify(this.form);
     console.log(this.consts.url + 'Recap');
-    this.http.post(this.consts.url + 'Recap', body, options)
+    this.http.post(this.consts.url + 'Recap?restUserID=' + this.user.UserID, body, options)
       .subscribe((data) => alert(data.text()));
     this.form.ApprovalStatus = 'red'
   }

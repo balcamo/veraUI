@@ -203,14 +203,6 @@ C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\System.IdentityModel.Toke
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\System.IdentityModel.Tokens.Jwt.xml
 C:\Users\balcamo\Documents\GitHub\veraUI\VeraAPI\veraAPI\bin\Microsoft.Exchange.WebServices.dll
 C:\Users\balcamo\Documents\GitHub\veraUI\VeraAPI\veraAPI\bin\System.IdentityModel.Tokens.Jwt.dll
-C:\Users\balcamo\Documents\GitHub\veraUI\VeraAPI\veraAPI\bin\Microsoft.IdentityModel.Logging.dll
-C:\Users\balcamo\Documents\GitHub\veraUI\VeraAPI\veraAPI\bin\Microsoft.IdentityModel.JsonWebTokens.dll
 C:\Users\balcamo\Documents\GitHub\veraUI\VeraAPI\veraAPI\bin\Microsoft.Exchange.WebServices.xml
-C:\Users\balcamo\Documents\GitHub\veraUI\VeraAPI\veraAPI\bin\Microsoft.IdentityModel.Tokens.pdb
-C:\Users\balcamo\Documents\GitHub\veraUI\VeraAPI\veraAPI\bin\Microsoft.IdentityModel.Tokens.xml
 C:\Users\balcamo\Documents\GitHub\veraUI\VeraAPI\veraAPI\bin\System.IdentityModel.Tokens.Jwt.pdb
 C:\Users\balcamo\Documents\GitHub\veraUI\VeraAPI\veraAPI\bin\System.IdentityModel.Tokens.Jwt.xml
-C:\Users\balcamo\Documents\GitHub\veraUI\VeraAPI\veraAPI\bin\Microsoft.IdentityModel.Logging.pdb
-C:\Users\balcamo\Documents\GitHub\veraUI\VeraAPI\veraAPI\bin\Microsoft.IdentityModel.Logging.xml
-C:\Users\balcamo\Documents\GitHub\veraUI\VeraAPI\veraAPI\bin\Microsoft.IdentityModel.JsonWebTokens.pdb
-C:\Users\balcamo\Documents\GitHub\veraUI\VeraAPI\veraAPI\bin\Microsoft.IdentityModel.JsonWebTokens.xml
