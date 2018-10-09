@@ -8,18 +8,18 @@ namespace VeraAPI.Models.Forms
 {
     public class TravelAuthForm : BaseForm
     {
-        public string Preparer { get; set; } = string.Empty;       // String
-        public string FirstName { get; set; } = string.Empty;     // String
-        public string LastName { get; set; } = string.Empty;     // String
-        public string Phone { get; set; } = string.Empty;        // Int
-        public string Email { get; set; } = string.Empty;     // Email
-        public string EventTitle { get; set; } = string.Empty;     // EventTitle
-        public string Location { get; set; } = string.Empty;     // Location
-        public string TravelBegin { get; set; } = string.Empty;       // TravelBegin
-        public string TravelEnd { get; set; } = string.Empty;       // TravelEnd
-        public string DistVehicle { get; set; } = string.Empty;       // DistVehicle
-        public string RegistrationCost { get; set; } = string.Empty;    // RegistrationCost
-        public string Airfare { get; set; } = string.Empty;    // Airfare
+        public string Preparer { get; set; } = string.Empty;            // String
+        public string FirstName { get; set; } = string.Empty;           // String
+        public string LastName { get; set; } = string.Empty;            // String
+        public string Phone { get; set; } = string.Empty;               // Int
+        public string Email { get; set; } = string.Empty;               // String
+        public string EventTitle { get; set; } = string.Empty;          // String
+        public string Location { get; set; } = string.Empty;            // String
+        public string TravelBegin { get; set; } = string.Empty;         // DateTime
+        public string TravelEnd { get; set; } = string.Empty;           // DateTime
+        public string DistVehicle { get; set; } = string.Empty;         // Bool
+        public string RegistrationCost { get; set; } = string.Empty;    // Decimal
+        public string Airfare { get; set; } = string.Empty;             // Decimal
         public string RentalCar { get; set; } = string.Empty;    // RentalCar
         public string Fuel { get; set; } = string.Empty;    // Fuel
         public string ParkingTolls { get; set; } = string.Empty;    // ParkingTolls
@@ -33,7 +33,7 @@ namespace VeraAPI.Models.Forms
         public string Advance { get; set; } = string.Empty;       // Advance
         public string AdvanceAmount { get; set; } = string.Empty;   // AdvanceAmount
         public string Policy { get; set; } = string.Empty;       // Policy
-        public string SubmitterSig { get; set; } = string.Empty;     // SubmitterSig
+        public string SubmitterEmail { get; set; } = string.Empty;     // SubmitterSig
         public string RecapRegistrationCost { get; set; } = string.Empty;   // RecapRegistrationCost
         public string RecapAirfare { get; set; } = string.Empty;   // RecapAirfare
         public string RecapRentalCar { get; set; } = string.Empty;   // RecapRentalCar
@@ -47,10 +47,10 @@ namespace VeraAPI.Models.Forms
         public string TotalRecap { get; set; } = string.Empty;   // TotalRecap
         public string TotalReimburse { get; set; } = string.Empty;   // TotalReimburse
         public string ApprovalStatus { get; set; } = string.Empty;     // ApprovalStatus - sets color of box on front end
-        public string DHApproval { get; set; } = string.Empty;     // Department head approval - DHApproval
-        public string DHID { get; set; } = string.Empty;    // Department head ID DHID
-        public string GMApproval { get; set; } = string.Empty;     // GMApproval
-        public string GMID { get; set; } = string.Empty;  // GMID
+        public string DeptHeadEmail { get; set; } = string.Empty;     // Department head approval - DHApproval
+        public string DeptHeadID { get; set; } = string.Empty;    // Department head ID DHID
+        public string GeneralManagerEmail { get; set; } = string.Empty;     // GMApproval
+        public string GeneralManagerID { get; set; } = string.Empty;  // GMID
 
         public TravelAuthForm() { }
 

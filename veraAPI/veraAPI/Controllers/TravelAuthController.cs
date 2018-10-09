@@ -64,7 +64,6 @@ namespace VeraAPI.Controllers
         // POST: api/API
 
         public string Post([FromUri]string restUserID, [FromBody]TravelAuthForm travelAuthForm)
-
         {
             log.WriteLogEntry("Begin TravelAuthController POST...");
             string result = string.Empty;
@@ -74,37 +73,48 @@ namespace VeraAPI.Controllers
                 LoginHelper loginHelp = new LoginHelper();
                 if (loginHelp.LoadUserSession(userID))
                 {
-                    travelAuthForm.TemplateID = TemplateIndex.InsertTravelAuth;
-                    try
+                    DomainUser user = new DomainUser();
+                    log.WriteLogEntry("Starting UserHelper...");
+                    UserHelper userHelp = new UserHelper(user);
+                    if (userHelp.LoadDomainUser(userID))
                     {
-                        if (travelAuthForm.GetType() == typeof(TravelAuthForm))
+                        travelAuthForm.TemplateID = TemplateIndex.InsertTravelAuth;
+                        try
                         {
-                            log.WriteLogEntry("Starting FormHelper...");
-                            FormHelper travelFormHelp = new FormHelper(travelAuthForm);
-                            if (travelFormHelp.SubmitTravelAuthForm())
+                            if (travelAuthForm.GetType() == typeof(TravelAuthForm))
                             {
-                                EmailHelper emailer = new EmailHelper(loginHelp.CurrentUser);
-                                emailer.NotifyDepartmentHead();
+                                log.WriteLogEntry("Starting FormHelper...");
+                                FormHelper travelFormHelp = new FormHelper();
+                                if (travelFormHelp.SubmitTravelAuthForm(user, travelAuthForm))
+                                {
+                                    //EmailHelper emailer = new EmailHelper(user);
+                                    //emailer.NotifyDepartmentHead();
+                                }
+                                else
+                                    log.WriteLogEntry("Fail FormHelp SubmitForm!");
+                                result = "Travel Authorization Form Submitted.";
                             }
                             else
-                                log.WriteLogEntry("Fail FormHelp SubmitForm!");
-                            result = "Travel Authorization Form Submitted.";
+                            {
+                                log.WriteLogEntry("FAILED submitted form is the wrong type!");
+                                result = "Failed to submit travel authorization form! Form not recognized!";
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            log.WriteLogEntry("FAILED submitted form is the wrong type!");
-                            result = "Failed to submit travel authorization form! Form not recognized!";
+                            log.WriteLogEntry("FAILED to submit travel authorization form! " + ex.Message);
+                            result = "Failed Travel Authorization Submit " + ex.Message;
                         }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        log.WriteLogEntry("FAILED to submit travel authorization form! " + ex.Message);
-                        result = "Failed Travel Authorization Submit " + ex.Message;
+                        log.WriteLogEntry("FAILED to load current user data!");
+                        result = "Failed to submit travel authorization! User not found!";
                     }
                 }
                 else
                 {
-                    log.WriteLogEntry("FAILED to load active user session!");
+                    log.WriteLogEntry("FAILED to load current user session!");
                     result = "Failed to submit travel authorization! User not recognized!";
                 }
             }

@@ -217,7 +217,7 @@
     <Compile Include="Models\Security\Position.cs" />
     <Compile Include="Models\Security\Role.cs" />
     <Compile Include="Models\Security\UserSession.cs" />
-    <Compile Include="Models\Templates\JobTemplate.cs" />
+    <Compile Include="Models\Templates\FormTemplate.cs" />
     <Compile Include="Models\DataHandler\UserDataHandler.cs" />
     <Compile Include="Models\Office365\ExchangeHandler.cs" />
     <Compile Include="Models\JobService\JobHeader.cs" />

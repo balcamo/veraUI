@@ -31,7 +31,7 @@ namespace VeraAPI.Controllers
         // POST: api/Recap
         public string Post(string restUserID, [FromBody]TravelAuthForm value)
         {
-            FormHelper recapHelp = new FormHelper(value);
+            FormHelper recapHelp = new FormHelper();
             string result = string.Empty;
             if (int.TryParse(restUserID, out int userID))
             {

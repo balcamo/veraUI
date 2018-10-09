@@ -69,32 +69,43 @@ namespace VeraAPI.Controllers
                 LoginHelper loginHelp = new LoginHelper();
                 if (loginHelp.LoadUserSession(userID))
                 {
-                    // Get template ID for insert travel authorization from static class TemplateIndex
-                    travelAuthForm.TemplateID = TemplateIndex.InsertTravelAuth;
-                    try
+                    DomainUser user = new DomainUser();
+                    log.WriteLogEntry("Starting UserHelper...");
+                    UserHelper userHelp = new UserHelper(user);
+                    if (userHelp.LoadDomainUser(userID))
                     {
-                        if (travelAuthForm.GetType() == typeof(TravelAuthForm))
+                        travelAuthForm.TemplateID = TemplateIndex.InsertTravelAuth;
+                        try
                         {
-                            FormHelper travelFormHelp = new FormHelper(travelAuthForm);
-                            log.WriteLogEntry("Starting FormHelper...");
-
-                            // SubmitForm loads the template for the travel auth form
-                            // this provides database table information
-                            // insert the form data into the system form database
-                            if (travelFormHelp.SubmitTravelAuthForm())
+                            if (travelAuthForm.GetType() == typeof(TravelAuthForm))
                             {
-                                log.WriteLogEntry("Success submitting travel form.");
+                                log.WriteLogEntry("Starting FormHelper...");
+                                FormHelper travelFormHelp = new FormHelper();
+                                if (travelFormHelp.SubmitTravelAuthForm(user, travelAuthForm))
+                                {
+                                    // Email code here
+
+                                }
+                                else
+                                    log.WriteLogEntry("Fail FormHelp SubmitForm!");
+                                result = "Travel Authorization Form Submitted.";
                             }
                             else
-                                log.WriteLogEntry("Fail FormHelp SubmitForm!");
-                            result = "Travel Authorization Form Submitted.";
+                            {
+                                log.WriteLogEntry("FAILED submitted form is the wrong type!");
+                                result = "Failed to submit travel authorization form! Form not recognized!";
+                            }
                         }
-                        else
-                            log.WriteLogEntry("Failed submitted form is the wrong type!");
+                        catch (Exception ex)
+                        {
+                            log.WriteLogEntry("FAILED to submit travel authorization form! " + ex.Message);
+                            result = "Failed Travel Authorization Submit " + ex.Message;
+                        }
                     }
-                    catch (Exception e)
+                    else
                     {
-                        result = "Failed Travel Authorization Submit " + e.Message;
+                        log.WriteLogEntry("FAILED to load current user data!");
+                        result = "Failed to submit travel authorization! User not found!";
                     }
                 }
                 else

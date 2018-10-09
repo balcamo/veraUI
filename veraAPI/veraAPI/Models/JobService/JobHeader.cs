@@ -8,7 +8,7 @@ using VeraAPI.Models.Templates;
 
 namespace VeraAPI.Models.JobService
 {
-    public class JobHeader : JobTemplate
+    public class JobHeader : FormTemplate
     {
         public int JobID { get; set; }
         public int FormDataID { get; set; }

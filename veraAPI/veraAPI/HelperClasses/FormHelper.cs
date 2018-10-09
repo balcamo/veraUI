@@ -9,14 +9,15 @@ using VeraAPI.Models.Templates;
 using VeraAPI.Models.DataHandler;
 using VeraAPI.Models.Tools;
 using VeraAPI.Models.OfficeHandler;
+using VeraAPI.Models.Security;
 
 namespace VeraAPI.HelperClasses
 {
     public class FormHelper
     {
-        public BaseForm WebForm { get; set; }
+        public BaseForm WebForm { get; private set; }
         public List<BaseForm> WebForms { get; private set; }
-        public JobTemplate Template { get; private set; }
+        //public JobTemplate Template { get; private set; }
 
         private readonly string dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
         private readonly string dbName = WebConfigurationManager.AppSettings.Get("DBName");
@@ -29,11 +30,6 @@ namespace VeraAPI.HelperClasses
             this.WebForm = new BaseForm();
         }
 
-        public FormHelper(BaseForm webForm)
-        {
-            this.WebForm = webForm;
-        }
-
         /**
         * 
         * SubmitForm will insert a new record into the database 
@@ -41,30 +37,40 @@ namespace VeraAPI.HelperClasses
         * @param FormData : this is the form that needs to be inserted
         * 
         **/
-        public bool SubmitTravelAuthForm()
+        public bool SubmitTravelAuthForm(User user, BaseForm webForm)
         {
-            log.WriteLogEntry("Begin FormHelp SubmitForm...");
+            log.WriteLogEntry("Begin SubmitTravelAuthForm...");
             bool result = false;
-            formDataHandle = new FormDataHandler(WebForm, dbServer, dbName);
-
-            // Hold submitted form for comparison
-            BaseForm SubmittedForm = WebForm;
-
-            // Load the job template corresponding to the templateID for the submitted form
-            if (formDataHandle.LoadFormTemplate())
+            if (webForm.GetType() == typeof(TravelAuthForm))
             {
-                Template = formDataHandle.Template;
-
-                // Insert travel form data into the database
-                if (formDataHandle.InsertFormData())
+                TravelAuthForm travelForm = (TravelAuthForm)webForm;
+                if (user.GetType() == typeof(DomainUser))
                 {
-                    log.WriteLogEntry("Success insert form data to database.");
-                    result = true;
+                    DomainUser domainUser = (DomainUser)user;
+                    travelForm.UserID = domainUser.UserID;
+                    travelForm.DeptHeadID = domainUser.Department.DeptHeadUserID.ToString();
+                    travelForm.DeptHeadEmail = domainUser.Department.DeptHeadEmail;
+                    travelForm.GeneralManagerID = domainUser.Company.GeneralManagerUserID.ToString();
+                    travelForm.GeneralManagerEmail = domainUser.Company.GeneralManagerEmail;
+
+                    // Load the job template corresponding to the templateID for the submitted form
+                    log.WriteLogEntry("Starting FormDataHandler...");
+                    formDataHandle = new FormDataHandler(dbServer, dbName);
+                    if (formDataHandle.LoadFormTemplate(webForm.TemplateID))
+                    {
+                        // Insert travel form data into the database
+                        if (formDataHandle.InsertTravelAuth(travelForm))
+                        {
+                            result = true;
+                        }
+                        log.WriteLogEntry("Failed insert form data to database.");
+                    }
+                    else
+                        log.WriteLogEntry("Failed loading form template!");
                 }
-                log.WriteLogEntry("Failed insert form data to database.");
             }
             else
-                log.WriteLogEntry("Failed loading form template!");
+                log.WriteLogEntry("FAILED submitted form is not a travel authorization form!");
             log.WriteLogEntry("End FormHelp SubmitForm result " + result);
             return result;
         }
@@ -100,7 +106,7 @@ namespace VeraAPI.HelperClasses
         public int LoadActiveTravelAuthForms(int userID)
         {
             log.WriteLogEntry("Starting LoadActiveTravelAuthForms...");
-            log.WriteLogEntry("User ID (passed token header) " + userID);
+            log.WriteLogEntry("User ID " + userID);
             int result = 0;
             WebForms = new List<BaseForm>();
             formDataHandle = new FormDataHandler(WebForms, dbServer, dbName);

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace VeraAPI.Models.Templates
 {
-    public class JobTemplate
+    public class FormTemplate
     {
         public int TemplateID { get; set; }
         public string TemplateName { get; set; }
@@ -15,9 +15,9 @@ namespace VeraAPI.Models.Templates
         public int JobPriority { get; set; }
         public string JobType { get; set; }
 
-        public JobTemplate() { }
+        public FormTemplate() { }
 
-        public JobTemplate(int templateID)
+        public FormTemplate(int templateID)
         {
             this.TemplateID = templateID;
         }
