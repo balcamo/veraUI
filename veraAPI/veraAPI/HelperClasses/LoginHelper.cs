@@ -124,13 +124,14 @@ namespace VeraAPI.HelperClasses
             bool result = false;
             string dbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
             string dbName = WebConfigurationManager.AppSettings.Get("LoginDB");
+            UserSession session = CurrentSession;
 
             log.WriteLogEntry("Starting UserDataHandler...");
-            UserSession session = CurrentSession;
             UserDataHandler userData = new UserDataHandler(session, dbServer, dbName);
             if (userData.LoadUserSession(userID))
                 result = true;
-
+            else
+                log.WriteLogEntry("FAILED to load the current user session!");
             log.WriteLogEntry("End LoadUserSession.");
             return result;
         }

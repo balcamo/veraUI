@@ -290,7 +290,6 @@ C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.AI.DependencyCo
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.AI.Web.xml
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\obj\Debug\veraAPI.csprojAssemblyReference.cache
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\obj\Debug\veraAPI.csproj.CoreCompileInputs.cache
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\obj\Debug\veraAPI.csproj.CopyComplete
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\obj\Debug\veraAPI.dll
@@ -298,13 +297,7 @@ C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\obj\Debug\veraAPI.pdb
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.Exchange.WebServices.dll
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.Exchange.WebServices.xml
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\System.IdentityModel.Tokens.Jwt.dll
-C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Logging.dll
-C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.JsonWebTokens.dll
-C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Tokens.pdb
-C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Tokens.xml
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\System.IdentityModel.Tokens.Jwt.pdb
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\System.IdentityModel.Tokens.Jwt.xml
-C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Logging.pdb
-C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Logging.xml
-C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.JsonWebTokens.pdb
-C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\VeraAPI.dll.CodeAnalysisLog.xml
+C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\VeraAPI.dll.lastcodeanalysissucceeded

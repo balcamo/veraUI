@@ -39,6 +39,7 @@ namespace VeraAPI.Models.DataHandler
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
             this.CurrentUser = new User();
+            this.CurrentSession = new UserSession();
         }
 
         public bool LoadUserSession(int userID)
@@ -110,7 +111,7 @@ namespace VeraAPI.Models.DataHandler
                     }
                 }
             }
-            log.WriteLogEntry(string.Format("Current User {0} {1} {2}", CurrentUser.UserID, CurrentUser.UserEmail, CurrentUser.Authenicated));
+            log.WriteLogEntry(string.Format("Current Session {0} {1} {2}", session.UserID, session.UserEmail, session.Authenicated));
             log.WriteLogEntry("End LoadUserSession.");
             return result;
         }
