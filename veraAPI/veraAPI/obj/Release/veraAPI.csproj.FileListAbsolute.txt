@@ -198,15 +198,7 @@ C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\obj\Release\VeraAPI.csproj.Co
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\obj\Release\VeraAPI.csproj.CopyComplete
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\obj\Release\VeraAPI.dll
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\obj\Release\VeraAPI.pdb
-C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.JsonWebTokens.dll
-C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Logging.dll
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\System.IdentityModel.Tokens.Jwt.dll
-C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.JsonWebTokens.pdb
-C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.JsonWebTokens.xml
-C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Logging.pdb
-C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Logging.xml
-C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Tokens.pdb
-C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Tokens.xml
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\System.IdentityModel.Tokens.Jwt.pdb
 C:\Users\thuff\source\repos\veraUI\veraAPI\veraAPI\bin\System.IdentityModel.Tokens.Jwt.xml
 C:\Users\balcamo\Documents\GitHub\veraUI\VeraAPI\veraAPI\bin\Microsoft.Exchange.WebServices.dll

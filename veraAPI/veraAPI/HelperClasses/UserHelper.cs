@@ -65,7 +65,7 @@ namespace VeraAPI.HelperClasses
                                     user.Token.AccessKey[3] = user.SecurityRoles.FirstOrDefault().RoleNumber;
                                     user.Token.AccessKey[4] = user.SecurityAccess.FirstOrDefault().AccessNumber;
                                     log.WriteLogEntry(string.Format("User access key array values {0} {1} {2} {3} {4}", user.CompanyNumber, user.DepartmentNumber, user.PositionNumber, user.SecurityRoles.FirstOrDefault().RoleNumber, user.SecurityAccess.FirstOrDefault().AccessNumber));
-                                    log.WriteLogEntry(string.Format("User token {0} {1} {2}", user.Token.UserID, user.Token.SessionKey, string.Join(",", user.Token.AccessKey)));
+                                    log.WriteLogEntry(string.Format("User token access key {0}", string.Join(",", user.Token.AccessKey)));
                                     result = true;
                                 }
                                 else

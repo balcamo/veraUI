@@ -39,6 +39,7 @@ namespace VeraAPI.Models.DataHandler
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
             this.CurrentUser = new User();
+            this.CurrentSession = new UserSession();
         }
 
         public bool LoadUserSession(int userID)
@@ -64,8 +65,8 @@ namespace VeraAPI.Models.DataHandler
                                 session.UserID = (int)rdr["user_id"];
                                 log.WriteLogEntry("Company number " + rdr["company_number"].ToString());
                                 session.CompanyNumber = (int)rdr["company_number"];
-                                log.WriteLogEntry("Department number " + rdr["department_number"].ToString());
-                                session.CompanyNumber = (int)rdr["department_number"];
+                                log.WriteLogEntry("Department number " + rdr["dept_number"].ToString());
+                                session.CompanyNumber = (int)rdr["dept_number"];
                                 log.WriteLogEntry("Position number " + rdr["position_number"].ToString());
                                 session.CompanyNumber = (int)rdr["position_number"];
                                 log.WriteLogEntry("Role number " + rdr["role_number"].ToString());
@@ -84,16 +85,8 @@ namespace VeraAPI.Models.DataHandler
                                 session.EmployeeID = rdr["user_employee_id"].ToString();
                                 log.WriteLogEntry("Department name " + rdr["dept_name"].ToString());
                                 session.DeptName = rdr["dept_name"].ToString();
-                                log.WriteLogEntry("Department head " + rdr["dept_head_name"].ToString());
-                                session.DeptHeadName = rdr["dept_head_name"].ToString();
                                 log.WriteLogEntry("Department head email" + rdr["dept_head_email"].ToString());
                                 session.DeptHeadEmail = rdr["dept_head_email"].ToString();
-                                /**
-                                log.WriteLogEntry("Supervisor name " + rdr["supervisor"].ToString());
-                                session.SupervisorName = rdr["supervisor"].ToString();
-                                log.WriteLogEntry("Supervisor email " + rdr["supervisor_email"].ToString());
-                                session.SupervisorEmail = rdr["supervisor_email"].ToString();
-                                **/
                                 log.WriteLogEntry("Domain UPN " + rdr["domain_upn"].ToString());
                                 session.DomainUpn = rdr["domain_upn"].ToString();
                                 log.WriteLogEntry("Domain UserName " + rdr["domain_username"].ToString());
@@ -102,9 +95,10 @@ namespace VeraAPI.Models.DataHandler
                                 session.SessionKey = rdr["session_key"].ToString();
                                 log.WriteLogEntry("Authenticated " + rdr["authenticated"].ToString());
                                 session.Authenicated = (bool)rdr["authenticated"];
-                                this.CurrentSession = session;
                                 result = true;
                             }
+                            else
+                                log.WriteLogEntry("FAILED no user session found in database!");
                         }
                     }
                     catch (SqlException ex)
@@ -117,7 +111,7 @@ namespace VeraAPI.Models.DataHandler
                     }
                 }
             }
-            log.WriteLogEntry(string.Format("Current User {0} {1} {2}", CurrentUser.UserID, CurrentUser.UserEmail, CurrentUser.Authenicated));
+            log.WriteLogEntry(string.Format("Current Session {0} {1} {2}", session.UserID, session.UserEmail, session.Authenicated));
             log.WriteLogEntry("End LoadUserSession.");
             return result;
         }
