@@ -44,10 +44,10 @@ namespace VeraAPI.Models.DataHandler
             bool result = false;
             string tableName = Template.TableName;
             string cmdString = string.Format(@"insert into {0}.dbo.{1} (first_name, last_name, phone, email, event_description, event_location, depart_date, return_date, district_vehicle, district_vehicle_number, registration_amt, airfare_amt, rental_amt, 
-                                    fuel_parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, misc_amt, request_advance, advance_amt, travel_policy, submit_date, submitter_approval, submitter_id, supervisor_approval, supervisor_id, 
-                                    manager_approval, manager_id, approval_status) output inserted.travel_id 
+                                    fuel_parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, misc_amt, request_advance, advance_amt, travel_policy, submit_date, submitter_id, supervisor_id, manager_id, approval_status) 
+                                    output inserted.form_id
                                     values (@firstName, @lastName, @phone, @email, @eventDescription, @eventLocation, @departDate, @returnDate, @districtVehicle, @districtVehicleNumber, @registrationAmt, @airfareAmt, @rentalAmt, @fuelParkingAmt, @estimatedMiles, 
-                                    @lodgingAmt, @perdiemAmt, @travelDays, @miscAmt, @requestAdvance, @advanceAmt, @travelPolicy, GETDATE(), @submitterEmail, @submitterID, @supervisorEmail, @supervisorID, @managerEmail, @managerID, @status)", dbName, tableName);
+                                    @lodgingAmt, @perdiemAmt, @travelDays, @miscAmt, @requestAdvance, @advanceAmt, @travelPolicy, GETDATE(), @submitterID, @supervisorID, @managerID, @status)", dbName, tableName);
             DateTime departDate = DateTime.MinValue, returnDate = DateTime.MinValue;
             bool districtVehicle = false, requestAdvance = false, travelPolicy = false;
             decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelParkingAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0, advanceAmt = 0;
@@ -125,11 +125,8 @@ namespace VeraAPI.Models.DataHandler
                     cmd.Parameters.AddWithValue("@advanceAmt", advanceAmt);
                     cmd.Parameters.AddWithValue("@travelPolicy", travelPolicy);
                     cmd.Parameters.AddWithValue("@submitterID", travelForm.UserID);
-                    cmd.Parameters.AddWithValue("@submitterEmail", travelForm.SubmitterSig);
-                    cmd.Parameters.AddWithValue("@supervisorID", travelForm.DeptHeadID);
-                    cmd.Parameters.AddWithValue("@supervisorEmail", travelForm.DeptHeadEmail);
-                    cmd.Parameters.AddWithValue("@managerID", travelForm.GeneralManagerID);
-                    cmd.Parameters.AddWithValue("@managerEmail", travelForm.GeneralManagerEmail);
+                    cmd.Parameters.AddWithValue("@supervisorID", travelForm.DHID);
+                    cmd.Parameters.AddWithValue("@managerID", travelForm.GMID);
                     cmd.Parameters.AddWithValue("@status", status);
                     try
                     {
@@ -207,7 +204,7 @@ namespace VeraAPI.Models.DataHandler
         {
             log.WriteLogEntry("Begin LoadTravelAuthForm...");
             bool result = false;
-            string cmdString = string.Format(@"select * from {0}.dbo.travel where travel_id = @dataID", dbName);
+            string cmdString = string.Format(@"select * from {0}.dbo.travel where form_id = @dataID", dbName);
             log.WriteLogEntry("SQL command string: " + cmdString);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
@@ -223,7 +220,7 @@ namespace VeraAPI.Models.DataHandler
                             {
                                 TravelAuthForm travel = new TravelAuthForm
                                 {
-                                    FormDataID = (int)rdr["travel_id"],
+                                    FormDataID = (int)rdr["form_id"],
                                     FirstName = rdr["first_name"].ToString(),
                                     LastName = rdr["last_name"].ToString(),
                                     Phone = rdr["phone"].ToString(),
@@ -247,7 +244,7 @@ namespace VeraAPI.Models.DataHandler
                                     Advance = rdr["request_advance"].ToString(),
                                     Policy = rdr["travel_policy"].ToString(),
                                     Preparer = rdr["preparer_name"].ToString(),
-                                    SubmitterSig = rdr["submitter_approval"].ToString()
+                                    SubmitterSig = rdr["submitter_id"].ToString()
                                 };
                                 int status = (int)rdr["approval_status"];
                                 switch (status)
@@ -294,7 +291,6 @@ namespace VeraAPI.Models.DataHandler
             int result = 0;
             List<BaseForm> travelForms = new List<BaseForm>();
 
-            // Load list of travel auth forms where submitter_approval = userID
             string cmdString = string.Format(@"select * from {0}.dbo.travel where submitter_id = @userID", dbName);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
@@ -311,7 +307,7 @@ namespace VeraAPI.Models.DataHandler
                                 TravelAuthForm travel = new TravelAuthForm
                                 {
                                     UserID = (int)rdr["submitter_id"],
-                                    FormDataID = (int)rdr["travel_id"],
+                                    FormDataID = (int)rdr["form_id"],
                                     FirstName = rdr["first_name"].ToString(),
                                     LastName = rdr["last_name"].ToString(),
                                     Phone = rdr["phone"].ToString(),
@@ -335,7 +331,7 @@ namespace VeraAPI.Models.DataHandler
                                     Advance = rdr["request_advance"].ToString(),
                                     Policy = rdr["travel_policy"].ToString(),
                                     Preparer = rdr["preparer_name"].ToString(),
-                                    SubmitterSig = rdr["submitter_approval"].ToString()
+                                    SubmitterSig = rdr["submitter_id"].ToString()
                                 };
                                 int status = (int)rdr["approval_status"];
                                 switch (status)
@@ -397,7 +393,7 @@ namespace VeraAPI.Models.DataHandler
                                 TravelAuthForm travel = new TravelAuthForm
                                 {
                                     UserID = (int)rdr["submitter_id"],
-                                    FormDataID = (int)rdr["travel_id"],
+                                    FormDataID = (int)rdr["form_id"],
                                     FirstName = rdr["first_name"].ToString(),
                                     LastName = rdr["last_name"].ToString(),
                                     Phone = rdr["phone"].ToString(),
@@ -421,7 +417,7 @@ namespace VeraAPI.Models.DataHandler
                                     Advance = rdr["request_advance"].ToString(),
                                     Policy = rdr["travel_policy"].ToString(),
                                     Preparer = rdr["preparer_name"].ToString(),
-                                    SubmitterSig = rdr["submitter_approval"].ToString()
+                                    SubmitterSig = rdr["submitter_id"].ToString()
                                 };
                                 int status = (int)rdr["approval_status"];
                                 switch (status)
@@ -457,6 +453,44 @@ namespace VeraAPI.Models.DataHandler
             WebForms = travelForms;
             result = WebForms.Count;
             log.WriteLogEntry("End LoadApproverTravelAuthForms.");
+            return result;
+        }
+
+        public int UpdateForm(string[,] formFields, string[,] formFilters)
+        {
+            log.WriteLogEntry("Begin UpdateForm...");
+            int result = 0;
+            StringBuilder sb = new StringBuilder(string.Format("update {0}.dbo.{1} set ", dbServer, dbName));
+            for (int i = 0; i < formFields.GetUpperBound(0); i++)
+            {
+                for (int j = 0; j < formFields.GetUpperBound(1); j++)
+                {
+                    sb.Append(formFields[i,j] + " = @" + formFields[i,j]);
+                    while (i < formFields.GetUpperBound(0) - 1)
+                    {
+                        sb.Append(", ");
+                    }
+                }
+            }
+            sb.Append(" where ");
+            for (int i = 0; i < formFilters.GetUpperBound(0); i++)
+            {
+                for (int j = 0; j < formFilters.GetUpperBound(1); j++)
+                {
+                    if (string.Equals(formFilters[i, j].ToLower(), "null"))
+                        sb.Append(formFilters[i, j] + " is null");
+                    else
+                        sb.Append(formFilters[i, j] + " = @" + formFilters[i, j]);
+                    while (i < formFilters.GetUpperBound(0) - 1)
+                    {
+                        sb.Append(" and ");
+                    }
+                }
+            }
+            string cmdString = sb.ToString();
+            log.WriteLogEntry("Update command string \n" + cmdString);
+            log.WriteLogEntry("Forms updated " + result);
+            log.WriteLogEntry("End UpdateForm.");
             return result;
         }
     }

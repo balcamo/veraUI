@@ -41,18 +41,7 @@ namespace VeraAPI.Controllers
                 {
                     if (value.GetType() == typeof(TravelAuthForm))
                     {
-                        //TravelAuthForm authForm = new TravelAuthForm(value);
-                        result = "Submitted Successfully";
-                        if (value.TotalReimburse != null) { emailType = "recap"; }
-                        Task t = Task.Run(() =>
-                        {
-                            // change number to constant once file is made
-                            recapHelp.UpdateForm(value, emailType);
 
-                        });
-                        //Thread helpThread = new Thread(authHelper.UpdateForm);
-
-                        //helpThread.Start(authForm);
                     }
                 }
                 catch (Exception e)

@@ -7,13 +7,8 @@ namespace VeraAPI.Models.Templates
 {
     public class TemplateIndex
     {
-        public static readonly int InsertTravelAuth;
-        public static readonly int InsertTravelRecap;
-
-        static TemplateIndex()
-        {
-            InsertTravelAuth = 1;
-            InsertTravelRecap = 2;
-        }
+        public static readonly int InsertTravelAuth = 1;
+        public static readonly int UpdateTravelAuth = 2;
+        public static readonly int InsertTravelRecap = 3;
     }
 }

@@ -74,33 +74,7 @@ namespace VeraAPI.Controllers
                     UserHelper userHelp = new UserHelper(user);
                     if (userHelp.LoadDomainUser(userID))
                     {
-                        travelAuthForm.TemplateID = TemplateIndex.InsertTravelAuth;
-                        try
-                        {
-                            if (travelAuthForm.GetType() == typeof(TravelAuthForm))
-                            {
-                                log.WriteLogEntry("Starting FormHelper...");
-                                FormHelper travelFormHelp = new FormHelper();
-                                if (travelFormHelp.SubmitTravelAuthForm(user, travelAuthForm))
-                                {
-                                    // Email code here
-
-                                }
-                                else
-                                    log.WriteLogEntry("Fail FormHelp SubmitForm!");
-                                result = "Travel Authorization Form Submitted.";
-                            }
-                            else
-                            {
-                                log.WriteLogEntry("FAILED submitted form is the wrong type!");
-                                result = "Failed to submit travel authorization form! Form not recognized!";
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            log.WriteLogEntry("FAILED to submit travel authorization form! " + ex.Message);
-                            result = "Failed Travel Authorization Submit " + ex.Message;
-                        }
+                        result = "TravelApprovalController POST.";
                     }
                     else
                     {
@@ -126,8 +100,58 @@ namespace VeraAPI.Controllers
         }
 
         // PUT: api/TravelApproval/5
-        public void Put(string id, [FromBody]string value)
+        public void Put([FromUri]string restUserID, [FromBody]TravelAuthForm travelAuthForm)
         {
+            log.WriteLogEntry("Begin Post TravelAuthForm...");
+            if (int.TryParse(restUserID, out int userID))
+            {
+                log.WriteLogEntry("Starting LoginHelper...");
+                LoginHelper loginHelp = new LoginHelper();
+                if (loginHelp.LoadUserSession(userID))
+                {
+                    DomainUser user = new DomainUser();
+                    log.WriteLogEntry("Starting UserHelper...");
+                    UserHelper userHelp = new UserHelper(user);
+                    if (userHelp.LoadDomainUser(userID))
+                    {
+                        travelAuthForm.TemplateID = TemplateIndex.UpdateTravelAuth;
+                        try
+                        {
+                            if (travelAuthForm.GetType() == typeof(TravelAuthForm))
+                            {
+                                log.WriteLogEntry("Starting FormHelper...");
+                                FormHelper travelFormHelp = new FormHelper();
+                                if (travelFormHelp.ApproveTravelAuthForm(user.UserID, travelAuthForm))
+                                {
+                                    // Email code here
+
+                                }
+                                else
+                                    log.WriteLogEntry("FAILED submit travel form!");
+                            }
+                            else
+                            {
+                                log.WriteLogEntry("FAILED submitted form is the wrong type!");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            log.WriteLogEntry("FAILED to submit travel authorization form! " + ex.Message);
+                        }
+                    }
+                    else
+                    {
+                        log.WriteLogEntry("FAILED to load current user data!");
+                    }
+                }
+                else
+                {
+                    log.WriteLogEntry("FAILED to load active user session!");
+                }
+            }
+            else
+                log.WriteLogEntry("FAILED invalid user id!");
+            log.WriteLogEntry("End Post TravelAuthForm.");
         }
 
         // DELETE: api/TravelApproval/5

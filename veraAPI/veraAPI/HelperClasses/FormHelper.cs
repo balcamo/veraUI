@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Configuration;
+using System.Text;
 using VeraAPI.Models;
 using VeraAPI.Models.Forms;
 using VeraAPI.Models.Templates;
@@ -48,10 +49,8 @@ namespace VeraAPI.HelperClasses
                 {
                     DomainUser domainUser = (DomainUser)user;
                     travelForm.UserID = domainUser.UserID;
-                    travelForm.DeptHeadID = domainUser.Department.DeptHeadUserID.ToString();
-                    travelForm.DeptHeadEmail = domainUser.Department.DeptHeadEmail;
-                    travelForm.GeneralManagerID = domainUser.Company.GeneralManagerUserID.ToString();
-                    travelForm.GeneralManagerEmail = domainUser.Company.GeneralManagerEmail;
+                    travelForm.DHID = domainUser.Department.DeptHeadUserID.ToString();
+                    travelForm.GMID = domainUser.Company.GeneralManagerUserID.ToString();
 
                     // Load the job template corresponding to the templateID for the submitted form
                     log.WriteLogEntry("Starting FormDataHandler...");
@@ -75,24 +74,6 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        /**
-         * 
-         * UpdateForm will find a record in the database to update
-         *      it will also send an email to the appropriate parties
-         * @param FormData : this is the form that needs to be updated
-         * @param EmailType : the eamil type will be used to send an email to 
-         *      those that need to be notified
-         *      
-         **/
-        public void UpdateForm(BaseForm FormData, string EmailType)
-        {
-            //set up for updating a specific record
-            //
-            
-        }
-
-        // WHAT FORMS ARE BEING LOADED?
-        // Load a travel auth form based on the form data ID
         public bool LoadTravelAuthForm()
         {
             log.WriteLogEntry("Starting LoadTravelAuthForm...");
@@ -124,6 +105,51 @@ namespace VeraAPI.HelperClasses
             WebForms = formDataHandle.WebForms;
             log.WriteLogEntry("Count loaded forms " + WebForms.Count);
             log.WriteLogEntry("End LoadApproverTravelAuthForms.");
+            return result;
+        }
+
+        public bool ApproveTravelAuthForm(int userID, BaseForm webForm)
+        {
+            log.WriteLogEntry("Begin ApproveTravelAuthForm...");
+            bool result = false;
+            string[,] formFields = new string[,] { };
+            string[,] formFilters = new string[,] { };
+
+            if (webForm.GetType() == typeof(TravelAuthForm))
+            {
+                TravelAuthForm travel = (TravelAuthForm)webForm;
+                bool dhApprove = bool.TryParse(travel.DHApproval, out bool dh);
+                bool gmApprove = bool.TryParse(travel.GMApproval, out bool gm);
+                if (dhApprove)
+                {
+                    formFields[0, 0] = "supervisor_approval_date";
+                    formFields[0, 1] = DateTime.Now.ToShortDateString();
+                    formFilters[0, 0] = "supervisor_id";
+                    formFilters[0, 1] = userID.ToString();
+                    formFilters[1, 0] = "form_id";
+                    formFilters[1, 1] = webForm.FormDataID.ToString();
+                    formFilters[2, 0] = "supervisor_approval_date";
+                    formFilters[2, 1] = "null";
+                    FormDataHandler formData = new FormDataHandler(dbServer, dbName);
+                    if (formData.UpdateForm(formFields, formFilters) > 0)
+                        result = true;
+                }
+                if (gmApprove)
+                {
+                    formFields[0, 0] = "manager_approval_date";
+                    formFields[0, 1] = DateTime.Now.ToShortDateString();
+                    formFilters[0, 0] = "manager_id";
+                    formFilters[0, 1] = userID.ToString();
+                    formFilters[1, 0] = "form_id";
+                    formFilters[1, 1] = webForm.FormDataID.ToString();
+                    formFilters[2, 0] = "manager_approval_date";
+                    formFilters[2, 1] = "null";
+                    FormDataHandler formData = new FormDataHandler(dbServer, dbName);
+                    if (formData.UpdateForm(formFields, formFilters) > 0)
+                        result = true;
+                }
+            }
+            log.WriteLogEntry("End ApproveTravelAuthForm.");
             return result;
         }
     }
