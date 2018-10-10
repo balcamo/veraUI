@@ -46,8 +46,8 @@ export class TavelAuthApproveComponent implements OnInit {
     this.form = authForm;
     this.food = (this.form.PerDiem * this.form.FullDays) + (this.form.PerDiem * this.consts.firstLastDayFood);
     this.mileage = this.form.Mileage * this.consts.mileageRate;
-    if ((this.user.EntryGroup[3] == 99 && this.form.DHApproval.toString() != '') ||
-      (this.user.EntryGroup[3] == 3 && this.form.GMApproval.toString() != '')) {
+    if ((this.user.EntryGroup[3] == 99 && this.form.DHApproval != undefined) ||
+      (this.user.EntryGroup[3] == 3 && this.form.GMApproval != undefined)) {
       this.submitted = true;
     } else {
       this.submitted = false;
