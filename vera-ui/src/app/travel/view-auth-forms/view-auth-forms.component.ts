@@ -43,12 +43,12 @@ export class ViewAuthFormsComponent implements OnInit {
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
     this.displayRecap = "none";
-    if (this.form.DHApproval.toString() == '') {
+    if (this.form.DHApproval == undefined) {
       this.dhApprove = "Pending";
       this.gmApprove = "Pending";
     } else if (this.form.DHApproval.toString() == "true") {
       this.dhApprove = "Approved";
-      if (this.form.GMApproval.toString() == '') {
+      if (this.form.GMApproval == undefined) {
         this.gmApprove = "Pending";
       } else if (this.form.GMApproval.toString() == 'true') {
         this.gmApprove = "Approved";
