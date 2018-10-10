@@ -37,7 +37,7 @@ namespace VeraAPI.Controllers
                         log.WriteLogEntry("Starting FormHelper...");
 
                         // Load active forms from system form database by user id = token header
-                        formHelp.LoadActiveTravelAuthForms(userID);
+                        formHelp.LoadApproverTravelAuthForms(userID);
                         result = formHelp.WebForms.ToArray();
                     }
                     catch (Exception ex)

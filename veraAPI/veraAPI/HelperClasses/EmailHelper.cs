@@ -29,39 +29,6 @@ namespace VeraAPI.HelperClasses
             this.CurrentUser = user;
         }
 
-        public bool ExchangeSendMail()
-        {
-            log.WriteLogEntry("Begin ExchangeSendMail...");
-            bool result = false;
-
-            if (CurrentUser.GetType() == typeof(DomainUser))
-            {
-                DomainUser user = (DomainUser)CurrentUser;
-                emailHandle = new ExchangeHandler(user);
-                try
-                {
-                    if (emailHandle.ConnectExchangeService())
-                    {
-                        log.WriteLogEntry("Connection to Exchange service successful.");
-                        if (emailHandle.SendMail())
-                        {
-                            result = true;
-                        }
-                        else
-                            log.WriteLogEntry("Failed send email!");
-                    }
-                    else
-                        log.WriteLogEntry("Failed connect to Exchange service!");
-                }
-                catch (Exception ex)
-                {
-                    log.WriteLogEntry("Program error " + ex.Message);
-                }
-            }
-            log.WriteLogEntry("End ExchangeSendMail.");
-            return result;
-        }
-
         public bool NotifyDepartmentHead()
         {
             log.WriteLogEntry("Begin NotifyDepartmentHead...");
@@ -96,6 +63,43 @@ namespace VeraAPI.HelperClasses
                 }
             }
             log.WriteLogEntry("End NotifyDepartmentHead.");
+            return result;
+        }
+
+        public bool NotifyFinance()
+        {
+            log.WriteLogEntry("Begin NotifyFinance...");
+            bool result = false;
+
+            if (CurrentUser.GetType() == typeof(DomainUser))
+            {
+                DomainUser user = (DomainUser)CurrentUser;
+                log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3} {4}", user.UserID, user.DomainUpn, user.EmployeeID, user.Department, user.Department.DeptHeadEmail));
+                emailHandle = new ExchangeHandler(user);
+                emailHandle.EmailSubject = "Notify Department Head";
+                emailHandle.RecipientEmailAddress = user.Department.DeptHeadEmail;
+                emailHandle.EmailBody = "<html><body><p>There has been a request to travel</p><p>go <a href=\"https://bermuda.verawp.local/?route=travel\"> here to approve</a></p></body></html>";
+                try
+                {
+                    if (emailHandle.ConnectExchangeService())
+                    {
+                        log.WriteLogEntry("Connection to Exchange service successful.");
+                        if (emailHandle.SendMail())
+                        {
+                            result = true;
+                        }
+                        else
+                            log.WriteLogEntry("Failed send email!");
+                    }
+                    else
+                        log.WriteLogEntry("Failed connect to Exchange service!");
+                }
+                catch (Exception ex)
+                {
+                    log.WriteLogEntry("Program error " + ex.Message);
+                }
+            }
+            log.WriteLogEntry("End NotifyFinance.");
             return result;
         }
     }

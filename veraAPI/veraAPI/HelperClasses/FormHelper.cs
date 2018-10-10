@@ -97,8 +97,8 @@ namespace VeraAPI.HelperClasses
         {
             log.WriteLogEntry("Starting LoadTravelAuthForm...");
             bool result = false;
-            formDataHandle = new FormDataHandler(WebForm, dbServer, dbName);
-            formDataHandle.LoadTravelAuthForm();
+            formDataHandle = new FormDataHandler(dbServer, dbName);
+            formDataHandle.LoadTravelAuthForm(WebForm.FormDataID);
             log.WriteLogEntry("End LoadTravelAuthForm.");
             return result;
         }

@@ -203,7 +203,7 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
-        public bool LoadTravelAuthForm()
+        public bool LoadTravelAuthForm(int formDataID)
         {
             log.WriteLogEntry("Begin LoadTravelAuthForm...");
             bool result = false;
@@ -213,7 +213,7 @@ namespace VeraAPI.Models.DataHandler
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                 {
-                    cmd.Parameters.AddWithValue("@dataID", WebForm.FormDataID);
+                    cmd.Parameters.AddWithValue("@dataID", formDataID);
                     try
                     {
                         conn.Open();
@@ -221,31 +221,34 @@ namespace VeraAPI.Models.DataHandler
                         {
                             if (rdr.Read())
                             {
-                                TravelAuthForm travel = new TravelAuthForm(WebForm.FormDataID);
-                                travel.FirstName = rdr["first_name"].ToString();
-                                travel.LastName = rdr["last_name"].ToString();
-                                travel.Phone = rdr["phone"].ToString();
-                                travel.Email = rdr["email"].ToString();
-                                travel.EventTitle = rdr["event_description"].ToString();
-                                travel.Location = rdr["event_location"].ToString();
-                                travel.TravelBegin = rdr["depart_date"].ToString();
-                                travel.TravelEnd = rdr["return_date"].ToString();
-                                travel.DistVehicle = rdr["district_vehicle"].ToString();
-                                travel.RegistrationCost = rdr["registration_amt"].ToString();
-                                travel.Airfare = rdr["airfare_amt"].ToString();
-                                travel.RentalCar = rdr["rental_amt"].ToString();
-                                travel.Fuel = rdr["fuel_parking_amt"].ToString();
-                                travel.Mileage = rdr["estimated_miles"].ToString();
-                                travel.Lodging = rdr["lodging_amt"].ToString();
-                                travel.PerDiem = rdr["perdiem_amt"].ToString();
-                                travel.FullDays = rdr["travel_days"].ToString();
-                                travel.Misc = rdr["misc_amt"].ToString();
-                                travel.TotalEstimate = rdr["total_cost"].ToString();
-                                travel.AdvanceAmount = rdr["advance_amt"].ToString();
-                                travel.Advance = rdr["request_advance"].ToString();
-                                travel.Policy = rdr["travel_policy"].ToString();
-                                travel.Preparer = rdr["preparer_name"].ToString();
-                                travel.SubmitterSig = rdr["submitter_approval"].ToString();
+                                TravelAuthForm travel = new TravelAuthForm
+                                {
+                                    FormDataID = (int)rdr["travel_id"],
+                                    FirstName = rdr["first_name"].ToString(),
+                                    LastName = rdr["last_name"].ToString(),
+                                    Phone = rdr["phone"].ToString(),
+                                    Email = rdr["email"].ToString(),
+                                    EventTitle = rdr["event_description"].ToString(),
+                                    Location = rdr["event_location"].ToString(),
+                                    TravelBegin = rdr["depart_date"].ToString(),
+                                    TravelEnd = rdr["return_date"].ToString(),
+                                    DistVehicle = rdr["district_vehicle"].ToString(),
+                                    RegistrationCost = rdr["registration_amt"].ToString(),
+                                    Airfare = rdr["airfare_amt"].ToString(),
+                                    RentalCar = rdr["rental_amt"].ToString(),
+                                    Fuel = rdr["fuel_parking_amt"].ToString(),
+                                    Mileage = rdr["estimated_miles"].ToString(),
+                                    Lodging = rdr["lodging_amt"].ToString(),
+                                    PerDiem = rdr["perdiem_amt"].ToString(),
+                                    FullDays = rdr["travel_days"].ToString(),
+                                    Misc = rdr["misc_amt"].ToString(),
+                                    TotalEstimate = rdr["total_cost"].ToString(),
+                                    AdvanceAmount = rdr["advance_amt"].ToString(),
+                                    Advance = rdr["request_advance"].ToString(),
+                                    Policy = rdr["travel_policy"].ToString(),
+                                    Preparer = rdr["preparer_name"].ToString(),
+                                    SubmitterSig = rdr["submitter_approval"].ToString()
+                                };
                                 int status = (int)rdr["approval_status"];
                                 switch (status)
                                 {
@@ -263,7 +266,7 @@ namespace VeraAPI.Models.DataHandler
                                         break;
                                 }
                                 log.WriteLogEntry("Retrieved travel data " + travel.FormDataID + " " + travel.EventTitle);
-                                WebForm = travel;
+                                this.WebForm = travel;
                                 result = true;
                             }
                         }
@@ -305,33 +308,35 @@ namespace VeraAPI.Models.DataHandler
                         {
                             while (rdr.Read())
                             {
-                                TravelAuthForm travel = new TravelAuthForm();
-                                travel.UserID = (int)rdr["submitter_id"];
-                                travel.FormDataID = (int)rdr["travel_id"];
-                                travel.FirstName = rdr["first_name"].ToString();
-                                travel.LastName = rdr["last_name"].ToString();
-                                travel.Phone = rdr["phone"].ToString();
-                                travel.Email = rdr["email"].ToString();
-                                travel.EventTitle = rdr["event_description"].ToString();
-                                travel.Location = rdr["event_location"].ToString();
-                                travel.TravelBegin = rdr["depart_date"].ToString();
-                                travel.TravelEnd = rdr["return_date"].ToString();
-                                travel.DistVehicle = rdr["district_vehicle"].ToString();
-                                travel.RegistrationCost = rdr["registration_amt"].ToString();
-                                travel.Airfare = rdr["airfare_amt"].ToString();
-                                travel.RentalCar = rdr["rental_amt"].ToString();
-                                travel.Fuel = rdr["fuel_parking_amt"].ToString();
-                                travel.Mileage = rdr["estimated_miles"].ToString();
-                                travel.Lodging = rdr["lodging_amt"].ToString();
-                                travel.PerDiem = rdr["perdiem_amt"].ToString();
-                                travel.FullDays = rdr["travel_days"].ToString();
-                                travel.Misc = rdr["misc_amt"].ToString();
-                                travel.TotalEstimate = rdr["total_cost"].ToString();
-                                travel.AdvanceAmount = rdr["advance_amt"].ToString();
-                                travel.Advance = rdr["request_advance"].ToString();
-                                travel.Policy = rdr["travel_policy"].ToString();
-                                travel.Preparer = rdr["preparer_name"].ToString();
-                                travel.SubmitterSig = rdr["submitter_approval"].ToString();
+                                TravelAuthForm travel = new TravelAuthForm
+                                {
+                                    UserID = (int)rdr["submitter_id"],
+                                    FormDataID = (int)rdr["travel_id"],
+                                    FirstName = rdr["first_name"].ToString(),
+                                    LastName = rdr["last_name"].ToString(),
+                                    Phone = rdr["phone"].ToString(),
+                                    Email = rdr["email"].ToString(),
+                                    EventTitle = rdr["event_description"].ToString(),
+                                    Location = rdr["event_location"].ToString(),
+                                    TravelBegin = rdr["depart_date"].ToString(),
+                                    TravelEnd = rdr["return_date"].ToString(),
+                                    DistVehicle = rdr["district_vehicle"].ToString(),
+                                    RegistrationCost = rdr["registration_amt"].ToString(),
+                                    Airfare = rdr["airfare_amt"].ToString(),
+                                    RentalCar = rdr["rental_amt"].ToString(),
+                                    Fuel = rdr["fuel_parking_amt"].ToString(),
+                                    Mileage = rdr["estimated_miles"].ToString(),
+                                    Lodging = rdr["lodging_amt"].ToString(),
+                                    PerDiem = rdr["perdiem_amt"].ToString(),
+                                    FullDays = rdr["travel_days"].ToString(),
+                                    Misc = rdr["misc_amt"].ToString(),
+                                    TotalEstimate = rdr["total_cost"].ToString(),
+                                    AdvanceAmount = rdr["advance_amt"].ToString(),
+                                    Advance = rdr["request_advance"].ToString(),
+                                    Policy = rdr["travel_policy"].ToString(),
+                                    Preparer = rdr["preparer_name"].ToString(),
+                                    SubmitterSig = rdr["submitter_approval"].ToString()
+                                };
                                 int status = (int)rdr["approval_status"];
                                 switch (status)
                                 {
@@ -389,33 +394,35 @@ namespace VeraAPI.Models.DataHandler
                         {
                             while (rdr.Read())
                             {
-                                TravelAuthForm travel = new TravelAuthForm();
-                                travel.UserID = (int)rdr["submitter_id"];
-                                travel.FormDataID = (int)rdr["travel_id"];
-                                travel.FirstName = rdr["first_name"].ToString();
-                                travel.LastName = rdr["last_name"].ToString();
-                                travel.Phone = rdr["phone"].ToString();
-                                travel.Email = rdr["email"].ToString();
-                                travel.EventTitle = rdr["event_description"].ToString();
-                                travel.Location = rdr["event_location"].ToString();
-                                travel.TravelBegin = rdr["depart_date"].ToString();
-                                travel.TravelEnd = rdr["return_date"].ToString();
-                                travel.DistVehicle = rdr["district_vehicle"].ToString();
-                                travel.RegistrationCost = rdr["registration_amt"].ToString();
-                                travel.Airfare = rdr["airfare_amt"].ToString();
-                                travel.RentalCar = rdr["rental_amt"].ToString();
-                                travel.Fuel = rdr["fuel_parking_amt"].ToString();
-                                travel.Mileage = rdr["estimated_miles"].ToString();
-                                travel.Lodging = rdr["lodging_amt"].ToString();
-                                travel.PerDiem = rdr["perdiem_amt"].ToString();
-                                travel.FullDays = rdr["travel_days"].ToString();
-                                travel.Misc = rdr["misc_amt"].ToString();
-                                travel.TotalEstimate = rdr["total_cost"].ToString();
-                                travel.AdvanceAmount = rdr["advance_amt"].ToString();
-                                travel.Advance = rdr["request_advance"].ToString();
-                                travel.Policy = rdr["travel_policy"].ToString();
-                                travel.Preparer = rdr["preparer_name"].ToString();
-                                travel.SubmitterSig = rdr["submitter_approval"].ToString();
+                                TravelAuthForm travel = new TravelAuthForm
+                                {
+                                    UserID = (int)rdr["submitter_id"],
+                                    FormDataID = (int)rdr["travel_id"],
+                                    FirstName = rdr["first_name"].ToString(),
+                                    LastName = rdr["last_name"].ToString(),
+                                    Phone = rdr["phone"].ToString(),
+                                    Email = rdr["email"].ToString(),
+                                    EventTitle = rdr["event_description"].ToString(),
+                                    Location = rdr["event_location"].ToString(),
+                                    TravelBegin = rdr["depart_date"].ToString(),
+                                    TravelEnd = rdr["return_date"].ToString(),
+                                    DistVehicle = rdr["district_vehicle"].ToString(),
+                                    RegistrationCost = rdr["registration_amt"].ToString(),
+                                    Airfare = rdr["airfare_amt"].ToString(),
+                                    RentalCar = rdr["rental_amt"].ToString(),
+                                    Fuel = rdr["fuel_parking_amt"].ToString(),
+                                    Mileage = rdr["estimated_miles"].ToString(),
+                                    Lodging = rdr["lodging_amt"].ToString(),
+                                    PerDiem = rdr["perdiem_amt"].ToString(),
+                                    FullDays = rdr["travel_days"].ToString(),
+                                    Misc = rdr["misc_amt"].ToString(),
+                                    TotalEstimate = rdr["total_cost"].ToString(),
+                                    AdvanceAmount = rdr["advance_amt"].ToString(),
+                                    Advance = rdr["request_advance"].ToString(),
+                                    Policy = rdr["travel_policy"].ToString(),
+                                    Preparer = rdr["preparer_name"].ToString(),
+                                    SubmitterSig = rdr["submitter_approval"].ToString()
+                                };
                                 int status = (int)rdr["approval_status"];
                                 switch (status)
                                 {
