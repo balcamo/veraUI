@@ -91,8 +91,8 @@ export class TavelAuthApproveComponent implements OnInit {
       this.form.GMID = this.user.UserID;
     }
     var body = JSON.stringify({ userID: this.user.UserID, value: this.form });
-    console.log(this.consts.url + 'Recap');
-    this.http.post(this.consts.url + 'Recap', body, options)
+    console.log(this.consts.url + 'TravelApproval');
+    this.http.put(this.consts.url + 'TravelApproval', body, options)
       .subscribe((data) => alert(data.text()));
     this.form.ApprovalStatus = 'green'
   }
@@ -118,8 +118,8 @@ export class TavelAuthApproveComponent implements OnInit {
       this.form.GMID = this.user.UserID;
     }
     var body = JSON.stringify(this.form);
-    console.log(this.consts.url + 'Recap');
-    this.http.post(this.consts.url + 'Recap?restUserID=' + this.user.UserID, body, options)
+    console.log(this.consts.url + 'TravelApproval');
+    this.http.put(this.consts.url + 'TravelApproval?restUserID=' + this.user.UserID, body, options)
       .subscribe((data) => alert(data.text()));
     this.form.ApprovalStatus = 'red'
   }
