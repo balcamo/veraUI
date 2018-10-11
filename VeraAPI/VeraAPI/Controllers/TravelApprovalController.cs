@@ -102,7 +102,7 @@ namespace VeraAPI.Controllers
         // PUT: api/TravelApproval/5
         public void Put([FromUri]string restUserID, [FromBody]TravelAuthForm travelAuthForm)
         {
-            log.WriteLogEntry("Begin Post TravelAuthForm...");
+            log.WriteLogEntry("Begin TravelAuthForm PUT...");
             if (int.TryParse(restUserID, out int userID))
             {
                 log.WriteLogEntry("Starting LoginHelper...");
@@ -119,6 +119,7 @@ namespace VeraAPI.Controllers
                         {
                             if (travelAuthForm.GetType() == typeof(TravelAuthForm))
                             {
+                                log.DumpObject(travelAuthForm);
                                 log.WriteLogEntry("Starting FormHelper...");
                                 FormHelper travelFormHelp = new FormHelper();
                                 if (travelFormHelp.ApproveTravelAuthForm(user.UserID, travelAuthForm))

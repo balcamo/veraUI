@@ -83,6 +83,7 @@ namespace VeraAPI.Controllers
                         {
                             if (travelAuthForm.GetType() == typeof(TravelAuthForm))
                             {
+                                log.DumpObject(travelAuthForm);
                                 log.WriteLogEntry("Starting FormHelper...");
                                 FormHelper travelFormHelp = new FormHelper();
                                 if (travelFormHelp.SubmitTravelAuthForm(user, travelAuthForm))

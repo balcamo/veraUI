@@ -5,6 +5,7 @@ using System.Web;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Reflection;
 
 namespace VeraAPI.Models.Tools
 {
@@ -58,6 +59,17 @@ namespace VeraAPI.Models.Tools
                 result = true;
             }
             return result;
+        }
+
+        public void DumpObject(object obj)
+        {
+            StringBuilder sb = new StringBuilder();
+            PropertyInfo[] properties = obj.GetType().GetProperties();
+            foreach (PropertyInfo pi in properties)
+            {
+                sb.Append(string.Format("Property: {0}\tValue:{1}\n", pi.Name, pi.GetValue(obj, null)));
+            }
+            WriteLogEntry(sb.ToString());
         }
     }
 }

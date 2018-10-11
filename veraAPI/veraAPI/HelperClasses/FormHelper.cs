@@ -112,43 +112,56 @@ namespace VeraAPI.HelperClasses
         {
             log.WriteLogEntry("Begin ApproveTravelAuthForm...");
             bool result = false;
-            string[,] formFields = new string[,] { };
-            string[,] formFilters = new string[,] { };
 
             if (webForm.GetType() == typeof(TravelAuthForm))
             {
                 TravelAuthForm travel = (TravelAuthForm)webForm;
-                bool dhApprove = bool.TryParse(travel.DHApproval, out bool dh);
-                bool gmApprove = bool.TryParse(travel.GMApproval, out bool gm);
-                if (dhApprove)
+                log.WriteLogEntry(string.Format("User {0} is approving form {1}.", userID, travel.FormDataID));
+                try
                 {
-                    formFields[0, 0] = "supervisor_approval_date";
-                    formFields[0, 1] = DateTime.Now.ToShortDateString();
-                    formFilters[0, 0] = "supervisor_id";
-                    formFilters[0, 1] = userID.ToString();
-                    formFilters[1, 0] = "form_id";
-                    formFilters[1, 1] = webForm.FormDataID.ToString();
-                    formFilters[2, 0] = "supervisor_approval_date";
-                    formFilters[2, 1] = "null";
-                    FormDataHandler formData = new FormDataHandler(dbServer, dbName);
-                    if (formData.UpdateForm(formFields, formFilters) > 0)
-                        result = true;
+                    bool dhApprove = bool.TryParse(travel.DHApproval, out bool dh);
+                    bool gmApprove = bool.TryParse(travel.GMApproval, out bool gm);
+                    log.WriteLogEntry(string.Format("Form DHApproval {0} Bool dhApprove {1}", travel.DHApproval, dhApprove));
+                    log.WriteLogEntry(string.Format("Form GMApproval {0} Bool gmApprove {1}", travel.GMApproval, gmApprove));
+                    if (dhApprove)
+                    {
+                        string[,] formFields = new string[,] { { "supervisor_approval_date", DateTime.Now.ToString() } };
+                        string[,] formFilters = new string[,] { { "supervisor_id", userID.ToString() }, { "form_id", travel.FormDataID.ToString() }, { "supervisor_approval_date", "null" } };
+                        log.WriteLogEntry(string.Format("FormFields array length 0 {0} length 1 {1}", formFields.GetLength(0), formFields.GetLength(1)));
+                        log.WriteLogEntry(string.Format("FormFilters array length 0 {0} length 1 {1}", formFilters.GetLength(0), formFilters.GetLength(1)));
+
+                        log.WriteLogEntry("Starting FormDataHandler...");
+                        FormDataHandler formData = new FormDataHandler(dbServer, dbName);
+                        if (formData.UpdateForm(formFields, formFilters) > 0)
+                            result = true;
+                    }
+                    else
+                        log.WriteLogEntry("Department Head approval FALSE");
+
+                    if (gmApprove)
+                    {
+                        string[,] formFields = new string[,] { { "manager_approval_date", DateTime.Now.ToString() } };
+                        string[,] formFilters = new string[,] { { "manager_id", userID.ToString() }, { "form_id", travel.FormDataID.ToString() }, { "manager_approval_date", "null" } };
+                        log.WriteLogEntry(string.Format("FormFields array length 0 {0} length 1 {1}", formFields.GetLength(0), formFields.GetLength(1)));
+                        log.WriteLogEntry(string.Format("FormFilters array length 0 {0} length 1 {1}", formFilters.GetLength(0), formFilters.GetLength(1)));
+
+                        log.WriteLogEntry("Starting FormDataHandler...");
+                        FormDataHandler formData = new FormDataHandler(dbServer, dbName);
+                        if (formData.UpdateForm(formFields, formFilters) > 0)
+                            result = true;
+                        else
+                            log.WriteLogEntry("FAILED no records updated!");
+                    }
+                    else
+                        log.WriteLogEntry("General Manager approval FALSE");
                 }
-                if (gmApprove)
+                catch (Exception ex)
                 {
-                    formFields[0, 0] = "manager_approval_date";
-                    formFields[0, 1] = DateTime.Now.ToShortDateString();
-                    formFilters[0, 0] = "manager_id";
-                    formFilters[0, 1] = userID.ToString();
-                    formFilters[1, 0] = "form_id";
-                    formFilters[1, 1] = webForm.FormDataID.ToString();
-                    formFilters[2, 0] = "manager_approval_date";
-                    formFilters[2, 1] = "null";
-                    FormDataHandler formData = new FormDataHandler(dbServer, dbName);
-                    if (formData.UpdateForm(formFields, formFilters) > 0)
-                        result = true;
+                    log.WriteLogEntry("General Program Error \n" + ex.Message);
                 }
             }
+            else
+                log.WriteLogEntry("FAILED not a travel form!");
             log.WriteLogEntry("End ApproveTravelAuthForm.");
             return result;
         }
