@@ -20,12 +20,11 @@ namespace VeraAPI.Models.OfficeHandler
             sagittis. Nunc ac ornare tellus, a faucibus dolor. Curabitur a magna eget erat vestibulum imperdiet.";
         public string RecipientEmailAddress { get; set; }
 
-        private User CurrentUser;
         private ExchangeService emailer;
         private EmailMessage emailMessage;
-        private Scribe log;
-        private string mailService;
-        private string mailServicePwd;
+        private static Scribe log;
+        private readonly string mailService;
+        private readonly string mailServicePwd;
 
         public ExchangeHandler()
         {
@@ -33,16 +32,6 @@ namespace VeraAPI.Models.OfficeHandler
             mailService = WebConfigurationManager.AppSettings.Get("MailService");
             mailServicePwd = WebConfigurationManager.AppSettings.Get("MailServicePwd");
             emailer = new ExchangeService();
-            CurrentUser = new User();
-        }
-
-        public ExchangeHandler(User user)
-        {
-            log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "ExchangeHandler_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-            mailService = WebConfigurationManager.AppSettings.Get("MailService");
-            mailServicePwd = WebConfigurationManager.AppSettings.Get("MailServicePwd");
-            emailer = new ExchangeService();
-            CurrentUser = user;
         }
 
         private bool ValidateRedirect(string redirectionUrl)

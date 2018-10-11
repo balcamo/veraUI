@@ -220,6 +220,48 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
+        public Department GetDepartment(int deptNumber)
+        {
+            log.WriteLogEntry("Begin LoadDepartment...");
+            Department department = new Department();
+            log.WriteLogEntry("Loading department number " + deptNumber);
+            string cmdString = string.Format(@"select * from {0}.dbo.department where dept_number = @deptNumber", dbName);
+
+            using (SqlConnection conn = new SqlConnection(dataConnectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(cmdString, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@deptNumber", deptNumber);
+                        using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SingleResult))
+                        {
+                            if (rdr.Read())
+                            {
+                                department.DeptNumber = (int)rdr["dept_number"];
+                                department.DeptName = rdr["dept_name"].ToString();
+                                department.DeptHeadUserID = (int)rdr["dept_head_user_id"];
+                                department.DeptEmail = rdr["dept_email"].ToString();
+                                department.DeptHeadEmail = rdr["dept_head_email"].ToString();
+                                log.WriteLogEntry(string.Format("Department loaded {0} {1} {2} {3}", department.DeptNumber, department.DeptName, department.DeptHeadUserID, department.DeptEmail));
+                            }
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    log.WriteLogEntry("SQL error " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    log.WriteLogEntry("General program error " + ex.Message);
+                }
+            }
+            log.WriteLogEntry("End LoadDepartment.");
+            return department;
+        }
+
         public bool LoadCompany()
         {
             log.WriteLogEntry("Begin LoadCompany...");

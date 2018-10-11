@@ -244,7 +244,9 @@ namespace VeraAPI.Models.DataHandler
                                     Advance = rdr["request_advance"].ToString(),
                                     Policy = rdr["travel_policy"].ToString(),
                                     Preparer = rdr["preparer_name"].ToString(),
-                                    SubmitterSig = rdr["submitter_id"].ToString()
+                                    SubmitterSig = rdr["submitter_id"].ToString(),
+                                    DHApproval = (rdr["supervisor_approval_date"] != DBNull.Value ? true : false).ToString(),
+                                    GMApproval = (rdr["manager_approval_date"] != DBNull.Value ? true : false).ToString()
                                 };
                                 int status = (int)rdr["approval_status"];
                                 switch (status)
@@ -331,7 +333,9 @@ namespace VeraAPI.Models.DataHandler
                                     Advance = rdr["request_advance"].ToString(),
                                     Policy = rdr["travel_policy"].ToString(),
                                     Preparer = rdr["preparer_name"].ToString(),
-                                    SubmitterSig = rdr["submitter_id"].ToString()
+                                    SubmitterSig = rdr["submitter_id"].ToString(),
+                                    DHApproval = (rdr["supervisor_approval_date"] != DBNull.Value ? true : false).ToString(),
+                                    GMApproval = (rdr["manager_approval_date"] != DBNull.Value ? true : false).ToString()
                                 };
                                 int status = (int)rdr["approval_status"];
                                 switch (status)
@@ -417,7 +421,9 @@ namespace VeraAPI.Models.DataHandler
                                     Advance = rdr["request_advance"].ToString(),
                                     Policy = rdr["travel_policy"].ToString(),
                                     Preparer = rdr["preparer_name"].ToString(),
-                                    SubmitterSig = rdr["submitter_id"].ToString()
+                                    SubmitterSig = rdr["submitter_id"].ToString(),
+                                    DHApproval = (rdr["supervisor_approval_date"] != DBNull.Value ? true : false).ToString(),
+                                    GMApproval = (rdr["manager_approval_date"] != DBNull.Value ? true : false).ToString()
                                 };
                                 int status = (int)rdr["approval_status"];
                                 switch (status)
@@ -460,36 +466,75 @@ namespace VeraAPI.Models.DataHandler
         {
             log.WriteLogEntry("Begin UpdateForm...");
             int result = 0;
-            StringBuilder sb = new StringBuilder(string.Format("update {0}.dbo.{1} set ", dbServer, dbName));
-            for (int i = 0; i < formFields.GetUpperBound(0); i++)
+            StringBuilder sbCommand = new StringBuilder(string.Format("update {0}.dbo.travel set ", dbServer));
+            StringBuilder sbParams = new StringBuilder();
+            for (int i = 0; i < formFields.GetLength(0); i++)
             {
-                for (int j = 0; j < formFields.GetUpperBound(1); j++)
+                string fieldName = formFields[i, 0];
+                sbCommand.Append(fieldName + " = @field" + i);
+                if (i < formFields.GetLength(0) - 1)
                 {
-                    sb.Append(formFields[i,j] + " = @" + formFields[i,j]);
-                    while (i < formFields.GetUpperBound(0) - 1)
-                    {
-                        sb.Append(", ");
-                    }
+                    sbCommand.Append(", ");
                 }
             }
-            sb.Append(" where ");
-            for (int i = 0; i < formFilters.GetUpperBound(0); i++)
+            sbCommand.Append(" where ");
+            for (int i = 0; i < formFilters.GetLength(0); i++)
             {
-                for (int j = 0; j < formFilters.GetUpperBound(1); j++)
+                string fieldName = formFilters[i, 0];
+                if (string.Equals(formFilters[i, 1].ToLower(), "null"))
+                    sbCommand.Append(fieldName + " is null");
+                else
+                    sbCommand.Append(fieldName + " = @filter" + i);
+                if (i < formFilters.GetLength(0) - 1)
                 {
-                    if (string.Equals(formFilters[i, j].ToLower(), "null"))
-                        sb.Append(formFilters[i, j] + " is null");
-                    else
-                        sb.Append(formFilters[i, j] + " = @" + formFilters[i, j]);
-                    while (i < formFilters.GetUpperBound(0) - 1)
-                    {
-                        sb.Append(" and ");
-                    }
+                    sbCommand.Append(" and ");
                 }
             }
-            string cmdString = sb.ToString();
+            string cmdString = sbCommand.ToString();
             log.WriteLogEntry("Update command string \n" + cmdString);
-            log.WriteLogEntry("Forms updated " + result);
+
+            using (SqlConnection conn = new SqlConnection(dataConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(cmdString, conn))
+                {
+                    try
+                    {
+                        for (int i = 0; i < formFields.GetLength(0); i++)
+                        {
+                            string parmName = "@field" + i;
+                            string parmValue = formFields[i, 1];
+                            log.WriteLogEntry("Field Name: " + parmName + "\tValue: " + parmValue);
+                            cmd.Parameters.AddWithValue(parmName, parmValue);
+                        }
+                        for (int i = 0; i < formFilters.GetLength(0); i++)
+                        {
+                            string parmName = "@filter" + i;
+                            string parmValue = formFilters[i, 1];
+                            log.WriteLogEntry("Filter Name: " + parmName + "\tValue: " + parmValue);
+                            if (string.Equals(parmValue.ToLower(), "null"))
+                                cmd.Parameters.AddWithValue(parmName, DBNull.Value);
+                            else
+                                cmd.Parameters.AddWithValue(parmName, parmValue);
+                        }
+                        log.WriteLogEntry("SQL Command Parameters\n");
+                        foreach (SqlParameter parm in cmd.Parameters)
+                        {
+                            log.WriteLogEntry("Name: " + parm.ParameterName + "\tValue: " + parm.SqlValue);
+                        }
+                        conn.Open();
+                        result = cmd.ExecuteNonQuery();
+                        log.WriteLogEntry("Updated row count " + result);
+                    }
+                    catch (SqlException ex)
+                    {
+                        log.WriteLogEntry("SQL error " + ex.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.WriteLogEntry("General program error " + ex.Message);
+                    }
+                }
+            }
             log.WriteLogEntry("End UpdateForm.");
             return result;
         }

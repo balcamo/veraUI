@@ -209,7 +209,9 @@
     <Compile Include="HelperClasses\UserHelper.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DataHandler\JobDataHandler.cs" />
+    <Compile Include="Models\DataHandler\NotificationHandler.cs" />
     <Compile Include="Models\Forms\TokenForm.cs" />
+    <Compile Include="Models\Notificaitons.cs" />
     <Compile Include="Models\Security\Access.cs" />
     <Compile Include="Models\Security\Company.cs" />
     <Compile Include="Models\Security\Department.cs" />
