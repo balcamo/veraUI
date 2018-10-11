@@ -59,7 +59,7 @@ export class ViewAuthFormsComponent implements OnInit {
       this.dhApprove = "Denied";
       this.gmApprove = "Form will not be sent to the GM";
     }
-    //console.log(this.form);
+
     if (this.displayForm == "none") {
       this.displayForm = "block";
     } else if (this.form !== this.oldForm) {
