@@ -46,8 +46,8 @@ export class TavelAuthApproveComponent implements OnInit {
     this.form = authForm;
     this.food = (this.form.PerDiem * this.form.FullDays) + (this.form.PerDiem * this.consts.firstLastDayFood);
     this.mileage = this.form.Mileage * this.consts.mileageRate;
-    if ((this.user.EntryGroup[3] == 99 && this.form.DHApproval != undefined) ||
-      (this.user.EntryGroup[3] == 3 && this.form.GMApproval != undefined)) {
+    if ((this.user.EntryGroup[3] == 1 && this.form.DHApproval.toString() != '') ||
+      (this.user.EntryGroup[3] == 99 && this.form.GMApproval.toString() != '')) {
       this.submitted = true;
     } else {
       this.submitted = false;
@@ -83,16 +83,16 @@ export class TavelAuthApproveComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-    if (this.user.EntryGroup[3] == 99) {
+    if (this.user.EntryGroup[3] == 1) {
       this.form.DHApproval = true;
       this.form.DHID = this.user.UserID;
-    } else if (this.user.EntryGroup[3] == 2) {
+    } else if (this.user.EntryGroup[3] == 99) {
       this.form.GMApproval = true;
       this.form.GMID = this.user.UserID;
     }
-    var body = JSON.stringify({ userID: this.user.UserID, value: this.form });
-    console.log(this.consts.url + 'TravelApproval');
-    this.http.put(this.consts.url + 'TravelApproval', body, options)
+    var body = JSON.stringify(this.form);
+    console.log("the form being approved: "+this.form);
+    this.http.put(this.consts.url + 'TravelApproval?restUserID=' + this.user.UserID, body, options)
       .subscribe((data) => alert(data.text()));
     this.form.ApprovalStatus = 'green'
   }
@@ -110,10 +110,10 @@ export class TavelAuthApproveComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-    if (this.user.EntryGroup[3] == 99) {
+    if (this.user.EntryGroup[3] == 1) {
       this.form.DHApproval = false;
       this.form.DHID = this.user.UserID;
-    } else if (this.user.EntryGroup[3] == 2) {
+    } else if (this.user.EntryGroup[3] == 99) {
       this.form.GMApproval = false;
       this.form.GMID = this.user.UserID;
     }
