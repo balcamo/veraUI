@@ -5,7 +5,8 @@
     <button type="button" class="btn secondary" (mouseover)="hover=true" (mouseleave)="hover=false"
               [ngStyle]="{'border-color':forms.GMApproval,
               'background-color': hover==true  ? forms.GMApproval : 'white' }"
-              (click)="displaySelected(forms)" >
+              (click)="displaySelected(forms)"
+              *ngIf="(forms.GMApproval != 'green' && this.user.EntryGroup[3] == 99) || (forms.DHApproval != 'green' && this.user.EntryGroup[3] == 1)">
       <h5>{{forms.FirstName}} {{forms.LastName}}</h5>
     </button>
   </div>
