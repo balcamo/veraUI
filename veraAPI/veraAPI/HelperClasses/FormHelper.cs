@@ -50,7 +50,10 @@ namespace VeraAPI.HelperClasses
                     DomainUser domainUser = (DomainUser)user;
                     travelForm.UserID = domainUser.UserID;
                     travelForm.DHID = domainUser.Department.DeptHeadUserID.ToString();
+                    travelForm.DHApproval = Constants.PendingColor;
                     travelForm.GMID = domainUser.Company.GeneralManagerUserID.ToString();
+                    travelForm.GMApproval = Constants.PendingColor;
+                    travelForm.ApprovalStatus = Constants.PendingColor;
 
                     // Load the job template corresponding to the templateID for the submitted form
                     log.WriteLogEntry("Starting FormDataHandler...");
