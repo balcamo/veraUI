@@ -16,10 +16,6 @@ namespace VeraAPI.Models.DataHandler
 {
     public class FormDataHandler : SQLDataHandler
     {
-        public BaseForm WebForm { get; private set; }
-        public List<BaseForm> WebForms { get; private set; }
-        public FormTemplate Template { get; private set; }
-
         private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormDataHandler" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         public FormDataHandler(string dbServer, string dbName) : base(dbServer)
@@ -27,27 +23,19 @@ namespace VeraAPI.Models.DataHandler
             this.dbServer = dbServer;
             this.dbName = dbName;
             this.dataConnectionString = GetDataConnectionString();
-            this.WebForm = new BaseForm();
         }
 
-        public FormDataHandler(BaseForm webForm, string dbServer, string dbName) : base(dbServer)
-        {
-            this.dbServer = dbServer;
-            this.dbName = dbName;
-            this.dataConnectionString = GetDataConnectionString();
-            this.WebForm = webForm;
-        }
-
-        public bool InsertTravelAuth(TravelAuthForm travelForm)
+        public bool InsertTravelAuth(TravelAuthForm travelForm, string tableName)
         {
             log.WriteLogEntry("Starting InsertTravelAuth...");
             bool result = false;
-            string tableName = Template.TableName;
-            string cmdString = string.Format(@"insert into {0}.dbo.{1} (first_name, last_name, phone, email, event_description, event_location, depart_date, return_date, district_vehicle, registration_amt, airfare_amt, rental_amt, 
-                                    fuel_parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, misc_amt, request_advance, advance_amt, travel_policy, submit_date, submitter_id, submitter_email, supervisor_id, supervisor_approval_status, manager_id, manager_approval_status, approval_status) 
+            string cmdString = string.Format(@"insert into {0}.dbo.travel (first_name, last_name, phone, email, event_description, event_location, depart_date, return_date, district_vehicle, registration_amt, airfare_amt, rental_amt, 
+                                    fuel_parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, misc_amt, request_advance, advance_amt, travel_policy, submit_date, submitter_id, supervisor_id, supervisor_email, 
+                                    supervisor_approval_status, supervisor_approval_date, manager_id, manager_email, manager_approval_status, manager_approval_date, approval_status) 
                                     output inserted.form_id
                                     values (@firstName, @lastName, @phone, @email, @eventDescription, @eventLocation, @departDate, @returnDate, @districtVehicle, @registrationAmt, @airfareAmt, @rentalAmt, @fuelParkingAmt, @estimatedMiles, 
-                                    @lodgingAmt, @perdiemAmt, @travelDays, @miscAmt, @requestAdvance, @advanceAmt, @travelPolicy, GETDATE(), @submitterID, @submitterEmail, @supervisorID, @supervisorApprove, @managerID, @managerApprove, @status)", dbName, tableName);
+                                    @lodgingAmt, @perdiemAmt, @travelDays, @miscAmt, @requestAdvance, @advanceAmt, @travelPolicy, GETDATE(), @submitterID, @supervisorID, @supervisorEmail, @supervisorApprove, 
+                                    GETDATE(), @managerID, @managerEmail, @managerApprove, GETDATE(), @status)", dbName);
             DateTime departDate = DateTime.MinValue, returnDate = DateTime.MinValue;
             bool districtVehicle = false, requestAdvance = false, travelPolicy = false;
             decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelParkingAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0, advanceAmt = 0;
@@ -122,10 +110,11 @@ namespace VeraAPI.Models.DataHandler
                     cmd.Parameters.AddWithValue("@advanceAmt", advanceAmt);
                     cmd.Parameters.AddWithValue("@travelPolicy", travelPolicy);
                     cmd.Parameters.AddWithValue("@submitterID", travelForm.UserID);
-                    cmd.Parameters.AddWithValue("submitterEmail", travelForm.SubmitterSig);
                     cmd.Parameters.AddWithValue("@supervisorID", travelForm.DHID);
+                    cmd.Parameters.AddWithValue("@supervisorEmail", travelForm.DHEmail);
                     cmd.Parameters.AddWithValue("@supervisorApprove", travelForm.DHApproval);
                     cmd.Parameters.AddWithValue("@managerID", travelForm.GMID);
+                    cmd.Parameters.AddWithValue("@managerEmail", travelForm.GMEmail);
                     cmd.Parameters.AddWithValue("@managerApprove", travelForm.GMApproval);
                     cmd.Parameters.AddWithValue("@status", travelForm.ApprovalStatus);
                     try
@@ -150,7 +139,7 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
-        public bool LoadFormTemplate(int templateID)
+        public bool LoadFormTemplate(FormTemplate formTemplate, int templateID)
         {
             log.WriteLogEntry("Begin LoadFormTemplate...");
             bool result = false;
@@ -168,7 +157,7 @@ namespace VeraAPI.Models.DataHandler
                         {
                             if (rdr.Read())
                             {
-                                FormTemplate template = new FormTemplate()
+                                formTemplate = new FormTemplate()
                                 {
                                     TemplateID = (int)rdr["template_id"],
                                     TemplateName = rdr["template_name"].ToString(),
@@ -178,8 +167,7 @@ namespace VeraAPI.Models.DataHandler
                                     JobPriority = (int)rdr["job_priority"],
                                     JobType = rdr["job_type"].ToString()
                                 };
-                                log.WriteLogEntry("Retrieved form template " + template.TemplateID + " " + template.TemplateName);
-                                this.Template = template;
+                                log.WriteLogEntry("Retrieved form template " + formTemplate.TemplateID + " " + formTemplate.TemplateName);
                                 result = true;
                             }
                         }
@@ -200,7 +188,7 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
-        public bool LoadTravelAuthForm(int formDataID)
+        public bool LoadTravelAuthForm(TravelAuthForm travelForm, int formDataID)
         {
             log.WriteLogEntry("Begin LoadTravelAuthForm...");
             bool result = false;
@@ -218,7 +206,7 @@ namespace VeraAPI.Models.DataHandler
                         {
                             if (rdr.Read())
                             {
-                                TravelAuthForm travel = new TravelAuthForm
+                                travelForm = new TravelAuthForm
                                 {
                                     UserID = (int)rdr["submitter_id"],
                                     FormDataID = (int)rdr["form_id"],
@@ -247,13 +235,12 @@ namespace VeraAPI.Models.DataHandler
                                     Preparer = rdr["preparer_name"].ToString(),
                                     SubmitterSig = rdr["submitter_email"].ToString(),
                                     DHID = rdr["supervisor_id"].ToString(),
-                                    DHApproval = GetStatusColor((int)rdr["supervisor_approval_status"]),
+                                    DHApproval = rdr["supervisor_approval_status"].ToString(),
                                     GMID = rdr["manager_id"].ToString(),
-                                    GMApproval = GetStatusColor((int)rdr["manager_approval_status"]),
-                                    ApprovalStatus = GetStatusColor((int)rdr["approval_status"]),
+                                    GMApproval = rdr["manager_approval_status"].ToString(),
+                                    ApprovalStatus = rdr["approval_status"].ToString()
                                 };
-                                log.WriteLogEntry("Retrieved travel data " + travel.FormDataID + " " + travel.EventTitle);
-                                this.WebForm = travel;
+                                log.WriteLogEntry("Retrieved travel data " + travelForm.FormDataID + " " + travelForm.EventTitle);
                                 result = true;
                             }
                         }
@@ -274,12 +261,11 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
-        public int LoadUserTravelAuthForms(int userID)
+        public int LoadUserTravelAuthForms(List<BaseForm> travelForms, int userID)
         {
             log.WriteLogEntry("Begin LoadUserTravelAuthForms...");
             log.WriteLogEntry("User ID" + userID);
             int result = 0;
-            List<BaseForm> travelForms = new List<BaseForm>();
 
             string cmdString = string.Format(@"select * from {0}.dbo.travel where submitter_id = @userID", dbName);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
@@ -323,10 +309,10 @@ namespace VeraAPI.Models.DataHandler
                                     Preparer = rdr["preparer_name"].ToString(),
                                     SubmitterSig = rdr["submitter_email"].ToString(),
                                     DHID = rdr["supervisor_id"].ToString(),
-                                    DHApproval = GetStatusColor((int)rdr["supervisor_approval_status"]),
+                                    DHApproval = rdr["supervisor_approval_status"].ToString(),
                                     GMID = rdr["manager_id"].ToString(),
-                                    GMApproval = GetStatusColor((int)rdr["manager_approval_status"]),
-                                    ApprovalStatus = GetStatusColor((int)rdr["approval_status"]),
+                                    GMApproval = rdr["manager_approval_status"].ToString(),
+                                    ApprovalStatus = rdr["approval_status"].ToString()
                                 };
                                 log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2} {3}", travel.FormDataID, travel.EventTitle, travel.SubmitterSig, travel.UserID));
                                 travelForms.Add(travel);
@@ -343,18 +329,16 @@ namespace VeraAPI.Models.DataHandler
                     }
                 }
             }
-            WebForms = travelForms;
-            result = WebForms.Count;
+            result = travelForms.Count;
             log.WriteLogEntry("End LoadUserTravelAuthForms.");
             return result;
         }
 
-        public int LoadApproverTravelAuthForms(int userID)
+        public int LoadApproverTravelAuthForms(List<BaseForm> travelForms, int userID)
         {
             log.WriteLogEntry("Begin LoadApproverTravelAuthForms...");
             log.WriteLogEntry("User ID" + userID);
             int result = 0;
-            List<BaseForm> travelForms = new List<BaseForm>();
 
             string cmdString = string.Format(@"select * from {0}.dbo.travel where supervisor_id = @userID or manager_id = @userID", dbName);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
@@ -398,10 +382,10 @@ namespace VeraAPI.Models.DataHandler
                                     Preparer = rdr["preparer_name"].ToString(),
                                     SubmitterSig = rdr["submitter_email"].ToString(),
                                     DHID = rdr["supervisor_id"].ToString(),
-                                    DHApproval = GetStatusColor((int)rdr["supervisor_approval_status"]),
+                                    DHApproval = rdr["supervisor_approval_status"].ToString(),
                                     GMID = rdr["manager_id"].ToString(),
-                                    GMApproval = GetStatusColor((int)rdr["manager_approval_status"]),
-                                    ApprovalStatus = GetStatusColor((int)rdr["approval_status"]),
+                                    GMApproval = rdr["manager_approval_status"].ToString(),
+                                    ApprovalStatus = rdr["approval_status"].ToString()
                                 };
                                 log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2} {3}", travel.FormDataID, travel.EventTitle, travel.SubmitterSig, travel.UserID));
                                 travelForms.Add(travel);
@@ -418,13 +402,12 @@ namespace VeraAPI.Models.DataHandler
                     }
                 }
             }
-            WebForms = travelForms;
-            result = WebForms.Count;
+            result = travelForms.Count;
             log.WriteLogEntry("End LoadApproverTravelAuthForms.");
             return result;
         }
 
-        public int UpdateForm(string[,] formFields, string[,] formFilters)
+        public int UpdateTravelForm(string[,] formFields, string[,] formFilters)
         {
             log.WriteLogEntry("Begin UpdateForm...");
             int result = 0;
@@ -473,9 +456,7 @@ namespace VeraAPI.Models.DataHandler
                             string parmName = "@filter" + i;
                             string parmValue = formFilters[i, 1];
                             log.WriteLogEntry("Filter Name: " + parmName + "\tValue: " + parmValue);
-                            if (string.Equals(parmValue.ToLower(), "null"))
-                                cmd.Parameters.AddWithValue(parmName, DBNull.Value);
-                            else
+                            if (!string.Equals(parmValue.ToLower(), "null"))
                                 cmd.Parameters.AddWithValue(parmName, parmValue);
                         }
                         log.WriteLogEntry("SQL Command Parameters\n");
@@ -498,27 +479,6 @@ namespace VeraAPI.Models.DataHandler
                 }
             }
             log.WriteLogEntry("End UpdateForm.");
-            return result;
-        }
-
-        private string GetStatusColor(int status)
-        {
-            string result = string.Empty;
-            switch (status)
-            {
-                case 0:
-                    result = Constants.DeniedColor;
-                    break;
-                case 1:
-                    result = Constants.ApprovedColor;
-                    break;
-                case 2:
-                    result = Constants.PendingColor;
-                    break;
-                default:
-                    result = Constants.DeniedColor;
-                    break;
-            }
             return result;
         }
     }

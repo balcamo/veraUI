@@ -33,7 +33,7 @@ namespace VeraAPI.Models.Forms
         public string Advance { get; set; } = string.Empty;             // Advance
         public string AdvanceAmount { get; set; } = string.Empty;       // AdvanceAmount
         public string Policy { get; set; } = string.Empty;              // Policy
-        public string SubmitterSig { get; set; } = string.Empty;        // SubmitterSig
+        public string SubmitterSig { get; set; } = string.Empty;        // Integer
         public string RecapRegistrationCost { get; set; } = string.Empty;   // RecapRegistrationCost
         public string RecapAirfare { get; set; } = string.Empty;        // RecapAirfare
         public string RecapRentalCar { get; set; } = string.Empty;      // RecapRentalCar
@@ -46,11 +46,13 @@ namespace VeraAPI.Models.Forms
         public string RecapMisc { get; set; } = string.Empty;           // RecapMisc
         public string TotalRecap { get; set; } = string.Empty;          // TotalRecap
         public string TotalReimburse { get; set; } = string.Empty;      // TotalReimburse
-        public string ApprovalStatus { get; set; } = string.Empty;      // ApprovalStatus - sets color of box on front end
-        public string DHApproval { get; set; } = string.Empty;          // Boolean
+        public string ApprovalStatus { get; set; } = string.Empty;      // Integer - {0 Denied Red} {1 Approved Green} {2 Pending Yellow}
+        public string DHApproval { get; set; } = string.Empty;          // Integer - {0 Denied Red} {1 Approved Green} {2 Pending Yellow}
         public string DHID { get; set; } = string.Empty;                // Integer department head userID
-        public string GMApproval { get; set; } = string.Empty;          // Boolean
+        public string DHEmail { get; set; } = string.Empty;
+        public string GMApproval { get; set; } = string.Empty;          // Integer - {0 Denied Red} {1 Approved Green} {2 Pending Yellow}
         public string GMID { get; set; } = string.Empty;                // Integer general manager userID
+        public string GMEmail { get; set; } = string.Empty;
 
         public TravelAuthForm() { }
 

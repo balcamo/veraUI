@@ -18,18 +18,10 @@ namespace VeraAPI.HelperClasses
     {
         public BaseForm WebForm { get; private set; }
         public List<BaseForm> WebForms { get; private set; }
-        //public JobTemplate Template { get; private set; }
 
         private readonly string dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
         private readonly string dbName = WebConfigurationManager.AppSettings.Get("DBName");
         private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "FormHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-        private FormDataHandler formDataHandle;
-        //private Validator formValidator;
-
-        public FormHelper()
-        {
-            this.WebForm = new BaseForm();
-        }
 
         /**
         * 
@@ -45,23 +37,26 @@ namespace VeraAPI.HelperClasses
             if (webForm.GetType() == typeof(TravelAuthForm))
             {
                 TravelAuthForm travelForm = (TravelAuthForm)webForm;
+                FormTemplate formTemplate = new FormTemplate();
                 if (user.GetType() == typeof(DomainUser))
                 {
                     DomainUser domainUser = (DomainUser)user;
                     travelForm.UserID = domainUser.UserID;
                     travelForm.DHID = domainUser.Department.DeptHeadUserID.ToString();
-                    travelForm.DHApproval = Constants.PendingColor;
+                    travelForm.DHEmail = domainUser.Department.DeptHeadEmail;
+                    travelForm.DHApproval = Constants.PendingValue.ToString();
                     travelForm.GMID = domainUser.Company.GeneralManagerUserID.ToString();
-                    travelForm.GMApproval = Constants.PendingColor;
-                    travelForm.ApprovalStatus = Constants.PendingColor;
+                    travelForm.GMEmail = domainUser.Company.GeneralManagerEmail;
+                    travelForm.GMApproval = Constants.PendingValue.ToString();
+                    travelForm.ApprovalStatus = Constants.PendingValue.ToString();
 
                     // Load the job template corresponding to the templateID for the submitted form
                     log.WriteLogEntry("Starting FormDataHandler...");
-                    formDataHandle = new FormDataHandler(dbServer, dbName);
-                    if (formDataHandle.LoadFormTemplate(webForm.TemplateID))
+                    FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
+                    if (formDataHandle.LoadFormTemplate(formTemplate, webForm.TemplateID))
                     {
                         // Insert travel form data into the database
-                        if (formDataHandle.InsertTravelAuth(travelForm))
+                        if (formDataHandle.InsertTravelAuth(travelForm, formTemplate.TableName))
                         {
                             result = true;
                         }
@@ -77,35 +72,53 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public bool LoadTravelAuthForm()
+        public bool LoadTravelAuthForm(int formDataID)
         {
             log.WriteLogEntry("Starting LoadTravelAuthForm...");
             bool result = false;
-            formDataHandle = new FormDataHandler(dbServer, dbName);
-            formDataHandle.LoadTravelAuthForm(WebForm.FormDataID);
+            TravelAuthForm travelForm = new TravelAuthForm();
+            log.WriteLogEntry("Starting FormDataHandler...");
+            FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
+            if (formDataHandle.LoadTravelAuthForm(travelForm, formDataID))
+            {
+                this.WebForm = travelForm;
+                result = true;
+            }
+            else
+                log.WriteLogEntry("FAILED to load travel auth form!");
             log.WriteLogEntry("End LoadTravelAuthForm.");
             return result;
         }
 
-        public int LoadActiveTravelAuthForms(int userID)
+        public bool LoadActiveTravelAuthForms(int userID)
         {
             log.WriteLogEntry("Starting LoadActiveTravelAuthForms...");
-            int result = 0;
-            formDataHandle = new FormDataHandler(dbServer, dbName);
-            formDataHandle.LoadUserTravelAuthForms(userID);
-            WebForms = formDataHandle.WebForms;
+            bool result = false;
+            List<BaseForm> travelForms = new List<BaseForm>();
+            log.WriteLogEntry("Starting FormDataHandler...");
+            FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
+            if (formDataHandle.LoadUserTravelAuthForms(travelForms, userID) > 0)
+            {
+                this.WebForms = travelForms;
+                result = true;
+            }
             log.WriteLogEntry("Count loaded forms " + WebForms.Count);
             log.WriteLogEntry("End LoadActiveTravelAuthForms.");
             return result;
         }
 
-        public int LoadApproverTravelAuthForms(int userID)
+        public bool LoadApproverTravelAuthForms(int userID)
         {
             log.WriteLogEntry("Starting LoadApproverTravelAuthForms...");
-            int result = 0;
-            formDataHandle = new FormDataHandler(dbServer, dbName);
-            formDataHandle.LoadApproverTravelAuthForms(userID);
-            WebForms = formDataHandle.WebForms;
+            bool result = false;
+            List<BaseForm> travelForms = new List<BaseForm>();
+            log.WriteLogEntry("Starting FormDataHandler...");
+            FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
+            if (formDataHandle.LoadApproverTravelAuthForms(travelForms, userID) > 0)
+            {
+                this.WebForms = travelForms;
+                result = true;
+            }
             log.WriteLogEntry("Count loaded forms " + WebForms.Count);
             log.WriteLogEntry("End LoadApproverTravelAuthForms.");
             return result;
@@ -119,53 +132,78 @@ namespace VeraAPI.HelperClasses
             if (webForm.GetType() == typeof(TravelAuthForm))
             {
                 TravelAuthForm travel = (TravelAuthForm)webForm;
+                int[] approve = { GetStatusValue(travel.DHApproval), GetStatusValue(travel.GMApproval) };
+                string[] approver = { "supervisor", "manager" };
                 log.WriteLogEntry(string.Format("User {0} is approving form {1}.", userID, travel.FormDataID));
-                try
+                for (int i = 0; i < approve.Length; i++)
                 {
-                    bool dhApprove = bool.TryParse(travel.DHApproval, out bool dh);
-                    bool gmApprove = bool.TryParse(travel.GMApproval, out bool gm);
-                    log.WriteLogEntry(string.Format("Form DHApproval {0} Bool dhApprove {1}", travel.DHApproval, dhApprove));
-                    log.WriteLogEntry(string.Format("Form GMApproval {0} Bool gmApprove {1}", travel.GMApproval, gmApprove));
-                    if (dhApprove)
+                    try
                     {
-                        string[,] formFields = new string[,] { { "supervisor_approval_date", DateTime.Now.ToString() } };
-                        string[,] formFilters = new string[,] { { "supervisor_id", userID.ToString() }, { "form_id", travel.FormDataID.ToString() }, { "supervisor_approval_date", "null" } };
-                        log.WriteLogEntry(string.Format("FormFields array length 0 {0} length 1 {1}", formFields.GetLength(0), formFields.GetLength(1)));
-                        log.WriteLogEntry(string.Format("FormFilters array length 0 {0} length 1 {1}", formFilters.GetLength(0), formFilters.GetLength(1)));
+                        string[,] formFields = { { approver[i] + "_approval_date", DateTime.Now.ToString() }, { approver[i] + "_approval_status", approve.ToString() } };
+                        string[,] formFilters = { { approver[i] + "_id", userID.ToString() }, { "form_id", travel.FormDataID.ToString() }, { approver[i] + "_approval_date", "null" } };
+                        log.WriteLogEntry(string.Format("FormFields array rows {0} columns {1}", formFields.GetLength(0), formFields.GetLength(1)));
+                        log.WriteLogEntry(string.Format("FormFilters array rows {0} columns {1}", formFilters.GetLength(0), formFilters.GetLength(1)));
 
                         log.WriteLogEntry("Starting FormDataHandler...");
                         FormDataHandler formData = new FormDataHandler(dbServer, dbName);
-                        if (formData.UpdateForm(formFields, formFilters) > 0)
-                            result = true;
-                    }
-                    else
-                        log.WriteLogEntry("Department Head approval FALSE");
-
-                    if (gmApprove)
-                    {
-                        string[,] formFields = new string[,] { { "manager_approval_date", DateTime.Now.ToString() } };
-                        string[,] formFilters = new string[,] { { "manager_id", userID.ToString() }, { "form_id", travel.FormDataID.ToString() }, { "manager_approval_date", "null" } };
-                        log.WriteLogEntry(string.Format("FormFields array length 0 {0} length 1 {1}", formFields.GetLength(0), formFields.GetLength(1)));
-                        log.WriteLogEntry(string.Format("FormFilters array length 0 {0} length 1 {1}", formFilters.GetLength(0), formFilters.GetLength(1)));
-
-                        log.WriteLogEntry("Starting FormDataHandler...");
-                        FormDataHandler formData = new FormDataHandler(dbServer, dbName);
-                        if (formData.UpdateForm(formFields, formFilters) > 0)
+                        if (formData.UpdateTravelForm(formFields, formFilters) > 0)
                             result = true;
                         else
-                            log.WriteLogEntry("FAILED no records updated!");
+                            log.WriteLogEntry("FAILED No records updated!");
                     }
-                    else
-                        log.WriteLogEntry("General Manager approval FALSE");
-                }
-                catch (Exception ex)
-                {
-                    log.WriteLogEntry("General Program Error \n" + ex.Message);
+                    catch (Exception ex)
+                    {
+                        log.WriteLogEntry("General Program Error \n" + ex.Message);
+                    }
                 }
             }
             else
                 log.WriteLogEntry("FAILED not a travel form!");
             log.WriteLogEntry("End ApproveTravelAuthForm.");
+            return result;
+        }
+
+        private string GetStatusColor(int status)
+        {
+            string result = string.Empty;
+            switch (status)
+            {
+                case 0:
+                    result = Constants.DeniedColor;
+                    break;
+                case 1:
+                    result = Constants.ApprovedColor;
+                    break;
+                case 2:
+                    result = Constants.PendingColor;
+                    break;
+                default:
+                    result = Constants.PendingColor;
+                    break;
+            }
+            return result;
+        }
+
+        private int GetStatusValue(string status)
+        {
+            if (!int.TryParse(status, out int result))
+            {
+                switch (status.ToLower())
+                {
+                    case "red":
+                        result = Constants.DeniedValue;
+                        break;
+                    case "green":
+                        result = Constants.ApprovedValue;
+                        break;
+                    case "yellow":
+                        result = Constants.PendingValue;
+                        break;
+                    default:
+                        result = Constants.PendingValue;
+                        break;
+                }
+            }
             return result;
         }
     }
