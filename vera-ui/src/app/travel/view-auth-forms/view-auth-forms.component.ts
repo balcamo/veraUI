@@ -43,19 +43,19 @@ export class ViewAuthFormsComponent implements OnInit {
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
     this.displayRecap = "none";
-    if (this.form.DHApproval == undefined) {
+    if (this.form.DHApproval.toString() == '') {
       this.dhApprove = "Pending";
       this.gmApprove = "Pending";
-    } else if (this.form.DHApproval.toString() == "true") {
+    } else if (this.form.DHApproval.toString() == "True") {
       this.dhApprove = "Approved";
-      if (this.form.GMApproval == undefined) {
+      if (this.form.GMApproval.toString() == '') {
         this.gmApprove = "Pending";
-      } else if (this.form.GMApproval.toString() == 'true') {
+      } else if (this.form.GMApproval.toString() == 'True') {
         this.gmApprove = "Approved";
       } else {
         this.gmApprove = "Denied";
       }
-    } else if (this.form.DHApproval.toString() == "false") {
+    } else if (this.form.DHApproval.toString() == "False") {
       this.dhApprove = "Denied";
       this.gmApprove = "Form will not be sent to the GM";
     }
