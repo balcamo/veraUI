@@ -2,8 +2,10 @@
 <!-- displays list of forms -->
 <div class="topbar forms" *ngFor="let forms of authForms">
   <div >
-    <button type="button" class="btn secondary" (click)="displaySelected(forms)" >
-      <h5>{{form.LastName}}</h5>
+    <button type="button" class="btn secondary" (click)="displaySelected(forms)"
+              *ngIf="(forms.GMApproval != 'green' && this.user.EntryGroup[3] == 99) ||
+              (forms.DHApproval != 'green' && this.user.EntryGroup[3] == 1)">
+      <h5>{{forms.FirstName}} {{forms.LastName}}</h5>
     </button>
   </div>
 </div>
