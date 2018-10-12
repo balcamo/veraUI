@@ -60,6 +60,7 @@ export class TavelAuthApproveComponent implements OnInit {
     } else {
       this.transType = "Personal Vehicle"
     }
+
     if (this.displayForm == "none") {
       this.displayForm = "block";
     } else if (this.form !== this.oldForm) {

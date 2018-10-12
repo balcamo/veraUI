@@ -2,9 +2,8 @@
 <!-- displays list of forms -->
 <div class="topbar forms" *ngFor="let forms of authForms">
   <div >
-    <button type="button" class="btn secondary" [ngStyle]="{'border-color':forms.ApprovalStatus}"
-            (click)="displaySelected(forms)" >
-      <h5>{{form.FirstName}} {{form.LastName}}</h5>
+    <button type="button" class="btn secondary" (click)="displaySelected(forms)" >
+      <h5>{{form.LastName}}</h5>
     </button>
   </div>
 </div>

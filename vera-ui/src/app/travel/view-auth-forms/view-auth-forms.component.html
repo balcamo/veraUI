@@ -2,8 +2,10 @@
 
 <div class="topbar forms" *ngFor="let forms of authForms">
   <div class="list" >
-      <button class="btn secondary" [ngStyle]="{'border-color':forms.ApprovalStatus, 'background-color': hover==true  ? forms.ApprovalStatus : 'white' }"
-              (click)="displaySelected(forms)" (mouseover)="hover=true" (mouseleave)="hover=false">
+      <button class="btn secondary" (mouseover)="hover=true" (mouseleave)="hover=false"
+              [ngStyle]="{'border-color':forms.ApprovalStatus,
+              'background-color': hover==true  ? forms.ApprovalStatus : 'white' }"
+              (click)="displaySelected(forms)" >
         <h5>{{forms.EventTitle}}</h5>
       </button>
   </div>
