@@ -2,8 +2,11 @@
 <!-- displays list of forms -->
 <div class="topbar forms" *ngFor="let forms of authForms">
   <div >
-    <button type="button" class="btn secondary" (click)="displaySelected(forms)" >
-      <h5>{{form.LastName}}</h5>
+    <button type="button" class="btn secondary" (mouseover)="hover=true" (mouseleave)="hover=false"
+              [ngStyle]="{'border-color':forms.GMApproval,
+              'background-color': hover==true  ? forms.GMApproval : 'white' }"
+              (click)="displaySelected(forms)" >
+      <h5>{{forms.FirstName}} {{forms.LastName}}</h5>
     </button>
   </div>
 </div>

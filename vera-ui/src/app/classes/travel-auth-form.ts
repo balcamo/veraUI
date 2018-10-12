@@ -40,8 +40,8 @@ export class AuthForm {
   TotalRecap: number;  // TotalRecap
   TotalReimburse: number;  // TotalReimburse
   ApprovalStatus: string;    // ApprovalStatus
-  DHApproval: boolean;     // Department head approval DHApproval
+  DHApproval: string;     // Department head approval DHApproval
   DHID: number;    // Department head ID DHID
-  GMApproval: boolean;     // GM approval GMApproval
+  GMApproval: string;     // GM approval GMApproval
   GMID: number;   // GMID
 }

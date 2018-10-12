@@ -87,8 +87,12 @@ export class TravelAuthComponent implements OnInit {
       this.form.SubmitterSig = this.user.UserID;
       this.form.Email = (this.form.Email == null ? this.user.UserEmail : this.form.Email);
       if (this.user.EntryGroup[3] == 1) {
-        this.form.DHApproval = true;
+        this.form.DHApproval = 'green';
         this.form.DHID = this.user.UserID;
+      }
+      if (this.user.EntryGroup[3] == 99) {
+        this.form.GMApproval = 'green';
+        this.form.GMID = this.user.UserID;
       }
       var body = JSON.stringify(this.form);
       console.log(this.consts.url +'TravelAuth');
