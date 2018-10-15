@@ -102,6 +102,8 @@ namespace VeraAPI.HelperClasses
                 this.WebForms = travelForms;
                 result = true;
             }
+            else
+                log.WriteLogEntry("No active forms loaded.");
             log.WriteLogEntry("Count loaded forms " + WebForms.Count);
             log.WriteLogEntry("End LoadActiveTravelAuthForms.");
             return result;
@@ -118,21 +120,36 @@ namespace VeraAPI.HelperClasses
             {
                 foreach (TravelAuthForm travelForm in travelForms)
                 {
-                    if (int.TryParse(travelForm.ApprovalStatus, out int status))
-                        travelForm.ApprovalStatus = GetStatusColor(status);
+                    if (int.TryParse(travelForm.ApprovalStatus, out int approve))
+                        if (int.TryParse(travelForm.DHApproval, out int dhApprove))
+                            if (int.TryParse(travelForm.GMApproval, out int gmApprove))
+                            {
+                                travelForm.ApprovalStatus = GetStatusColor(approve);
+                                travelForm.DHApproval = GetStatusColor(dhApprove);
+                                travelForm.GMApproval = GetStatusColor(gmApprove);
+                                if (dhApprove == Constants.PendingValue && userID == int.Parse(travelForm.DHID))
+                                    this.WebForms.Add(travelForm);
+                                else if (gmApprove == Constants.PendingValue && userID == int.Parse(travelForm.GMID))
+                                    this.WebForms.Add(travelForm);
+                                log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", userID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
+                                result = true;
+                            }
+                            else
+                            {
+                                log.WriteLogEntry("FAILED GM approval status not recognized!");
+                                result = false;
+                            }
+                        else
+                        {
+                            log.WriteLogEntry("FAILED DH approval status not recognized!");
+                            result = false;
+                        }
                     else
+                    {
                         log.WriteLogEntry("FAILED approval status not recognized!");
-                    if (int.TryParse(travelForm.DHApproval, out int dhStatus))
-                        travelForm.DHApproval = GetStatusColor(dhStatus);
-                    else
-                        log.WriteLogEntry("FAILED DH approval status not recognized!");
-                    if (int.TryParse(travelForm.GMApproval, out int gmStatus))
-                        travelForm.GMApproval = GetStatusColor(gmStatus);
-                    else
-                        log.WriteLogEntry("FAILED GM approval status not recognized!");
+                        result = false;
+                    }
                 }
-                this.WebForms = travelForms;
-                result = true;
             }
             log.WriteLogEntry("Count loaded forms " + WebForms.Count);
             log.WriteLogEntry("End LoadApproverTravelAuthForms.");

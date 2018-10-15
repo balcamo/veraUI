@@ -31,7 +31,7 @@ namespace VeraAPI.Controllers
         {
             // call function to get active forms
             log.WriteLogEntry("Starting TravelAuthController GET...");
-            BaseForm[] result = null;
+            BaseForm[] result = new BaseForm[0];
             if (int.TryParse(restUserID, out int userID))
             {
                 try
@@ -42,14 +42,19 @@ namespace VeraAPI.Controllers
                     {
                         log.WriteLogEntry("Starting FormHelper...");
                         FormHelper formHelp = new FormHelper();
-
-                        // Load active forms from system form database by user id = token header
-                        formHelp.LoadActiveTravelAuthForms(userID);
-                        result = formHelp.WebForms.ToArray();
+                        if (formHelp.LoadActiveTravelAuthForms(userID))
+                        {
+                            result = formHelp.WebForms.ToArray();
+                        }
+                        else
+                        {
+                            log.WriteLogEntry("No active travel forms returned!");
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
+                    result = new BaseForm[0];
                     log.WriteLogEntry("General program error! " + ex.Message);
                 }
             }

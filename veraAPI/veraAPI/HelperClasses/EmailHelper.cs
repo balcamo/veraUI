@@ -93,5 +93,44 @@ namespace VeraAPI.HelperClasses
             log.WriteLogEntry("End NotifyFinance.");
             return result;
         }
+
+        public bool NotifySubmitter(User user)
+        {
+            log.WriteLogEntry("Begin NotifyDepartmentHead...");
+            bool result = false;
+
+            if (user.GetType() == typeof(DomainUser))
+            {
+                DomainUser domainUser = (DomainUser)user;
+                log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3} {4}", user.UserID, domainUser.DomainUpn, domainUser.EmployeeID, domainUser.Department, domainUser.Department.DeptHeadEmail));
+                ExchangeHandler emailHandle = new ExchangeHandler
+                {
+                    EmailSubject = "Notify Submitter",
+                    RecipientEmailAddress = domainUser.UserEmail,
+                    EmailBody = "<html><body><p>Your request to travel has been approved.</p></body></html>"
+                };
+                try
+                {
+                    if (emailHandle.ConnectExchangeService())
+                    {
+                        log.WriteLogEntry("Connection to Exchange service successful.");
+                        if (emailHandle.SendMail())
+                        {
+                            result = true;
+                        }
+                        else
+                            log.WriteLogEntry("Failed send email!");
+                    }
+                    else
+                        log.WriteLogEntry("Failed connect to Exchange service!");
+                }
+                catch (Exception ex)
+                {
+                    log.WriteLogEntry("Program error " + ex.Message);
+                }
+            }
+            log.WriteLogEntry("End NotifyDepartmentHead.");
+            return result;
+        }
     }
 }
