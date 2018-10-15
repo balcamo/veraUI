@@ -24,7 +24,7 @@ namespace VeraAPI.Controllers
         {
             // call function to get active forms
             log.WriteLogEntry("Starting Get active travel forms for approval...");
-            BaseForm[] result = null;
+            BaseForm[] result = new BaseForm[0];
             if (int.TryParse(restUserID, out int userID))
             {
                 log.WriteLogEntry("Starting LoginHelper...");
@@ -35,13 +35,14 @@ namespace VeraAPI.Controllers
                     {
                         FormHelper formHelp = new FormHelper();
                         log.WriteLogEntry("Starting FormHelper...");
-
-                        // Load active forms from system form database by user id = token header
-                        formHelp.LoadApproverTravelAuthForms(userID);
-                        result = formHelp.WebForms.ToArray();
+                        if (formHelp.LoadApproverTravelAuthForms(userID))
+                            result = formHelp.WebForms.ToArray();
+                        else
+                            log.WriteLogEntry("No forms found pending approval.");
                     }
                     catch (Exception ex)
                     {
+                        result = new BaseForm[0];
                         log.WriteLogEntry(ex.Message);
                     }
                 }
@@ -122,10 +123,16 @@ namespace VeraAPI.Controllers
                                 log.DumpObject(travelAuthForm);
                                 log.WriteLogEntry("Starting FormHelper...");
                                 FormHelper travelFormHelp = new FormHelper();
-                                if (travelFormHelp.ApproveTravelAuthForm(user.UserID, travelAuthForm))
+                                if (travelFormHelp.ApproveTravelAuthForm(userID, travelAuthForm))
                                 {
-                                    // Email code here
-
+                                    EmailHelper email = new EmailHelper();
+                                    email.NotifySubmitter(user);
+                                    if (bool.TryParse(travelAuthForm.Advance, out bool advance))
+                                    {
+                                        if (bool.TryParse(travelAuthForm.GMApproval, out bool approve))
+                                            email.NotifyFinance();
+                                    }
+                                    log.WriteLogEntry("SUCCESS travel request approved!");
                                 }
                                 else
                                     log.WriteLogEntry("FAILED submit travel form!");

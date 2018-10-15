@@ -340,12 +340,13 @@ namespace VeraAPI.Models.DataHandler
             log.WriteLogEntry("User ID" + userID);
             int result = 0;
 
-            string cmdString = string.Format(@"select * from {0}.dbo.travel where supervisor_id = @userID or manager_id = @userID", dbName);
+            string cmdString = string.Format(@"select * from {0}.dbo.travel where (supervisor_id = @userID or manager_id = @userID) and approval_status = @status", dbName);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                 {
                     cmd.Parameters.AddWithValue("@userID", userID);
+                    cmd.Parameters.AddWithValue("@status", Constants.PendingValue);
                     try
                     {
                         conn.Open();
@@ -436,7 +437,7 @@ namespace VeraAPI.Models.DataHandler
                 }
             }
             string cmdString = sbCommand.ToString();
-            log.WriteLogEntry("Update command string \n" + cmdString);
+            log.WriteLogEntry("Update command string:\n" + cmdString);
 
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
@@ -459,7 +460,7 @@ namespace VeraAPI.Models.DataHandler
                             if (!string.Equals(parmValue.ToLower(), "null"))
                                 cmd.Parameters.AddWithValue(parmName, parmValue);
                         }
-                        log.WriteLogEntry("SQL Command Parameters\n");
+                        log.WriteLogEntry("SQL Command Parameters:");
                         foreach (SqlParameter parm in cmd.Parameters)
                         {
                             log.WriteLogEntry("Name: " + parm.ParameterName + "\tValue: " + parm.SqlValue);
