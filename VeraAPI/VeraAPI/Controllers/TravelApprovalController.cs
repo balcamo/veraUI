@@ -125,7 +125,7 @@ namespace VeraAPI.Controllers
                                 if (travelFormHelp.ApproveTravelAuthForm(user.UserID, travelAuthForm))
                                 {
                                     // Email code here
-
+                                    log.WriteLogEntry("SUCCESS travel request approved!");
                                 }
                                 else
                                     log.WriteLogEntry("FAILED submit travel form!");

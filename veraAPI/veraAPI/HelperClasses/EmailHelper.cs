@@ -15,17 +15,6 @@ namespace VeraAPI.HelperClasses
         private readonly string dbServer = WebConfigurationManager.AppSettings.Get("DBServer");
         private readonly string dbName = WebConfigurationManager.AppSettings.Get("DBName");
         private Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "EmailHelper_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
-        private readonly User user;
-
-        public EmailHelper()
-        {
-
-        }
-
-        public EmailHelper(User user)
-        {
-            this.user = user;
-        }
 
         public bool NotifyDepartmentHead(User user)
         {

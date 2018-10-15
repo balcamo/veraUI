@@ -436,7 +436,7 @@ namespace VeraAPI.Models.DataHandler
                 }
             }
             string cmdString = sbCommand.ToString();
-            log.WriteLogEntry("Update command string \n" + cmdString);
+            log.WriteLogEntry("Update command string:\n" + cmdString);
 
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
@@ -459,7 +459,7 @@ namespace VeraAPI.Models.DataHandler
                             if (!string.Equals(parmValue.ToLower(), "null"))
                                 cmd.Parameters.AddWithValue(parmName, parmValue);
                         }
-                        log.WriteLogEntry("SQL Command Parameters\n");
+                        log.WriteLogEntry("SQL Command Parameters:");
                         foreach (SqlParameter parm in cmd.Parameters)
                         {
                             log.WriteLogEntry("Name: " + parm.ParameterName + "\tValue: " + parm.SqlValue);
