@@ -55,6 +55,7 @@ export class TravelComponent implements OnInit {
    * */
   displayAllAuth() {
     this.user = this.userService.getUser();
+    this.authForms = [];
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({
       'Content-Type': 'application/json'

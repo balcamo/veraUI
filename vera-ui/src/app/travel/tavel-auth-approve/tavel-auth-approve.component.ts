@@ -26,11 +26,15 @@ export class TavelAuthApproveComponent implements OnInit {
   transType: string;
   food: number;
   mileage: number;
+  forms = true;
 
   constructor(http: Http, userService: UserService) {
     this.http = http;
     this.userService = userService;
     this.user = this.userService.getUser();
+    if (this.authForms == []) {
+      this.forms = false;
+    }
   }
 
   ngOnInit() {

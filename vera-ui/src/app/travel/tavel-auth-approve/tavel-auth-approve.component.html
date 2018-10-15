@@ -12,31 +12,36 @@
 
 <br />
 
-<!-- Displayes overview of the selected Auth form -->
-<div [ngStyle]="{'display':displayForm}" class="overview">
-  <h2 style="text-align:center">{{form.FirstName}} {{form.LastName}} : {{form.Location}}</h2>
-  <h5>Name: <b><i>{{form.FirstName}} {{form.LastName}}</i></b></h5>
-  <h5>Event title:<b> <i>{{form.EventTitle}}</i> </b></h5>
-  <h5>Location:<b> <i>{{form.Location}}</i></b></h5>
-  <h5>Type of transportation:<b> <i>{{transType}}</i></b></h5>
-  <h5>Travel start date: <b><i>{{form.TravelBegin}}</i></b></h5>
-  <h5>Travel end date:<b> <i>{{form.TravelEnd}}</i></b></h5>
-  <!-- Cost breakdown of the trip -->
-  <h5>Registration cost:<b> <i>{{form.RegistrationCost}}</i></b></h5>
-  <h5>Airfare:<b> <i>{{form.Airfare}}</i></b></h5>
-  <h5>Rental car:<b> <i>{{form.RentalCar}}</i></b></h5>
-  <h5>Fuel:<b> <i>{{form.Fuel}}</i></b></h5>
-  <h5>Parking and tolls:<b> <i>{{form.ParkingTolls}}</i></b></h5>
-  <h5>Mileage:<b> <i>{{mileage}}</i></b></h5>
-  <h5>Lodging:<b> <i>{{form.Lodging}}</i></b></h5>
-  <h5>Food:<b> <i>{{food}}</i></b></h5>
-  <h5>Misc:<b> <i>{{form.Misc}}</i></b></h5>
 
-  <h5>Total estimate of trip:<b> <i>{{form.TotalEstimate}}</i></b></h5>
-
-  <button class="bg-info sup" (click)="submitApproveStatus()" *ngIf="!submitted">Approve</button>
-  <button class="bg-warning sup" (click)="submitDenyStatus()" *ngIf="!submitted">Deny</button>
+<div *ngIf="forms" class="overview">
+  <h5>You currently have no forms to approve</h5>
 </div>
 
+<div *ngIf="!forms">
+  <!-- Displayes overview of the selected Auth form -->
+  <div [ngStyle]="{'display':displayForm}" class="overview">
+    <h2 style="text-align:center">{{form.FirstName}} {{form.LastName}} : {{form.Location}}</h2>
+    <h5>Name: <b><i>{{form.FirstName}} {{form.LastName}}</i></b></h5>
+    <h5>Event title:<b> <i>{{form.EventTitle}}</i> </b></h5>
+    <h5>Location:<b> <i>{{form.Location}}</i></b></h5>
+    <h5>Type of transportation:<b> <i>{{transType}}</i></b></h5>
+    <h5>Travel start date: <b><i>{{form.TravelBegin}}</i></b></h5>
+    <h5>Travel end date:<b> <i>{{form.TravelEnd}}</i></b></h5>
+    <!-- Cost breakdown of the trip -->
+    <h5>Registration cost:<b> <i>{{form.RegistrationCost}}</i></b></h5>
+    <h5>Airfare:<b> <i>{{form.Airfare}}</i></b></h5>
+    <h5>Rental car:<b> <i>{{form.RentalCar}}</i></b></h5>
+    <h5>Fuel:<b> <i>{{form.Fuel}}</i></b></h5>
+    <h5>Parking and tolls:<b> <i>{{form.ParkingTolls}}</i></b></h5>
+    <h5>Mileage:<b> <i>{{mileage}}</i></b></h5>
+    <h5>Lodging:<b> <i>{{form.Lodging}}</i></b></h5>
+    <h5>Food:<b> <i>{{food}}</i></b></h5>
+    <h5>Misc:<b> <i>{{form.Misc}}</i></b></h5>
 
+    <h5>Total estimate of trip:<b> <i>{{form.TotalEstimate}}</i></b></h5>
+
+    <button class="bg-info sup" (click)="submitApproveStatus()" *ngIf="!submitted">Approve</button>
+    <button class="bg-warning sup" (click)="submitDenyStatus()" *ngIf="!submitted">Deny</button>
+  </div>
+</div>
 

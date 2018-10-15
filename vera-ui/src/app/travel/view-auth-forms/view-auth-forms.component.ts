@@ -24,11 +24,15 @@ export class ViewAuthFormsComponent implements OnInit {
   oldForm: AuthForm;
   dhApprove: string;
   gmApprove: string;
+  forms = true;
 
   constructor(http: Http, userService: UserService) {
     this.http = http;
     this.userService = userService;
     this.user = this.userService.getUser();
+    if (this.authForms == []) {
+      this.forms = false;
+    }
   }
 
   ngOnInit() {
@@ -43,14 +47,14 @@ export class ViewAuthFormsComponent implements OnInit {
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
     this.displayRecap = "none";
-    if (this.form.DHApproval == 'yellow') {
+    if (this.form.DHApproval.toString() == "yellow") {
       this.dhApprove = "Pending";
       this.gmApprove = "Pending";
-    } else if (this.form.DHApproval == "green") {
+    } else if (this.form.DHApproval.toString() == "green") {
       this.dhApprove = "Approved";
-      if (this.form.GMApproval == 'yellow') {
+      if (this.form.GMApproval.toString() == "yellow") {
         this.gmApprove = "Pending";
-      } else if (this.form.GMApproval == 'green') {
+      } else if (this.form.GMApproval.toString() == "green") {
         this.gmApprove = "Approved";
       } else {
         this.gmApprove = "Denied";
