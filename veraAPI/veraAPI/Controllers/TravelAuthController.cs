@@ -54,8 +54,9 @@ namespace VeraAPI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    result = new BaseForm[0];
                     log.WriteLogEntry("General program error! " + ex.Message);
+                    result = new BaseForm[0];
+                    return result;
                 }
             }
             else
@@ -110,6 +111,7 @@ namespace VeraAPI.Controllers
                         {
                             log.WriteLogEntry("FAILED to submit travel authorization form! " + ex.Message);
                             result = "Failed Travel Authorization Submit " + ex.Message;
+                            return result;
                         }
                     }
                     else
