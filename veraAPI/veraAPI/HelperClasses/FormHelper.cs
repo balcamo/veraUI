@@ -81,8 +81,11 @@ namespace VeraAPI.HelperClasses
             FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
             if (formDataHandle.LoadTravelAuthForm(travelForm, formDataID))
             {
-                this.WebForm = travelForm;
-                result = true;
+                if (ConvertStatusValues(travelForm))
+                {
+                    this.WebForm = travelForm;
+                    result = true;
+                }
             }
             else
                 log.WriteLogEntry("FAILED to load travel auth form!");
@@ -99,8 +102,22 @@ namespace VeraAPI.HelperClasses
             FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
             if (formDataHandle.LoadUserTravelAuthForms(travelForms, userID) > 0)
             {
-                this.WebForms = travelForms;
-                result = true;
+                WebForms = new List<BaseForm>();
+                foreach (TravelAuthForm travelForm in travelForms)
+                {
+                    if (ConvertStatusValues(travelForm))
+                    {
+                        this.WebForms.Add(travelForm);
+                        result = true;
+                        log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", userID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
+                    }
+                    else
+                    {
+                        log.WriteLogEntry("FAILED to convert status colors!");
+                        result = false;
+                        break;
+                    }
+                }
             }
             else
                 log.WriteLogEntry("No active forms loaded.");
@@ -118,36 +135,23 @@ namespace VeraAPI.HelperClasses
             FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
             if (formDataHandle.LoadApproverTravelAuthForms(travelForms, userID) > 0)
             {
+                WebForms = new List<BaseForm>();
                 foreach (TravelAuthForm travelForm in travelForms)
                 {
-                    if (int.TryParse(travelForm.ApprovalStatus, out int approve))
-                        if (int.TryParse(travelForm.DHApproval, out int dhApprove))
-                            if (int.TryParse(travelForm.GMApproval, out int gmApprove))
-                            {
-                                travelForm.ApprovalStatus = GetStatusColor(approve);
-                                travelForm.DHApproval = GetStatusColor(dhApprove);
-                                travelForm.GMApproval = GetStatusColor(gmApprove);
-                                if (dhApprove == Constants.PendingValue && userID == int.Parse(travelForm.DHID))
-                                    this.WebForms.Add(travelForm);
-                                else if (gmApprove == Constants.PendingValue && userID == int.Parse(travelForm.GMID))
-                                    this.WebForms.Add(travelForm);
-                                log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", userID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
-                                result = true;
-                            }
-                            else
-                            {
-                                log.WriteLogEntry("FAILED GM approval status not recognized!");
-                                result = false;
-                            }
-                        else
-                        {
-                            log.WriteLogEntry("FAILED DH approval status not recognized!");
-                            result = false;
-                        }
+                    if (ConvertStatusValues(travelForm))
+                    {
+                        if (travelForm.DHApproval == Constants.PendingColor && userID == int.Parse(travelForm.DHID))
+                            this.WebForms.Add(travelForm);
+                        else if (travelForm.GMApproval == Constants.PendingColor && userID == int.Parse(travelForm.GMID))
+                            this.WebForms.Add(travelForm);
+                        result = true;
+                        log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", userID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
+                    }
                     else
                     {
-                        log.WriteLogEntry("FAILED approval status not recognized!");
+                        log.WriteLogEntry("FAILED to convert status colors!");
                         result = false;
+                        break;
                     }
                 }
             }
@@ -242,6 +246,32 @@ namespace VeraAPI.HelperClasses
             else
                 log.WriteLogEntry("Status value is a number: " + status);
             log.WriteLogEntry("Returning status value: " + result);
+            return result;
+        }
+
+        private bool ConvertStatusValues(TravelAuthForm travelForm)
+        {
+            log.WriteLogEntry("Converting status values...");
+            bool result = false;
+            if (int.TryParse(travelForm.ApprovalStatus, out int approve))
+            {
+                if (int.TryParse(travelForm.DHApproval, out int dhApprove))
+                {
+                    if (int.TryParse(travelForm.GMApproval, out int gmApprove))
+                    {
+                        travelForm.ApprovalStatus = GetStatusColor(approve);
+                        travelForm.DHApproval = GetStatusColor(dhApprove);
+                        travelForm.GMApproval = GetStatusColor(gmApprove);
+                        result = true;
+                    }
+                    else
+                        log.WriteLogEntry("FAILED GM approval status not recognized!");
+                }
+                else
+                    log.WriteLogEntry("FAILED DH approval status not recognized!");
+            }
+            else
+                log.WriteLogEntry("FAILED approval status not recognized!");
             return result;
         }
     }

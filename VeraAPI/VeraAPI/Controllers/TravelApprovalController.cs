@@ -128,7 +128,7 @@ namespace VeraAPI.Controllers
                                 if (travelFormHelp.ApproveTravelAuthForm(userID, travelAuthForm))
                                 {
                                     EmailHelper email = new EmailHelper();
-                                    email.NotifySubmitter(user);
+                                    email.NotifySubmitter(travelAuthForm.Email);
                                     if (bool.TryParse(travelAuthForm.Advance, out bool advance))
                                     {
                                         if (travelAuthForm.GMApproval.ToLower() == Constants.ApprovedColor)

@@ -59,17 +59,14 @@ namespace VeraAPI.HelperClasses
         {
             log.WriteLogEntry("Begin NotifyFinance...");
             bool result = false;
-            // Get finance department email
+
             UserDataHandler userData = new UserDataHandler(dbServer, dbName);
             string financeEmail = userData.GetDepartment(Department.FinanceDept).DeptEmail;
-            // Get finance notification
-
-
             ExchangeHandler emailHandle = new ExchangeHandler
             {
-                EmailSubject = "Notify Department Head",
+                EmailSubject = "Notify Finance",
                 RecipientEmailAddress = financeEmail,
-                EmailBody = "<html><body><p>There has been a request to travel</p><p>go <a href=\"https://bermuda.verawp.local/?route=travel\"> here to approve</a></p></body></html>"
+                EmailBody = "<html><body><p>Notifying Finance the GM has approved a request to travel</p></body></html>"
             };
             try
             {
@@ -94,48 +91,41 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public bool NotifySubmitter(User user)
+        public bool NotifySubmitter(string email)
         {
-            log.WriteLogEntry("Begin NotifyDepartmentHead...");
+            log.WriteLogEntry("Begin NotifySubmitter...");
             bool result = false;
-
-            if (user.GetType() == typeof(DomainUser))
+            ExchangeHandler emailHandle = new ExchangeHandler
             {
-                DomainUser domainUser = (DomainUser)user;
-                log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3} {4}", user.UserID, domainUser.DomainUpn, domainUser.EmployeeID, domainUser.Department, domainUser.Department.DeptHeadEmail));
-                ExchangeHandler emailHandle = new ExchangeHandler
+                EmailSubject = "Notify Submitter",
+                RecipientEmailAddress = email,
+                EmailBody = "<html><body><p>Your request to travel has been approved.</p></body></html>"
+            };
+            try
+            {
+                if (emailHandle.ConnectExchangeService())
                 {
-                    EmailSubject = "Notify Submitter",
-                    RecipientEmailAddress = domainUser.UserEmail,
-                    EmailBody = "<html><body><p>Your request to travel has been approved.</p></body></html>"
-                };
-                try
-                {
-                    if (emailHandle.ConnectExchangeService())
+                    log.WriteLogEntry("Connection to Exchange service successful.");
+                    if (emailHandle.SendMail())
                     {
-                        log.WriteLogEntry("Connection to Exchange service successful.");
-                        if (emailHandle.SendMail())
-                        {
-                            result = true;
-                        }
-                        else
-                            log.WriteLogEntry("Failed send email!");
+                        result = true;
                     }
                     else
-                        log.WriteLogEntry("Failed connect to Exchange service!");
+                        log.WriteLogEntry("Failed send email!");
                 }
-                catch (Exception ex)
-                {
-                    log.WriteLogEntry("Program error " + ex.Message);
-                }
+                else
+                    log.WriteLogEntry("Failed connect to Exchange service!");
             }
-            log.WriteLogEntry("End NotifyDepartmentHead.");
+            catch (Exception ex)
+            {
+                log.WriteLogEntry("Program error " + ex.Message);
+            }
             return result;
         }
 
         public bool NotifyGeneralManager(User user)
         {
-            log.WriteLogEntry("Begin NotifyDepartmentHead...");
+            log.WriteLogEntry("Begin NotifyGeneralManager...");
             bool result = false;
 
             if (user.GetType() == typeof(DomainUser))
@@ -168,7 +158,7 @@ namespace VeraAPI.HelperClasses
                     log.WriteLogEntry("Program error " + ex.Message);
                 }
             }
-            log.WriteLogEntry("End NotifyDepartmentHead.");
+            log.WriteLogEntry("End NotifyGeneralManager.");
             return result;
         }
     }
