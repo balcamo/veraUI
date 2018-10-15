@@ -13,11 +13,11 @@
 <br />
 
 
-<div *ngIf="forms" class="overview">
+<div *ngIf="!forms" class="overview">
   <h5>You currently have no forms to approve</h5>
 </div>
 
-<div *ngIf="!forms">
+<div *ngIf="forms">
   <!-- Displayes overview of the selected Auth form -->
   <div [ngStyle]="{'display':displayForm}" class="overview">
     <h2 style="text-align:center">{{form.FirstName}} {{form.LastName}} : {{form.Location}}</h2>

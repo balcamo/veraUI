@@ -22,11 +22,11 @@
   </div>
 
   <div [ngStyle]="{'display':allAuthDisplay}">
-    <app-view-auth-forms [authForms]="authForms"></app-view-auth-forms>
+    <app-view-auth-forms [forms]="forms" [authForms]="authForms"></app-view-auth-forms>
   </div>
 
   <div [ngStyle]="{'display':approveAuthDisplay}">
-    <app-tavel-auth-approve [authForms]="authForms"></app-tavel-auth-approve>
+    <app-tavel-auth-approve [forms]="forms" [authForms]="authForms"></app-tavel-auth-approve>
   </div>
 
 </body>
