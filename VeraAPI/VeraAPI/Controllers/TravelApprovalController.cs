@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using VeraAPI.Models;
 using VeraAPI.Models.Forms;
 using VeraAPI.Models.Templates;
 using VeraAPI.HelperClasses;
@@ -23,7 +24,7 @@ namespace VeraAPI.Controllers
         public BaseForm[] Get(string restUserID)
         {
             // call function to get active forms
-            log.WriteLogEntry("Starting Get active travel forms for approval...");
+            log.WriteLogEntry("Begin TravelApprovalController GET...");
             BaseForm[] result = new BaseForm[0];
             if (int.TryParse(restUserID, out int userID))
             {
@@ -42,8 +43,9 @@ namespace VeraAPI.Controllers
                     }
                     catch (Exception ex)
                     {
+                        log.WriteLogEntry("General program error! " + ex.Message);
                         result = new BaseForm[0];
-                        log.WriteLogEntry(ex.Message);
+                        return result;
                     }
                 }
                 else
@@ -55,14 +57,14 @@ namespace VeraAPI.Controllers
                 log.WriteLogEntry("FAILED invalid user id!");
             // return array of active travel auth forms
             log.WriteLogEntry("Forms returned " + result.Count<BaseForm>() + " " + result[0].UserID + " " + result[0].FormDataID);
-            log.WriteLogEntry("End Get active travel forms.");
+            log.WriteLogEntry("End TravelApprovalController GET.");
             return result;
         }
 
         // POST: api/TravelApproval
         public string Post([FromUri]string restUserID, [FromBody]TravelAuthForm travelAuthForm)
         {
-            log.WriteLogEntry("Begin Post TravelAuthForm...");
+            log.WriteLogEntry("Begin TravelApprovalController POST...");
             string result = string.Empty;
             if (int.TryParse(restUserID, out int userID))
             {
@@ -91,7 +93,7 @@ namespace VeraAPI.Controllers
             }
             else
                 log.WriteLogEntry("FAILED invalid user id!");
-            log.WriteLogEntry("End Post TravelAuthForm.");
+            log.WriteLogEntry("End TravelApprovalController POST.");
             return result;
         }
 
@@ -103,7 +105,7 @@ namespace VeraAPI.Controllers
         // PUT: api/TravelApproval/5
         public void Put([FromUri]string restUserID, [FromBody]TravelAuthForm travelAuthForm)
         {
-            log.WriteLogEntry("Begin TravelAuthForm PUT...");
+            log.WriteLogEntry("Begin TravelApprovalController PUT...");
             if (int.TryParse(restUserID, out int userID))
             {
                 log.WriteLogEntry("Starting LoginHelper...");
@@ -129,9 +131,11 @@ namespace VeraAPI.Controllers
                                     email.NotifySubmitter(user);
                                     if (bool.TryParse(travelAuthForm.Advance, out bool advance))
                                     {
-                                        if (bool.TryParse(travelAuthForm.GMApproval, out bool approve))
+                                        if (travelAuthForm.GMApproval.ToLower() == Constants.ApprovedColor)
                                             email.NotifyFinance();
                                     }
+                                    if (travelAuthForm.DHApproval.ToLower() == Constants.ApprovedColor)
+                                        email.NotifyGeneralManager(user);
                                     log.WriteLogEntry("SUCCESS travel request approved!");
                                 }
                                 else
@@ -159,7 +163,7 @@ namespace VeraAPI.Controllers
             }
             else
                 log.WriteLogEntry("FAILED invalid user id!");
-            log.WriteLogEntry("End Post TravelAuthForm.");
+            log.WriteLogEntry("End TravelApprovalController PUT.");
         }
 
         // DELETE: api/TravelApproval/5

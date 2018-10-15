@@ -132,5 +132,44 @@ namespace VeraAPI.HelperClasses
             log.WriteLogEntry("End NotifyDepartmentHead.");
             return result;
         }
+
+        public bool NotifyGeneralManager(User user)
+        {
+            log.WriteLogEntry("Begin NotifyDepartmentHead...");
+            bool result = false;
+
+            if (user.GetType() == typeof(DomainUser))
+            {
+                DomainUser domainUser = (DomainUser)user;
+                log.WriteLogEntry(string.Format("Current User {0} {1} {2} {3} {4}", user.UserID, domainUser.DomainUpn, domainUser.EmployeeID, domainUser.Department, domainUser.Department.DeptHeadEmail));
+                ExchangeHandler emailHandle = new ExchangeHandler
+                {
+                    EmailSubject = "Notify General Manager",
+                    RecipientEmailAddress = domainUser.Company.GeneralManagerEmail,
+                    EmailBody = "<html><body><p>A department head has approved a request to travel</p><p>go <a href=\"https://bermuda.verawp.local/?route=travel\"> here to approve</a></p></body></html>"
+                };
+                try
+                {
+                    if (emailHandle.ConnectExchangeService())
+                    {
+                        log.WriteLogEntry("Connection to Exchange service successful.");
+                        if (emailHandle.SendMail())
+                        {
+                            result = true;
+                        }
+                        else
+                            log.WriteLogEntry("Failed send email!");
+                    }
+                    else
+                        log.WriteLogEntry("Failed connect to Exchange service!");
+                }
+                catch (Exception ex)
+                {
+                    log.WriteLogEntry("Program error " + ex.Message);
+                }
+            }
+            log.WriteLogEntry("End NotifyDepartmentHead.");
+            return result;
+        }
     }
 }
