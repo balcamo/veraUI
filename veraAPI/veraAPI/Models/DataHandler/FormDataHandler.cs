@@ -388,7 +388,7 @@ namespace VeraAPI.Models.DataHandler
                                     GMApproval = rdr["manager_approval_status"].ToString(),
                                     ApprovalStatus = rdr["approval_status"].ToString()
                                 };
-                                log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2} {3}", travel.FormDataID, travel.EventTitle, travel.SubmitterSig, travel.UserID));
+                                log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2} {3} {4} {5}", travel.FormDataID, travel.UserID, travel.EventTitle, travel.ApprovalStatus, travel.DHApproval, travel.GMApproval));
                                 travelForms.Add(travel);
                             }
                         }

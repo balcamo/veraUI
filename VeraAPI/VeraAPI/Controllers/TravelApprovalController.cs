@@ -36,7 +36,7 @@ namespace VeraAPI.Controllers
                     {
                         FormHelper formHelp = new FormHelper();
                         log.WriteLogEntry("Starting FormHelper...");
-                        if (formHelp.LoadApproverTravelAuthForms(userID))
+                        if (formHelp.LoadApproverTravelAuthForms(userID) > 0)
                             result = formHelp.WebForms.ToArray();
                         else
                             log.WriteLogEntry("No forms found pending approval.");
@@ -56,7 +56,7 @@ namespace VeraAPI.Controllers
             else
                 log.WriteLogEntry("FAILED invalid user id!");
             // return array of active travel auth forms
-            log.WriteLogEntry("Forms returned " + result.Count<BaseForm>() + " " + result[0].UserID + " " + result[0].FormDataID);
+            log.WriteLogEntry("Count of forms returned " + result.Count<BaseForm>());
             log.WriteLogEntry("End TravelApprovalController GET.");
             return result;
         }

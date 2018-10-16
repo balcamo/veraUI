@@ -60,21 +60,22 @@ namespace VeraAPI.HelperClasses
                         {
                             result = true;
                         }
-                        log.WriteLogEntry("Failed insert form data to database.");
+                        else
+                            log.WriteLogEntry("FAILED insert form data to database.");
                     }
                     else
-                        log.WriteLogEntry("Failed loading form template!");
+                        log.WriteLogEntry("FAILED loading form template!");
                 }
             }
             else
                 log.WriteLogEntry("FAILED submitted form is not a travel authorization form!");
-            log.WriteLogEntry("End FormHelp SubmitForm result " + result);
+            log.WriteLogEntry("End SubmitTravelAuthForm.");
             return result;
         }
 
         public bool LoadTravelAuthForm(int formDataID)
         {
-            log.WriteLogEntry("Starting LoadTravelAuthForm...");
+            log.WriteLogEntry("Begin LoadTravelAuthForm...");
             bool result = false;
             TravelAuthForm travelForm = new TravelAuthForm();
             log.WriteLogEntry("Starting FormDataHandler...");
@@ -95,7 +96,7 @@ namespace VeraAPI.HelperClasses
 
         public bool LoadActiveTravelAuthForms(int userID)
         {
-            log.WriteLogEntry("Starting LoadActiveTravelAuthForms...");
+            log.WriteLogEntry("Begin LoadActiveTravelAuthForms...");
             bool result = false;
             List<BaseForm> travelForms = new List<BaseForm>();
             log.WriteLogEntry("Starting FormDataHandler...");
@@ -126,10 +127,10 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public bool LoadApproverTravelAuthForms(int userID)
+        public int LoadApproverTravelAuthForms(int userID)
         {
-            log.WriteLogEntry("Starting LoadApproverTravelAuthForms...");
-            bool result = false;
+            log.WriteLogEntry("Begin LoadApproverTravelAuthForms...");
+            int result = 0;
             List<BaseForm> travelForms = new List<BaseForm>();
             log.WriteLogEntry("Starting FormDataHandler...");
             FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
@@ -140,17 +141,23 @@ namespace VeraAPI.HelperClasses
                 {
                     if (ConvertStatusValues(travelForm))
                     {
-                        if (travelForm.DHApproval == Constants.PendingColor && userID == int.Parse(travelForm.DHID))
+                        if (userID == int.Parse(travelForm.GMID) && travelForm.DHApproval.ToLower() == Constants.ApprovedColor)
+                        {
                             this.WebForms.Add(travelForm);
-                        else if (travelForm.GMApproval == Constants.PendingColor && userID == int.Parse(travelForm.GMID))
+                            result++;
+                        }
+                        else if (userID == int.Parse(travelForm.DHID) && travelForm.DHApproval.ToLower() == Constants.PendingColor)
+                        {
                             this.WebForms.Add(travelForm);
-                        result = true;
+                            result++;
+                        }
+                        else
+                            log.WriteLogEntry("No forms available for approval by user " + userID);
                         log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", userID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
                     }
                     else
                     {
                         log.WriteLogEntry("FAILED to convert status colors!");
-                        result = false;
                         break;
                     }
                 }
@@ -169,7 +176,19 @@ namespace VeraAPI.HelperClasses
             {
                 TravelAuthForm travel = (TravelAuthForm)webForm;
                 log.WriteLogEntry(string.Format("User {0} is approving form {1}.", userID, travel.FormDataID));
-                int[] approve = { GetStatusValue(travel.DHApproval), GetStatusValue(travel.GMApproval) };
+                if (userID == int.Parse(travel.GMID))
+                {
+                    travel.GMApproval = Constants.ApprovedColor;
+                    travel.DHApproval = Constants.ApprovedColor;
+                    travel.ApprovalStatus = Constants.ApprovedColor;
+                }
+                else if (userID == int.Parse(travel.DHID))
+                {
+                    travel.DHApproval = Constants.ApprovedColor;
+                    travel.GMApproval = Constants.PendingColor;
+                    travel.ApprovalStatus = Constants.PendingColor;
+                }
+                int[] approve = { GetStatusValue(travel.DHApproval), GetStatusValue(travel.GMApproval), GetStatusValue(travel.ApprovalStatus) };
                 string[] approver = { "supervisor", "manager" };
                 for (int i = 0; i < approve.Length; i++)
                 {
@@ -177,8 +196,8 @@ namespace VeraAPI.HelperClasses
                     {
                         string[,] formFields = { { approver[i] + "_approval_date", DateTime.Now.ToString() }, { approver[i] + "_approval_status", approve[i].ToString() } };
                         string[,] formFilters = { { approver[i] + "_id", userID.ToString() }, { "form_id", travel.FormDataID.ToString() } };
-                        log.WriteLogEntry(string.Format("FormFields array rows {0} columns {1}", formFields.GetLength(0), formFields.GetLength(1)));
-                        log.WriteLogEntry(string.Format("FormFilters array rows {0} columns {1}", formFilters.GetLength(0), formFilters.GetLength(1)));
+                        log.WriteLogEntry(string.Format("Form Fields\nName: {0}\tValue: {1}", formFields[i, 0], formFields[i, 1]));
+                        log.WriteLogEntry(string.Format("Form Filters\nName: {0}\tValue: {1}", formFilters[i, 0], formFilters[i, 1]));
 
                         log.WriteLogEntry("Starting FormDataHandler...");
                         FormDataHandler formData = new FormDataHandler(dbServer, dbName);
@@ -190,6 +209,8 @@ namespace VeraAPI.HelperClasses
                     catch (Exception ex)
                     {
                         log.WriteLogEntry("General Program Error \n" + ex.Message);
+                        result = false;
+                        return result;
                     }
                 }
             }
@@ -201,7 +222,7 @@ namespace VeraAPI.HelperClasses
 
         private string GetStatusColor(int status)
         {
-            log.WriteLogEntry("Getting status color...");
+            log.WriteLogEntry("Getting status color.");
             string result = string.Empty;
             switch (status)
             {
@@ -224,7 +245,7 @@ namespace VeraAPI.HelperClasses
 
         private int GetStatusValue(string status)
         {
-            log.WriteLogEntry("Getting status value...");
+            log.WriteLogEntry("Getting status value.");
             if (!int.TryParse(status, out int result))
             {
                 switch (status.ToLower())
@@ -251,7 +272,7 @@ namespace VeraAPI.HelperClasses
 
         private bool ConvertStatusValues(TravelAuthForm travelForm)
         {
-            log.WriteLogEntry("Converting status values...");
+            log.WriteLogEntry("Converting status values.");
             bool result = false;
             if (int.TryParse(travelForm.ApprovalStatus, out int approve))
             {
