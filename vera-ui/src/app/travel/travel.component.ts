@@ -22,6 +22,7 @@ export class TravelComponent implements OnInit {
   @Input() user;
   userService: UserService;
   approver = false;
+  forms = false;
 
   constructor(private router: Router, http: Http, userService: UserService) {
     this.http = http;
@@ -30,7 +31,7 @@ export class TravelComponent implements OnInit {
   }
   
   ngOnInit() {
-    if (this.user.EntryGroup[3] != 0) {
+    if (this.user.EntryGroup[3] == 1 || this.user.EntryGroup[3] == 2 || this.user.EntryGroup[3] == 99) {
       this.approver = true;
     }
   }
@@ -56,6 +57,8 @@ export class TravelComponent implements OnInit {
   displayAllAuth() {
     this.user = this.userService.getUser();
     this.authForms = [];
+    this.forms = false;
+
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({
       'Content-Type': 'application/json'
@@ -80,6 +83,9 @@ export class TravelComponent implements OnInit {
    * */
   displayApproveAuth() {
     this.user = this.userService.getUser();
+    this.authForms = [];
+    this.forms = false;
+
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({
       'Content-Type': 'application/json'
@@ -108,12 +114,12 @@ export class TravelComponent implements OnInit {
    */
   waitForHttp(data: any) {
     console.log("the data : " + data.text());
-    if (JSON.parse(data.text()) == []) {
+    this.authForms = JSON.parse(data.text()) as AuthForm[];
+    if (this.authForms == undefined) {
       console.log("Data returned is null");
-
+      this.forms = false;
     } else {
-      this.authForms = JSON.parse(data.text()) as AuthForm[];
-
+      this.forms = true;
       console.log("finishing waitForHttp");
     }
   }

@@ -6,19 +6,19 @@
               [ngStyle]="{'border-color':forms.ApprovalStatus,
               'background-color': hover==true  ? forms.ApprovalStatus : 'white' }"
               (click)="displaySelected(forms)" >
-        <h5>{{forms.EventTitle}}</h5>
+        <h5>{{forms.Location}}</h5>
       </button>
   </div>
 </div>
 
 <br />
-<div *ngIf="forms" class="overview">
+<div *ngIf="forms==false" class="overview">
   <h5>You currently have no active travel forms</h5>
 </div>
-<div *ngIf="!forms">
+<div *ngIf="forms==true">
   <!-- Displayes overview of the selected Auth form -->
   <div [ngStyle]="{'display':displayForm}" class="overview">
-    <h2 style="text-align:center">{{form.EventTitle}} : {{form.Location}}</h2>
+    <h2 style="text-align:center">{{form.FirstName}} {{form.LastName}} : {{form.Location}}</h2>
     <h5>First Name: <b><i>{{form.FirstName}}</i></b></h5>
     <h5>Last Name: <b><i>{{form.LastName}}</i></b></h5>
     <h5>Phone: <b><i>{{form.Phone}}</i></b></h5>
