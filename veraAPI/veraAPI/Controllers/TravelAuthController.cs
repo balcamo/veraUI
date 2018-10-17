@@ -94,8 +94,21 @@ namespace VeraAPI.Controllers
                                 FormHelper travelFormHelp = new FormHelper();
                                 if (travelFormHelp.SubmitTravelAuthForm(user, travelAuthForm))
                                 {
-                                        EmailHelper emailer = new EmailHelper();
+                                    log.WriteLogEntry("Starting EmailHelper...");
+                                    EmailHelper emailer = new EmailHelper();
+                                    if (userID == int.Parse(travelAuthForm.DHID))
+                                    {
+                                        travelFormHelp.ApproveTravelAuthForm(userID, travelAuthForm);
+                                        emailer.NotifyGeneralManager(user);
+                                    }
+                                    else if (userID == int.Parse(travelAuthForm.GMID))
+                                    {
+                                        travelFormHelp.ApproveTravelAuthForm(userID, travelAuthForm);
+                                    }
+                                    else
+                                    {
                                         emailer.NotifyDepartmentHead(user);
+                                    }
                                 }
                                 else
                                     log.WriteLogEntry("Fail FormHelp SubmitForm!");
