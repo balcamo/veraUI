@@ -12,10 +12,10 @@
 </div>
 
 <br />
-<div *ngIf="forms==false" class="overview">
+<div *ngIf="!formsList" class="overview">
   <h5>You currently have no active travel forms</h5>
 </div>
-<div *ngIf="forms==true">
+<div *ngIf="formsList">
   <!-- Displayes overview of the selected Auth form -->
   <div [ngStyle]="{'display':displayForm}" class="overview">
     <h2 style="text-align:center">{{form.FirstName}} {{form.LastName}} : {{form.Location}}</h2>

@@ -12,7 +12,7 @@ import { Constants } from '../../classes/constants';
 })
 export class ViewAuthFormsComponent implements OnInit {
   @Input() authForms;
-  @Input() forms;
+  @Input() formsList;
   http: Http;
   userService: UserService
   user: User;
@@ -32,15 +32,13 @@ export class ViewAuthFormsComponent implements OnInit {
     this.user = this.userService.getUser();
     if (this.authForms == undefined) {
       console.log("in constructor: no forms to approve");
-      this.forms = false;
+      this.formsList = false;
     }
   }
 
   ngOnInit() {
-    if (this.authForms == undefined) {
-      console.log("in ngOnInit: no forms to approve");
-      this.forms = false;
-    }
+    console.log("formsList from in all forms html" + this.formsList);
+
   }
 
   /**
@@ -72,9 +70,9 @@ export class ViewAuthFormsComponent implements OnInit {
     if (this.displayForm == "none") {
       this.displayForm = "block";
     } else if (this.form !== this.oldForm) {
-      this.displayForm = "block"
+      this.displayForm = "block";
     } else if (this.form == this.oldForm) {
-      this.displayForm = "none"
+      this.displayForm = "none";
     } 
     this.oldForm = this.form
   }

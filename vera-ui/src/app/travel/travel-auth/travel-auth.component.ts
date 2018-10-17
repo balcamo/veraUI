@@ -62,10 +62,10 @@ export class TravelAuthComponent implements OnInit {
     var mileage = this.form.Mileage * this.consts.mileageRate;
     var foodTravel = this.form.PerDiem * this.consts.firstLastDayFood;
     var foodFull = this.form.PerDiem * this.form.FullDays;
-    this.total = this.form.RegistrationCost + this.form.Airfare + this.form.RentalCar +
+    this.form.TotalEstimate = this.form.RegistrationCost + this.form.Airfare + this.form.RentalCar +
       this.form.Fuel + this.form.ParkingTolls + mileage + this.form.Lodging +
       foodTravel + foodFull + this.form.Misc;
-    this.form.TotalEstimate = this.total;
+    //this.form.TotalEstimate = this.total;
   }
 
   // function to contact API and submit the form

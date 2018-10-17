@@ -22,7 +22,7 @@ export class TravelComponent implements OnInit {
   @Input() user;
   userService: UserService;
   approver = false;
-  forms = false;
+  formsList = false;
 
   constructor(private router: Router, http: Http, userService: UserService) {
     this.http = http;
@@ -57,7 +57,7 @@ export class TravelComponent implements OnInit {
   displayAllAuth() {
     this.user = this.userService.getUser();
     this.authForms = [];
-    this.forms = false;
+    this.formsList = false;
 
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({
@@ -70,7 +70,14 @@ export class TravelComponent implements OnInit {
     console.log(this.consts.url + 'TravelAuth?restUserID=' + this.user.UserID);
     this.http.get(this.consts.url + 'TravelAuth?restUserID=' + this.user.UserID)
       .subscribe((data) => this.waitForHttp(data));
-
+    if (this.authForms.length == 0) {
+      console.log("Data returned is null");
+      this.formsList = false;
+    } else {
+      this.formsList = true;
+      console.log("finishing displayAllAuth");
+    }
+    console.log("in all auth formsList is : " + this.formsList);
     if (this.allAuthDisplay == "none") {
       this.authDisplay = "none";
       this.approveAuthDisplay = "none";
@@ -84,7 +91,7 @@ export class TravelComponent implements OnInit {
   displayApproveAuth() {
     this.user = this.userService.getUser();
     this.authForms = [];
-    this.forms = false;
+    this.formsList = false;
 
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({
@@ -97,7 +104,14 @@ export class TravelComponent implements OnInit {
 
     this.http.get(this.consts.url + 'TravelApproval?restUserID=' + this.user.UserID)
       .subscribe((data) => this.waitForHttp(data));
-
+    if (this.authForms.length == 0) {
+      console.log("Data returned is null");
+      this.formsList = false;
+    } else {
+      this.formsList = true;
+      console.log("finishing displayAllAuth");
+    }
+    console.log("in approve auth formsList is : " + this.formsList);
     if (this.approveAuthDisplay == "none") {
       this.allAuthDisplay = "none";
       this.authDisplay = "none";
@@ -115,11 +129,11 @@ export class TravelComponent implements OnInit {
   waitForHttp(data: any) {
     console.log("the data : " + data.text());
     this.authForms = JSON.parse(data.text()) as AuthForm[];
-    if (this.authForms == undefined) {
+    if (this.authForms.length == 0) {
       console.log("Data returned is null");
-      this.forms = false;
+      this.formsList = false;
     } else {
-      this.forms = true;
+      this.formsList = true;
       console.log("finishing waitForHttp");
     }
   }
