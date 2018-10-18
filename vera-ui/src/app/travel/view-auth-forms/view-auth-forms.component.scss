@@ -7,7 +7,7 @@ div {
   margin:auto;
 }
 .btn {
-  border: 2px solid black;
+  border: 10px solid $success;
   background-color: white;
   color: black;
   padding: 14px 28px;
@@ -29,13 +29,13 @@ div {
 
 .overview {
   border: solid 5px;
-  max-width: 80%;
-  min-width: 50%;
+  min-width: 50vw;
+  max-width: 80vw;
   background-color: white;
   padding: 5%;
   border-radius: 25px;
   margin-left: 12%;
-  align-content:center;
+  align-content: center;
   word-wrap: break-word;
 }
 b {

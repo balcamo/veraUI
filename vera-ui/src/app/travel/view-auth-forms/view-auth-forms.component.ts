@@ -50,20 +50,26 @@ export class ViewAuthFormsComponent implements OnInit {
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
     this.displayRecap = "none";
-    if (this.form.DHApproval.toString() == "yellow") {
-      this.dhApprove = "Pending";
-    } else if (this.form.DHApproval.toString() == "green") {
+    if (this.form.ApprovalStatus == 'green') {
       this.dhApprove = "Approved";
-    } else if (this.form.DHApproval.toString() == "red") {
-      this.dhApprove = "Denied";
-      this.gmApprove = "Form will not be sent to the GM";
-    }
-    if (this.form.GMApproval.toString() == "yellow") {
-      this.gmApprove = "Pending";
-    } else if (this.form.GMApproval.toString() == "green") {
       this.gmApprove = "Approved";
     } else {
-      this.gmApprove = "Denied";
+      if (this.form.DHApproval.toString() == "yellow") {
+        this.dhApprove = "Pending";
+      } else if (this.form.DHApproval.toString() == "green") {
+        this.dhApprove = "Approved";
+      } else {
+        this.dhApprove = "Denied";
+        this.gmApprove = "Form will not be sent to the GM";
+      }
+
+      if (this.form.GMApproval.toString() == "yellow") {
+        this.gmApprove = "Pending";
+      } else if (this.form.GMApproval.toString() == "green") {
+        this.gmApprove = "Approved";
+      } else {
+        this.gmApprove = "Denied";
+      }
     }
     if (this.displayForm == "none") {
       this.displayForm = "block";
@@ -71,10 +77,10 @@ export class ViewAuthFormsComponent implements OnInit {
       this.displayForm = "block";
     } else if (this.form == this.oldForm) {
       this.displayForm = "none";
-    } 
+    }
     this.oldForm = this.form
+    
   }
-
   /**
    * checkTot will calculate the total spent on the trip
    * and the total the traveler is owed for reimbursement 
