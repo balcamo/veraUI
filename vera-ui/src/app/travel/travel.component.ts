@@ -16,6 +16,7 @@ export class TravelComponent implements OnInit {
   authDisplay = "none";
   allAuthDisplay = "none";
   approveAuthDisplay = "none";
+  financeAuthDisplay = "none";
   consts = new Constants();
   http: Http;
   authForms = [];
@@ -23,6 +24,7 @@ export class TravelComponent implements OnInit {
   userService: UserService;
   approver = false;
   formsList = false;
+  finance = false;
 
   constructor(private router: Router, http: Http, userService: UserService) {
     this.http = http;
@@ -33,6 +35,9 @@ export class TravelComponent implements OnInit {
   ngOnInit() {
     if (this.user.EntryGroup[3] == 1 || this.user.EntryGroup[3] == 2 || this.user.EntryGroup[3] == 99) {
       this.approver = true;
+    }
+    if (this.user.EntryGroup[2] == 1 ||  this.user.EntryGroup[3] == 99) {
+      this.finance = true;
     }
   }
 
@@ -45,6 +50,7 @@ export class TravelComponent implements OnInit {
     if (this.authDisplay == "none") {
       this.allAuthDisplay = "none";
       this.approveAuthDisplay = "none";
+      this.financeAuthDisplay = "none";
       this.authDisplay = "block";
     } else {
       this.authDisplay = "none";
@@ -81,11 +87,13 @@ export class TravelComponent implements OnInit {
     if (this.allAuthDisplay == "none") {
       this.authDisplay = "none";
       this.approveAuthDisplay = "none";
+      this.financeAuthDisplay = "none";
       this.allAuthDisplay = "block";
     } else {
       this.allAuthDisplay = "none";
     }
-  }  /**
+  }
+  /**
    * this displays all active authforms to be approved found on in the database
    * */
   displayApproveAuth() {
@@ -115,9 +123,47 @@ export class TravelComponent implements OnInit {
     if (this.approveAuthDisplay == "none") {
       this.allAuthDisplay = "none";
       this.authDisplay = "none";
+      this.financeAuthDisplay = "none";
       this.approveAuthDisplay = "block";
     } else {
       this.approveAuthDisplay = "none";
+    }
+  }
+
+ /**
+   * this displays all active forms for finance to be approved found in the database
+   * */
+  displayFinanceAuth() {
+    this.user = this.userService.getUser();
+    this.authForms = [];
+    this.formsList = false;
+
+    let params: URLSearchParams = new URLSearchParams();
+    var pageHeaders = new Headers({
+      'Content-Type': 'application/json'
+    });
+    let options = new RequestOptions({
+      search: params,
+      headers: pageHeaders
+    });
+
+    this.http.get(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID)
+      .subscribe((data) => this.waitForHttp(data));
+    if (this.authForms.length == 0) {
+      console.log("Data returned is null");
+      this.formsList = false;
+    } else {
+      this.formsList = true;
+      console.log("finishing displayAllAuth");
+    }
+    console.log("in approve auth formsList is : " + this.formsList);
+    if (this.financeAuthDisplay == "none") {
+      this.allAuthDisplay = "none";
+      this.authDisplay = "none";
+      this.approveAuthDisplay = "none";
+      this.financeAuthDisplay = "block";
+    } else {
+      this.financeAuthDisplay = "none";
     }
   }
 

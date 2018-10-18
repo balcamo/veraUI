@@ -15,7 +15,7 @@
     </button>
 
     <button *ngIf="finance;" class="btn bg-primary" [routerLink]="['financeAuth']" (click)="displayFinanceAuth()" [authForms]="authForms">
-      Approve Authorization Forms
+      Forms for Finance
     </button>
   </div>
 
@@ -33,6 +33,6 @@
   </div>
 
   <div [ngStyle]="{'display':financeAuthDisplay}">
-    <app-tavel-auth-approve [formsList]="formsList" [authForms]="authForms"></app-tavel-auth-approve>
+    <app-view-travel-finance [formsList]="formsList" [authForms]="authForms"></app-view-travel-finance>
   </div>
 </body>

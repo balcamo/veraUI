@@ -1,0 +1,64 @@
+@import '../../../theme.scss';
+
+div {
+  display: inline-flex;
+}
+
+.list {
+  margin: auto;
+}
+
+.btn {
+  border: 10px solid $success;
+  background-color: white;
+  color: black;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  text-transform: lowercase;
+  text-transform: capitalize;
+}
+
+.secondary {
+  border-color: $success;
+  color: $primary;
+}
+
+.forms {
+  margin-left: 25px;
+  align-content: center;
+}
+
+.overview {
+  border: solid 5px;
+  min-width: 50vw;
+  max-width: 80vw;
+  background-color: white;
+  padding: 5%;
+  border-radius: 25px;
+  margin-left: 12%;
+  align-content: center;
+  word-wrap: break-word;
+}
+
+b {
+  padding-left: 5%;
+  word-wrap: break-word;
+}
+
+.wrapper {
+  max-width: 100%;
+  margin: 0 auto;
+  display: inherit;
+}
+
+.wrapper ul {
+  overflow: hidden;
+  margin: 0 -10px;
+  padding: 0;
+  list-style: none;
+}
+
+.wrapper li {
+  display: inherit;
+}
