@@ -58,4 +58,8 @@ export class ViewTravelFinanceComponent implements OnInit {
     this.oldForm = this.form
 
   }
+
+  approveAdvance() { }
+
+  approveRecap() { }
 }
