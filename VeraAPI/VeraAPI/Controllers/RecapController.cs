@@ -35,6 +35,7 @@ namespace VeraAPI.Controllers
             log.WriteLogEntry("Begin RecapController POST...");
             System.Diagnostics.Debug.WriteLine("Begin RecapController POST...");
             string result = string.Empty;
+            log.WriteLogEntry("REST user id " + restUserID);
             if (int.TryParse(restUserID, out int userID))
             {
                 log.WriteLogEntry("Starting LoginHelper...");
@@ -48,7 +49,6 @@ namespace VeraAPI.Controllers
                     UserHelper userHelp = new UserHelper(user);
                     if (userHelp.LoadDomainUser(userID))
                     {
-                        value.TemplateID = TemplateIndex.InsertTravelAuth;
                         try
                         {
                             log.DumpObject(value);

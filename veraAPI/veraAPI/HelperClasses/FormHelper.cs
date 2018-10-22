@@ -119,7 +119,7 @@ namespace VeraAPI.HelperClasses
                     log.WriteLogEntry("Total Recap: " + travelForm.TotalRecap);
                     totalAmt = decimal.Parse(travelForm.TotalRecap);
                     log.WriteLogEntry("Total Reimbursement: " + travelForm.TotalReimburse);
-                    reimburseAmt = decimal.Parse("reimburse_amt");
+                    reimburseAmt = decimal.Parse(travelForm.TotalReimburse, System.Globalization.NumberStyles.AllowLeadingSign);
                 }
                 catch (Exception ex)
                 {
