@@ -41,6 +41,7 @@ namespace VeraAPI.Models.Forms
         public string RecapFuel { get; set; } = string.Empty;           // RecapFuel
         public string RecapParkingTolls { get; set; } = string.Empty;   // RecapParkingTolls
         public string RecapMileage { get; set; } = string.Empty;        // RecapMileage
+        public string RecapMileageAmount { get; set; } = string.Empty;        // RecapMileageAmount
         public string RecapLodging { get; set; } = string.Empty;        // RecapLodging
         public string RecapPerDiem { get; set; } = string.Empty;        // RecapPerDiem
         public string RecapTravelDays { get; set; } = string.Empty;       // RecapTravelDays

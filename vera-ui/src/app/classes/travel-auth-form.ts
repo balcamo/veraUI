@@ -34,6 +34,7 @@ export class AuthForm {
   RecapFuel: number;  // RecapFuel
   RecapParkingTolls: number;  // RecapParkingTolls
   RecapMileage: number;  // RecapMileage
+  RecapMileageAmount: number;  // RecapMileage
   RecapLodging: number;  // RecapLodging
   RecapPerDiem: number;  // RecapPerDiem
   RecapTravelDays: number;  // RecapTravelDays
