@@ -56,7 +56,7 @@ namespace VeraAPI.Controllers
             else
                 log.WriteLogEntry("FAILED invalid user id!");
             // return array of active travel auth forms
-            log.WriteLogEntry("Count of forms returned " + result.Count<BaseForm>());
+            log.WriteLogEntry("Forms returned " + result.Length);
             log.WriteLogEntry("End TravelApprovalController GET.");
             return result;
         }
@@ -128,15 +128,27 @@ namespace VeraAPI.Controllers
                                 if (travelFormHelp.ApproveTravelAuthForm(userID, travelAuthForm))
                                 {
                                     EmailHelper email = new EmailHelper();
-                                    email.NotifySubmitter(travelAuthForm.Email);
-                                    if (bool.TryParse(travelAuthForm.Advance, out bool advance))
-                                    {
-                                        if (travelAuthForm.GMApproval.ToLower() == Constants.ApprovedColor)
-                                            email.NotifyFinance();
-                                    }
-                                    if (travelAuthForm.DHApproval.ToLower() == Constants.ApprovedColor)
+                                    if (travelAuthForm.DHApproval.ToLower() == Constants.ApprovedColor && travelAuthForm.GMApproval.ToLower() != Constants.ApprovedColor)
                                         email.NotifyGeneralManager(user);
-                                    log.WriteLogEntry("SUCCESS travel request approved!");
+                                    else if (travelAuthForm.DHApproval.ToLower() == Constants.DeniedColor && travelAuthForm.GMApproval.ToLower() != Constants.ApprovedColor)
+                                        email.NotifySubmitter(travelAuthForm.Email, Constants.DeniedValue);
+                                    else if (travelAuthForm.GMApproval.ToLower() == Constants.ApprovedColor)
+                                    {
+                                        email.NotifySubmitter(travelAuthForm.Email, Constants.ApprovedValue);
+                                        if (bool.TryParse(travelAuthForm.Advance, out bool advance))
+                                        {
+                                            if (advance)
+                                                email.NotifyFinance();
+                                            else
+                                                log.WriteLogEntry("No advance requested.");
+                                        }
+                                        else
+                                            log.WriteLogEntry("FAILED to parse travel form advance boolean!");
+                                    }
+                                    else
+                                    {
+                                        log.WriteLogEntry("GM has not approved.");
+                                    }
                                 }
                                 else
                                     log.WriteLogEntry("FAILED submit travel form!");

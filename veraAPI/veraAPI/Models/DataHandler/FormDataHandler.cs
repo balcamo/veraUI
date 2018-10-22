@@ -30,46 +30,50 @@ namespace VeraAPI.Models.DataHandler
             log.WriteLogEntry("Starting InsertTravelAuth...");
             bool result = false;
             string cmdString = string.Format(@"insert into {0}.dbo.travel (first_name, last_name, phone, email, event_description, event_location, depart_date, return_date, district_vehicle, registration_amt, airfare_amt, rental_amt, 
-                                    fuel_parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, misc_amt, request_advance, advance_amt, travel_policy, submit_date, submitter_id, supervisor_id, supervisor_email, 
+                                    fuel_amt, parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, misc_amt, total_cost_amt, request_advance, advance_amt, travel_policy, submit_date, submitter_id, supervisor_id, supervisor_email, 
                                     supervisor_approval_status, supervisor_approval_date, manager_id, manager_email, manager_approval_status, manager_approval_date, approval_status) 
                                     output inserted.form_id
-                                    values (@firstName, @lastName, @phone, @email, @eventDescription, @eventLocation, @departDate, @returnDate, @districtVehicle, @registrationAmt, @airfareAmt, @rentalAmt, @fuelParkingAmt, @estimatedMiles, 
-                                    @lodgingAmt, @perdiemAmt, @travelDays, @miscAmt, @requestAdvance, @advanceAmt, @travelPolicy, GETDATE(), @submitterID, @supervisorID, @supervisorEmail, @supervisorApprove, 
+                                    values (@firstName, @lastName, @phone, @email, @eventDescription, @eventLocation, @departDate, @returnDate, @districtVehicle, @registrationAmt, @airfareAmt, @rentalAmt, @fuelAmt, @parkingAmt, @estimatedMiles, 
+                                    @lodgingAmt, @perdiemAmt, @travelDays, @miscAmt, @totalCostAmt, @requestAdvance, @advanceAmt, @travelPolicy, GETDATE(), @submitterID, @supervisorID, @supervisorEmail, @supervisorApprove, 
                                     GETDATE(), @managerID, @managerEmail, @managerApprove, GETDATE(), @status)", dbName);
             DateTime departDate = DateTime.MinValue, returnDate = DateTime.MinValue;
             bool districtVehicle = false, requestAdvance = false, travelPolicy = false;
-            decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelParkingAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0, advanceAmt = 0;
+            decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelAmt = 0, parkingAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0, totalCostAmt = 0, advanceAmt = 0;
             int estimatedMiles = 0, travelDays = 0;
 
             try
             {
-                log.WriteLogEntry("TravelBegin: " + travelForm.TravelBegin);
+                log.WriteLogEntry("Travel Begin: " + travelForm.TravelBegin);
                 departDate = DateTime.Parse(travelForm.TravelBegin);
-                log.WriteLogEntry("TravelEnd: " + travelForm.TravelEnd);
+                log.WriteLogEntry("Travel End: " + travelForm.TravelEnd);
                 returnDate = DateTime.Parse(travelForm.TravelEnd);
-                log.WriteLogEntry("DistrictVehicle: " + travelForm.DistVehicle);
+                log.WriteLogEntry("District Vehicle: " + travelForm.DistVehicle);
                 districtVehicle = travelForm.DistVehicle == "true" ? true : false;
-                log.WriteLogEntry("RegistrationCost: " + travelForm.RegistrationCost);
+                log.WriteLogEntry("Registration Cost: " + travelForm.RegistrationCost);
                 registrationAmt = decimal.Parse(travelForm.RegistrationCost);
                 log.WriteLogEntry("Airfare: " + travelForm.Airfare);
                 airfareAmt = decimal.Parse(travelForm.Airfare);
                 log.WriteLogEntry("RentalCar: " + travelForm.RentalCar);
                 rentalAmt = decimal.Parse(travelForm.RentalCar);
-                log.WriteLogEntry("FuelParking: " + travelForm.Fuel);
-                fuelParkingAmt = decimal.Parse(travelForm.Fuel);
+                log.WriteLogEntry("Fuel: " + travelForm.Fuel);
+                fuelAmt = decimal.Parse(travelForm.Fuel);
+                log.WriteLogEntry("Parking: " + travelForm.ParkingTolls);
+                parkingAmt = decimal.Parse(travelForm.ParkingTolls);
                 log.WriteLogEntry("Mileage: " + travelForm.Mileage);
                 estimatedMiles = int.Parse(travelForm.Mileage);
                 log.WriteLogEntry("Lodging: " + travelForm.Lodging);
                 lodgingAmt = decimal.Parse(travelForm.Lodging);
                 log.WriteLogEntry("PerDiem: " + travelForm.PerDiem);
                 perdiemAmt = decimal.Parse(travelForm.PerDiem);
-                log.WriteLogEntry("TravelDays: " + travelForm.FullDays);
+                log.WriteLogEntry("Travel Days: " + travelForm.FullDays);
                 travelDays = int.Parse(travelForm.FullDays);
                 log.WriteLogEntry("Misc: " + travelForm.Misc);
                 miscAmt = decimal.Parse(travelForm.Misc);
+                log.WriteLogEntry("Total Cost: " + travelForm.TotalEstimate);
+                totalCostAmt = decimal.Parse(travelForm.TotalEstimate);
                 log.WriteLogEntry("Advance: " + travelForm.Advance);
                 requestAdvance = travelForm.Advance == "true" ? true : false;
-                log.WriteLogEntry("AdvanceAmount: " + travelForm.AdvanceAmount);
+                log.WriteLogEntry("Advance Amount: " + travelForm.AdvanceAmount);
                 advanceAmt = decimal.Parse(travelForm.AdvanceAmount);
                 log.WriteLogEntry("Policy: " + travelForm.Policy);
                 travelPolicy = travelForm.Policy == "true" ? true : false;
@@ -100,12 +104,14 @@ namespace VeraAPI.Models.DataHandler
                     cmd.Parameters.AddWithValue("@registrationAmt", registrationAmt);
                     cmd.Parameters.AddWithValue("@airfareAmt", airfareAmt);
                     cmd.Parameters.AddWithValue("@rentalAmt", rentalAmt);
-                    cmd.Parameters.AddWithValue("@fuelParkingAmt", fuelParkingAmt);
+                    cmd.Parameters.AddWithValue("@fuelAmt", fuelAmt);
+                    cmd.Parameters.AddWithValue("@parkingAmt", parkingAmt);
                     cmd.Parameters.AddWithValue("@estimatedMiles", estimatedMiles);
                     cmd.Parameters.AddWithValue("@lodgingAmt", lodgingAmt);
                     cmd.Parameters.AddWithValue("@perdiemAmt", perdiemAmt);
                     cmd.Parameters.AddWithValue("@travelDays", travelDays);
                     cmd.Parameters.AddWithValue("@miscAmt", miscAmt);
+                    cmd.Parameters.AddWithValue("@totalCostAmt", totalCostAmt);
                     cmd.Parameters.AddWithValue("@requestAdvance", requestAdvance);
                     cmd.Parameters.AddWithValue("@advanceAmt", advanceAmt);
                     cmd.Parameters.AddWithValue("@travelPolicy", travelPolicy);
@@ -222,13 +228,14 @@ namespace VeraAPI.Models.DataHandler
                                     RegistrationCost = rdr["registration_amt"].ToString(),
                                     Airfare = rdr["airfare_amt"].ToString(),
                                     RentalCar = rdr["rental_amt"].ToString(),
-                                    Fuel = rdr["fuel_parking_amt"].ToString(),
+                                    Fuel = rdr["fuel_amt"].ToString(),
+                                    ParkingTolls = rdr["parking_amt"].ToString(),
                                     Mileage = rdr["estimated_miles"].ToString(),
                                     Lodging = rdr["lodging_amt"].ToString(),
                                     PerDiem = rdr["perdiem_amt"].ToString(),
                                     FullDays = rdr["travel_days"].ToString(),
                                     Misc = rdr["misc_amt"].ToString(),
-                                    TotalEstimate = rdr["total_cost"].ToString(),
+                                    TotalEstimate = rdr["total_cost_amt"].ToString(),
                                     AdvanceAmount = rdr["advance_amt"].ToString(),
                                     Advance = rdr["request_advance"].ToString(),
                                     Policy = rdr["travel_policy"].ToString(),
@@ -296,13 +303,14 @@ namespace VeraAPI.Models.DataHandler
                                     RegistrationCost = rdr["registration_amt"].ToString(),
                                     Airfare = rdr["airfare_amt"].ToString(),
                                     RentalCar = rdr["rental_amt"].ToString(),
-                                    Fuel = rdr["fuel_parking_amt"].ToString(),
+                                    Fuel = rdr["fuel_amt"].ToString(),
+                                    ParkingTolls = rdr["parking_amt"].ToString(),
                                     Mileage = rdr["estimated_miles"].ToString(),
                                     Lodging = rdr["lodging_amt"].ToString(),
                                     PerDiem = rdr["perdiem_amt"].ToString(),
                                     FullDays = rdr["travel_days"].ToString(),
                                     Misc = rdr["misc_amt"].ToString(),
-                                    TotalEstimate = rdr["total_cost"].ToString(),
+                                    TotalEstimate = rdr["total_cost_amt"].ToString(),
                                     AdvanceAmount = rdr["advance_amt"].ToString(),
                                     Advance = rdr["request_advance"].ToString(),
                                     Policy = rdr["travel_policy"].ToString(),
@@ -370,13 +378,14 @@ namespace VeraAPI.Models.DataHandler
                                     RegistrationCost = rdr["registration_amt"].ToString(),
                                     Airfare = rdr["airfare_amt"].ToString(),
                                     RentalCar = rdr["rental_amt"].ToString(),
-                                    Fuel = rdr["fuel_parking_amt"].ToString(),
+                                    Fuel = rdr["fuel_amt"].ToString(),
+                                    ParkingTolls = rdr["parking_amt"].ToString(),
                                     Mileage = rdr["estimated_miles"].ToString(),
                                     Lodging = rdr["lodging_amt"].ToString(),
                                     PerDiem = rdr["perdiem_amt"].ToString(),
                                     FullDays = rdr["travel_days"].ToString(),
                                     Misc = rdr["misc_amt"].ToString(),
-                                    TotalEstimate = rdr["total_cost"].ToString(),
+                                    TotalEstimate = rdr["total_cost_amt"].ToString(),
                                     AdvanceAmount = rdr["advance_amt"].ToString(),
                                     Advance = rdr["request_advance"].ToString(),
                                     Policy = rdr["travel_policy"].ToString(),

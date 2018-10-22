@@ -62,7 +62,7 @@ namespace VeraAPI.Controllers
             else
                 log.WriteLogEntry("FAILED invalid user id!");
             // return array of active travel auth forms
-            log.WriteLogEntry("Forms returned " + result.Count<BaseForm>() + " " + result[0].UserID + " " + result[0].FormDataID);
+            log.WriteLogEntry("Forms returned " + result.Length);
             log.WriteLogEntry("End TravelAuthController GET.");
             return result;
         }
@@ -104,6 +104,15 @@ namespace VeraAPI.Controllers
                                     else if (userID == int.Parse(travelAuthForm.GMID))
                                     {
                                         travelFormHelp.ApproveTravelAuthForm(userID, travelAuthForm);
+                                        if (bool.TryParse(travelAuthForm.Advance, out bool advance))
+                                        {
+                                            if (advance)
+                                                emailer.NotifyFinance();
+                                            else
+                                                log.WriteLogEntry("No advance requested.");
+                                        }
+                                        else
+                                            log.WriteLogEntry("FAILED to parse travel form advance boolean!");
                                     }
                                     else
                                     {
