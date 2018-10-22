@@ -94,35 +94,34 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public bool LoadActiveTravelAuthForms(int userID)
+        public int LoadActiveTravelAuthForms(int userID)
         {
             log.WriteLogEntry("Begin LoadActiveTravelAuthForms...");
-            bool result = false;
+            int result = 0;
             List<BaseForm> travelForms = new List<BaseForm>();
+            WebForms = new List<BaseForm>();
             log.WriteLogEntry("Starting FormDataHandler...");
             FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
             if (formDataHandle.LoadUserTravelAuthForms(travelForms, userID) > 0)
             {
-                WebForms = new List<BaseForm>();
                 foreach (TravelAuthForm travelForm in travelForms)
                 {
                     if (ConvertStatusValues(travelForm))
                     {
                         this.WebForms.Add(travelForm);
-                        result = true;
+                        result++;
                         log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", userID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
                     }
                     else
                     {
                         log.WriteLogEntry("FAILED to convert status colors!");
-                        result = false;
                         break;
                     }
                 }
             }
             else
                 log.WriteLogEntry("No active forms loaded.");
-            log.WriteLogEntry("Count loaded forms " + WebForms.Count);
+            log.WriteLogEntry("Count loaded forms " + result);
             log.WriteLogEntry("End LoadActiveTravelAuthForms.");
             return result;
         }
