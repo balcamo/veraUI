@@ -144,7 +144,8 @@ namespace VeraAPI.HelperClasses
                         { "recap_full_days", fullDays.ToString() },
                         { "recap_misc_amt", miscAmt.ToString() },
                         { "recap_total_amt", totalAmt.ToString() },
-                        { "reimburse_amt", reimburseAmt.ToString() }
+                        { "reimburse_amt", reimburseAmt.ToString() },
+                        { "recap_date", DateTime.Now.ToString() }
                     };
                     formFilters = new string[,] {
                         { "submitter_id", userID.ToString() },

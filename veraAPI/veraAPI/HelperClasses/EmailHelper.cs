@@ -55,18 +55,27 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public bool NotifyFinance()
+        public bool NotifyFinance(int notification)
         {
             log.WriteLogEntry("Begin NotifyFinance...");
             bool result = false;
-
+            string emailBody = string.Empty;
+            switch (notification)
+            {
+                case 0:
+                    emailBody = "<html><body><p>Notifying Finance the GM has approved a request to travel.</p></body></html>";
+                    break;
+                case 1:
+                    emailBody = "<html><body><p>Notifying Finance there is a new travel recap.</p></body></html>";
+                    break;
+            }
             UserDataHandler userData = new UserDataHandler(dbServer, dbName);
             string financeEmail = userData.GetDepartment(Department.FinanceDept).DeptEmail;
             ExchangeHandler emailHandle = new ExchangeHandler
             {
                 EmailSubject = "Notify Finance",
                 RecipientEmailAddress = financeEmail,
-                EmailBody = "<html><body><p>Notifying Finance the GM has approved a request to travel</p></body></html>"
+                EmailBody = emailBody
             };
             try
             {
@@ -96,10 +105,15 @@ namespace VeraAPI.HelperClasses
             log.WriteLogEntry("Begin NotifySubmitter...");
             bool result = false;
             string emailBody = string.Empty;
-            if (notification == 1)
-                emailBody = "<html><body><p>Your request to travel has been <b>APPROVED.</b></p></body></html>";
-            else if (notification == 0)
-                emailBody = "<html><body><p>Your request to travel has been <b>DENIED.</b></p></body></html>";
+            switch (notification)
+            {
+                case 0:
+                    emailBody = "<html><body><p>Your request to travel has been <b>DENIED.</b></p></body></html>";
+                    break;
+                case 1:
+                    emailBody = "<html><body><p>Your request to travel has been <b>APPROVED.</b></p></body></html>";
+                    break;
+            }
             ExchangeHandler emailHandle = new ExchangeHandler
             {
                 EmailSubject = "Notify Submitter",

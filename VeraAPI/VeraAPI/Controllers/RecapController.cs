@@ -57,6 +57,9 @@ namespace VeraAPI.Controllers
                             FormHelper travelFormHelp = new FormHelper();
                             if (travelFormHelp.SubmitTravelRecapForm(userID, value))
                             {
+                                log.WriteLogEntry("Starting EmailHelper...");
+                                EmailHelper emailer = new EmailHelper();
+                                emailer.NotifyFinance(1);
                                 result = "Travel Recap Form Submitted.";
                             }
                             else
