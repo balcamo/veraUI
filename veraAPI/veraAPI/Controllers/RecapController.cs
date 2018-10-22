@@ -32,16 +32,19 @@ namespace VeraAPI.Controllers
         // POST: api/Recap
         public string Post(string restUserID, [FromBody]TravelAuthForm value)
         {
-            log.WriteLogEntry("Begin TravelAuthController POST...");
+            log.WriteLogEntry("Begin RecapController POST...");
+            System.Diagnostics.Debug.WriteLine("Begin RecapController POST...");
             string result = string.Empty;
             if (int.TryParse(restUserID, out int userID))
             {
                 log.WriteLogEntry("Starting LoginHelper...");
+                System.Diagnostics.Debug.WriteLine("Starting LoginHelper...");
                 LoginHelper loginHelp = new LoginHelper();
                 if (loginHelp.LoadUserSession(userID))
                 {
                     DomainUser user = new DomainUser();
                     log.WriteLogEntry("Starting UserHelper...");
+                    System.Diagnostics.Debug.WriteLine("Starting UserHelper...");
                     UserHelper userHelp = new UserHelper(user);
                     if (userHelp.LoadDomainUser(userID))
                     {
@@ -50,60 +53,49 @@ namespace VeraAPI.Controllers
                         {
                             log.DumpObject(value);
                             log.WriteLogEntry("Starting FormHelper...");
+                            System.Diagnostics.Debug.WriteLine("Starting FormHelper...");
                             FormHelper travelFormHelp = new FormHelper();
                             if (travelFormHelp.SubmitTravelRecapForm(userID, value))
                             {
-                                log.WriteLogEntry("Starting EmailHelper...");
-                                EmailHelper emailer = new EmailHelper();
-                                if (userID == int.Parse(value.DHID))
-                                {
-                                    travelFormHelp.ApproveTravelAuthForm(userID, value);
-                                    emailer.NotifyGeneralManager(user);
-                                }
-                                else if (userID == int.Parse(value.GMID))
-                                {
-                                    travelFormHelp.ApproveTravelAuthForm(userID, value);
-                                    if (bool.TryParse(value.Advance, out bool advance))
-                                    {
-                                        if (advance)
-                                            emailer.NotifyFinance();
-                                        else
-                                            log.WriteLogEntry("No advance requested.");
-                                    }
-                                    else
-                                        log.WriteLogEntry("FAILED to parse travel form advance boolean!");
-                                }
-                                else
-                                {
-                                    emailer.NotifyDepartmentHead(user);
-                                }
+                                result = "Travel Recap Form Submitted.";
                             }
                             else
-                                log.WriteLogEntry("Fail FormHelp SubmitForm!");
-                            result = "Travel Authorization Form Submitted.";
+                            {
+                                result = "Failed to submit recap form!";
+                                System.Diagnostics.Debug.WriteLine(result);
+                                log.WriteLogEntry(result);
+                            }
                         }
                         catch (Exception ex)
                         {
-                            log.WriteLogEntry("FAILED to submit travel authorization form! " + ex.Message);
-                            result = "Failed Travel Authorization Submit " + ex.Message;
+                            result = "ERROR in Travel Recap Submit!\n" + ex.Message;
+                            System.Diagnostics.Debug.WriteLine(result);
+                            log.WriteLogEntry(result);
                             return result;
                         }
                     }
                     else
                     {
-                        log.WriteLogEntry("FAILED to load current user data!");
-                        result = "Failed to submit travel authorization! User not found!";
+                        result = "Failed to submit travel recap! User not found!";
+                        System.Diagnostics.Debug.WriteLine(result);
+                        log.WriteLogEntry(result);
                     }
                 }
                 else
                 {
-                    log.WriteLogEntry("FAILED to load current user session!");
-                    result = "Failed to submit travel authorization! User not recognized!";
+                    result = "Failed to submit travel recap! User not recognized!";
+                    System.Diagnostics.Debug.WriteLine(result);
+                    log.WriteLogEntry(result);
                 }
             }
             else
-                log.WriteLogEntry("FAILED invalid user id!");
-            log.WriteLogEntry("End TravelAuthController POST.");
+            {
+                result = "Failed to submit travel recap! Invalid user id!";
+                System.Diagnostics.Debug.WriteLine(result);
+                log.WriteLogEntry(result);
+            }
+            System.Diagnostics.Debug.WriteLine("End RecapController POST.");
+            log.WriteLogEntry("End RecapController POST.");
             return result;
         }
 
