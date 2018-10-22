@@ -26,6 +26,7 @@ namespace VeraAPI.Models.Forms
         public string Mileage { get; set; } = string.Empty;             // Mileage
         public string Lodging { get; set; } = string.Empty;             // Lodging
         public string PerDiem { get; set; } = string.Empty;             // PerDiem
+        public string TravelDays { get; set; } = string.Empty;            // TravelDays
         public string FullDays { get; set; } = string.Empty;            // FullDays
         public string Misc { get; set; } = string.Empty;                // Misc
         public string MiscExplain { get; set; } = string.Empty;         // MiscExplain
@@ -42,6 +43,7 @@ namespace VeraAPI.Models.Forms
         public string RecapMileage { get; set; } = string.Empty;        // RecapMileage
         public string RecapLodging { get; set; } = string.Empty;        // RecapLodging
         public string RecapPerDiem { get; set; } = string.Empty;        // RecapPerDiem
+        public string RecapTravelDays { get; set; } = string.Empty;       // RecapTravelDays
         public string RecapFullDays { get; set; } = string.Empty;       // RecapFullDays
         public string RecapMisc { get; set; } = string.Empty;           // RecapMisc
         public string TotalRecap { get; set; } = string.Empty;          // TotalRecap

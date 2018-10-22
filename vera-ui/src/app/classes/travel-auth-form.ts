@@ -19,7 +19,8 @@ export class AuthForm {
   Mileage: number;   // Mileage
   Lodging: number;   // Lodging
   PerDiem: number;   // PerDiem
-  FullDays: number;  // FullDays
+  TravelDays:number  // days of travel
+  FullDays: number;  // FullDays of travel
   Misc: number;  // Misc
   MiscExplain: string;    // MiscExplain
   TotalEstimate: number;  // TotalEstimate
@@ -35,6 +36,7 @@ export class AuthForm {
   RecapMileage: number;  // RecapMileage
   RecapLodging: number;  // RecapLodging
   RecapPerDiem: number;  // RecapPerDiem
+  RecapTravelDays: number;  // RecapTravelDays
   RecapFullDays: number;  // RecapFullDays
   RecapMisc: number;  // RecapMisc
   TotalRecap: number;  // TotalRecap

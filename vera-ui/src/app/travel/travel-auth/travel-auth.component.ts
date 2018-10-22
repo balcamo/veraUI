@@ -40,6 +40,7 @@ export class TravelAuthComponent implements OnInit {
   advanceColor = "black";
   distVehColor = "black";
   policyColor = "black";
+  daysTravelBorder = "black";
   // variables to display sections
   distVehDisplay = "none";
   rentalCarDisplay = "block";
@@ -60,7 +61,7 @@ export class TravelAuthComponent implements OnInit {
   checkTot() {
     this.total = 0;
     var mileage = this.form.Mileage * this.consts.mileageRate;
-    var foodTravel = this.form.PerDiem * this.consts.firstLastDayFood;
+    var foodTravel = this.form.PerDiem * this.consts.travelDayFood * this.form.TravelDays;
     var foodFull = this.form.PerDiem * this.form.FullDays;
     this.total = this.form.RegistrationCost + this.form.Airfare + this.form.RentalCar +
       this.form.Fuel + this.form.ParkingTolls + mileage + this.form.Lodging +
@@ -120,6 +121,7 @@ export class TravelAuthComponent implements OnInit {
       || this.form.TravelEnd == null || this.form.DistVehicle == null || this.form.Airfare == null
       || this.form.RegistrationCost == null || this.form.Advance == null || this.form.DistVehicle == null
       || this.form.Policy == null || this.form.LastName == null || this.form.ParkingTolls == null
+      || this.form.TravelDays == null
       ) {
       valid = false;
     }
@@ -144,6 +146,7 @@ export class TravelAuthComponent implements OnInit {
     this.miscBorder = (this.form.Misc == null ? "red" : "black");
     this.advanceColor = (this.form.Advance == null ? "red" : "black");
     this.policyColor = (this.form.Policy == null ? "red" : "black");
+    this.daysTravelBorder = (this.form.TravelDays == null ? "red" : "black");
     // ensure traveler is aware of travel policy
     if (this.form.Policy == false) {
       valid = false;
@@ -174,6 +177,7 @@ export class TravelAuthComponent implements OnInit {
     this.form.Lodging = 0;
     this.form.PerDiem = 0;
     this.form.FullDays = 0;
+    this.form.TravelDays = 0;
     this.form.Misc = 0;
     this.form.MiscExplain = null;
     this.form.TotalEstimate = 0;

@@ -131,11 +131,18 @@
            class="form-control" [(ngModel)]="form.PerDiem" placeholder="Food allowence for each day" />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="travelDays">Number of full days traveling*:</label>
-    <input [ngStyle]="{'border-color':daysBorder}" type="number" id="travelDays"
+    <label class="mr-sm-2 mb-0" for="travelDays">Number of traveling days*:</label>
+    <input [ngStyle]="{'border-color':daysTravelBorder}" type="number" id="travelDays"
+           class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Number of days traveling*"
+           [(ngModel)]="form.TravelDays" (change)="checkTot()"
+           ngbTooltip="Count the days you will be traveling." required />
+  </h6>
+  <h6>
+    <label class="mr-sm-2 mb-0" for="fulltravelDays">Number of full days*:</label>
+    <input [ngStyle]="{'border-color':daysBorder}" type="number" id="fulltravelDays"
            class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Number of full days of the trip*"
            [(ngModel)]="form.FullDays" (change)="checkTot()"
-           ngbTooltip="Count the days you will be gone. Don't include first or last day. i.e. If you are traveling Mon-Wed that's 1 full day" required />
+           ngbTooltip="Count the full days you will be gone." required />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0" for="misc">Miscellaneous*:</label>
