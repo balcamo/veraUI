@@ -107,7 +107,7 @@ namespace VeraAPI.Controllers
                                         if (bool.TryParse(travelAuthForm.Advance, out bool advance))
                                         {
                                             if (advance)
-                                                emailer.NotifyFinance();
+                                                emailer.NotifyFinance(0);
                                             else
                                                 log.WriteLogEntry("No advance requested.");
                                         }

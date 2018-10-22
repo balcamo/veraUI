@@ -119,7 +119,7 @@ namespace VeraAPI.HelperClasses
                     log.WriteLogEntry("Total Recap: " + travelForm.TotalRecap);
                     totalAmt = decimal.Parse(travelForm.TotalRecap);
                     log.WriteLogEntry("Total Reimbursement: " + travelForm.TotalReimburse);
-                    reimburseAmt = decimal.Parse("reimburse_amt");
+                    reimburseAmt = decimal.Parse(travelForm.TotalReimburse, System.Globalization.NumberStyles.AllowLeadingSign);
                 }
                 catch (Exception ex)
                 {
@@ -144,7 +144,8 @@ namespace VeraAPI.HelperClasses
                         { "recap_full_days", fullDays.ToString() },
                         { "recap_misc_amt", miscAmt.ToString() },
                         { "recap_total_amt", totalAmt.ToString() },
-                        { "reimburse_amt", reimburseAmt.ToString() }
+                        { "reimburse_amt", reimburseAmt.ToString() },
+                        { "recap_date", DateTime.Now.ToString() }
                     };
                     formFilters = new string[,] {
                         { "submitter_id", userID.ToString() },
