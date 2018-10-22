@@ -73,6 +73,90 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
+        public bool SubmitTravelRecapForm(int userID, BaseForm webForm)
+        {
+            log.WriteLogEntry("Begin SubmitTravelRecapForm...");
+            bool result = false;
+
+            if (webForm.GetType() == typeof(TravelAuthForm))
+            {
+                TravelAuthForm travelForm = (TravelAuthForm)webForm;
+                log.WriteLogEntry(string.Format("User {0} is recapping form {1}.", userID, travelForm.FormDataID));
+
+                decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelAmt = 0, parkingAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0, totalAmt = 0, reimburseAmt = 0;
+                int estimatedMiles = 0, travelDays = 0, fullDays = 0;
+
+                try
+                {
+                    log.WriteLogEntry("Registration Cost: " + travelForm.RegistrationCost);
+                    registrationAmt = decimal.Parse(travelForm.RegistrationCost);
+                    log.WriteLogEntry("Airfare: " + travelForm.Airfare);
+                    airfareAmt = decimal.Parse(travelForm.Airfare);
+                    log.WriteLogEntry("RentalCar: " + travelForm.RentalCar);
+                    rentalAmt = decimal.Parse(travelForm.RentalCar);
+                    log.WriteLogEntry("Fuel: " + travelForm.Fuel);
+                    fuelAmt = decimal.Parse(travelForm.Fuel);
+                    log.WriteLogEntry("Parking: " + travelForm.ParkingTolls);
+                    parkingAmt = decimal.Parse(travelForm.ParkingTolls);
+                    log.WriteLogEntry("Mileage: " + travelForm.Mileage);
+                    estimatedMiles = int.Parse(travelForm.Mileage);
+                    log.WriteLogEntry("Lodging: " + travelForm.Lodging);
+                    lodgingAmt = decimal.Parse(travelForm.Lodging);
+                    log.WriteLogEntry("PerDiem: " + travelForm.PerDiem);
+                    perdiemAmt = decimal.Parse(travelForm.PerDiem);
+                    log.WriteLogEntry("Travel Days: " + travelForm.TravelDays);
+                    travelDays = int.Parse(travelForm.TravelDays);
+                    log.WriteLogEntry("Full Days: " + travelForm.FullDays);
+                    fullDays = int.Parse(travelForm.FullDays);
+                    log.WriteLogEntry("Misc: " + travelForm.Misc);
+                    miscAmt = decimal.Parse(travelForm.Misc);
+                    log.WriteLogEntry("Total Cost: " + travelForm.TotalEstimate);
+                    totalAmt = decimal.Parse(travelForm.TotalEstimate);
+                    log.WriteLogEntry("Advance: " + travelForm.Advance);
+                    reimburseAmt = decimal.Parse(travelForm.AdvanceAmount);
+                }
+                catch (Exception ex)
+                {
+                    log.WriteLogEntry("Form data conversion error: " + ex.Message);
+                    return result;
+                }
+
+                try
+                {
+                    string[,] formFields = new string[0, 0];
+                    string[,] formFilters = new string[0, 0];
+
+                    // Build field and filter list to update SQL
+                    formFields = new string[,] {
+                        { "recap_registration_amt", registrationAmt.ToString() },
+                        { "recap_airfare_amt", airfareAmt.ToString() },
+                        { "recap_rental_amt", rentalAmt.ToString() },
+                        { "recap_fuel_amt", fuelAmt.ToString() },
+                        { "recap_parking_amt", parkingAmt.ToString() },
+                        { "recap_mileage_amt", milea.ToString() }
+                    };
+                    formFilters = new string[,] { { "manager_id", userID.ToString() }, { "form_id", travel.FormDataID.ToString() } };
+
+                    log.WriteLogEntry("Starting FormDataHandler...");
+                    FormDataHandler formData = new FormDataHandler(dbServer, dbName);
+                    if (formData.UpdateTravelForm(formFields, formFilters) > 0)
+                        result = true;
+                    else
+                        log.WriteLogEntry("FAILED No records updated!");
+                }
+                catch (Exception ex)
+                {
+                    log.WriteLogEntry("General Program Error \n" + ex.Message);
+                    result = false;
+                    return result;
+                }
+            }
+            else
+                log.WriteLogEntry("FAILED submitted form is not a travel authorization form!");
+            log.WriteLogEntry("End SubmitTravelRecapForm.");
+            return result;
+        }
+
         public bool LoadTravelAuthForm(int formDataID)
         {
             log.WriteLogEntry("Begin LoadTravelAuthForm...");
