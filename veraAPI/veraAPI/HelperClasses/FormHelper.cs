@@ -94,35 +94,34 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public bool LoadActiveTravelAuthForms(int userID)
+        public int LoadActiveTravelAuthForms(int userID)
         {
             log.WriteLogEntry("Begin LoadActiveTravelAuthForms...");
-            bool result = false;
+            int result = 0;
             List<BaseForm> travelForms = new List<BaseForm>();
+            WebForms = new List<BaseForm>();
             log.WriteLogEntry("Starting FormDataHandler...");
             FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
             if (formDataHandle.LoadUserTravelAuthForms(travelForms, userID) > 0)
             {
-                WebForms = new List<BaseForm>();
                 foreach (TravelAuthForm travelForm in travelForms)
                 {
                     if (ConvertStatusValues(travelForm))
                     {
                         this.WebForms.Add(travelForm);
-                        result = true;
+                        result++;
                         log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", userID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
                     }
                     else
                     {
                         log.WriteLogEntry("FAILED to convert status colors!");
-                        result = false;
                         break;
                     }
                 }
             }
             else
                 log.WriteLogEntry("No active forms loaded.");
-            log.WriteLogEntry("Count loaded forms " + WebForms.Count);
+            log.WriteLogEntry("Count loaded forms " + result);
             log.WriteLogEntry("End LoadActiveTravelAuthForms.");
             return result;
         }
@@ -131,12 +130,12 @@ namespace VeraAPI.HelperClasses
         {
             log.WriteLogEntry("Begin LoadApproverTravelAuthForms...");
             int result = 0;
+            this.WebForms = new List<BaseForm>();
             List<BaseForm> travelForms = new List<BaseForm>();
             log.WriteLogEntry("Starting FormDataHandler...");
             FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
             if (formDataHandle.LoadApproverTravelAuthForms(travelForms, userID) > 0)
             {
-                WebForms = new List<BaseForm>();
                 foreach (TravelAuthForm travelForm in travelForms)
                 {
                     if (ConvertStatusValues(travelForm))
@@ -162,6 +161,10 @@ namespace VeraAPI.HelperClasses
                     }
                 }
             }
+            else
+            {
+                log.WriteLogEntry("No forms available for approval by user " + userID);
+            }
             log.WriteLogEntry("Count loaded forms " + WebForms.Count);
             log.WriteLogEntry("End LoadApproverTravelAuthForms.");
             return result;
@@ -176,42 +179,47 @@ namespace VeraAPI.HelperClasses
             {
                 TravelAuthForm travel = (TravelAuthForm)webForm;
                 log.WriteLogEntry(string.Format("User {0} is approving form {1}.", userID, travel.FormDataID));
-                if (userID == int.Parse(travel.GMID))
+                try
                 {
-                    travel.GMApproval = Constants.ApprovedColor;
-                    travel.DHApproval = Constants.ApprovedColor;
-                    travel.ApprovalStatus = Constants.ApprovedColor;
-                }
-                else if (userID == int.Parse(travel.DHID))
-                {
-                    travel.DHApproval = Constants.ApprovedColor;
-                    travel.GMApproval = Constants.PendingColor;
-                    travel.ApprovalStatus = Constants.PendingColor;
-                }
-                int[] approve = { GetStatusValue(travel.DHApproval), GetStatusValue(travel.GMApproval), GetStatusValue(travel.ApprovalStatus) };
-                string[] approver = { "supervisor", "manager" };
-                for (int i = 0; i < approve.Length; i++)
-                {
-                    try
+                    string[,] formFields = new string[0, 0];
+                    string[,] formFilters = new string[0, 0];
+                    if (userID == int.Parse(travel.GMID))
                     {
-                        string[,] formFields = { { approver[i] + "_approval_date", DateTime.Now.ToString() }, { approver[i] + "_approval_status", approve[i].ToString() } };
-                        string[,] formFilters = { { approver[i] + "_id", userID.ToString() }, { "form_id", travel.FormDataID.ToString() } };
-                        log.WriteLogEntry(string.Format("Form Fields\nName: {0}\tValue: {1}", formFields[i, 0], formFields[i, 1]));
-                        log.WriteLogEntry(string.Format("Form Filters\nName: {0}\tValue: {1}", formFilters[i, 0], formFilters[i, 1]));
-
-                        log.WriteLogEntry("Starting FormDataHandler...");
-                        FormDataHandler formData = new FormDataHandler(dbServer, dbName);
-                        if (formData.UpdateTravelForm(formFields, formFilters) > 0)
-                            result = true;
+                        if (travel.GMApproval == Constants.DeniedColor)
+                            travel.ApprovalStatus = Constants.DeniedColor;
                         else
-                            log.WriteLogEntry("FAILED No records updated!");
+                        {
+                            travel.GMApproval = Constants.ApprovedColor;
+                            travel.ApprovalStatus = Constants.ApprovedColor;
+                        }
+
+                        // Build field and filter list to update SQL
+                        formFields = new string[,] { { "manager_approval_date", DateTime.Now.ToString() }, { "manager_approval_status", GetStatusValue(travel.GMApproval).ToString() }, { "approval_date", DateTime.Now.ToString() }, { "approval_status", GetStatusValue(travel.ApprovalStatus).ToString() } };
+                        formFilters = new string[,] { { "manager_id", userID.ToString() }, { "form_id", travel.FormDataID.ToString() } };
                     }
-                    catch (Exception ex)
+                    else if (userID == int.Parse(travel.DHID))
                     {
-                        log.WriteLogEntry("General Program Error \n" + ex.Message);
-                        result = false;
-                        return result;
+                        if (travel.DHApproval == Constants.DeniedColor)
+                            travel.ApprovalStatus = Constants.DeniedColor;
+                        else
+                            travel.DHApproval = Constants.ApprovedColor;
+
+                        // Build field and filter list to update SQL
+                        formFields = new string[,] { { "supervisor_approval_date", DateTime.Now.ToString() }, { "supervisor_approval_status", GetStatusValue(travel.DHApproval).ToString() } };
+                        formFilters = new string[,] { { "supervisor_id", userID.ToString() }, { "form_id", travel.FormDataID.ToString() } };
                     }
+                    log.WriteLogEntry("Starting FormDataHandler...");
+                    FormDataHandler formData = new FormDataHandler(dbServer, dbName);
+                    if (formData.UpdateTravelForm(formFields, formFilters) > 0)
+                        result = true;
+                    else
+                        log.WriteLogEntry("FAILED No records updated!");
+                }
+                catch (Exception ex)
+                {
+                    log.WriteLogEntry("General Program Error \n" + ex.Message);
+                    result = false;
+                    return result;
                 }
             }
             else

@@ -91,15 +91,20 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public bool NotifySubmitter(string email)
+        public bool NotifySubmitter(string email, int notification)
         {
             log.WriteLogEntry("Begin NotifySubmitter...");
             bool result = false;
+            string emailBody = string.Empty;
+            if (notification == 1)
+                emailBody = "<html><body><p>Your request to travel has been <b>APPROVED.</b></p></body></html>";
+            else if (notification == 0)
+                emailBody = "<html><body><p>Your request to travel has been <b>DENIED.</b></p></body></html>";
             ExchangeHandler emailHandle = new ExchangeHandler
             {
                 EmailSubject = "Notify Submitter",
                 RecipientEmailAddress = email,
-                EmailBody = "<html><body><p>Your request to travel has been approved.</p></body></html>"
+                EmailBody = emailBody
             };
             try
             {
