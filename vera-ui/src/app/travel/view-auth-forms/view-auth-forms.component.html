@@ -86,12 +86,12 @@
           </th>
         </tr>
         <tr>
-          <th><h5><b>Miles Driven</b></h5></th>
+          <th><h5><b>Reimbursement for miles driven</b></h5></th>
           <th><h5>{{form.Mileage}}</h5></th>
           <th>
-            <input type="number" ngbTooltip="Miles Driven" (change)="checkTot()"
+            <input type="number" ngbTooltip="Enter the miles driven" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Miles Driven*"
-                   [(ngModel)]="form.RecapMileage" required />
+                   [(ngModel)]="form.RecapMileageAmount" required />
           </th>
         </tr>
         <tr>

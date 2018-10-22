@@ -88,12 +88,14 @@ export class ViewAuthFormsComponent implements OnInit {
   checkTot() {
     if (this.airfareComp) { this.form.RecapAirfare = 0; }
     if (this.registrationComp) { this.form.RecapRegistrationCost = 0; }
+    this.form.RecapMileage = this.form.RecapMileageAmount;
     this.form.TotalRecap = 0;
-    var mileage = this.form.RecapMileage * this.consts.mileageRate;
+    this.form.RecapMileageAmount = this.form.RecapMileage * this.consts.mileageRate;
+    if (this.form.RecapMileageAmount > this.form.Mileage) { this.form.RecapMileageAmount = this.form.Mileage; }
     var foodTravel = this.form.RecapPerDiem * this.consts.travelDayFood * this.form.RecapTravelDays;
     var foodFull = this.form.RecapPerDiem * this.form.RecapFullDays
     this.form.TotalRecap = this.form.RecapRegistrationCost + this.form.RecapAirfare + this.form.RecapRentalCar + foodFull +
-      this.form.RecapFuel + this.form.RecapParkingTolls + mileage + this.form.RecapLodging + foodTravel + this.form.RecapMisc;
+      this.form.RecapFuel + this.form.RecapParkingTolls + this.form.RecapMileageAmount + this.form.RecapLodging + foodTravel + this.form.RecapMisc;
     this.form.TotalReimburse = this.form.TotalRecap - this.form.AdvanceAmount;
   }
 
@@ -108,7 +110,9 @@ export class ViewAuthFormsComponent implements OnInit {
     this.form.RecapFuel = 0;
     this.form.RecapParkingTolls = 0;
     this.form.RecapMileage = 0;
+    this.form.RecapMileageAmount = 0;
     this.form.RecapLodging = 0;
+    this.form.RecapTravelDays = 0;
     this.form.RecapFullDays = 0;
     this.form.RecapPerDiem = 0;
     this.form.RecapMisc = 0;
@@ -132,9 +136,9 @@ export class ViewAuthFormsComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-    var body = JSON.stringify({ userID: this.user.UserID, value: this.form });
+    var body = JSON.stringify(this.form);
     console.log(this.consts.url + 'Recap');
-    this.http.post(this.consts.url + 'Recap', body, options)
+    this.http.post(this.consts.url + 'Recap?restUserID=', body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert(data.text()));
   }
