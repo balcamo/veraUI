@@ -13,7 +13,7 @@ import { Constants } from '../../classes/constants';
 export class TavelAuthApproveComponent implements OnInit {
 
   @Input() authForms;
-  @Input() forms;
+  @Input() formsList;
   http: Http;
   userService: UserService
   user: User;
@@ -34,15 +34,12 @@ export class TavelAuthApproveComponent implements OnInit {
     this.user = this.userService.getUser();
     if (this.authForms == undefined) {
       console.log("in constructor: no forms to approve");
-      this.forms = false;
+      this.formsList = false;
     }
   }
 
   ngOnInit() {
-    if (this.authForms == undefined) {
-      console.log("in ngOnInit: no forms to approve");
-      this.forms = false;
-    }
+    console.log("formsList from in approve html" + this.formsList);
   }
 
   /**
@@ -93,6 +90,7 @@ export class TavelAuthApproveComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
+    this.displaySelected(this.form);
     if (this.user.EntryGroup[3] == 1) {
       this.form.DHApproval = 'green';
       this.form.DHID = this.user.UserID;
@@ -122,6 +120,7 @@ export class TavelAuthApproveComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
+    this.displaySelected(this.form);
     if (this.user.EntryGroup[3] == 1) {
       this.form.DHApproval = 'red';
       this.form.DHID = this.user.UserID;
@@ -135,6 +134,6 @@ export class TavelAuthApproveComponent implements OnInit {
     console.log(this.consts.url + 'TravelApproval');
     this.http.put(this.consts.url + 'TravelApproval?restUserID=' + this.user.UserID, body, options)
       .subscribe((data) => alert("You have DENIED this travel request"));
-    
+
   }
 }

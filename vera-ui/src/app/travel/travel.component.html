@@ -2,7 +2,7 @@
 <body>
   <!-- travel nevigation -->
   <div class="topbar" style="text-align:center;margin-left:50px;">
-    <button class="btn bg-primary" [routerLink]="['authform']"  (click)="displayAuth()">
+    <button class="btn bg-primary" [routerLink]="['authform']" (click)="displayAuth()">
       New Travel Authorization
     </button>
 
@@ -14,6 +14,9 @@
       Approve Authorization Forms
     </button>
 
+    <button *ngIf="finance;" class="btn bg-primary" [routerLink]="['financeAuth']" (click)="displayFinanceAuth()" [authForms]="authForms">
+      Forms for Finance
+    </button>
   </div>
 
   <!-- display of button selected from the nav -->
@@ -22,11 +25,14 @@
   </div>
 
   <div [ngStyle]="{'display':allAuthDisplay}">
-    <app-view-auth-forms [forms]="forms" [authForms]="authForms"></app-view-auth-forms>
+    <app-view-auth-forms [formsList]="formsList" [authForms]="authForms"></app-view-auth-forms>
   </div>
 
   <div [ngStyle]="{'display':approveAuthDisplay}">
-    <app-tavel-auth-approve [forms]="forms" [authForms]="authForms"></app-tavel-auth-approve>
+    <app-tavel-auth-approve [formsList]="formsList" [authForms]="authForms"></app-tavel-auth-approve>
   </div>
 
+  <div [ngStyle]="{'display':financeAuthDisplay}">
+    <app-view-travel-finance [formsList]="formsList" [authForms]="authForms"></app-view-travel-finance>
+  </div>
 </body>

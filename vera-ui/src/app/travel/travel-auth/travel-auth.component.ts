@@ -176,7 +176,7 @@ export class TravelAuthComponent implements OnInit {
     this.form.FullDays = 0;
     this.form.Misc = 0;
     this.form.MiscExplain = null;
-    this.form.TotalEstimate = null;
+    this.form.TotalEstimate = 0;
     this.form.Advance = null;
     this.form.AdvanceAmount = 0;
     this.form.Policy = null;

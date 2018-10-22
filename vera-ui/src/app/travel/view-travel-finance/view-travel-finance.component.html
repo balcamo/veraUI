@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<div class="topbar forms" *ngFor="let forms of authForms">
+  <div class="list">
+    <button class="btn secondary" (mouseover)="hover=true" (mouseleave)="hover=false"
+            (click)="displaySelected(forms)">
+      <script>
+        if (forms.Advance && forms.TotalReimburse == null) {
+          formType = "Advance";
+        } else { formType = "Recap"; }
+      </script>
+      <h5>{{forms.LastName}} : {{formType}}</h5>
+      <h5>{{forms.LastName}} : {{formType}}</h5>
+    </button>
+  </div>
+</div>
+
+<br />
+<div *ngIf="!formsList" class="overview">
+  <h5>You currently have no active travel forms</h5>
+</div>
+
+<div *ngIf="formsList">
+  <!-- Displayes overview of the selected Auth form -->
+  <div [ngStyle]="{'display':displayForm}" class="overview">
+    <div *ngIf="advance">
+      <h2 style="text-align:center">{{form.FirstName}} {{form.LastName}} : {{form.Location}}</h2>
+      <h5>Email: <b><i>{{form.Email}}</i></b></h5>
+      <h5>Event Title:<b> <i>{{form.EventTitle}}</i> </b></h5>
+      <h5>Dates: <b><i>{{form.TravelBegin}} to {{form.TravelEnd}}</i></b></h5>
+      <br />
+      <h5>Registration cost:<b> <i>{{form.RegistrationCost}}</i></b></h5>
+      <h5>Airfare:<b> <i>{{form.Airfare}}</i></b></h5>
+      <h5>Rental car:<b> <i>{{form.RentalCar}}</i></b></h5>
+      <h5>Fuel:<b> <i>{{form.Fuel}}</i></b></h5>
+      <h5>Parking and tolls:<b> <i>{{form.ParkingTolls}}</i></b></h5>
+      <h5>Mileage:<b> <i>{{mileage}}</i></b></h5>
+      <h5>Lodging:<b> <i>{{form.Lodging}}</i></b></h5>
+      <h5>Food:<b> <i>{{food}}</i></b></h5>
+      <h5>Misc:<b> <i>{{form.Misc}}</i></b></h5>
+      <h5>Total Estimate of Trip:<b> <i>{{form.TotalEstimate}}</i></b></h5>
+      <h5>Advance Taken: <b><i>{{form.AdvanceAmount}}</i></b></h5>
+
+      <button class="btn bg-success" (click)="approveAdvance()">Approve</button>
+    </div>
+  </div>
+
+  <!-- Displays recap information in a table -->
+  <div *ngIf="recap" [ngStyle]="{'display':displayRecap}" style="border:solid 5px; max-width:80%;
+      min-width:50%; background-color:white;padding:5%;border-radius: 25px; margin-left:50px">
+    <h2 style="text-align:center">{{form.FirstName}} {{form.LastName}} : {{form.Location}}</h2>
+    <h5>Email: <b><i>{{form.Email}}</i></b></h5>
+    <h5>Event Title:<b> <i>{{form.EventTitle}}</i> </b></h5>
+    <h5>Location:<b> <i>{{form.Location}}</i></b></h5>
+    <h5>Travel Start Date: <b><i>{{form.TravelBegin}}</i></b></h5>
+    <h5>Travel End Date:<b> <i>{{form.TravelEnd}}</i></b></h5>
+    <table class="table">
+      <thead>
+        <tr>
+          <th><h5></h5></th>
+          <th><h5>Info From Advance</h5></th>
+          <th><h5>Recap Form</h5></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>
+            <h5>
+              <b>Registration Cost</b>
+            </h5>
+            <h8>Company paid: <input type="checkbox" [(ngModel)]="registrationComp" (change)="checkTot()" /></h8>
+          </th>
+          <th><h5>{{form.RegistrationCost}}</h5></th>
+          <th>
+            <h5>{{form.RecapRegistrationCost}}</h5>
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <h5><b>Airfare</b></h5>
+            <h8>Company paid: <input type="checkbox" [(ngModel)]="airfareComp" (change)="checkTot()" /></h8>
+          </th>
+          <th><h5>{{form.Airfare}}</h5></th>
+          <th><h5>{{form.RecapAirfare}}</h5></th>
+        </tr>
+        <tr>
+          <th><h5><b>Rental Car</b></h5></th>
+          <th><h5>{{form.RentalCar}}</h5></th>
+          <th><h5>{{form.RecapRentalCar}}</h5></th>
+        </tr>
+        <tr>
+          <th><h5><b>Miles Driven</b></h5></th>
+          <th><h5>{{form.Mileage}}</h5></th>
+          <th><h5>{{form.RecapMileage}}</h5></th>
+        </tr>
+        <tr>
+          <th><h5><b>Parking and Tolls</b></h5></th>
+          <th><h5>{{form.ParkingTolls}}</h5></th>
+          <th><h5>{{form.RecapParkingTolls}}</h5></th>
+        </tr>
+        <tr>
+          <th><h5><b>Fuel</b></h5></th>
+          <th><h5>{{form.Fuel}}</h5></th>
+          <th><h5>{{form.RecapFuel}}</h5></th>
+        </tr>
+        <tr>
+          <th><h5><b>Lodging</b></h5></th>
+          <th><h5>{{form.Lodging}}</h5></th>
+          <th><h5>{{form.RecapLodging}}</h5></th>
+        </tr>
+        <tr>
+          <th><h5><b>Per Diem</b></h5></th>
+          <th><h5>{{form.PerDiem}}</h5></th>
+          <th><h5>{{form.RecapPerDiem}}</h5></th>
+        </tr>
+        <tr>
+          <th><h5><b>Full Days of Travel</b></h5></th>
+          <th><h5>{{form.FullDays}}</h5></th>
+          <th><h5>{{form.RecapFullDays}}</h5></th>
+        </tr>
+        <tr>
+          <th><h5><b>Miscellaneous</b></h5></th>
+          <th><h5>{{form.Misc}}</h5></th>
+          <th><h5>{{form.RecapMisc}}</h5></th>
+        </tr>
+        <tr>
+          <th><h6><b>Total</b></h6></th>
+          <th><h6>{{form.TotalEstimate}}</h6></th>
+          <th><h6>{{form.TotalRecap}}</h6></th>
+        </tr>
+        <tr>
+          <th><h6><b>Advance Taken</b></h6></th>
+          <th><h6></h6></th>
+          <th><h6>{{form.AdvanceAmount}}</h6></th>
+        </tr>
+        <tr>
+          <th><h5><b>Total for Reimbursement</b></h5></th>
+          <th><h5></h5></th>
+          <th><h5>{{form.TotalReimburse}}</h5></th>
+        </tr>
+      </tbody>
+    </table>
+    <button type="submit" (click)="approveRecap()">Approve</button>
+  </div>
+</div>

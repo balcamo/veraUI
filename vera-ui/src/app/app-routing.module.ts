@@ -16,6 +16,7 @@ const routes: Routes = [
     children: [
       { path: 'authform', component: TravelAuthComponent },
       { path: 'activeAuth', component: ViewAuthFormsComponent },
+      { path: 'financeAuth', component: ViewAuthFormsComponent },
       { path: 'approveAuth', component: TavelAuthApproveComponent }
     ] 
   },

@@ -12,7 +12,7 @@ import { Constants } from '../../classes/constants';
 })
 export class ViewAuthFormsComponent implements OnInit {
   @Input() authForms;
-  @Input() forms;
+  @Input() formsList;
   http: Http;
   userService: UserService
   user: User;
@@ -32,15 +32,13 @@ export class ViewAuthFormsComponent implements OnInit {
     this.user = this.userService.getUser();
     if (this.authForms == undefined) {
       console.log("in constructor: no forms to approve");
-      this.forms = false;
+      this.formsList = false;
     }
   }
 
   ngOnInit() {
-    if (this.authForms == undefined) {
-      console.log("in ngOnInit: no forms to approve");
-      this.forms = false;
-    }
+    console.log("formsList from in all forms html" + this.formsList);
+
   }
 
   /**
@@ -52,11 +50,19 @@ export class ViewAuthFormsComponent implements OnInit {
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
     this.displayRecap = "none";
-    if (this.form.DHApproval.toString() == "yellow") {
-      this.dhApprove = "Pending";
-      this.gmApprove = "Pending";
-    } else if (this.form.DHApproval.toString() == "green") {
+    if (this.form.ApprovalStatus == 'green') {
       this.dhApprove = "Approved";
+      this.gmApprove = "Approved";
+    } else {
+      if (this.form.DHApproval.toString() == "yellow") {
+        this.dhApprove = "Pending";
+      } else if (this.form.DHApproval.toString() == "green") {
+        this.dhApprove = "Approved";
+      } else {
+        this.dhApprove = "Denied";
+        this.gmApprove = "Form will not be sent to the GM";
+      }
+
       if (this.form.GMApproval.toString() == "yellow") {
         this.gmApprove = "Pending";
       } else if (this.form.GMApproval.toString() == "green") {
@@ -64,21 +70,17 @@ export class ViewAuthFormsComponent implements OnInit {
       } else {
         this.gmApprove = "Denied";
       }
-    } else if (this.form.DHApproval.toString() == "red") {
-      this.dhApprove = "Denied";
-      this.gmApprove = "Form will not be sent to the GM";
     }
-
     if (this.displayForm == "none") {
       this.displayForm = "block";
     } else if (this.form !== this.oldForm) {
-      this.displayForm = "block"
+      this.displayForm = "block";
     } else if (this.form == this.oldForm) {
-      this.displayForm = "none"
-    } 
+      this.displayForm = "none";
+    }
     this.oldForm = this.form
+    
   }
-
   /**
    * checkTot will calculate the total spent on the trip
    * and the total the traveler is owed for reimbursement 

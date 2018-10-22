@@ -4,8 +4,12 @@ div {
   display: inline-flex;
 }
 
+.list {
+  margin: auto;
+}
+
 .btn {
-  border: 2px solid black;
+  border: 10px solid $success;
   background-color: white;
   color: black;
   padding: 14px 28px;
@@ -13,25 +17,10 @@ div {
   cursor: pointer;
   text-transform: lowercase;
   text-transform: capitalize;
-  align-content:center;
-  text-align:center;
-}
-
-.sup {
-  border: 2px solid black;
-  color: white;
-  padding: 14px 28px;
-  font-size: 16px;
-  cursor: pointer;
-  margin: 10px;
 }
 
 .secondary {
   border-color: $success;
-  color: $primary;
-}
-
-.secondary:hover {
   color: $primary;
 }
 
@@ -43,7 +32,7 @@ div {
 .overview {
   border: solid 5px;
   min-width: 50vw;
-  max-width:80vw;
+  max-width: 80vw;
   background-color: white;
   padding: 5%;
   border-radius: 25px;
