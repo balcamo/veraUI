@@ -50,7 +50,8 @@ export class TavelAuthApproveComponent implements OnInit {
    */
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
-    this.food = (this.form.PerDiem * this.form.FullDays) + (this.form.PerDiem * this.consts.firstLastDayFood);
+    this.food = (this.form.PerDiem * this.form.FullDays) +
+      (this.form.PerDiem * this.consts.travelDayFood * this.form.TravelDays);
     this.mileage = this.form.Mileage * this.consts.mileageRate;
     if ((this.user.EntryGroup[3] == 1 && this.form.DHApproval.toString() != 'yellow') ||
       (this.user.EntryGroup[3] == 99 && this.form.GMApproval.toString() != 'yellow')) {
