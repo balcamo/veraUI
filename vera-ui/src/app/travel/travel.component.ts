@@ -146,8 +146,8 @@ export class TravelComponent implements OnInit {
       search: params,
       headers: pageHeaders
     });
-
-    this.http.get(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID)
+    this.http.get(this.consts.url + 'TravelAuth?restUserID=' + this.user.UserID)
+   // this.http.get(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID)
       .subscribe((data) => this.waitForHttp(data));
     if (this.authForms.length == 0) {
       console.log("Data returned is null");
