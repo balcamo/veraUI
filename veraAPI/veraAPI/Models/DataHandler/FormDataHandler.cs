@@ -30,16 +30,16 @@ namespace VeraAPI.Models.DataHandler
             log.WriteLogEntry("Starting InsertTravelAuth...");
             bool result = false;
             string cmdString = string.Format(@"insert into {0}.dbo.travel (first_name, last_name, phone, email, event_description, event_location, depart_date, return_date, district_vehicle, registration_amt, airfare_amt, rental_amt, 
-                                    fuel_amt, parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, misc_amt, total_cost_amt, request_advance, advance_amt, travel_policy, submit_date, submitter_id, supervisor_id, supervisor_email, 
+                                    fuel_amt, parking_amt, estimated_miles, lodging_amt, perdiem_amt, travel_days, full_days, misc_amt, total_cost_amt, request_advance, advance_amt, travel_policy, submit_date, submitter_id, supervisor_id, supervisor_email, 
                                     supervisor_approval_status, supervisor_approval_date, manager_id, manager_email, manager_approval_status, manager_approval_date, approval_status) 
                                     output inserted.form_id
                                     values (@firstName, @lastName, @phone, @email, @eventDescription, @eventLocation, @departDate, @returnDate, @districtVehicle, @registrationAmt, @airfareAmt, @rentalAmt, @fuelAmt, @parkingAmt, @estimatedMiles, 
-                                    @lodgingAmt, @perdiemAmt, @travelDays, @miscAmt, @totalCostAmt, @requestAdvance, @advanceAmt, @travelPolicy, GETDATE(), @submitterID, @supervisorID, @supervisorEmail, @supervisorApprove, 
+                                    @lodgingAmt, @perdiemAmt, @travelDays, @fullDays, @miscAmt, @totalCostAmt, @requestAdvance, @advanceAmt, @travelPolicy, GETDATE(), @submitterID, @supervisorID, @supervisorEmail, @supervisorApprove, 
                                     GETDATE(), @managerID, @managerEmail, @managerApprove, GETDATE(), @status)", dbName);
             DateTime departDate = DateTime.MinValue, returnDate = DateTime.MinValue;
             bool districtVehicle = false, requestAdvance = false, travelPolicy = false;
             decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelAmt = 0, parkingAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0, totalCostAmt = 0, advanceAmt = 0;
-            int estimatedMiles = 0, travelDays = 0;
+            int estimatedMiles = 0, travelDays = 0, fullDays = 0;
 
             try
             {
@@ -65,8 +65,10 @@ namespace VeraAPI.Models.DataHandler
                 lodgingAmt = decimal.Parse(travelForm.Lodging);
                 log.WriteLogEntry("PerDiem: " + travelForm.PerDiem);
                 perdiemAmt = decimal.Parse(travelForm.PerDiem);
-                log.WriteLogEntry("Travel Days: " + travelForm.FullDays);
-                travelDays = int.Parse(travelForm.FullDays);
+                log.WriteLogEntry("Travel Days: " + travelForm.TravelDays);
+                travelDays = int.Parse(travelForm.TravelDays);
+                log.WriteLogEntry("Full Days: " + travelForm.FullDays);
+                fullDays = int.Parse(travelForm.FullDays);
                 log.WriteLogEntry("Misc: " + travelForm.Misc);
                 miscAmt = decimal.Parse(travelForm.Misc);
                 log.WriteLogEntry("Total Cost: " + travelForm.TotalEstimate);
@@ -110,6 +112,7 @@ namespace VeraAPI.Models.DataHandler
                     cmd.Parameters.AddWithValue("@lodgingAmt", lodgingAmt);
                     cmd.Parameters.AddWithValue("@perdiemAmt", perdiemAmt);
                     cmd.Parameters.AddWithValue("@travelDays", travelDays);
+                    cmd.Parameters.AddWithValue("@fullDays", fullDays);
                     cmd.Parameters.AddWithValue("@miscAmt", miscAmt);
                     cmd.Parameters.AddWithValue("@totalCostAmt", totalCostAmt);
                     cmd.Parameters.AddWithValue("@requestAdvance", requestAdvance);
@@ -233,7 +236,8 @@ namespace VeraAPI.Models.DataHandler
                                     Mileage = rdr["estimated_miles"].ToString(),
                                     Lodging = rdr["lodging_amt"].ToString(),
                                     PerDiem = rdr["perdiem_amt"].ToString(),
-                                    FullDays = rdr["travel_days"].ToString(),
+                                    FullDays = rdr["full_days"].ToString(),
+                                    TravelDays = rdr["travel_days"].ToString(),
                                     Misc = rdr["misc_amt"].ToString(),
                                     TotalEstimate = rdr["total_cost_amt"].ToString(),
                                     AdvanceAmount = rdr["advance_amt"].ToString(),
@@ -308,7 +312,8 @@ namespace VeraAPI.Models.DataHandler
                                     Mileage = rdr["estimated_miles"].ToString(),
                                     Lodging = rdr["lodging_amt"].ToString(),
                                     PerDiem = rdr["perdiem_amt"].ToString(),
-                                    FullDays = rdr["travel_days"].ToString(),
+                                    FullDays = rdr["full_days"].ToString(),
+                                    TravelDays = rdr["travel_days"].ToString(),
                                     Misc = rdr["misc_amt"].ToString(),
                                     TotalEstimate = rdr["total_cost_amt"].ToString(),
                                     AdvanceAmount = rdr["advance_amt"].ToString(),
@@ -383,7 +388,8 @@ namespace VeraAPI.Models.DataHandler
                                     Mileage = rdr["estimated_miles"].ToString(),
                                     Lodging = rdr["lodging_amt"].ToString(),
                                     PerDiem = rdr["perdiem_amt"].ToString(),
-                                    FullDays = rdr["travel_days"].ToString(),
+                                    FullDays = rdr["full_days"].ToString(),
+                                    TravelDays = rdr["travel_days"].ToString(),
                                     Misc = rdr["misc_amt"].ToString(),
                                     TotalEstimate = rdr["total_cost_amt"].ToString(),
                                     AdvanceAmount = rdr["advance_amt"].ToString(),
