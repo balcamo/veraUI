@@ -24,6 +24,8 @@ export class ViewTravelFinanceComponent implements OnInit {
   form = new AuthForm();
   oldForm: AuthForm;
   formType: string;
+  advance = false;
+  recap = false;
 
   constructor(http: Http, userService: UserService) {
     this.http = http;
@@ -44,9 +46,16 @@ export class ViewTravelFinanceComponent implements OnInit {
    * @param authForm : form to be displayed
    * 
    */
-  displaySelected(authForm: AuthForm) {
+  displaySelected(authForm: AuthForm, formType:string) {
     this.form = authForm;
     this.displayRecap = "none";
+    this.advance = false;
+    this.recap = false;
+    if (authForm.Advance && authForm.TotalReimburse == null) {
+      this.advance = true;
+    } else {
+    this.recap = true;
+    }  
 
     if (this.displayForm == "none") {
       this.displayForm = "block";

@@ -2,7 +2,7 @@ import { environment } from '../../environments/environment';
 
 export class Constants {
   mileageRate = 0.545;
-  firstLastDayFood = .75 * 2;
+  travelDayFood = .75 ;
   customer = [];
   employee = [
     { name: "Home", route: "./home", icon: "../../assets/HomeBrown.png" },

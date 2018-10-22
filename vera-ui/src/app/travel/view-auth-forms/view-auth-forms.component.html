@@ -126,7 +126,7 @@
             <h5>
               <a href="https://www.gsa.gov/travel-resources" target="_blank" placement="right"
                  ngbTooltip="Find your city to find the Per Diem">
-                <b>Per Diem</b>
+                <b>Meals & Incidentals</b>
               </a>
             </h5>
           </th>
@@ -138,11 +138,19 @@
           </th>
         </tr>
         <tr>
-          <th><h5><b>Full Days of Travel</b></h5></th>
+          <th><h5><b>Days of Travel</b></h5></th>
+          <th><h5>{{form.TravelDays}}</h5></th>
+          <th>
+            <input type="number" ngbTooltip="Days of Travel" (change)="checkTot()"
+                   class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Days of travel*"
+                   [(ngModel)]="form.RecapTravelDays" required />
+          </th>
+        </tr><tr>
+          <th><h5><b>Full Days of Gone</b></h5></th>
           <th><h5>{{form.FullDays}}</h5></th>
           <th>
-            <input type="number" ngbTooltip="Full Days of Travel" (change)="checkTot()"
-                   class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Days of travel*"
+            <input type="number" ngbTooltip="Full Days of the trip" (change)="checkTot()"
+                   class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Days of trip*"
                    [(ngModel)]="form.RecapFullDays" required />
           </th>
         </tr>

@@ -2,13 +2,13 @@
 
 <div class="topbar forms" *ngFor="let forms of authForms">
   <div class="list">
+    <script>
+      if (forms.Advance && forms.TotalReimburse == null) {
+        formType = "Advance";
+      } else { formType = "Recap"; }
+    </script>
     <button class="btn secondary" (mouseover)="hover=true" (mouseleave)="hover=false"
-            (click)="displaySelected(forms)">
-      <script>
-        if (forms.Advance && forms.TotalReimburse == null) {
-          formType = "Advance";
-        } else { formType = "Recap"; }
-      </script>
+            (click)="displaySelected(forms, formType)">
       <h5>{{forms.LastName}} : {{formType}}</h5>
       <h5>{{forms.LastName}} : {{formType}}</h5>
     </button>
