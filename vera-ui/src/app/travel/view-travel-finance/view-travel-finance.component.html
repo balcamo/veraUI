@@ -2,16 +2,19 @@
 
 <div class="topbar forms" *ngFor="let forms of authForms">
   <div class="list">
-    <script>
-      if (forms.Advance && forms.TotalReimburse == null) {
-        formType = "Advance";
-      } else { formType = "Recap"; }
-    </script>
-    <button class="btn secondary" (mouseover)="hover=true" (mouseleave)="hover=false"
-            (click)="displaySelected(forms, formType)">
-      <h5>{{forms.LastName}} : {{formType}}</h5>
-      <h5>{{forms.LastName}} : {{formType}}</h5>
-    </button>
+    <div *ngIf="forms.Advance == true && forms.TotalReimburse == 0">
+      <button class="btn secondary" (mouseover)="hover=true" (mouseleave)="hover=false"
+              (click)="displaySelected(forms)">
+        <h5>{{forms.LastName}} : Advance</h5>
+      </button>
+    </div>
+    <div *ngIf="forms.TotalReimburse != 0">
+      <button class="btn secondary" (mouseover)="hover=true" (mouseleave)="hover=false"
+              (click)="displaySelected(forms)">
+        <h5>{{forms.LastName}} : Recap</h5>
+      </button>
+    </div>
+
   </div>
 </div>
 
@@ -22,27 +25,25 @@
 
 <div *ngIf="formsList">
   <!-- Displayes overview of the selected Auth form -->
-  <div [ngStyle]="{'display':displayForm}" class="overview">
-    <div *ngIf="advance">
-      <h2 style="text-align:center">{{form.FirstName}} {{form.LastName}} : {{form.Location}}</h2>
-      <h5>Email: <b><i>{{form.Email}}</i></b></h5>
-      <h5>Event Title:<b> <i>{{form.EventTitle}}</i> </b></h5>
-      <h5>Dates: <b><i>{{form.TravelBegin}} to {{form.TravelEnd}}</i></b></h5>
-      <br />
-      <h5>Registration cost:<b> <i>{{form.RegistrationCost}}</i></b></h5>
-      <h5>Airfare:<b> <i>{{form.Airfare}}</i></b></h5>
-      <h5>Rental car:<b> <i>{{form.RentalCar}}</i></b></h5>
-      <h5>Fuel:<b> <i>{{form.Fuel}}</i></b></h5>
-      <h5>Parking and tolls:<b> <i>{{form.ParkingTolls}}</i></b></h5>
-      <h5>Mileage:<b> <i>{{mileage}}</i></b></h5>
-      <h5>Lodging:<b> <i>{{form.Lodging}}</i></b></h5>
-      <h5>Food:<b> <i>{{food}}</i></b></h5>
-      <h5>Misc:<b> <i>{{form.Misc}}</i></b></h5>
-      <h5>Total Estimate of Trip:<b> <i>{{form.TotalEstimate}}</i></b></h5>
-      <h5>Advance Taken: <b><i>{{form.AdvanceAmount}}</i></b></h5>
+  <div  *ngIf="advance" [ngStyle]="{'display':displayAdvance}" class="overview">
+    <h2 style="text-align:center">{{form.FirstName}} {{form.LastName}} : {{form.Location}}</h2>
+    <h5>Email: <b><i>{{form.Email}}</i></b></h5>
+    <h5>Event Title:<b> <i>{{form.EventTitle}}</i> </b></h5>
+    <h5>Dates: <b><i>{{form.TravelBegin}} to {{form.TravelEnd}}</i></b></h5>
+    <br />
+    <h5>Registration cost:<b> <i>{{form.RegistrationCost}}</i></b></h5>
+    <h5>Airfare:<b> <i>{{form.Airfare}}</i></b></h5>
+    <h5>Rental car:<b> <i>{{form.RentalCar}}</i></b></h5>
+    <h5>Fuel:<b> <i>{{form.Fuel}}</i></b></h5>
+    <h5>Parking and tolls:<b> <i>{{form.ParkingTolls}}</i></b></h5>
+    <h5>Mileage:<b> <i>{{mileage}}</i></b></h5>
+    <h5>Lodging:<b> <i>{{form.Lodging}}</i></b></h5>
+    <h5>Food:<b> <i>{{food}}</i></b></h5>
+    <h5>Misc:<b> <i>{{form.Misc}}</i></b></h5>
+    <h5>Total Estimate of Trip:<b> <i>{{form.TotalEstimate}}</i></b></h5>
+    <h5>Advance Taken: <b><i>{{form.AdvanceAmount}}</i></b></h5>
 
-      <button class="btn bg-success" (click)="approveAdvance()">Approve</button>
-    </div>
+    <button class="btn bg-success" (click)="approveAdvance()">Approve</button>
   </div>
 
   <!-- Displays recap information in a table -->

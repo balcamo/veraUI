@@ -16,7 +16,7 @@ export class ViewTravelFinanceComponent implements OnInit {
   http: Http;
   userService: UserService
   user: User;
-  displayForm = "none";
+  displayAdvance = "none";
   displayRecap = "none";
   consts = new Constants();
   registrationComp = true;
@@ -51,18 +51,29 @@ export class ViewTravelFinanceComponent implements OnInit {
     this.displayRecap = "none";
     this.advance = false;
     this.recap = false;
-    if (authForm.Advance && authForm.TotalReimburse == null) {
+    if (authForm.Advance && authForm.TotalReimburse == 0) {
       this.advance = true;
     } else {
     this.recap = true;
     }  
-
-    if (this.displayForm == "none") {
-      this.displayForm = "block";
-    } else if (this.form !== this.oldForm) {
-      this.displayForm = "block";
-    } else if (this.form == this.oldForm) {
-      this.displayForm = "none";
+    if (this.recap) {
+      this.displayAdvance = "none"
+      if (this.displayRecap == "none") {
+        this.displayRecap = "block";
+      } else if (this.form !== this.oldForm) {
+        this.displayRecap = "block";
+      } else if (this.form == this.oldForm) {
+        this.displayRecap = "none";
+      }
+    } else {
+      this.displayRecap = "none"
+      if (this.displayAdvance == "none") {
+        this.displayAdvance = "block";
+      } else if (this.form !== this.oldForm) {
+        this.displayAdvance = "block";
+      } else if (this.form == this.oldForm) {
+        this.displayAdvance = "none";
+      }
     }
     this.oldForm = this.form
 
