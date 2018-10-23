@@ -79,7 +79,7 @@ export class ViewAuthFormsComponent implements OnInit {
     } else if (this.form == this.oldForm) {
       this.displayForm = "none";
     }
-    if (this.form.TotalReimburse != 0) { this.submitted = true;}
+    
     this.oldForm = this.form
     
   }
@@ -108,22 +108,21 @@ export class ViewAuthFormsComponent implements OnInit {
    * */
   showRecap() {
     this.displayForm = "none";
-    this.form.RecapAirfare = (this.form.RecapAirfare == null ? 0 : this.form.RecapAirfare);
-    this.form.RecapRegistrationCost = (this.form.RecapRegistrationCost == null ? 0 : this.form.RecapRegistrationCost);
-    this.form.RecapRentalCar = (this.form.RecapRentalCar == null ? 0 : this.form.RecapRentalCar);
-    this.form.RecapFuel = (this.form.RecapFuel == null ? 0 : this.form.RecapFuel);
-    this.form.RecapParkingTolls = (this.form.RecapParkingTolls == null ? 0 : this.form.RecapParkingTolls);
-    this.form.RecapMileage = (this.form.RecapMileage == null ? 0 : this.form.RecapMileage);
-    this.form.RecapMileageAmount = (this.form.RecapMileageAmount == null ? 0 : this.form.RecapMileageAmount);
-    this.form.RecapLodging = (this.form.RecapLodging == null ? 0 : this.form.RecapLodging);
-    this.form.RecapTravelDays = (this.form.RecapTravelDays == null ? 0 : this.form.RecapTravelDays);
-    this.form.RecapFullDays = (this.form.RecapFullDays == null ? 0 : this.form.RecapFullDays);
-    this.form.RecapPerDiem = (this.form.RecapPerDiem == null ? 0 : this.form.RecapPerDiem);
-    this.form.RecapMisc = (this.form.RecapMisc == null ? 0 : this.form.RecapMisc);
-    this.form.TotalRecap = (this.form.TotalRecap == null ? 0 : this.form.TotalRecap);
-    this.form.TotalReimburse = (this.form.TotalReimburse == null ? 0 : this.form.TotalReimburse);
-
-    console.log("Form" + this.form);
+    this.form.RecapAirfare = (this.form.RecapAirfare.toString() == '' ? 0 : this.form.RecapAirfare);
+    this.form.RecapRegistrationCost = (this.form.RecapRegistrationCost.toString() == '' ? 0 : this.form.RecapRegistrationCost);
+    this.form.RecapRentalCar = (this.form.RecapRentalCar.toString() == '' ? 0 : this.form.RecapRentalCar);
+    this.form.RecapFuel = (this.form.RecapFuel.toString() == '' ? 0 : this.form.RecapFuel);
+    this.form.RecapParkingTolls = (this.form.RecapParkingTolls.toString() == '' ? 0 : this.form.RecapParkingTolls);
+    this.form.RecapMileage = (this.form.RecapMileage.toString() == '' ? 0 : this.form.RecapMileage);
+    this.form.RecapMileageAmount = (this.form.RecapMileageAmount.toString() == '' ? 0 : this.form.RecapMileageAmount);
+    this.form.RecapLodging = (this.form.RecapLodging.toString() == '' ? 0 : this.form.RecapLodging);
+    this.form.RecapTravelDays = (this.form.RecapTravelDays.toString() == '' ? 0 : this.form.RecapTravelDays);
+    this.form.RecapFullDays = (this.form.RecapFullDays.toString() == '' ? 0 : this.form.RecapFullDays);
+    this.form.RecapPerDiem = (this.form.RecapPerDiem.toString() == '' ? 0 : this.form.RecapPerDiem);
+    this.form.RecapMisc = (this.form.RecapMisc.toString() == '' ? 0 : this.form.RecapMisc);
+    this.form.TotalRecap = (this.form.TotalRecap.toString() == '' ? 0 : this.form.TotalRecap);
+    this.form.TotalReimburse = (this.form.TotalReimburse.toString() == '' ? 0 : this.form.TotalReimburse);
+    if (this.form.TotalReimburse != 0) { this.submitted = true; }
     this.displayRecap = "block";
 
   }
