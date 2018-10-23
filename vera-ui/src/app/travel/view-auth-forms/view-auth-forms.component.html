@@ -59,7 +59,7 @@
           <th>
             <input type="number" ngbTooltip="Registration Cost" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Registration Cost*"
-                   [(ngModel)]="form.RecapRegistrationCost" required [disabled]="registrationComp" />
+                   [(ngModel)]="form.RecapRegistrationCost" required [disabled]="registrationComp || submitted"/>
           </th>
         </tr>
         <tr>
@@ -73,7 +73,7 @@
           <th>
             <input type="number" ngbTooltip="Airfare" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Airfare*"
-                   [(ngModel)]="form.RecapAirfare" required [disabled]="airfareComp" />
+                   [(ngModel)]="form.RecapAirfare" required [disabled]="airfareComp || submitted" />
           </th>
         </tr>
         <tr>
@@ -82,7 +82,7 @@
           <th>
             <input type="number" ngbTooltip="Rental Car" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Rental Car*"
-                   [(ngModel)]="form.RecapRentalCar" required />
+                   [(ngModel)]="form.RecapRentalCar" required [disabled]="submitted"/>
           </th>
         </tr>
         <tr>
@@ -91,7 +91,7 @@
           <th>
             <input type="number" ngbTooltip="Enter the miles driven" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Miles Driven*"
-                   [(ngModel)]="form.RecapMileageAmount" required />
+                   [(ngModel)]="form.RecapMileageAmount" required [disabled]="submitted"/>
           </th>
         </tr>
         <tr>
@@ -100,7 +100,7 @@
           <th>
             <input type="number" ngbTooltip="Fuel and Parking" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Parking and tolls*"
-                   [(ngModel)]="form.RecapParkingTolls" required />
+                   [(ngModel)]="form.RecapParkingTolls" required [disabled]="submitted" />
           </th>
         </tr>
         <tr>
@@ -109,7 +109,7 @@
           <th>
             <input type="number" ngbTooltip="Fuel and Parking" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Fuel*"
-                   [(ngModel)]="form.RecapFuel" required />
+                   [(ngModel)]="form.RecapFuel" required [disabled]="submitted" />
           </th>
         </tr>
         <tr>
@@ -118,7 +118,7 @@
           <th>
             <input type="number" ngbTooltip="Lodging" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Lodging*"
-                   [(ngModel)]="form.RecapLodging" required />
+                   [(ngModel)]="form.RecapLodging" required [disabled]="submitted" />
           </th>
         </tr>
         <tr>
@@ -134,7 +134,7 @@
           <th>
             <input type="number" ngbTooltip="Find your city to find the Per Diem at https://www.gsa.gov/travel-resources" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Per Diem*"
-                   [(ngModel)]="form.RecapPerDiem" required />
+                   [(ngModel)]="form.RecapPerDiem" required [disabled]="submitted" />
           </th>
         </tr>
         <tr>
@@ -143,7 +143,7 @@
           <th>
             <input type="number" ngbTooltip="Days of Travel" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Days of travel*"
-                   [(ngModel)]="form.RecapTravelDays" required />
+                   [(ngModel)]="form.RecapTravelDays" required [disabled]="submitted" />
           </th>
         </tr><tr>
           <th><h5><b>Full Days of Gone</b></h5></th>
@@ -151,7 +151,7 @@
           <th>
             <input type="number" ngbTooltip="Full Days of the trip" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Days of trip*"
-                   [(ngModel)]="form.RecapFullDays" required />
+                   [(ngModel)]="form.RecapFullDays" required [disabled]="submitted" />
           </th>
         </tr>
         <tr>
@@ -160,7 +160,7 @@
           <th>
             <input type="number" ngbTooltip="Miscellaneous" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Miscellaneous*"
-                   [(ngModel)]="form.RecapMisc" required />
+                   [(ngModel)]="form.RecapMisc" required [disabled]="submitted" />
           </th>
         </tr>
         <tr>

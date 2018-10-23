@@ -25,6 +25,7 @@ export class ViewAuthFormsComponent implements OnInit {
   oldForm: AuthForm;
   dhApprove: string;
   gmApprove: string;
+  submitted = false;
 
   constructor(http: Http, userService: UserService) {
     this.http = http;
@@ -78,6 +79,7 @@ export class ViewAuthFormsComponent implements OnInit {
     } else if (this.form == this.oldForm) {
       this.displayForm = "none";
     }
+    
     this.oldForm = this.form
     
   }
@@ -91,7 +93,9 @@ export class ViewAuthFormsComponent implements OnInit {
     this.form.RecapMileage = this.form.RecapMileageAmount;
     this.form.TotalRecap = 0;
     this.form.RecapMileageAmount = this.form.RecapMileage * this.consts.mileageRate;
-    if (this.form.RecapMileageAmount > this.form.Mileage) { this.form.RecapMileageAmount = this.form.Mileage; }
+    if (this.form.RecapMileageAmount > this.form.Mileage) {
+      this.form.RecapMileageAmount = this.form.Mileage;
+    }
     var foodTravel = this.form.RecapPerDiem * this.consts.travelDayFood * this.form.RecapTravelDays;
     var foodFull = this.form.RecapPerDiem * this.form.RecapFullDays
     this.form.TotalRecap = this.form.RecapRegistrationCost + this.form.RecapAirfare + this.form.RecapRentalCar + foodFull +
@@ -104,22 +108,21 @@ export class ViewAuthFormsComponent implements OnInit {
    * */
   showRecap() {
     this.displayForm = "none";
-    this.form.RecapAirfare = 0;
-    this.form.RecapRegistrationCost = 0;
-    this.form.RecapRentalCar = 0;
-    this.form.RecapFuel = 0;
-    this.form.RecapParkingTolls = 0;
-    this.form.RecapMileage = 0;
-    this.form.RecapMileageAmount = 0;
-    this.form.RecapLodging = 0;
-    this.form.RecapTravelDays = 0;
-    this.form.RecapFullDays = 0;
-    this.form.RecapPerDiem = 0;
-    this.form.RecapMisc = 0;
-    this.form.TotalRecap = 0;
-    this.form.TotalReimburse = 0;
-
-    console.log("Form" + this.form);
+    this.form.RecapAirfare = (this.form.RecapAirfare.toString() == '' ? 0 : this.form.RecapAirfare);
+    this.form.RecapRegistrationCost = (this.form.RecapRegistrationCost.toString() == '' ? 0 : this.form.RecapRegistrationCost);
+    this.form.RecapRentalCar = (this.form.RecapRentalCar.toString() == '' ? 0 : this.form.RecapRentalCar);
+    this.form.RecapFuel = (this.form.RecapFuel.toString() == '' ? 0 : this.form.RecapFuel);
+    this.form.RecapParkingTolls = (this.form.RecapParkingTolls.toString() == '' ? 0 : this.form.RecapParkingTolls);
+    this.form.RecapMileage = (this.form.RecapMileage.toString() == '' ? 0 : this.form.RecapMileage);
+    this.form.RecapMileageAmount = (this.form.RecapMileageAmount.toString() == '' ? 0 : this.form.RecapMileageAmount);
+    this.form.RecapLodging = (this.form.RecapLodging.toString() == '' ? 0 : this.form.RecapLodging);
+    this.form.RecapTravelDays = (this.form.RecapTravelDays.toString() == '' ? 0 : this.form.RecapTravelDays);
+    this.form.RecapFullDays = (this.form.RecapFullDays.toString() == '' ? 0 : this.form.RecapFullDays);
+    this.form.RecapPerDiem = (this.form.RecapPerDiem.toString() == '' ? 0 : this.form.RecapPerDiem);
+    this.form.RecapMisc = (this.form.RecapMisc.toString() == '' ? 0 : this.form.RecapMisc);
+    this.form.TotalRecap = (this.form.TotalRecap.toString() == '' ? 0 : this.form.TotalRecap);
+    this.form.TotalReimburse = (this.form.TotalReimburse.toString() == '' ? 0 : this.form.TotalReimburse);
+    if (this.form.TotalReimburse != 0) { this.submitted = true; }
     this.displayRecap = "block";
 
   }
@@ -128,6 +131,7 @@ export class ViewAuthFormsComponent implements OnInit {
    * submit the recap to the server to get approval
    * */
   submitRecap() {
+    this.submitted = true;
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({
       'Content-Type': 'application/json'
@@ -138,7 +142,7 @@ export class ViewAuthFormsComponent implements OnInit {
     });
     var body = JSON.stringify(this.form);
     console.log(this.consts.url + 'Recap');
-    this.http.post(this.consts.url + 'Recap?restUserID=', body, options)
+    this.http.post(this.consts.url + 'Recap?restUserID=' + this.user.UserID, body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert(data.text()));
   }

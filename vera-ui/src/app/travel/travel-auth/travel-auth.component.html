@@ -110,9 +110,9 @@
   </h6>
   <div [ngStyle]="{'display':rentalCarDisplay}">
     <h6>
-      <label class="mr-sm-2 mb-0" for="mileage">Mileage reimburesement cap*</label>
+      <label class="mr-sm-2 mb-0 sr-only" for="mileage">Mileage reimburesement cap*</label>
       <a href="https://www.alaskaair.com/" target="_blank" placement="right"
-         ngbTooltip="Enter the cost of the flight to your destination">Per Diem:*</a>
+         ngbTooltip="Enter the cost of the flight to your destination">Mileage reimburesement cap*</a>
       <input [ngStyle]="{'border-color':mileageBorder}" type="number" id="mileage"
              (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
              placeholder="Estimated miles to be driven*" [(ngModel)]="form.Mileage" required />
