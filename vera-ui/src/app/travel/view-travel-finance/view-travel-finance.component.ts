@@ -79,7 +79,35 @@ export class ViewTravelFinanceComponent implements OnInit {
 
   }
 
-  approveAdvance() { }
+  approveAdvance() {
+    let params: URLSearchParams = new URLSearchParams();
+    var pageHeaders = new Headers({
+      'Content-Type': 'application/json'
+    });
+    let options = new RequestOptions({
+      search: params,
+      headers: pageHeaders
+    });
+    var body = JSON.stringify(this.form);
+    console.log(this.consts.url + 'TravelFinance');
+    this.http.post(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID +'&restButtonID=0', body, options)
+      //.subscribe((data) => this.waitForHttp(data));
+      .subscribe((data) => alert("Advance form is being processed"));
+  }
 
-  approveRecap() { }
+  approveRecap() {
+    let params: URLSearchParams = new URLSearchParams();
+    var pageHeaders = new Headers({
+      'Content-Type': 'application/json'
+    });
+    let options = new RequestOptions({
+      search: params,
+      headers: pageHeaders
+    });
+    var body = JSON.stringify(this.form);
+    console.log(this.consts.url + 'TravelFinance');
+    this.http.post(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID + '&restButtonID=1', body, options)
+      //.subscribe((data) => this.waitForHttp(data));
+      .subscribe((data) => alert("Recap form is being processed"));
+  }
 }
