@@ -30,33 +30,28 @@ namespace VeraAPI.Controllers
         public BaseForm[] Get(string restUserID)
         {
             // call function to get active forms
-            log.WriteLogEntry("Starting TravelAuthController GET...");
+            log.WriteLogEntry("Begin TravelAuthController GET...");
             BaseForm[] result = new BaseForm[0];
             if (int.TryParse(restUserID, out int userID))
             {
-                try
+                log.WriteLogEntry("Starting LoginHelper...");
+                LoginHelper loginHelp = new LoginHelper();
+                if (loginHelp.LoadUserSession(userID))
                 {
-                    log.WriteLogEntry("Starting LoginHelper...");
-                    LoginHelper loginHelp = new LoginHelper();
-                    if (loginHelp.LoadUserSession(userID))
+                    log.WriteLogEntry("Starting FormHelper...");
+                    FormHelper formHelp = new FormHelper();
+                    if (formHelp.LoadActiveTravelAuthForms(userID) > 0)
                     {
-                        log.WriteLogEntry("Starting FormHelper...");
-                        FormHelper formHelp = new FormHelper();
-                        if (formHelp.LoadActiveTravelAuthForms(userID) > 0)
-                        {
-                            result = formHelp.WebForms.ToArray();
-                        }
-                        else
-                        {
-                            log.WriteLogEntry("No active travel forms returned!");
-                        }
+                        result = formHelp.WebForms.ToArray();
+                    }
+                    else
+                    {
+                        log.WriteLogEntry("No active travel forms returned!");
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    log.WriteLogEntry("General program error! " + ex.Message);
-                    result = new BaseForm[0];
-                    return result;
+                    log.WriteLogEntry("FAILED to load active user session!");
                 }
             }
             else

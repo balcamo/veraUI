@@ -24,7 +24,7 @@ namespace VeraAPI.Controllers
         public BaseForm[] Get(string restUserID)
         {
             // call function to get active forms
-            log.WriteLogEntry("Begin TravelApprovalController GET...");
+            log.WriteLogEntry("Begin TravelFinanceController GET...");
             BaseForm[] result = new BaseForm[0];
             if (int.TryParse(restUserID, out int userID))
             {
@@ -32,20 +32,15 @@ namespace VeraAPI.Controllers
                 LoginHelper loginHelp = new LoginHelper();
                 if (loginHelp.LoadUserSession(userID))
                 {
-                    try
+                    log.WriteLogEntry("Starting FormHelper...");
+                    FormHelper formHelp = new FormHelper();
+                    if (formHelp.LoadFinanceTravelRecapForms(userID) > 0)
                     {
-                        FormHelper formHelp = new FormHelper();
-                        log.WriteLogEntry("Starting FormHelper...");
-                        if (formHelp.LoadApproverTravelAuthForms(userID) > 0)
-                            result = formHelp.WebForms.ToArray();
-                        else
-                            log.WriteLogEntry("No forms found pending approval.");
+                        result = formHelp.WebForms.ToArray();
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        log.WriteLogEntry("General program error! " + ex.Message);
-                        result = new BaseForm[0];
-                        return result;
+                        log.WriteLogEntry("No forms found pending approval.");
                     }
                 }
                 else
@@ -57,7 +52,7 @@ namespace VeraAPI.Controllers
                 log.WriteLogEntry("FAILED invalid user id!");
             // return array of active travel auth forms
             log.WriteLogEntry("Count of forms returned " + result.Count<BaseForm>());
-            log.WriteLogEntry("End TravelApprovalController GET.");
+            log.WriteLogEntry("End TravelFinanceController GET.");
             return result;
         }
 
@@ -103,9 +98,10 @@ namespace VeraAPI.Controllers
         }
 
         // PUT: api/TravelFinance/5
-        public void Put([FromUri]string restUserID, [FromBody]TravelAuthForm travelAuthForm)
+        // for restButtonID 0 = Advance 1 = Recap
+        public void Put([FromUri]string restUserID, [FromUri]string restButtonID, [FromBody]TravelAuthForm travelAuthForm)
         {
-            log.WriteLogEntry("Begin TravelApprovalController PUT...");
+            log.WriteLogEntry("Begin TravelFinanceController PUT...");
             if (int.TryParse(restUserID, out int userID))
             {
                 log.WriteLogEntry("Starting LoginHelper...");
@@ -117,7 +113,6 @@ namespace VeraAPI.Controllers
                     UserHelper userHelp = new UserHelper(user);
                     if (userHelp.LoadDomainUser(userID))
                     {
-                        travelAuthForm.TemplateID = TemplateIndex.UpdateTravelAuth;
                         try
                         {
                             if (travelAuthForm.GetType() == typeof(TravelAuthForm))
@@ -125,30 +120,9 @@ namespace VeraAPI.Controllers
                                 log.DumpObject(travelAuthForm);
                                 log.WriteLogEntry("Starting FormHelper...");
                                 FormHelper travelFormHelp = new FormHelper();
-                                if (travelFormHelp.ApproveTravelAuthForm(userID, travelAuthForm))
+                                if (travelFormHelp.LoadFinanceTravelRecapForms(userID) > 0)
                                 {
-                                    EmailHelper email = new EmailHelper();
-                                    if (travelAuthForm.DHApproval.ToLower() == Constants.ApprovedColor && travelAuthForm.GMApproval.ToLower() != Constants.ApprovedColor)
-                                        email.NotifyGeneralManager(user);
-                                    else if (travelAuthForm.DHApproval.ToLower() == Constants.DeniedColor && travelAuthForm.GMApproval.ToLower() != Constants.ApprovedColor)
-                                        email.NotifySubmitter(travelAuthForm.Email, Constants.DeniedValue);
-                                    else if (travelAuthForm.GMApproval.ToLower() == Constants.ApprovedColor)
-                                    {
-                                        email.NotifySubmitter(travelAuthForm.Email, Constants.ApprovedValue);
-                                        if (bool.TryParse(travelAuthForm.Advance, out bool advance))
-                                        {
-                                            if (advance)
-                                                email.NotifyFinance(0);
-                                            else
-                                                log.WriteLogEntry("No advance requested.");
-                                        }
-                                        else
-                                            log.WriteLogEntry("FAILED to parse travel form advance boolean!");
-                                    }
-                                    else
-                                    {
-                                        log.WriteLogEntry("GM has not approved.");
-                                    }
+                                    // more code here
                                 }
                             }
                             else
@@ -173,7 +147,7 @@ namespace VeraAPI.Controllers
             }
             else
                 log.WriteLogEntry("FAILED invalid user id!");
-            log.WriteLogEntry("End TravelApprovalController PUT.");
+            log.WriteLogEntry("End TravelFinanceController PUT.");
         }
 
         // DELETE: api/TravelFinance/5

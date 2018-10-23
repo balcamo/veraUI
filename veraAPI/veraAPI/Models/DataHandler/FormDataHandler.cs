@@ -29,13 +29,14 @@ namespace VeraAPI.Models.DataHandler
         {
             log.WriteLogEntry("Starting InsertTravelAuth...");
             bool result = false;
-            string cmdString = string.Format(@"insert into {0}.dbo.travel (first_name, last_name, phone, email, event_description, event_location, depart_date, return_date, district_vehicle, registration_amt, airfare_amt, rental_amt, 
-                                    fuel_amt, parking_amt, mileage_amt, lodging_amt, perdiem_amt, travel_days, full_days, misc_amt, total_cost_amt, request_advance, advance_amt, travel_policy, submit_date, submitter_id, supervisor_id, supervisor_email, 
-                                    supervisor_approval_status, supervisor_approval_date, manager_id, manager_email, manager_approval_status, manager_approval_date, approval_status) 
+            string cmdString = string.Format(@"insert into {0}.dbo.travel (first_name, last_name, phone, email, event_description, event_location, depart_date, return_date, district_vehicle, 
+                                    registration_amt, airfare_amt, rental_amt, fuel_amt, parking_amt, mileage_amt, lodging_amt, perdiem_amt, travel_days, full_days, misc_amt, total_cost_amt, 
+                                    request_advance, advance_amt, travel_policy, submit_date, submitter_id, supervisor_id, supervisor_email, supervisor_approval_status, supervisor_approval_date, 
+                                    manager_id, manager_email, manager_approval_status, manager_approval_date, approval_status) 
                                     output inserted.form_id
-                                    values (@firstName, @lastName, @phone, @email, @eventDescription, @eventLocation, @departDate, @returnDate, @districtVehicle, @registrationAmt, @airfareAmt, @rentalAmt, @fuelAmt, @parkingAmt, @mileageAmt, 
-                                    @lodgingAmt, @perdiemAmt, @travelDays, @fullDays, @miscAmt, @totalAmt, @requestAdvance, @advanceAmt, @travelPolicy, GETDATE(), @submitterID, @supervisorID, @supervisorEmail, @supervisorApprove, 
-                                    GETDATE(), @managerID, @managerEmail, @managerApprove, GETDATE(), @status)", dbName);
+                                    values (@firstName, @lastName, @phone, @email, @eventDescription, @eventLocation, @departDate, @returnDate, @districtVehicle, @registrationAmt, @airfareAmt, 
+                                    @rentalAmt, @fuelAmt, @parkingAmt, @mileageAmt, @lodgingAmt, @perdiemAmt, @travelDays, @fullDays, @miscAmt, @totalAmt, @requestAdvance, @advanceAmt, @travelPolicy, 
+                                    GETDATE(), @submitterID, @supervisorID, @supervisorEmail, @supervisorApprove, GETDATE(), @managerID, @managerEmail, @managerApprove, GETDATE(), @status)", dbName);
             DateTime departDate = DateTime.MinValue, returnDate = DateTime.MinValue;
             bool districtVehicle = false, requestAdvance = false, travelPolicy = false;
             decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelAmt = 0, parkingAmt = 0, mileageAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0,
@@ -80,7 +81,6 @@ namespace VeraAPI.Models.DataHandler
                 advanceAmt = decimal.Parse(travelForm.AdvanceAmount);
                 log.WriteLogEntry("Policy: " + travelForm.Policy);
                 travelPolicy = travelForm.Policy == "true" ? true : false;
-
             }
             catch (Exception ex)
             {
@@ -273,6 +273,93 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
+        public int LoadTravelRecapForms(List<BaseForm> travelForms)
+        {
+            log.WriteLogEntry("Begin LoadUserTravelAuthForms...");
+            int result = 0;
+
+            string cmdString = string.Format(@"select * from {0}.dbo.travel where close_date is null and (reimburse_amt != 0 or request_advance = 1)", dbName);
+            using (SqlConnection conn = new SqlConnection(dataConnectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(cmdString, conn))
+                {
+                    try
+                    {
+                        conn.Open();
+                        using (SqlDataReader rdr = cmd.ExecuteReader())
+                        {
+                            while (rdr.Read())
+                            {
+                                TravelAuthForm travel = new TravelAuthForm
+                                {
+                                    UserID = (int)rdr["submitter_id"],
+                                    FormDataID = (int)rdr["form_id"],
+                                    FirstName = rdr["first_name"].ToString(),
+                                    LastName = rdr["last_name"].ToString(),
+                                    Phone = rdr["phone"].ToString(),
+                                    Email = rdr["email"].ToString(),
+                                    EventTitle = rdr["event_description"].ToString(),
+                                    Location = rdr["event_location"].ToString(),
+                                    TravelBegin = rdr["depart_date"].ToString(),
+                                    TravelEnd = rdr["return_date"].ToString(),
+                                    DistVehicle = rdr["district_vehicle"].ToString(),
+                                    RegistrationCost = rdr["registration_amt"].ToString(),
+                                    Airfare = rdr["airfare_amt"].ToString(),
+                                    RentalCar = rdr["rental_amt"].ToString(),
+                                    Fuel = rdr["fuel_amt"].ToString(),
+                                    ParkingTolls = rdr["parking_amt"].ToString(),
+                                    Mileage = rdr["mileage_amt"].ToString(),
+                                    Lodging = rdr["lodging_amt"].ToString(),
+                                    PerDiem = rdr["perdiem_amt"].ToString(),
+                                    FullDays = rdr["full_days"].ToString(),
+                                    TravelDays = rdr["travel_days"].ToString(),
+                                    Misc = rdr["misc_amt"].ToString(),
+                                    TotalEstimate = rdr["total_cost_amt"].ToString(),
+                                    AdvanceAmount = rdr["advance_amt"].ToString(),
+                                    Advance = rdr["request_advance"].ToString(),
+                                    Policy = rdr["travel_policy"].ToString(),
+                                    Preparer = rdr["preparer_name"].ToString(),
+                                    SubmitterSig = rdr["submitter_email"].ToString(),
+                                    DHID = rdr["supervisor_id"].ToString(),
+                                    DHApproval = rdr["supervisor_approval_status"].ToString(),
+                                    GMID = rdr["manager_id"].ToString(),
+                                    GMApproval = rdr["manager_approval_status"].ToString(),
+                                    ApprovalStatus = rdr["approval_status"].ToString(),
+                                    RecapRegistrationCost = rdr["recap_registration_amt"].ToString(),
+                                    RecapAirfare = rdr["recap_airfare_amt"].ToString(),
+                                    RecapRentalCar = rdr["recap_rental_amt"].ToString(),
+                                    RecapFuel = rdr["recap_fuel_amt"].ToString(),
+                                    RecapParkingTolls = rdr["recap_parking_amt"].ToString(),
+                                    RecapMileage = rdr["recap_miles"].ToString(),
+                                    RecapMileageAmount = rdr["recap_mileage_amt"].ToString(),
+                                    RecapLodging = rdr["recap_lodging_amt"].ToString(),
+                                    RecapPerDiem = rdr["recap_perdiem_amt"].ToString(),
+                                    RecapTravelDays = rdr["recap_travel_days"].ToString(),
+                                    RecapFullDays = rdr["recap_full_days"].ToString(),
+                                    RecapMisc = rdr["recap_misc_amt"].ToString(),
+                                    TotalRecap = rdr["recap_total_amt"].ToString(),
+                                    TotalReimburse = rdr["reimburse_amt"].ToString()
+                                };
+                                log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2} {3}", travel.FormDataID, travel.EventTitle, travel.SubmitterSig, travel.UserID));
+                                travelForms.Add(travel);
+                            }
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        log.WriteLogEntry("SQL error " + ex.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.WriteLogEntry("General program error " + ex.Message);
+                    }
+                }
+            }
+            result = travelForms.Count;
+            log.WriteLogEntry("End LoadUserTravelAuthForms.");
+            return result;
+        }
+
         public int LoadUserTravelAuthForms(List<BaseForm> travelForms, int userID)
         {
             log.WriteLogEntry("Begin LoadUserTravelAuthForms...");
@@ -326,7 +413,21 @@ namespace VeraAPI.Models.DataHandler
                                     DHApproval = rdr["supervisor_approval_status"].ToString(),
                                     GMID = rdr["manager_id"].ToString(),
                                     GMApproval = rdr["manager_approval_status"].ToString(),
-                                    ApprovalStatus = rdr["approval_status"].ToString()
+                                    ApprovalStatus = rdr["approval_status"].ToString(),
+                                    RecapRegistrationCost = rdr["recap_registration_amt"].ToString(),
+                                    RecapAirfare = rdr["recap_airfare_amt"].ToString(),
+                                    RecapRentalCar = rdr["recap_rental_amt"].ToString(),
+                                    RecapFuel = rdr["recap_fuel_amt"].ToString(),
+                                    RecapParkingTolls = rdr["recap_parking_amt"].ToString(),
+                                    RecapMileage = rdr["recap_miles"].ToString(),
+                                    RecapMileageAmount = rdr["recap_mileage_amt"].ToString(),
+                                    RecapLodging = rdr["recap_lodging_amt"].ToString(),
+                                    RecapPerDiem = rdr["recap_perdiem_amt"].ToString(),
+                                    RecapTravelDays = rdr["recap_travel_days"].ToString(),
+                                    RecapFullDays = rdr["recap_full_days"].ToString(),
+                                    RecapMisc = rdr["recap_misc_amt"].ToString(),
+                                    TotalRecap = rdr["recap_total_amt"].ToString(),
+                                    TotalReimburse = rdr["reimburse_amt"].ToString()
                                 };
                                 log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2} {3}", travel.FormDataID, travel.EventTitle, travel.SubmitterSig, travel.UserID));
                                 travelForms.Add(travel);
