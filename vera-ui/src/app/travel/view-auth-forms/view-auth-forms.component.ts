@@ -97,7 +97,7 @@ export class ViewAuthFormsComponent implements OnInit {
       this.form.RecapMileageAmount = this.form.Mileage;
     }
     var foodTravel = this.form.RecapPerDiem * this.consts.travelDayFood * this.form.RecapTravelDays;
-    var foodFull = this.form.RecapPerDiem * this.form.RecapFullDays
+    var foodFull = this.form.RecapPerDiem * this.form.RecapFullDays;
     this.form.TotalRecap = this.form.RecapRegistrationCost + this.form.RecapAirfare + this.form.RecapRentalCar + foodFull +
       this.form.RecapFuel + this.form.RecapParkingTolls + this.form.RecapMileageAmount + this.form.RecapLodging + foodTravel + this.form.RecapMisc;
     this.form.TotalReimburse = this.form.TotalRecap - this.form.AdvanceAmount;

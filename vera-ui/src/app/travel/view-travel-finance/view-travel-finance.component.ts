@@ -26,6 +26,7 @@ export class ViewTravelFinanceComponent implements OnInit {
   formType: string;
   advance = false;
   recap = false;
+  food:number;
 
   constructor(http: Http, userService: UserService) {
     this.http = http;
@@ -46,8 +47,9 @@ export class ViewTravelFinanceComponent implements OnInit {
    * @param authForm : form to be displayed
    * 
    */
-  displaySelected(authForm: AuthForm, formType:string) {
+  displaySelected(authForm: AuthForm) {
     this.form = authForm;
+   
     this.displayRecap = "none";
     this.advance = false;
     this.recap = false;
@@ -57,6 +59,8 @@ export class ViewTravelFinanceComponent implements OnInit {
     this.recap = true;
     }  
     if (this.recap) {
+      this.food = (this.form.RecapPerDiem * this.consts.travelDayFood * this.form.RecapTravelDays)
+        + (this.form.RecapPerDiem * this.form.RecapFullDays);
       this.displayAdvance = "none"
       if (this.displayRecap == "none") {
         this.displayRecap = "block";
@@ -66,6 +70,8 @@ export class ViewTravelFinanceComponent implements OnInit {
         this.displayRecap = "none";
       }
     } else {
+      this.food = (this.form.PerDiem * this.consts.travelDayFood * this.form.TravelDays)
+        + (this.form.PerDiem * this.form.FullDays);
       this.displayRecap = "none"
       if (this.displayAdvance == "none") {
         this.displayAdvance = "block";
@@ -90,6 +96,7 @@ export class ViewTravelFinanceComponent implements OnInit {
     });
     var body = JSON.stringify(this.form);
     console.log(this.consts.url + 'TravelFinance');
+    this.displaySelected(this.form);
     this.http.post(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID +'&restButtonID=0', body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert("Advance form is being processed"));
@@ -106,6 +113,7 @@ export class ViewTravelFinanceComponent implements OnInit {
     });
     var body = JSON.stringify(this.form);
     console.log(this.consts.url + 'TravelFinance');
+    this.displaySelected(this.form);
     this.http.post(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID + '&restButtonID=1', body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert("Recap form is being processed"));
