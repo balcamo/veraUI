@@ -63,7 +63,7 @@ namespace VeraAPI.HelperClasses
             switch (notification)
             {
                 case 0:
-                    emailBody = "<html><body><p>Notifying Finance the GM has approved a request to travel.</p></body></html>";
+                    emailBody = "<html><body><p>Notifying Finance there is a new travel advance.</p></body></html>";
                     break;
                 case 1:
                     emailBody = "<html><body><p>Notifying Finance there is a new travel recap.</p></body></html>";
@@ -108,11 +108,25 @@ namespace VeraAPI.HelperClasses
             switch (notification)
             {
                 case 0:
-                    emailBody = "<html><body><p>Your request to travel has been <b>DENIED.</b></p></body></html>";
-                    break;
+                    {
+                        emailBody = "<html><body><p>Your request to travel has been <b>DENIED.</b></p></body></html>";
+                        break;
+                    }
                 case 1:
-                    emailBody = "<html><body><p>Your request to travel has been <b>APPROVED.</b></p></body></html>";
-                    break;
+                    {
+                        emailBody = "<html><body><p>Your request to travel has been <b>APPROVED.</b></p></body></html>";
+                        break;
+                    }
+                case 2:
+                    {
+                        emailBody = "<html><body><p>Your travel advance is being processed by Finance.</p></body></html>";
+                        break;
+                    }
+                case 3:
+                    {
+                        emailBody = "<html><body><p>Your travel recap is being processed by Finance.</p></body></html>";
+                        break;
+                    }
             }
             ExchangeHandler emailHandle = new ExchangeHandler
             {

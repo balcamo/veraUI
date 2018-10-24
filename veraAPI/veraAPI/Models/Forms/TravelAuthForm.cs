@@ -33,8 +33,11 @@ namespace VeraAPI.Models.Forms
         public string TotalEstimate { get; set; } = string.Empty;       // TotalEstimate
         public string Advance { get; set; } = string.Empty;             // Advance
         public string AdvanceAmount { get; set; } = string.Empty;       // AdvanceAmount
+        public string AdvanceDate { get; set; } = string.Empty;
+        public string AdvanceStatus { get; set; } = string.Empty;
         public string Policy { get; set; } = string.Empty;              // Policy
         public string SubmitterSig { get; set; } = string.Empty;        // Integer
+        public string SubmitDate { get; set; } = string.Empty;
         public string RecapRegistrationCost { get; set; } = string.Empty;   // RecapRegistrationCost
         public string RecapAirfare { get; set; } = string.Empty;        // RecapAirfare
         public string RecapRentalCar { get; set; } = string.Empty;      // RecapRentalCar
@@ -48,14 +51,20 @@ namespace VeraAPI.Models.Forms
         public string RecapFullDays { get; set; } = string.Empty;       // RecapFullDays
         public string RecapMisc { get; set; } = string.Empty;           // RecapMisc
         public string TotalRecap { get; set; } = string.Empty;          // TotalRecap
+        public string RecapDate { get; set; } = string.Empty;
+        public string RecapStatus { get; set; } = string.Empty;
         public string TotalReimburse { get; set; } = string.Empty;      // TotalReimburse
         public string ApprovalStatus { get; set; } = string.Empty;      // Integer - {0 Denied Red} {1 Approved Green} {2 Pending Yellow}
         public string DHApproval { get; set; } = string.Empty;          // Integer - {0 Denied Red} {1 Approved Green} {2 Pending Yellow}
+        public string DHApprovalDate { get; set; } = string.Empty;
         public string DHID { get; set; } = string.Empty;                // Integer department head userID
         public string DHEmail { get; set; } = string.Empty;
         public string GMApproval { get; set; } = string.Empty;          // Integer - {0 Denied Red} {1 Approved Green} {2 Pending Yellow}
+        public string GMApprovalDate { get; set; } = string.Empty;
         public string GMID { get; set; } = string.Empty;                // Integer general manager userID
         public string GMEmail { get; set; } = string.Empty;
+        public string CloseDate { get; set; } = string.Empty;
+        public string CloseStatus { get; set; } = string.Empty;
 
         public TravelAuthForm() { }
 

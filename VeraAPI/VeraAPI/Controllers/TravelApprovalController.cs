@@ -131,10 +131,10 @@ namespace VeraAPI.Controllers
                                     if (travelAuthForm.DHApproval.ToLower() == Constants.ApprovedColor && travelAuthForm.GMApproval.ToLower() != Constants.ApprovedColor)
                                         email.NotifyGeneralManager(user);
                                     else if (travelAuthForm.DHApproval.ToLower() == Constants.DeniedColor && travelAuthForm.GMApproval.ToLower() != Constants.ApprovedColor)
-                                        email.NotifySubmitter(travelAuthForm.Email, Constants.DeniedValue);
+                                        email.NotifySubmitter(travelAuthForm.Email, Constants.NotificationTravelDenied);
                                     else if (travelAuthForm.GMApproval.ToLower() == Constants.ApprovedColor)
                                     {
-                                        email.NotifySubmitter(travelAuthForm.Email, Constants.ApprovedValue);
+                                        email.NotifySubmitter(travelAuthForm.Email, Constants.NotificationTravelApproved);
                                         if (bool.TryParse(travelAuthForm.Advance, out bool advance))
                                         {
                                             if (advance)

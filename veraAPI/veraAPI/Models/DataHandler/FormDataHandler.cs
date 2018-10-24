@@ -31,12 +31,13 @@ namespace VeraAPI.Models.DataHandler
             bool result = false;
             string cmdString = string.Format(@"insert into {0}.dbo.travel (first_name, last_name, phone, email, event_description, event_location, depart_date, return_date, district_vehicle, 
                                     registration_amt, airfare_amt, rental_amt, fuel_amt, parking_amt, mileage_amt, lodging_amt, perdiem_amt, travel_days, full_days, misc_amt, total_cost_amt, 
-                                    request_advance, advance_amt, travel_policy, submit_date, submitter_id, supervisor_id, supervisor_email, supervisor_approval_status, supervisor_approval_date, 
-                                    manager_id, manager_email, manager_approval_status, manager_approval_date, approval_status) 
+                                    request_advance, advance_amt, advance_status, advance_date, travel_policy, submit_date, submitter_id, supervisor_id, supervisor_email, supervisor_approval_status, 
+                                    supervisor_approval_date, manager_id, manager_email, manager_approval_status, manager_approval_date, approval_status, recap_status, recap_date) 
                                     output inserted.form_id
                                     values (@firstName, @lastName, @phone, @email, @eventDescription, @eventLocation, @departDate, @returnDate, @districtVehicle, @registrationAmt, @airfareAmt, 
-                                    @rentalAmt, @fuelAmt, @parkingAmt, @mileageAmt, @lodgingAmt, @perdiemAmt, @travelDays, @fullDays, @miscAmt, @totalAmt, @requestAdvance, @advanceAmt, @travelPolicy, 
-                                    GETDATE(), @submitterID, @supervisorID, @supervisorEmail, @supervisorApprove, GETDATE(), @managerID, @managerEmail, @managerApprove, GETDATE(), @status)", dbName);
+                                    @rentalAmt, @fuelAmt, @parkingAmt, @mileageAmt, @lodgingAmt, @perdiemAmt, @travelDays, @fullDays, @miscAmt, @totalAmt, @requestAdvance, @advanceAmt, @advanceStatus, 
+                                    @advanceDate, @travelPolicy, @submitDate, @submitterID, @supervisorID, @supervisorEmail, @supervisorApprove, @supervisorDate, @managerID, @managerEmail, @managerApprove, 
+                                    @managerDate, @status, @recapStatus, @recapDate)", dbName);
             DateTime departDate = DateTime.MinValue, returnDate = DateTime.MinValue;
             bool districtVehicle = false, requestAdvance = false, travelPolicy = false;
             decimal registrationAmt = 0, airfareAmt = 0, rentalAmt = 0, fuelAmt = 0, parkingAmt = 0, mileageAmt = 0, lodgingAmt = 0, perdiemAmt = 0, miscAmt = 0,
@@ -50,7 +51,7 @@ namespace VeraAPI.Models.DataHandler
                 log.WriteLogEntry("Travel End: " + travelForm.TravelEnd);
                 returnDate = DateTime.Parse(travelForm.TravelEnd);
                 log.WriteLogEntry("District Vehicle: " + travelForm.DistVehicle);
-                districtVehicle = travelForm.DistVehicle == "true" ? true : false;
+                districtVehicle = travelForm.DistVehicle.ToLower() == "true" ? true : false;
                 log.WriteLogEntry("Registration Cost: " + travelForm.RegistrationCost);
                 registrationAmt = decimal.Parse(travelForm.RegistrationCost);
                 log.WriteLogEntry("Airfare: " + travelForm.Airfare);
@@ -76,11 +77,11 @@ namespace VeraAPI.Models.DataHandler
                 log.WriteLogEntry("Total Cost: " + travelForm.TotalEstimate);
                 totalAmt = decimal.Parse(travelForm.TotalEstimate);
                 log.WriteLogEntry("Advance: " + travelForm.Advance);
-                requestAdvance = travelForm.Advance == "true" ? true : false;
+                requestAdvance = travelForm.Advance.ToLower() == "true" ? true : false;
                 log.WriteLogEntry("Advance Amount: " + travelForm.AdvanceAmount);
                 advanceAmt = decimal.Parse(travelForm.AdvanceAmount);
                 log.WriteLogEntry("Policy: " + travelForm.Policy);
-                travelPolicy = travelForm.Policy == "true" ? true : false;
+                travelPolicy = travelForm.Policy.ToLower() == "true" ? true : false;
             }
             catch (Exception ex)
             {
@@ -123,10 +124,18 @@ namespace VeraAPI.Models.DataHandler
                     cmd.Parameters.AddWithValue("@supervisorID", travelForm.DHID);
                     cmd.Parameters.AddWithValue("@supervisorEmail", travelForm.DHEmail);
                     cmd.Parameters.AddWithValue("@supervisorApprove", travelForm.DHApproval);
+                    cmd.Parameters.AddWithValue("@supervisorDate", travelForm.DHApprovalDate);
                     cmd.Parameters.AddWithValue("@managerID", travelForm.GMID);
                     cmd.Parameters.AddWithValue("@managerEmail", travelForm.GMEmail);
                     cmd.Parameters.AddWithValue("@managerApprove", travelForm.GMApproval);
+                    cmd.Parameters.AddWithValue("@managerDate", travelForm.GMApprovalDate);
                     cmd.Parameters.AddWithValue("@status", travelForm.ApprovalStatus);
+                    cmd.Parameters.AddWithValue("@advanceStatus", travelForm.AdvanceStatus);
+                    cmd.Parameters.AddWithValue("@advanceDate", travelForm.AdvanceDate);
+                    cmd.Parameters.AddWithValue("@recapStatus", travelForm.RecapStatus);
+                    cmd.Parameters.AddWithValue("@recapDate", travelForm.RecapDate);
+                    cmd.Parameters.AddWithValue("@submitDate", travelForm.SubmitDate);
+                    
                     try
                     {
                         // Try opening the SQL connection and executing the above constructed SQL query
@@ -273,12 +282,11 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
-        public int LoadTravelRecapForms(List<BaseForm> travelForms)
+        public int LoadTravelForms(List<BaseForm> travelForms, string cmdString)
         {
-            log.WriteLogEntry("Begin LoadUserTravelAuthForms...");
+            log.WriteLogEntry("Begin LoadTravelForms...");
             int result = 0;
 
-            string cmdString = string.Format(@"select * from {0}.dbo.travel where close_date is null and (reimburse_amt != 0 or request_advance = 1)", dbName);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
@@ -356,7 +364,7 @@ namespace VeraAPI.Models.DataHandler
                 }
             }
             result = travelForms.Count;
-            log.WriteLogEntry("End LoadUserTravelAuthForms.");
+            log.WriteLogEntry("End LoadTravelForms.");
             return result;
         }
 

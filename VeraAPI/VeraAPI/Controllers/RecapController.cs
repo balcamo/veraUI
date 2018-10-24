@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Threading.Tasks;
 using VeraAPI.HelperClasses;
+using VeraAPI.Models;
 using VeraAPI.Models.Tools;
 using VeraAPI.Models.Forms;
 using VeraAPI.Models.Templates;
@@ -53,13 +54,12 @@ namespace VeraAPI.Controllers
                         {
                             log.DumpObject(value);
                             log.WriteLogEntry("Starting FormHelper...");
-                            System.Diagnostics.Debug.WriteLine("Starting FormHelper...");
                             FormHelper travelFormHelp = new FormHelper();
                             if (travelFormHelp.SubmitTravelRecapForm(userID, value))
                             {
                                 log.WriteLogEntry("Starting EmailHelper...");
                                 EmailHelper emailer = new EmailHelper();
-                                emailer.NotifyFinance(1);
+                                emailer.NotifyFinance(Constants.NotificationFinanceRecap);
                                 result = "Travel Recap Form Submitted.";
                             }
                             else
