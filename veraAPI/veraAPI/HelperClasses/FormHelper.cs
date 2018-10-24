@@ -126,7 +126,7 @@ namespace VeraAPI.HelperClasses
                     log.WriteLogEntry("Total Recap: " + travelForm.TotalRecap);
                     totalAmt = decimal.Parse(travelForm.TotalRecap);
                     log.WriteLogEntry("Total Reimbursement: " + travelForm.TotalReimburse);
-                    reimburseAmt = decimal.Parse(travelForm.TotalReimburse, System.Globalization.NumberStyles.AllowLeadingSign);
+                    reimburseAmt = decimal.Parse(travelForm.TotalReimburse, System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint);
                 }
                 catch (Exception ex)
                 {
@@ -200,79 +200,149 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public int LoadActiveTravelAuthForms(int userID)
+        public int LoadTravelForms(int commandID, int fieldID)
         {
-            log.WriteLogEntry("Begin LoadActiveTravelAuthForms...");
+            log.WriteLogEntry("Begin LoadTravelForms...");
+            log.WriteLogEntry("Command ID: " + commandID + " Field ID: " + fieldID);
             int result = 0;
-            List<BaseForm> travelForms = new List<BaseForm>();
-            WebForms = new List<BaseForm>();
-            log.WriteLogEntry("Starting FormDataHandler...");
-            FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
-            if (formDataHandle.LoadUserTravelAuthForms(travelForms, userID) > 0)
-            {
-                foreach (TravelAuthForm travelForm in travelForms)
-                {
-                    if (ConvertStatusValues(travelForm))
-                    {
-                        this.WebForms.Add(travelForm);
-                        result++;
-                        log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", userID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
-                    }
-                    else
-                    {
-                        log.WriteLogEntry("FAILED to convert status colors!");
-                        break;
-                    }
-                }
-            }
-            else
-                log.WriteLogEntry("No active forms loaded.");
-            log.WriteLogEntry("Count loaded forms " + result);
-            log.WriteLogEntry("End LoadActiveTravelAuthForms.");
-            return result;
-        }
-
-        public int LoadApproverTravelAuthForms(int userID)
-        {
-            log.WriteLogEntry("Begin LoadApproverTravelAuthForms...");
-            int result = 0;
+            string[] formFields = new string[0];
+            string[,] formFilters = new string[0, 0];
             this.WebForms = new List<BaseForm>();
             List<BaseForm> travelForms = new List<BaseForm>();
-            log.WriteLogEntry("Starting FormDataHandler...");
             FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
-            if (formDataHandle.LoadApproverTravelAuthForms(travelForms, userID) > 0)
+
+            switch (commandID)
             {
-                foreach (TravelAuthForm travelForm in travelForms)
-                {
-                    if (ConvertStatusValues(travelForm))
+                case 0: // Load Finance Travel Forms
                     {
-                        if (userID == int.Parse(travelForm.GMID) && travelForm.DHApproval.ToLower() == Constants.ApprovedColor)
+                        log.WriteLogEntry("Handling command ID: " + commandID);
+                        string cmdString = string.Format(@"select * from valhalla.dbo.travel where close_date is null and ((request_advance = 1 and advance_status = 2) or (advance_status = 1 and recap_status = 1))", dbName);
+
+                        log.WriteLogEntry("Starting FormDataHandler...");
+                        if (formDataHandle.LoadTravelForms(travelForms, cmdString) > 0)
                         {
-                            this.WebForms.Add(travelForm);
-                            result++;
-                        }
-                        else if (userID == int.Parse(travelForm.DHID) && travelForm.DHApproval.ToLower() == Constants.PendingColor)
-                        {
-                            this.WebForms.Add(travelForm);
-                            result++;
+                            foreach (TravelAuthForm travelForm in travelForms)
+                            {
+                                if (ConvertStatusValues(travelForm))
+                                {
+                                    log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", travelForm.UserID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
+                                    this.WebForms.Add(travelForm);
+                                    result++;
+                                }
+                                else
+                                {
+                                    log.WriteLogEntry("FAILED to convert status colors!");
+                                    break;
+                                }
+                            }
                         }
                         else
-                            log.WriteLogEntry("No forms available for approval by user " + userID);
-                        log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", userID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
-                    }
-                    else
-                    {
-                        log.WriteLogEntry("FAILED to convert status colors!");
+                        {
+                            log.WriteLogEntry("No forms found.");
+                        }
                         break;
                     }
-                }
+                case 1: // Load User Travel Forms
+                    {
+                        log.WriteLogEntry("Handling command ID: " + commandID);
+                        int userID = fieldID;
+                        try
+                        {
+                            formFields = new string[] { "*" };
+                            formFilters = new string[,] {
+                                    { "user_id", userID.ToString() }
+                                };
+                        }
+                        catch (Exception ex)
+                        {
+                            log.WriteLogEntry("ERROR building SQL field and filter arrays!\n" + ex.Message);
+                            return result;
+                        }
+
+                        log.WriteLogEntry("Starting FormDataHandler...");
+                        if (formDataHandle.LoadTravelForms(travelForms, formFields, formFilters) > 0)
+                        {
+                            foreach (TravelAuthForm travelForm in travelForms)
+                            {
+                                if (ConvertStatusValues(travelForm))
+                                {
+                                    log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", travelForm.UserID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
+                                    this.WebForms.Add(travelForm);
+                                    result++;
+                                }
+                                else
+                                {
+                                    log.WriteLogEntry("FAILED to convert status colors!");
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            log.WriteLogEntry("No forms found.");
+                        }
+                        break;
+                    }
+                case 2: // Load Approver Travel Forms
+                    {
+                        log.WriteLogEntry("Handling command ID: " + commandID);
+                        int userID = fieldID;
+                        try
+                        {
+                            formFields = new string[] { "*" };
+                            formFilters = new string[,] {
+                                    { "user_id", userID.ToString() },
+                                    { "approval_status", Constants.PendingValue.ToString() }
+                                };
+                        }
+                        catch (Exception ex)
+                        {
+                            log.WriteLogEntry("ERROR building SQL field and filter arrays!\n" + ex.Message);
+                            return result;
+                        }
+
+                        log.WriteLogEntry("Starting FormDataHandler...");
+                        if (formDataHandle.LoadTravelForms(travelForms, formFields, formFilters) > 0)
+                        {
+                            foreach (TravelAuthForm travelForm in travelForms)
+                            {
+                                if (ConvertStatusValues(travelForm))
+                                {
+                                    if (userID == int.Parse(travelForm.GMID) && travelForm.DHApproval.ToLower() == Constants.ApprovedColor)
+                                    {
+                                        this.WebForms.Add(travelForm);
+                                        result++;
+                                    }
+                                    else if (userID == int.Parse(travelForm.DHID) && travelForm.DHApproval.ToLower() == Constants.PendingColor)
+                                    {
+                                        this.WebForms.Add(travelForm);
+                                        result++;
+                                    }
+                                    else
+                                        log.WriteLogEntry("No forms available for approval by user " + userID);
+                                    log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", travelForm.UserID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
+                                }
+                                else
+                                {
+                                    log.WriteLogEntry("FAILED to convert status colors!");
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            log.WriteLogEntry("No forms available for approval by user " + userID);
+                        }
+                        break;
+                    }
+                default:
+                    {
+                        log.WriteLogEntry("Fell through switch button ID. No action taken.");
+                        return result;
+                    }
             }
-            else
-            {
-                log.WriteLogEntry("No forms available for approval by user " + userID);
-            }
-            log.WriteLogEntry("Count loaded forms " + WebForms.Count);
-            log.WriteLogEntry("End LoadApproverTravelAuthForms.");
+            log.WriteLogEntry("Count loaded forms " + result);
+            log.WriteLogEntry("End LoadTravelForms.");
             return result;
         }
 
@@ -300,13 +370,13 @@ namespace VeraAPI.HelperClasses
                     // Build field and filter list to update SQL
                     try
                     {
-                        formFields = new string[,] { 
+                        formFields = new string[,] {
                             { "manager_approval_date", DateTime.Now.ToString() },
                             { "manager_approval_status", GetStatusValue(travel.GMApproval).ToString() },
                             { "approval_date", DateTime.Now.ToString() },
                             { "approval_status", GetStatusValue(travel.ApprovalStatus).ToString() }
                         };
-                        formFilters = new string[,] { 
+                        formFilters = new string[,] {
                             { "manager_id", userID.ToString() },
                             { "form_id", travel.FormDataID.ToString() }
                         };
@@ -352,59 +422,6 @@ namespace VeraAPI.HelperClasses
             else
                 log.WriteLogEntry("FAILED not a travel form!");
             log.WriteLogEntry("End ApproveTravelAuthForm.");
-            return result;
-        }
-
-        public int LoadTravelForms(int commandID)
-        {
-            log.WriteLogEntry("Begin LoadFinanceTravelRecapForms...");
-            int result = 0;
-            string cmdString = string.Empty;
-            this.WebForms = new List<BaseForm>();
-            List<BaseForm> travelForms = new List<BaseForm>();
-            log.WriteLogEntry("Command ID: " + commandID);
-            switch (commandID)
-            {
-                case 0:
-                    {
-                        cmdString = string.Format(@"select * from valhalla.dbo.travel where close_date is null and ((request_advance = 1 and advance_status = 2) or (advance_status = 1 and recap_status = 1))", dbName);
-                        break;
-                    }
-                case 1:
-                    {
-                        cmdString = string.Format(@"select * from {0}.dbo.travel where submitter_id = @userID", dbName);
-                        break;
-                    }
-                default:
-                    {
-                        log.WriteLogEntry("FAILED Button ID not found!");
-                        return result;
-                    }
-            }
-            log.WriteLogEntry("Starting FormDataHandler...");
-            FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
-            if (formDataHandle.LoadTravelForms(travelForms, cmdString) > 0)
-            {
-                foreach (TravelAuthForm travelForm in travelForms)
-                {
-                    if (ConvertStatusValues(travelForm))
-                    {
-                        this.WebForms.Add(travelForm);
-                        result++;
-                    }
-                    else
-                    {
-                        log.WriteLogEntry("FAILED to convert status colors!");
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                log.WriteLogEntry("No forms found.");
-            }
-            log.WriteLogEntry("Count loaded forms " + result);
-            log.WriteLogEntry("End LoadFinanceTravelRecapForms.");
             return result;
         }
 
