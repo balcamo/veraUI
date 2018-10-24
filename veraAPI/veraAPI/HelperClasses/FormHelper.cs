@@ -52,7 +52,7 @@ namespace VeraAPI.HelperClasses
                     travelForm.GMApprovalDate = DateTime.Now.ToString();
                     travelForm.ApprovalStatus = Constants.PendingValue.ToString();
                     travelForm.SubmitDate = DateTime.Now.ToString();
-                    travelForm.AdvanceStatus = Constants.PendingValue.ToString();
+                    travelForm.AdvanceStatus = travelForm.Advance.ToLower() == "true" ? Constants.PendingValue.ToString() : Constants.ApprovedValue.ToString();
                     travelForm.AdvanceDate = DateTime.Now.ToString();
                     travelForm.RecapStatus = Constants.PendingValue.ToString();
                     travelForm.RecapDate = DateTime.Now.ToString();
@@ -126,7 +126,7 @@ namespace VeraAPI.HelperClasses
                     log.WriteLogEntry("Total Recap: " + travelForm.TotalRecap);
                     totalAmt = decimal.Parse(travelForm.TotalRecap);
                     log.WriteLogEntry("Total Reimbursement: " + travelForm.TotalReimburse);
-                    reimburseAmt = decimal.Parse(travelForm.TotalReimburse, System.Globalization.NumberStyles.AllowLeadingSign);
+                    reimburseAmt = decimal.Parse(travelForm.TotalReimburse, System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint);
                 }
                 catch (Exception ex)
                 {

@@ -59,7 +59,7 @@ namespace VeraAPI.Controllers
         // POST: api/TravelFinance
         public string Post([FromUri]string restUserID, [FromBody]TravelAuthForm travelAuthForm)
         {
-            log.WriteLogEntry("Begin TravelApprovalController POST...");
+            log.WriteLogEntry("Begin TravelFinanceController POST...");
             string result = string.Empty;
             if (int.TryParse(restUserID, out int userID))
             {
@@ -72,7 +72,7 @@ namespace VeraAPI.Controllers
                     UserHelper userHelp = new UserHelper(user);
                     if (userHelp.LoadDomainUser(userID))
                     {
-                        result = "TravelApprovalController POST.";
+                        result = "TravelFinanceController POST.";
                     }
                     else
                     {
@@ -88,7 +88,7 @@ namespace VeraAPI.Controllers
             }
             else
                 log.WriteLogEntry("FAILED invalid user id!");
-            log.WriteLogEntry("End TravelApprovalController POST.");
+            log.WriteLogEntry("End TravelFinanceController POST.");
             return result;
         }
 
