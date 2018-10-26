@@ -41,7 +41,7 @@ namespace VeraAPI.Controllers
                 {
                     log.WriteLogEntry("Starting FormHelper...");
                     FormHelper formHelp = new FormHelper();
-                    if (formHelp.LoadActiveTravelAuthForms(userID) > 0)
+                    if (formHelp.LoadTravelForms(Constants.GetUserTravelForms, userID) > 0)
                     {
                         result = formHelp.WebForms.ToArray();
                     }

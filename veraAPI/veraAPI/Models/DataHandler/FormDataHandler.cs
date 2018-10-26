@@ -385,14 +385,14 @@ namespace VeraAPI.Models.DataHandler
             sbCommand.Append(string.Format(" from {0}.dbo.travel where ", dbServer));
             for (int i = 0; i < formFilters.GetLength(0); i++)
             {
-                string fieldName = formFilters[i, 0];
+                sbCommand.Append(formFilters[i, 0]);
                 if (string.Equals(formFilters[i, 1].ToLower(), "null"))
-                    sbCommand.Append(fieldName + " is null");
+                    sbCommand.Append(" is null");
                 else
-                    sbCommand.Append(fieldName + " = @filter" + i);
+                    sbCommand.Append(string.Format(" {0} @filter{1}", formFilters[i,2], i));
                 if (i < formFilters.GetLength(0) - 1)
                 {
-                    sbCommand.Append(" and ");
+                    sbCommand.Append(string.Format(" {0} ", formFilters[i+1,3]));
                 }
             }
             string cmdString = sbCommand.ToString();

@@ -213,7 +213,7 @@ namespace VeraAPI.HelperClasses
 
             switch (commandID)
             {
-                case 0: // Load Finance Travel Forms
+                case Constants.GetFinanceTravelForms: // Load Finance Travel Forms
                     {
                         log.WriteLogEntry("Handling command ID: " + commandID);
                         string cmdString = string.Format(@"select * from valhalla.dbo.travel where close_date is null and ((request_advance = 1 and advance_status = 2) or (advance_status = 1 and recap_status = 1))", dbName);
@@ -242,7 +242,7 @@ namespace VeraAPI.HelperClasses
                         }
                         break;
                     }
-                case 1: // Load User Travel Forms
+                case Constants.GetUserTravelForms: // Load User Travel Forms
                     {
                         log.WriteLogEntry("Handling command ID: " + commandID);
                         int userID = fieldID;
@@ -250,7 +250,8 @@ namespace VeraAPI.HelperClasses
                         {
                             formFields = new string[] { "*" };
                             formFilters = new string[,] {
-                                    { "user_id", userID.ToString() }
+                                    { "user_id", userID.ToString(), "=", "and"},
+                                    {"close_status", Constants.PendingValue.ToString(), "=", "and" }
                                 };
                         }
                         catch (Exception ex)
@@ -283,7 +284,7 @@ namespace VeraAPI.HelperClasses
                         }
                         break;
                     }
-                case 2: // Load Approver Travel Forms
+                case Constants.GetApproverTravelForms: // Load Approver Travel Forms
                     {
                         log.WriteLogEntry("Handling command ID: " + commandID);
                         int userID = fieldID;
@@ -291,8 +292,8 @@ namespace VeraAPI.HelperClasses
                         {
                             formFields = new string[] { "*" };
                             formFilters = new string[,] {
-                                    { "user_id", userID.ToString() },
-                                    { "approval_status", Constants.PendingValue.ToString() }
+                                    { "user_id", userID.ToString(), "=", "and" },
+                                    { "approval_status", Constants.PendingValue.ToString(), "=", "and" }
                                 };
                         }
                         catch (Exception ex)
