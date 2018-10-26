@@ -36,7 +36,7 @@ namespace VeraAPI.Controllers
                     {
                         FormHelper formHelp = new FormHelper();
                         log.WriteLogEntry("Starting FormHelper...");
-                        if (formHelp.LoadApproverTravelAuthForms(userID) > 0)
+                        if (formHelp.LoadTravelForms(Constants.GetApproverTravelForms, userID) > 0)
                             result = formHelp.WebForms.ToArray();
                         else
                             log.WriteLogEntry("No forms found pending approval.");
