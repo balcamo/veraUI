@@ -59,7 +59,7 @@ namespace VeraAPI.Controllers
         // POST: api/TravelFinance
         public string Post([FromUri]string restUserID, [FromBody]TravelAuthForm travelAuthForm)
         {
-            log.WriteLogEntry("Begin TravelFinanceController POST...");
+            log.WriteLogEntry("Begin TravelApprovalController POST...");
             string result = string.Empty;
             if (int.TryParse(restUserID, out int userID))
             {
@@ -72,7 +72,7 @@ namespace VeraAPI.Controllers
                     UserHelper userHelp = new UserHelper(user);
                     if (userHelp.LoadDomainUser(userID))
                     {
-                        result = "TravelFinanceController POST.";
+                        result = "TravelApprovalController POST.";
                     }
                     else
                     {
@@ -88,7 +88,7 @@ namespace VeraAPI.Controllers
             }
             else
                 log.WriteLogEntry("FAILED invalid user id!");
-            log.WriteLogEntry("End TravelFinanceController POST.");
+            log.WriteLogEntry("End TravelApprovalController POST.");
             return result;
         }
 
@@ -168,56 +168,6 @@ namespace VeraAPI.Controllers
                 }
                 else
                     log.WriteLogEntry("FAILED invalid button id!");
-            }
-            else
-                log.WriteLogEntry("FAILED invalid user id!");
-            log.WriteLogEntry("End TravelFinanceController PUT.");
-        }
-        public void Put([FromUri]string restUserID, [FromUri]string restButtonID,[FromUri]string restDenyMessage, [FromBody]TravelAuthForm travelAuthForm)
-        {
-            log.WriteLogEntry("Begin TravelFinanceController PUT...");
-            if (int.TryParse(restUserID, out int userID))
-            {
-                log.WriteLogEntry("Starting LoginHelper...");
-                LoginHelper loginHelp = new LoginHelper();
-                if (loginHelp.LoadUserSession(userID))
-                {
-                    DomainUser user = new DomainUser();
-                    log.WriteLogEntry("Starting UserHelper...");
-                    UserHelper userHelp = new UserHelper(user);
-                    if (userHelp.LoadDomainUser(userID))
-                    {
-                        try
-                        {
-                            if (travelAuthForm.GetType() == typeof(TravelAuthForm))
-                            {
-                                log.DumpObject(travelAuthForm);
-                                log.WriteLogEntry("Starting FormHelper...");
-                                FormHelper travelFormHelp = new FormHelper();
-                                if (travelFormHelp.LoadFinanceTravelRecapForms(userID) > 0)
-                                {
-                                    // more code here
-                                }
-                            }
-                            else
-                            {
-                                log.WriteLogEntry("FAILED submitted form is the wrong type!");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            log.WriteLogEntry("FAILED to submit travel authorization form! " + ex.Message);
-                        }
-                    }
-                    else
-                    {
-                        log.WriteLogEntry("FAILED to load current user data!");
-                    }
-                }
-                else
-                {
-                    log.WriteLogEntry("FAILED to load active user session!");
-                }
             }
             else
                 log.WriteLogEntry("FAILED invalid user id!");

@@ -368,79 +368,65 @@ namespace VeraAPI.Models.DataHandler
             return result;
         }
 
-        public int LoadUserTravelAuthForms(List<BaseForm> travelForms, int userID)
+        public int LoadTravelForms(List<BaseForm> travelForms, string[] formFields, string[,] formFilters)
         {
-            log.WriteLogEntry("Begin LoadUserTravelAuthForms...");
-            log.WriteLogEntry("User ID" + userID);
+            log.WriteLogEntry("Begin LoadTravelForms...");
             int result = 0;
+            StringBuilder sbCommand = new StringBuilder("select ");
+            for (int i = 0; i < formFields.GetLength(0); i++)
+            {
+                string fieldName = formFields[i];
+                sbCommand.Append(fieldName);
+                if (i < formFields.GetLength(0) - 1)
+                {
+                    sbCommand.Append(", ");
+                }
+            }
+            sbCommand.Append(string.Format(" from {0}.dbo.travel where ", dbServer));
+            for (int i = 0; i < formFilters.GetLength(0); i++)
+            {
+                sbCommand.Append(formFilters[i, 0]);
+                if (string.Equals(formFilters[i, 1].ToLower(), "null"))
+                    sbCommand.Append(" is null");
+                else
+                    sbCommand.Append(string.Format(" {0} @filter{1}", formFilters[i,2], i));
+                if (i < formFilters.GetLength(0) - 1)
+                {
+                    sbCommand.Append(string.Format(" {0} ", formFilters[i+1,3]));
+                }
+            }
+            string cmdString = sbCommand.ToString();
+            log.WriteLogEntry("Update command string:\n" + cmdString);
 
-            string cmdString = string.Format(@"select * from {0}.dbo.travel where submitter_id = @userID", dbName);
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                 {
-                    cmd.Parameters.AddWithValue("@userID", userID);
                     try
                     {
-                        conn.Open();
-                        using (SqlDataReader rdr = cmd.ExecuteReader())
+                        for (int i = 0; i < formFields.GetLength(0); i++)
                         {
-                            while (rdr.Read())
-                            {
-                                TravelAuthForm travel = new TravelAuthForm
-                                {
-                                    UserID = (int)rdr["submitter_id"],
-                                    FormDataID = (int)rdr["form_id"],
-                                    FirstName = rdr["first_name"].ToString(),
-                                    LastName = rdr["last_name"].ToString(),
-                                    Phone = rdr["phone"].ToString(),
-                                    Email = rdr["email"].ToString(),
-                                    EventTitle = rdr["event_description"].ToString(),
-                                    Location = rdr["event_location"].ToString(),
-                                    TravelBegin = rdr["depart_date"].ToString(),
-                                    TravelEnd = rdr["return_date"].ToString(),
-                                    DistVehicle = rdr["district_vehicle"].ToString(),
-                                    RegistrationCost = rdr["registration_amt"].ToString(),
-                                    Airfare = rdr["airfare_amt"].ToString(),
-                                    RentalCar = rdr["rental_amt"].ToString(),
-                                    Fuel = rdr["fuel_amt"].ToString(),
-                                    ParkingTolls = rdr["parking_amt"].ToString(),
-                                    Mileage = rdr["mileage_amt"].ToString(),
-                                    Lodging = rdr["lodging_amt"].ToString(),
-                                    PerDiem = rdr["perdiem_amt"].ToString(),
-                                    FullDays = rdr["full_days"].ToString(),
-                                    TravelDays = rdr["travel_days"].ToString(),
-                                    Misc = rdr["misc_amt"].ToString(),
-                                    TotalEstimate = rdr["total_cost_amt"].ToString(),
-                                    AdvanceAmount = rdr["advance_amt"].ToString(),
-                                    Advance = rdr["request_advance"].ToString(),
-                                    Policy = rdr["travel_policy"].ToString(),
-                                    Preparer = rdr["preparer_name"].ToString(),
-                                    SubmitterSig = rdr["submitter_email"].ToString(),
-                                    DHID = rdr["supervisor_id"].ToString(),
-                                    DHApproval = rdr["supervisor_approval_status"].ToString(),
-                                    GMID = rdr["manager_id"].ToString(),
-                                    GMApproval = rdr["manager_approval_status"].ToString(),
-                                    ApprovalStatus = rdr["approval_status"].ToString(),
-                                    RecapRegistrationCost = rdr["recap_registration_amt"].ToString(),
-                                    RecapAirfare = rdr["recap_airfare_amt"].ToString(),
-                                    RecapRentalCar = rdr["recap_rental_amt"].ToString(),
-                                    RecapFuel = rdr["recap_fuel_amt"].ToString(),
-                                    RecapParkingTolls = rdr["recap_parking_amt"].ToString(),
-                                    RecapMileage = rdr["recap_miles"].ToString(),
-                                    RecapMileageAmount = rdr["recap_mileage_amt"].ToString(),
-                                    RecapLodging = rdr["recap_lodging_amt"].ToString(),
-                                    RecapPerDiem = rdr["recap_perdiem_amt"].ToString(),
-                                    RecapTravelDays = rdr["recap_travel_days"].ToString(),
-                                    RecapFullDays = rdr["recap_full_days"].ToString(),
-                                    RecapMisc = rdr["recap_misc_amt"].ToString(),
-                                    TotalRecap = rdr["recap_total_amt"].ToString(),
-                                    TotalReimburse = rdr["reimburse_amt"].ToString()
-                                };
-                                log.WriteLogEntry(string.Format("Retrieved travel data {0} {1} {2} {3}", travel.FormDataID, travel.EventTitle, travel.SubmitterSig, travel.UserID));
-                                travelForms.Add(travel);
-                            }
+                            string parmName = "@field" + i;
+                            string parmValue = formFields[i];
+                            log.WriteLogEntry("Field Name: " + parmName + "\tValue: " + parmValue);
+                            cmd.Parameters.AddWithValue(parmName, parmValue);
                         }
+                        for (int i = 0; i < formFilters.GetLength(0); i++)
+                        {
+                            string parmName = "@filter" + i;
+                            string parmValue = formFilters[i, 1];
+                            log.WriteLogEntry("Filter Name: " + parmName + "\tValue: " + parmValue);
+                            if (!string.Equals(parmValue.ToLower(), "null"))
+                                cmd.Parameters.AddWithValue(parmName, parmValue);
+                        }
+                        log.WriteLogEntry("SQL Command Parameters:");
+                        foreach (SqlParameter parm in cmd.Parameters)
+                        {
+                            log.WriteLogEntry("Name: " + parm.ParameterName + "\tValue: " + parm.SqlValue);
+                        }
+                        conn.Open();
+                        result = cmd.ExecuteNonQuery();
+                        log.WriteLogEntry("Updated row count " + result);
                     }
                     catch (SqlException ex)
                     {
@@ -452,8 +438,7 @@ namespace VeraAPI.Models.DataHandler
                     }
                 }
             }
-            result = travelForms.Count;
-            log.WriteLogEntry("End LoadUserTravelAuthForms.");
+            log.WriteLogEntry("End LoadTravelForms.");
             return result;
         }
 
@@ -538,7 +523,6 @@ namespace VeraAPI.Models.DataHandler
             log.WriteLogEntry("Begin UpdateForm...");
             int result = 0;
             StringBuilder sbCommand = new StringBuilder(string.Format("update {0}.dbo.travel set ", dbServer));
-            StringBuilder sbParams = new StringBuilder();
             for (int i = 0; i < formFields.GetLength(0); i++)
             {
                 string fieldName = formFields[i, 0];
