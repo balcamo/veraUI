@@ -89,6 +89,12 @@
         </tr>
         <tr>
           <th>
+            <h6><b>Misc explination</b></h6>
+          </th>
+          <th><h6>{{form.MiscExplain}}</h6></th>
+        </tr>
+        <tr>
+          <th>
             <h6><b>Total estimate of trip</b></h6>
           </th>
           <th><h6>{{form.TotalEstimate}}</h6></th>
@@ -101,7 +107,11 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn bg-success" (click)="approveAdvance()">Approve</button>
+    <button class="btn bg-info" style="background:green" (click)="approveAdvance()">Approve</button>
+    <button class="btn bg-warning" style="background:red" (click)="denyAdvance()">Deny</button>
+    <input [ngStyle]="{'border-color':miscBorder}" type="text" id="misc"
+           ngbTooltip="Explanation for denial" class="form-control mr-sm-2 mb-2 mb-sm-0"
+           placeholder="Explanation for denial" [(ngModel)]="denyExplain" required />
   </div>
 
   <!-- Displays recap information in a table -->
@@ -181,6 +191,11 @@
           <th><h5><b>Miscellaneous</b></h5></th>
           <th><h5>{{form.Misc}}</h5></th>
           <th><h5>{{form.RecapMisc}}</h5></th>
+        </tr>
+        <tr>
+          <th><h5><b>Miscellaneous explination</b></h5></th>
+          <th><h5></h5></th>
+          <th><h5>{{form.MiscExplain}}</h5></th>
         </tr>
         <tr>
           <th><h6><b>Total</b></h6></th>

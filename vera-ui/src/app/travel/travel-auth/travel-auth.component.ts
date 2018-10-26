@@ -60,11 +60,10 @@ export class TravelAuthComponent implements OnInit {
   // calculate the estimated total 
   checkTot() {
     this.total = 0;
-    var mileage = this.form.Mileage * this.consts.mileageRate;
     var foodTravel = this.form.PerDiem * this.consts.travelDayFood * this.form.TravelDays;
     var foodFull = this.form.PerDiem * this.form.FullDays;
     this.total = this.form.RegistrationCost + this.form.Airfare + this.form.RentalCar +
-      this.form.Fuel + this.form.ParkingTolls + mileage + this.form.Lodging +
+      this.form.Fuel + this.form.ParkingTolls + this.form.Mileage + this.form.Lodging +
       foodTravel + foodFull + this.form.Misc;
     this.form.TotalEstimate = this.total;
   }
