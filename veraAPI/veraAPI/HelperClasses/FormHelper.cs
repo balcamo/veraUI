@@ -45,10 +45,17 @@ namespace VeraAPI.HelperClasses
                     travelForm.DHID = domainUser.Department.DeptHeadUserID.ToString();
                     travelForm.DHEmail = domainUser.Department.DeptHeadEmail;
                     travelForm.DHApproval = Constants.PendingValue.ToString();
+                    travelForm.DHApprovalDate = DateTime.Now.ToString();
                     travelForm.GMID = domainUser.Company.GeneralManagerUserID.ToString();
                     travelForm.GMEmail = domainUser.Company.GeneralManagerEmail;
                     travelForm.GMApproval = Constants.PendingValue.ToString();
+                    travelForm.GMApprovalDate = DateTime.Now.ToString();
                     travelForm.ApprovalStatus = Constants.PendingValue.ToString();
+                    travelForm.SubmitDate = DateTime.Now.ToString();
+                    travelForm.AdvanceStatus = travelForm.Advance.ToLower() == "true" ? Constants.PendingValue.ToString() : Constants.ApprovedValue.ToString();
+                    travelForm.AdvanceDate = DateTime.Now.ToString();
+                    travelForm.RecapStatus = Constants.PendingValue.ToString();
+                    travelForm.RecapDate = DateTime.Now.ToString();
 
                     // Load the job template corresponding to the templateID for the submitted form
                     log.WriteLogEntry("Starting FormDataHandler...");
@@ -119,7 +126,7 @@ namespace VeraAPI.HelperClasses
                     log.WriteLogEntry("Total Recap: " + travelForm.TotalRecap);
                     totalAmt = decimal.Parse(travelForm.TotalRecap);
                     log.WriteLogEntry("Total Reimbursement: " + travelForm.TotalReimburse);
-                    reimburseAmt = decimal.Parse(travelForm.TotalReimburse, System.Globalization.NumberStyles.AllowLeadingSign);
+                    reimburseAmt = decimal.Parse(travelForm.TotalReimburse, System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint);
                 }
                 catch (Exception ex)
                 {
@@ -145,7 +152,8 @@ namespace VeraAPI.HelperClasses
                         { "recap_misc_amt", miscAmt.ToString() },
                         { "recap_total_amt", totalAmt.ToString() },
                         { "reimburse_amt", reimburseAmt.ToString() },
-                        { "recap_date", DateTime.Now.ToString() }
+                        { "recap_date", DateTime.Now.ToString() },
+                        { "recap_status", Constants.ApprovedValue.ToString() }
                     };
                     formFilters = new string[,] {
                         { "submitter_id", userID.ToString() },
@@ -347,21 +355,40 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public int LoadFinanceTravelRecapForms(int userID)
+        public int LoadTravelForms(int commandID)
         {
             log.WriteLogEntry("Begin LoadFinanceTravelRecapForms...");
             int result = 0;
+            string cmdString = string.Empty;
             this.WebForms = new List<BaseForm>();
             List<BaseForm> travelForms = new List<BaseForm>();
+            log.WriteLogEntry("Command ID: " + commandID);
+            switch (commandID)
+            {
+                case 0:
+                    {
+                        cmdString = string.Format(@"select * from valhalla.dbo.travel where close_date is null and ((request_advance = 1 and advance_status = 2) or (advance_status = 1 and recap_status = 1))", dbName);
+                        break;
+                    }
+                case 1:
+                    {
+                        cmdString = string.Format(@"select * from {0}.dbo.travel where submitter_id = @userID", dbName);
+                        break;
+                    }
+                default:
+                    {
+                        log.WriteLogEntry("FAILED Button ID not found!");
+                        return result;
+                    }
+            }
             log.WriteLogEntry("Starting FormDataHandler...");
             FormDataHandler formDataHandle = new FormDataHandler(dbServer, dbName);
-            if (formDataHandle.LoadTravelRecapForms(travelForms) > 0)
+            if (formDataHandle.LoadTravelForms(travelForms, cmdString) > 0)
             {
                 foreach (TravelAuthForm travelForm in travelForms)
                 {
                     if (ConvertStatusValues(travelForm))
                     {
-                        log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", userID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
                         this.WebForms.Add(travelForm);
                         result++;
                     }
@@ -374,10 +401,81 @@ namespace VeraAPI.HelperClasses
             }
             else
             {
-                log.WriteLogEntry("No forms available for approval by user " + userID);
+                log.WriteLogEntry("No forms found.");
             }
             log.WriteLogEntry("Count loaded forms " + result);
             log.WriteLogEntry("End LoadFinanceTravelRecapForms.");
+            return result;
+        }
+
+        public bool HandleFinanceAction(int commandID, BaseForm webForm)
+        {
+            log.WriteLogEntry("Begin HandleFinanceAction...");
+            bool result = false;
+            string[,] formFields = new string[0, 0];
+            string[,] formFilters = new string[0, 0];
+
+            if (webForm.GetType() == typeof(TravelAuthForm))
+            {
+                TravelAuthForm travel = (TravelAuthForm)webForm;
+                switch (commandID)
+                {
+                    case 1: // Process Advance
+                        {
+                            log.WriteLogEntry("Processing advance.");
+                            try
+                            {
+                                formFields = new string[,] {
+                                    { "advance_status", Constants.ApprovedValue.ToString() },
+                                    { "advance_date", DateTime.Now.ToString() }
+                                };
+                                formFilters = new string[,] {
+                                    { "form_id", travel.FormDataID.ToString() }
+                                };
+                            }
+                            catch (Exception ex)
+                            {
+                                log.WriteLogEntry("ERROR building SQL field and filter arrays!\n" + ex.Message);
+                                return result;
+                            }
+                            break;
+                        }
+                    case 2: // Process Recap
+                        {
+                            log.WriteLogEntry("Processing recap.");
+                            try
+                            {
+                                formFields = new string[,] {
+                                    { "recap_status", Constants.ApprovedValue.ToString() },
+                                    { "recap_date", DateTime.Now.ToString() }
+                                };
+                                formFilters = new string[,] {
+                                    { "form_id", travel.FormDataID.ToString() }
+                                };
+                            }
+                            catch (Exception ex)
+                            {
+                                log.WriteLogEntry("ERROR building SQL field and filter arrays!\n" + ex.Message);
+                                return result;
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            log.WriteLogEntry("Fell through switch. No action taken.");
+                            return result;
+                        }
+                }
+                log.WriteLogEntry("Starting FormDataHandler...");
+                FormDataHandler formData = new FormDataHandler(dbServer, dbName);
+                if (formData.UpdateTravelForm(formFields, formFilters) > 0)
+                    result = true;
+                else
+                    log.WriteLogEntry("FAILED No records updated!");
+            }
+            else
+                log.WriteLogEntry("FAILED not a travel form!");
+            log.WriteLogEntry("End HandleFinanceAction.");
             return result;
         }
 

@@ -15,6 +15,17 @@ namespace VeraAPI.Models
         public static readonly int PendingValue = 2;
         public static readonly int DeniedValue = 0;
 
+        public static readonly int NotificationTravelDenied = 0;
+        public static readonly int NotificationTravelApproved = 1;
+        public static readonly int NotificationTravelAdvance = 2;
+        public static readonly int NotificationTravelRecap = 3;
+
+        public static readonly int NotificationFinanceAdvance = 0;
+        public static readonly int NotificationFinanceRecap = 1;
+
+        public static readonly int FinanceGetTravelForms = 0;
+
+
         public static readonly string Issuer = "Vera Water and Power";
         public static readonly string Audience = "https://bermuda.verawp.local";
 

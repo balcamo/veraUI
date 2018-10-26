@@ -34,13 +34,13 @@ namespace VeraAPI.Controllers
                 {
                     log.WriteLogEntry("Starting FormHelper...");
                     FormHelper formHelp = new FormHelper();
-                    if (formHelp.LoadFinanceTravelRecapForms(userID) > 0)
+                    if (formHelp.LoadTravelForms(Constants.FinanceGetTravelForms) > 0)
                     {
                         result = formHelp.WebForms.ToArray();
                     }
                     else
                     {
-                        log.WriteLogEntry("No forms found pending approval.");
+                        log.WriteLogEntry("No finance travel forms loaded.");
                     }
                 }
                 else
@@ -59,7 +59,7 @@ namespace VeraAPI.Controllers
         // POST: api/TravelFinance
         public string Post([FromUri]string restUserID, [FromBody]TravelAuthForm travelAuthForm)
         {
-            log.WriteLogEntry("Begin TravelApprovalController POST...");
+            log.WriteLogEntry("Begin TravelFinanceController POST...");
             string result = string.Empty;
             if (int.TryParse(restUserID, out int userID))
             {
@@ -72,7 +72,7 @@ namespace VeraAPI.Controllers
                     UserHelper userHelp = new UserHelper(user);
                     if (userHelp.LoadDomainUser(userID))
                     {
-                        result = "TravelApprovalController POST.";
+                        result = "TravelFinanceController POST.";
                     }
                     else
                     {
@@ -88,7 +88,7 @@ namespace VeraAPI.Controllers
             }
             else
                 log.WriteLogEntry("FAILED invalid user id!");
-            log.WriteLogEntry("End TravelApprovalController POST.");
+            log.WriteLogEntry("End TravelFinanceController POST.");
             return result;
         }
 
@@ -104,46 +104,70 @@ namespace VeraAPI.Controllers
             log.WriteLogEntry("Begin TravelFinanceController PUT...");
             if (int.TryParse(restUserID, out int userID))
             {
-                log.WriteLogEntry("Starting LoginHelper...");
-                LoginHelper loginHelp = new LoginHelper();
-                if (loginHelp.LoadUserSession(userID))
+                if (int.TryParse(restButtonID, out int buttonID))
                 {
-                    DomainUser user = new DomainUser();
-                    log.WriteLogEntry("Starting UserHelper...");
-                    UserHelper userHelp = new UserHelper(user);
-                    if (userHelp.LoadDomainUser(userID))
+                    log.WriteLogEntry("Starting LoginHelper...");
+                    LoginHelper loginHelp = new LoginHelper();
+                    if (loginHelp.LoadUserSession(userID))
                     {
-                        try
+                        DomainUser user = new DomainUser();
+                        log.WriteLogEntry("Starting UserHelper...");
+                        UserHelper userHelp = new UserHelper(user);
+                        if (userHelp.LoadDomainUser(userID))
                         {
-                            if (travelAuthForm.GetType() == typeof(TravelAuthForm))
+                            try
                             {
-                                log.DumpObject(travelAuthForm);
-                                log.WriteLogEntry("Starting FormHelper...");
-                                FormHelper travelFormHelp = new FormHelper();
-                                if (travelFormHelp.LoadFinanceTravelRecapForms(userID) > 0)
+                                if (travelAuthForm.GetType() == typeof(TravelAuthForm))
                                 {
-                                    // more code here
+                                    log.DumpObject(travelAuthForm);
+                                    log.WriteLogEntry("Starting FormHelper...");
+                                    FormHelper travelFormHelp = new FormHelper();
+                                    if (travelFormHelp.HandleFinanceAction(buttonID, travelAuthForm))
+                                    {
+                                        log.WriteLogEntry("Starting EmailHelper...");
+                                        EmailHelper email = new EmailHelper();
+                                        switch (buttonID)
+                                        {
+                                            case 0:
+                                                {
+                                                    email.NotifySubmitter(travelAuthForm.Email, Constants.NotificationTravelAdvance);
+                                                    break;
+                                                }
+                                            case 1:
+                                                {
+                                                    email.NotifySubmitter(travelAuthForm.Email, Constants.NotificationTravelRecap);
+                                                    break;
+                                                }
+                                            default:
+                                                {
+                                                    log.WriteLogEntry("Fell through button ID switch. No email sent.");
+                                                    break;
+                                                }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    log.WriteLogEntry("FAILED submitted form is the wrong type!");
                                 }
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                log.WriteLogEntry("FAILED submitted form is the wrong type!");
+                                log.WriteLogEntry("FAILED to submit travel authorization form! " + ex.Message);
                             }
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            log.WriteLogEntry("FAILED to submit travel authorization form! " + ex.Message);
+                            log.WriteLogEntry("FAILED to load current user data!");
                         }
                     }
                     else
                     {
-                        log.WriteLogEntry("FAILED to load current user data!");
+                        log.WriteLogEntry("FAILED to load active user session!");
                     }
                 }
                 else
-                {
-                    log.WriteLogEntry("FAILED to load active user session!");
-                }
+                    log.WriteLogEntry("FAILED invalid button id!");
             }
             else
                 log.WriteLogEntry("FAILED invalid user id!");

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using VeraAPI.Models;
 using VeraAPI.Models.Forms;
 using VeraAPI.Models.Templates;
 using VeraAPI.HelperClasses;
@@ -102,7 +103,7 @@ namespace VeraAPI.Controllers
                                         if (bool.TryParse(travelAuthForm.Advance, out bool advance))
                                         {
                                             if (advance)
-                                                emailer.NotifyFinance(0);
+                                                emailer.NotifyFinance(Constants.NotificationFinanceAdvance);
                                             else
                                                 log.WriteLogEntry("No advance requested.");
                                         }
