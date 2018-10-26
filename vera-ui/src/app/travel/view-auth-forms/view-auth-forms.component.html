@@ -124,8 +124,8 @@
         <tr>
           <th>
             <h5>
-              <a href="https://www.gsa.gov/travel-resources" target="_blank" placement="right"
-                 ngbTooltip="Find your city to find the Per Diem">
+              <a href="https://www.gsa.gov/travel/plan-book/per-diem-rates" target="_blank" placement="right"
+                 ngbTooltip="Find your city to find the Per Diem" style="color:darkblue">
                 <b>Meals & Incidentals</b>
               </a>
             </h5>
@@ -161,6 +161,9 @@
             <input type="number" ngbTooltip="Miscellaneous" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Miscellaneous*"
                    [(ngModel)]="form.RecapMisc" required [disabled]="submitted" />
+            Explination: <input type="text" ngbTooltip="Explanation for miscellaneous"
+                   class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Explanation for miscellaneous"
+                   [(ngModel)]="form.MiscExplain" required />
           </th>
         </tr>
         <tr>

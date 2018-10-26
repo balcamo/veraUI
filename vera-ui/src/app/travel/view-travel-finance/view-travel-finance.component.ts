@@ -26,7 +26,8 @@ export class ViewTravelFinanceComponent implements OnInit {
   formType: string;
   advance = false;
   recap = false;
-  food:number;
+  food: number;
+  denyExplain: string;
 
   constructor(http: Http, userService: UserService) {
     this.http = http;
@@ -97,7 +98,23 @@ export class ViewTravelFinanceComponent implements OnInit {
     var body = JSON.stringify(this.form);
     console.log(this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
-    this.http.post(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID +'&restButtonID=0', body, options)
+    this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID +'&restButtonID=0', body, options)
+      //.subscribe((data) => this.waitForHttp(data));
+      .subscribe((data) => alert("Advance form is being processed"));
+  }
+  denyAdvance() {
+    let params: URLSearchParams = new URLSearchParams();
+    var pageHeaders = new Headers({
+      'Content-Type': 'application/json'
+    });
+    let options = new RequestOptions({
+      search: params,
+      headers: pageHeaders
+    });
+    var body = JSON.stringify(this.form);
+    console.log(this.consts.url + 'TravelFinance');
+    this.displaySelected(this.form);
+    this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID + '&restButtonID=0&restDenyMessage=' + this.denyExplain, body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert("Advance form is being processed"));
   }
@@ -114,7 +131,7 @@ export class ViewTravelFinanceComponent implements OnInit {
     var body = JSON.stringify(this.form);
     console.log(this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
-    this.http.post(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID + '&restButtonID=1', body, options)
+    this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID + '&restButtonID=1', body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert("Recap form is being processed"));
   }
