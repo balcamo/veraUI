@@ -365,6 +365,7 @@ namespace VeraAPI.HelperClasses
             log.WriteLogEntry("Command ID: " + commandID);
             switch (commandID)
             {
+                // Finance Controller active forms 0 = Advance 1 = Recap
                 case 0:
                     {
                         cmdString = string.Format(@"select * from valhalla.dbo.travel where close_date is null and ((request_advance = 1 and advance_status = 2) or (advance_status = 1 and recap_status = 1))", dbName);
