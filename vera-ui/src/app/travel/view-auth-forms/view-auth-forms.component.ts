@@ -26,6 +26,7 @@ export class ViewAuthFormsComponent implements OnInit {
   dhApprove: string;
   gmApprove: string;
   submitted = false;
+  advanceLocked = true;
 
   constructor(http: Http, userService: UserService) {
     this.http = http;
@@ -49,6 +50,19 @@ export class ViewAuthFormsComponent implements OnInit {
    * 
    */
   displaySelected(authForm: AuthForm) {
+
+    if (authForm.RecapStatus == 0 || authForm.RecapStatus == 3 || authForm.RecapStatus.toString() == "") {
+      this.submitted = false;
+    } else if (authForm.RecapStatus == 1 || authForm.RecapStatus == 2) {
+      this.submitted = true;
+    }
+    if (authForm.AdvanceStatus != 0 || authForm.AdvanceStatus.toString() == "") {
+      this.advanceLocked = true;
+    }
+
+    console.log("recap staus: " + authForm.RecapStatus);
+    console.log("submitted: " + this.submitted);
+
     this.form = authForm;
     this.displayRecap = "none";
     if (this.form.ApprovalStatus == 'green') {
@@ -140,6 +154,24 @@ export class ViewAuthFormsComponent implements OnInit {
   }
 
   /**
+   * submit the recap to the server to get approval
+   * */
+  submitUpdate() {
+    let params: URLSearchParams = new URLSearchParams();
+    var pageHeaders = new Headers({
+      'Content-Type': 'application/json'
+    });
+    let options = new RequestOptions({
+      search: params,
+      headers: pageHeaders
+    });
+    var body = JSON.stringify(this.form);
+    console.log(this.consts.url + 'Recap');
+    this.http.put(this.consts.url + 'TravelAuth?restUserID=' + this.user.UserID, body, options)
+      //.subscribe((data) => this.waitForHttp(data));
+      .subscribe((data) => alert(data.text()));
+  }
+   /**
    * submit the recap to the server to get approval
    * */
   submitRecap() {

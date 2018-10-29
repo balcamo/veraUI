@@ -27,10 +27,20 @@
     <h5>Location:<b> <i>{{form.Location}}</i></b></h5>
     <h5>Travel Start Date: <b><i>{{form.TravelBegin}}</i></b></h5>
     <h5>Travel End Date:<b> <i>{{form.TravelEnd}}</i></b></h5>
-    <h5>Total Estimate of Trip:<b> <i>{{form.TotalEstimate}}</i></b></h5>
-    <h5>Advance Taken: <b><i>{{form.AdvanceAmount}}</i></b></h5>
+    <h5>Total Estimate of Trip:<b><i>{{form.TotalEstimate}}</i></b></h5>
+    <h5>
+      <lable class="mr-sm-2 mb-0 form-check-inline" for="advanceAmount">Advance Taken: </lable>
+      <b>
+        <i>
+          <input id="advanceAmount" type="number" class="form-check-inline form-control mr-sm-2 mb-2 mb-sm-0"
+                 [(ngModel)]="form.AdvanceAmount" [disabled]="advanceLocked" />
+        </i>
+      </b>
+    </h5>
     <h5>Department Head Approved: <b><i>{{dhApprove}}</i></b></h5>
     <h5>General Manager Approved: <b><i>{{gmApprove}}</i></b></h5>
+
+    <button *ngIf="!advanceLocked" class="btn bg-success" (click)="submitUpdate()">Submit Update</button>
 
     <button class="btn bg-success" (click)="showRecap()">Travel Recap</button>
   </div>
@@ -183,6 +193,6 @@
         </tr>
       </tbody>
     </table>
-    <button type="submit" (click)="submitRecap()" [disabled]="submitted" >Submit</button>
+    <button class="btn bg-success" (click)="submitRecap()" [disabled]="submitted" >Submit</button>
   </div>
 </div>
