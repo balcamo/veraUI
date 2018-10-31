@@ -27,6 +27,7 @@ export class AuthForm {
   Advance: boolean;     // Advance
   AdvanceAmount: number;  // AdvanceAmount
   Policy: boolean;     // Policy
+  AdvanceStatus: number; // approval status of the advance
   SubmitterSig: number;    // SubmitterSig
   RecapRegistrationCost: number;  // RecapRegistrationCost
   RecapAirfare: number;  // RecapAirfare
@@ -41,6 +42,7 @@ export class AuthForm {
   RecapFullDays: number;  // RecapFullDays
   RecapMisc: number;  // RecapMisc
   TotalRecap: number;  // TotalRecap
+  RecapStatus: number; // whether the recap has been approved or not
   TotalReimburse: number;  // TotalReimburse
   ApprovalStatus: string;    // ApprovalStatus
   DHApproval: string;     // Department head approval DHApproval

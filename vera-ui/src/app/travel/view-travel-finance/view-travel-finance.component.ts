@@ -98,7 +98,8 @@ export class ViewTravelFinanceComponent implements OnInit {
     var body = JSON.stringify(this.form);
     console.log(this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
-    this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID +'&restButtonID=0', body, options)
+    this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID
+      + '&restButtonID=0', body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert("Advance form is being processed"));
   }
@@ -114,9 +115,10 @@ export class ViewTravelFinanceComponent implements OnInit {
     var body = JSON.stringify(this.form);
     console.log(this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
-    this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID + '&restButtonID=0&restDenyMessage=' + this.denyExplain, body, options)
+    this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID
+      + '&restButtonID=0&restDenyMessage=' + this.denyExplain, body, options)
       //.subscribe((data) => this.waitForHttp(data));
-      .subscribe((data) => alert("Advance form is being processed"));
+      .subscribe((data) => alert("Advance form is being returned to the traveler"));
   }
 
   approveRecap() {
@@ -131,8 +133,26 @@ export class ViewTravelFinanceComponent implements OnInit {
     var body = JSON.stringify(this.form);
     console.log(this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
-    this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID + '&restButtonID=1', body, options)
+    this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID
+      + '&restButtonID=1', body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert("Recap form is being processed"));
+  }
+  denyRecap() {
+    let params: URLSearchParams = new URLSearchParams();
+    var pageHeaders = new Headers({
+      'Content-Type': 'application/json'
+    });
+    let options = new RequestOptions({
+      search: params,
+      headers: pageHeaders
+    });
+    var body = JSON.stringify(this.form);
+    console.log(this.consts.url + 'TravelFinance');
+    this.displaySelected(this.form);
+    this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID
+      + '&restButtonID=1&restDenyMessage=' + this.denyExplain, body, options)
+      //.subscribe((data) => this.waitForHttp(data));
+      .subscribe((data) => alert("Recap form is being returned to the traveler"));
   }
 }

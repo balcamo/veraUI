@@ -151,7 +151,8 @@ namespace VeraAPI.Controllers
         }
 
         // PUT: api/API/5
-        public void Put(string id, [FromBody]string value)
+        // update the advance amount
+        public void Put([FromUri]string restUserID, [FromBody]TravelAuthForm travelAuthForm)
         {
         }
 
