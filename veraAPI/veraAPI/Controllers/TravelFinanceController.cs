@@ -98,7 +98,7 @@ namespace VeraAPI.Controllers
         }
 
         // PUT: api/TravelFinance/5
-        // for restButtonID 0 = Advance 1 = Recap
+        // for restButtonID 0 = Approve Advance 1 = Approve Recap (closes auth form) 2 = Deny Advance 3 = Deny Recap
         public void Put([FromUri]string restUserID, [FromUri]string restButtonID, [FromBody]TravelAuthForm travelAuthForm)
         {
             log.WriteLogEntry("Begin TravelFinanceController PUT...");
@@ -138,6 +138,18 @@ namespace VeraAPI.Controllers
                                                     email.NotifySubmitter(travelAuthForm.Email, Constants.NotificationTravelRecap);
                                                     break;
                                                 }
+                                            case 2:
+                                                {
+                                                    string message = string.Format("{0}\n{1}\n{2}", travelAuthForm.EventTitle, travelAuthForm.Location, travelAuthForm.MailMessage);
+                                                    email.NotifySubmitter(travelAuthForm.Email, message);
+                                                    break;
+                                                }
+                                            case 3:
+                                                {
+                                                    string message = string.Format("{0}\n{1}\n{2}", travelAuthForm.EventTitle, travelAuthForm.Location, travelAuthForm.MailMessage);
+                                                    email.NotifySubmitter(travelAuthForm.Email, message);
+                                                    break;
+                                                }
                                             default:
                                                 {
                                                     log.WriteLogEntry("Fell through button ID switch. No email sent.");
@@ -168,56 +180,6 @@ namespace VeraAPI.Controllers
                 }
                 else
                     log.WriteLogEntry("FAILED invalid button id!");
-            }
-            else
-                log.WriteLogEntry("FAILED invalid user id!");
-            log.WriteLogEntry("End TravelFinanceController PUT.");
-        }
-        public void Put([FromUri]string restUserID, [FromUri]string restButtonID,[FromUri]string restDenyMessage, [FromBody]TravelAuthForm travelAuthForm)
-        {
-            log.WriteLogEntry("Begin TravelFinanceController PUT...");
-            if (int.TryParse(restUserID, out int userID))
-            {
-                log.WriteLogEntry("Starting LoginHelper...");
-                LoginHelper loginHelp = new LoginHelper();
-                if (loginHelp.LoadUserSession(userID))
-                {
-                    DomainUser user = new DomainUser();
-                    log.WriteLogEntry("Starting UserHelper...");
-                    UserHelper userHelp = new UserHelper(user);
-                    if (userHelp.LoadDomainUser(userID))
-                    {
-                        try
-                        {
-                            if (travelAuthForm.GetType() == typeof(TravelAuthForm))
-                            {
-                                log.DumpObject(travelAuthForm);
-                                log.WriteLogEntry("Starting FormHelper...");
-                                FormHelper travelFormHelp = new FormHelper();
-                                if (travelFormHelp.LoadFinanceTravelRecapForms(userID) > 0)
-                                {
-                                    // more code here
-                                }
-                            }
-                            else
-                            {
-                                log.WriteLogEntry("FAILED submitted form is the wrong type!");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            log.WriteLogEntry("FAILED to submit travel authorization form! " + ex.Message);
-                        }
-                    }
-                    else
-                    {
-                        log.WriteLogEntry("FAILED to load current user data!");
-                    }
-                }
-                else
-                {
-                    log.WriteLogEntry("FAILED to load active user session!");
-                }
             }
             else
                 log.WriteLogEntry("FAILED invalid user id!");
