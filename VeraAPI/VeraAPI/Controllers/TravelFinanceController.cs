@@ -98,7 +98,7 @@ namespace VeraAPI.Controllers
         }
 
         // PUT: api/TravelFinance/5
-        // for restButtonID 0 = Advance 1 = Recap
+        // for restButtonID 0 = Approve Advance 1 = Approve Recap (closes auth form) 2 = Deny Advance 3 = Deny Recap
         public void Put([FromUri]string restUserID, [FromUri]string restButtonID, [FromBody]TravelAuthForm travelAuthForm)
         {
             log.WriteLogEntry("Begin TravelFinanceController PUT...");
@@ -173,7 +173,7 @@ namespace VeraAPI.Controllers
                 log.WriteLogEntry("FAILED invalid user id!");
             log.WriteLogEntry("End TravelFinanceController PUT.");
         }
-        public void Put([FromUri]string restUserID, [FromUri]string restButtonID,[FromUri]string restDenyMessage, [FromBody]TravelAuthForm travelAuthForm)
+        public void Put([FromUri]string restUserID, [FromUri]string restButtonID, [FromUri]string restDenyMessage, [FromBody]TravelAuthForm travelAuthForm)
         {
             log.WriteLogEntry("Begin TravelFinanceController PUT...");
             if (int.TryParse(restUserID, out int userID))
@@ -194,7 +194,7 @@ namespace VeraAPI.Controllers
                                 log.DumpObject(travelAuthForm);
                                 log.WriteLogEntry("Starting FormHelper...");
                                 FormHelper travelFormHelp = new FormHelper();
-                                if (travelFormHelp.LoadFinanceTravelRecapForms(userID) > 0)
+                                if (travelFormHelp.LoadTravelForms(Constants.GetFinanceTravelForms, userID) > 0)
                                 {
                                     // more code here
                                 }
