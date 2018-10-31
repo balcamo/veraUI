@@ -34,19 +34,16 @@ namespace VeraAPI.Controllers
         public string Post(string restUserID, [FromBody]TravelAuthForm value)
         {
             log.WriteLogEntry("Begin RecapController POST...");
-            System.Diagnostics.Debug.WriteLine("Begin RecapController POST...");
             string result = string.Empty;
             log.WriteLogEntry("REST user id " + restUserID);
             if (int.TryParse(restUserID, out int userID))
             {
                 log.WriteLogEntry("Starting LoginHelper...");
-                System.Diagnostics.Debug.WriteLine("Starting LoginHelper...");
                 LoginHelper loginHelp = new LoginHelper();
                 if (loginHelp.LoadUserSession(userID))
                 {
                     DomainUser user = new DomainUser();
                     log.WriteLogEntry("Starting UserHelper...");
-                    System.Diagnostics.Debug.WriteLine("Starting UserHelper...");
                     UserHelper userHelp = new UserHelper(user);
                     if (userHelp.LoadDomainUser(userID))
                     {
@@ -65,14 +62,12 @@ namespace VeraAPI.Controllers
                             else
                             {
                                 result = "Failed to submit recap form!";
-                                System.Diagnostics.Debug.WriteLine(result);
                                 log.WriteLogEntry(result);
                             }
                         }
                         catch (Exception ex)
                         {
                             result = "ERROR in Travel Recap Submit!\n" + ex.Message;
-                            System.Diagnostics.Debug.WriteLine(result);
                             log.WriteLogEntry(result);
                             return result;
                         }
@@ -80,24 +75,20 @@ namespace VeraAPI.Controllers
                     else
                     {
                         result = "Failed to submit travel recap! User not found!";
-                        System.Diagnostics.Debug.WriteLine(result);
                         log.WriteLogEntry(result);
                     }
                 }
                 else
                 {
                     result = "Failed to submit travel recap! User not recognized!";
-                    System.Diagnostics.Debug.WriteLine(result);
                     log.WriteLogEntry(result);
                 }
             }
             else
             {
                 result = "Failed to submit travel recap! Invalid user id!";
-                System.Diagnostics.Debug.WriteLine(result);
                 log.WriteLogEntry(result);
             }
-            System.Diagnostics.Debug.WriteLine("End RecapController POST.");
             log.WriteLogEntry("End RecapController POST.");
             return result;
         }
