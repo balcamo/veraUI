@@ -55,6 +55,7 @@ namespace VeraAPI.Models.Forms
         public string RecapStatus { get; set; } = string.Empty;
         public string TotalReimburse { get; set; } = string.Empty;      // TotalReimburse
         public string ApprovalStatus { get; set; } = string.Empty;      // Integer - {0 Denied Red} {1 Approved Green} {2 Pending Yellow}
+        public string ApprovalDate { get; set; } = string.Empty;
         public string DHApproval { get; set; } = string.Empty;          // Integer - {0 Denied Red} {1 Approved Green} {2 Pending Yellow}
         public string DHApprovalDate { get; set; } = string.Empty;
         public string DHID { get; set; } = string.Empty;                // Integer department head userID
@@ -65,6 +66,7 @@ namespace VeraAPI.Models.Forms
         public string GMEmail { get; set; } = string.Empty;
         public string CloseDate { get; set; } = string.Empty;
         public string CloseStatus { get; set; } = string.Empty;
+        public string MailMessage { get; set; } = string.Empty;
 
         public TravelAuthForm() { }
 

@@ -52,9 +52,12 @@ namespace VeraAPI.HelperClasses
                     travelForm.GMApprovalDate = DateTime.Now.ToString();
                     travelForm.ApprovalStatus = Constants.PendingValue.ToString();
                     travelForm.SubmitDate = DateTime.Now.ToString();
-                    travelForm.AdvanceStatus = Constants.PendingValue.ToString();
+                    if (travelForm.Advance.ToLower() == "true")
+                        travelForm.AdvanceStatus = Constants.PendingValue.ToString();
+                    else
+                        travelForm.AdvanceStatus = Constants.ApprovedValue.ToString();
                     travelForm.AdvanceDate = DateTime.Now.ToString();
-                    travelForm.RecapStatus = Constants.PendingValue.ToString();
+                    travelForm.RecapStatus = Constants.NotStartedValue.ToString();
                     travelForm.RecapDate = DateTime.Now.ToString();
 
                     // Load the job template corresponding to the templateID for the submitted form
@@ -77,6 +80,53 @@ namespace VeraAPI.HelperClasses
             else
                 log.WriteLogEntry("FAILED submitted form is not a travel authorization form!");
             log.WriteLogEntry("End SubmitTravelAuthForm.");
+            return result;
+        }
+
+        public bool UpdateTravelAdvanceAmount(int userID, BaseForm webForm)
+        {
+            log.WriteLogEntry("Begin UpdateTravelAuthForm...");
+            bool result = false;
+            string[,] formFields = new string[0, 0];
+            string[,] formFilters = new string[0, 0];
+
+            if (webForm.GetType() == typeof(TravelAuthForm))
+            {
+                TravelAuthForm travelForm = (TravelAuthForm)webForm;
+
+                // Build field and filter list to update SQL
+                try
+                {
+                    formFields = new string[,] {
+                            { "advance_amt", travelForm.AdvanceAmount.ToString() },
+                            { "advance_status", Constants.PendingValue.ToString() },
+                            { "advance_date", DateTime.Now.ToString() },
+                            { "close_status", Constants.PendingValue.ToString() },
+                            { "close_date", DateTime.Now.ToString() },
+                            { "recap_status", Constants.PendingValue.ToString() },
+                            { "recap_date", DateTime.Now.ToString() }
+                        };
+                    formFilters = new string[,] {
+                            { "submitter_id", userID.ToString() },
+                            { "form_id", travelForm.FormDataID.ToString() }
+                        };
+                }
+                catch (Exception ex)
+                {
+                    log.WriteLogEntry("ERROR building SQL field and filter arrays!\n" + ex.Message);
+                    return result;
+                }
+
+                log.WriteLogEntry("Starting FormDataHandler...");
+                FormDataHandler formData = new FormDataHandler(dbServer, dbName);
+                if (formData.UpdateTravelForm(formFields, formFilters) > 0)
+                    result = true;
+                else
+                    log.WriteLogEntry("FAILED No records updated!");
+            }
+            else
+                log.WriteLogEntry("FAILED submitted form is not a travel authorization form!");
+            log.WriteLogEntry("End UpdateTravelAuthForm.");
             return result;
         }
 
@@ -153,7 +203,7 @@ namespace VeraAPI.HelperClasses
                         { "recap_total_amt", totalAmt.ToString() },
                         { "reimburse_amt", reimburseAmt.ToString() },
                         { "recap_date", DateTime.Now.ToString() },
-                        { "recap_status", Constants.ApprovedValue.ToString() }
+                        { "recap_status", Constants.PendingValue.ToString() }
                     };
                     formFilters = new string[,] {
                         { "submitter_id", userID.ToString() },
@@ -250,7 +300,7 @@ namespace VeraAPI.HelperClasses
                         {
                             formFields = new string[] { "*" };
                             formFilters = new string[,] {
-                                    { "user_id", userID.ToString(), "=", "and"},
+                                    { "submitter_id", userID.ToString(), "=", "and"},
                                     {"close_status", Constants.PendingValue.ToString(), "=", "and" }
                                 };
                         }
@@ -292,7 +342,7 @@ namespace VeraAPI.HelperClasses
                         {
                             formFields = new string[] { "*" };
                             formFilters = new string[,] {
-                                    { "user_id", userID.ToString(), "=", "and" },
+                                    { "submitter_id", userID.ToString(), "=", "and" },
                                     { "approval_status", Constants.PendingValue.ToString(), "=", "and" }
                                 };
                         }
@@ -356,16 +406,16 @@ namespace VeraAPI.HelperClasses
 
             if (webForm.GetType() == typeof(TravelAuthForm))
             {
-                TravelAuthForm travel = (TravelAuthForm)webForm;
-                log.WriteLogEntry(string.Format("User {0} is approving form {1}.", userID, travel.FormDataID));
-                if (userID == int.Parse(travel.GMID))
+                TravelAuthForm travelForm = (TravelAuthForm)webForm;
+                log.WriteLogEntry(string.Format("User {0} is approving form {1}.", userID, travelForm.FormDataID));
+                if (userID == int.Parse(travelForm.GMID))
                 {
-                    if (travel.GMApproval == Constants.DeniedColor)
-                        travel.ApprovalStatus = Constants.DeniedColor;
+                    if (travelForm.GMApproval == Constants.DeniedColor)
+                        travelForm.ApprovalStatus = Constants.DeniedColor;
                     else
                     {
-                        travel.GMApproval = Constants.ApprovedColor;
-                        travel.ApprovalStatus = Constants.ApprovedColor;
+                        travelForm.GMApproval = Constants.ApprovedColor;
+                        travelForm.ApprovalStatus = Constants.ApprovedColor;
                     }
 
                     // Build field and filter list to update SQL
@@ -373,13 +423,13 @@ namespace VeraAPI.HelperClasses
                     {
                         formFields = new string[,] {
                             { "manager_approval_date", DateTime.Now.ToString() },
-                            { "manager_approval_status", GetStatusValue(travel.GMApproval).ToString() },
+                            { "manager_approval_status", GetStatusValue(travelForm.GMApproval).ToString() },
                             { "approval_date", DateTime.Now.ToString() },
-                            { "approval_status", GetStatusValue(travel.ApprovalStatus).ToString() }
+                            { "approval_status", GetStatusValue(travelForm.ApprovalStatus).ToString() }
                         };
                         formFilters = new string[,] {
                             { "manager_id", userID.ToString() },
-                            { "form_id", travel.FormDataID.ToString() }
+                            { "form_id", travelForm.FormDataID.ToString() }
                         };
                     }
                     catch (Exception ex)
@@ -388,23 +438,23 @@ namespace VeraAPI.HelperClasses
                         return result;
                     }
                 }
-                else if (userID == int.Parse(travel.DHID))
+                else if (userID == int.Parse(travelForm.DHID))
                 {
-                    if (travel.DHApproval == Constants.DeniedColor)
-                        travel.ApprovalStatus = Constants.DeniedColor;
+                    if (travelForm.DHApproval == Constants.DeniedColor)
+                        travelForm.ApprovalStatus = Constants.DeniedColor;
                     else
-                        travel.DHApproval = Constants.ApprovedColor;
+                        travelForm.DHApproval = Constants.ApprovedColor;
 
                     // Build field and filter list to update SQL
                     try
                     {
                         formFields = new string[,] {
                             { "supervisor_approval_date", DateTime.Now.ToString() },
-                            { "supervisor_approval_status", GetStatusValue(travel.DHApproval).ToString() }
+                            { "supervisor_approval_status", GetStatusValue(travelForm.DHApproval).ToString() }
                         };
                         formFilters = new string[,] {
                             { "supervisor_id", userID.ToString() },
-                            { "form_id", travel.FormDataID.ToString() }
+                            { "form_id", travelForm.FormDataID.ToString() }
                         };
                     }
                     catch (Exception ex)
@@ -438,9 +488,9 @@ namespace VeraAPI.HelperClasses
                 TravelAuthForm travel = (TravelAuthForm)webForm;
                 switch (commandID)
                 {
-                    case 1: // Process Advance
+                    case 0: // Approve Advance
                         {
-                            log.WriteLogEntry("Processing advance.");
+                            log.WriteLogEntry("Approve advance.");
                             try
                             {
                                 formFields = new string[,] {
@@ -458,13 +508,55 @@ namespace VeraAPI.HelperClasses
                             }
                             break;
                         }
-                    case 2: // Process Recap
+                    case 1: // Approve Recap
                         {
-                            log.WriteLogEntry("Processing recap.");
+                            log.WriteLogEntry("Approve recap.");
                             try
                             {
                                 formFields = new string[,] {
                                     { "recap_status", Constants.ApprovedValue.ToString() },
+                                    { "recap_date", DateTime.Now.ToString() },
+                                    { "close_status", Constants.ApprovedValue.ToString() },
+                                    { "close_date", DateTime.Now.ToString() }
+                                };
+                                formFilters = new string[,] {
+                                    { "form_id", travel.FormDataID.ToString() }
+                                };
+                            }
+                            catch (Exception ex)
+                            {
+                                log.WriteLogEntry("ERROR building SQL field and filter arrays!\n" + ex.Message);
+                                return result;
+                            }
+                            break;
+                        }
+                    case 2: // Deny Advance
+                        {
+                            log.WriteLogEntry("Deny advance.");
+                            try
+                            {
+                                formFields = new string[,] {
+                                    { "advance_status", Constants.DeniedValue.ToString() },
+                                    { "advance_date", DateTime.Now.ToString() }
+                                };
+                                formFilters = new string[,] {
+                                    { "form_id", travel.FormDataID.ToString() }
+                                };
+                            }
+                            catch (Exception ex)
+                            {
+                                log.WriteLogEntry("ERROR building SQL field and filter arrays!\n" + ex.Message);
+                                return result;
+                            }
+                            break;
+                        }
+                    case 3: // Deny Recap
+                        {
+                            log.WriteLogEntry("Deny recap.");
+                            try
+                            {
+                                formFields = new string[,] {
+                                    { "recap_status", Constants.DeniedValue.ToString() },
                                     { "recap_date", DateTime.Now.ToString() }
                                 };
                                 formFilters = new string[,] {

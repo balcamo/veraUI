@@ -15,6 +15,7 @@ namespace VeraAPI.Models
         public const int ApprovedValue = 1;
         public const int PendingValue = 2;
         public const int DeniedValue = 0;
+        public const int NotStartedValue = 3;
 
         // Email Notification Index
         public const int NotificationTravelDenied = 0;

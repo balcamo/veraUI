@@ -156,6 +156,39 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
+        public bool NotifySubmitter(string email, string message)
+        {
+            log.WriteLogEntry("Begin NotifySubmitter...");
+            bool result = false;
+
+            ExchangeHandler emailHandle = new ExchangeHandler
+            {
+                EmailSubject = "Notify Submitter",
+                RecipientEmailAddress = email,
+                EmailBody = message
+            };
+            try
+            {
+                if (emailHandle.ConnectExchangeService())
+                {
+                    log.WriteLogEntry("Connection to Exchange service successful.");
+                    if (emailHandle.SendMail())
+                    {
+                        result = true;
+                    }
+                    else
+                        log.WriteLogEntry("Failed send email!");
+                }
+                else
+                    log.WriteLogEntry("Failed connect to Exchange service!");
+            }
+            catch (Exception ex)
+            {
+                log.WriteLogEntry("Program error " + ex.Message);
+            }
+            return result;
+        }
+
         public bool NotifyGeneralManager(User user)
         {
             log.WriteLogEntry("Begin NotifyGeneralManager...");
