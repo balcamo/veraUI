@@ -50,7 +50,7 @@ export class ViewTravelFinanceComponent implements OnInit {
    */
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
-   
+    this.form.MailMessage = '';
     this.displayRecap = "none";
     this.advance = false;
     this.recap = false;
@@ -116,7 +116,7 @@ export class ViewTravelFinanceComponent implements OnInit {
     console.log(this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
     this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID
-      + '&restButtonID=0&restDenyMessage=' + this.denyExplain, body, options)
+      + '&restButtonID=2', body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert("Advance form is being returned to the traveler"));
   }
@@ -151,7 +151,7 @@ export class ViewTravelFinanceComponent implements OnInit {
     console.log(this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
     this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID
-      + '&restButtonID=1&restDenyMessage=' + this.denyExplain, body, options)
+      + '&restButtonID=3', body, options)
       //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert("Recap form is being returned to the traveler"));
   }

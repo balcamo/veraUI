@@ -27,6 +27,8 @@ export class ViewAuthFormsComponent implements OnInit {
   gmApprove: string;
   submitted = false;
   advanceLocked = true;
+  advanceStatus: string;
+  recapStatus: string;
 
   constructor(http: Http, userService: UserService) {
     this.http = http;
@@ -50,17 +52,15 @@ export class ViewAuthFormsComponent implements OnInit {
    * 
    */
   displaySelected(authForm: AuthForm) {
-
-    if (authForm.RecapStatus == 0 || authForm.RecapStatus == 3 || authForm.RecapStatus.toString() == "") {
+    if (authForm.RecapStatus == 0 || authForm.RecapStatus == 3 ) {
       this.submitted = false;
     } else if (authForm.RecapStatus == 1 || authForm.RecapStatus == 2) {
       this.submitted = true;
     }
-    if (authForm.AdvanceStatus != 0 || authForm.AdvanceStatus.toString() == "") {
+    if (authForm.AdvanceStatus != 0 ) {
       this.advanceLocked = true;
     }
-
-    console.log("recap staus: " + authForm.RecapStatus);
+    console.log("recap status: " + authForm.RecapStatus);
     console.log("submitted: " + this.submitted);
 
     this.form = authForm;
@@ -86,12 +86,31 @@ export class ViewAuthFormsComponent implements OnInit {
         this.gmApprove = "Denied";
       }
     }
+    if (this.form.AdvanceStatus == 0) {
+      this.advanceStatus = "Denied. Please see email for feedback.";
+    } else if (this.form.AdvanceStatus == 1) {
+      this.advanceStatus = "Approved";
+    } else if (this.form.AdvanceStatus == 2) {
+      this.advanceStatus = "Pending";
+    }
+    if (this.form.RecapStatus == 0) {
+      this.recapStatus = "Denied. Please see email for feedback.";
+    } else if (this.form.RecapStatus == 1) {
+      this.recapStatus = "Approved";
+    } else if (this.form.RecapStatus == 2) {
+      this.recapStatus = "Pending";
+    }else if (this.form.RecapStatus == 3) {
+      this.recapStatus = "Not Started";
+    }
     if (this.displayForm == "none") {
       this.displayForm = "block";
+      this.displayRecap = "none";
     } else if (this.form !== this.oldForm) {
       this.displayForm = "block";
+      this.displayRecap = "none";
     } else if (this.form == this.oldForm) {
       this.displayForm = "none";
+      this.displayRecap = "none";
     }
     
     this.oldForm = this.form
@@ -157,6 +176,7 @@ export class ViewAuthFormsComponent implements OnInit {
    * submit the recap to the server to get approval
    * */
   submitUpdate() {
+    this.form.AdvanceStatus = 2;
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({
       'Content-Type': 'application/json'
@@ -175,6 +195,7 @@ export class ViewAuthFormsComponent implements OnInit {
    * submit the recap to the server to get approval
    * */
   submitRecap() {
+    this.form.RecapStatus = 2;
     let params: URLSearchParams = new URLSearchParams();
     var pageHeaders = new Headers({
       'Content-Type': 'application/json'

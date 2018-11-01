@@ -26,9 +26,11 @@ export class AuthForm {
   TotalEstimate: number;  // TotalEstimate
   Advance: boolean;     // Advance
   AdvanceAmount: number;  // AdvanceAmount
-  Policy: boolean;     // Policy
+  AdvanceDate: Date;
   AdvanceStatus: number; // approval status of the advance
+  Policy: boolean;     // Policy
   SubmitterSig: number;    // SubmitterSig
+  SubmitDate: Date;
   RecapRegistrationCost: number;  // RecapRegistrationCost
   RecapAirfare: number;  // RecapAirfare
   RecapRentalCar: number;  // RecapRentalCar
@@ -42,11 +44,20 @@ export class AuthForm {
   RecapFullDays: number;  // RecapFullDays
   RecapMisc: number;  // RecapMisc
   TotalRecap: number;  // TotalRecap
+  RecapDate: Date;
   RecapStatus: number; // whether the recap has been approved or not
   TotalReimburse: number;  // TotalReimburse
   ApprovalStatus: string;    // ApprovalStatus
+  ApprovalDate: Date;
   DHApproval: string;     // Department head approval DHApproval
+  DHApprovalDate: Date;
   DHID: number;    // Department head ID DHID
+  DHEmail: string;
   GMApproval: string;     // GM approval GMApproval
+  GMApprovalDate: Date;
   GMID: number;   // GMID
+  GMEmail: string;
+  CloseDate: Date;
+  CloseStatus: number;
+  MailMessage: string; // message to be sent to the traveler
 }

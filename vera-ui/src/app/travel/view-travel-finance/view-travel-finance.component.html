@@ -111,7 +111,7 @@
     <button class="btn bg-warning" style="background:red" (click)="denyAdvance()">Deny</button>
     <input [ngStyle]="{'border-color':miscBorder}" type="text" id="misc"
            ngbTooltip="Explanation for denial" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Explanation for denial (max 250 characters)" [(ngModel)]="denyExplain" maxlength="250" />
+           placeholder="Explanation for denial (max 250 characters)" [(ngModel)]="form.MailMessage" maxlength="250" />
   </div>
 
   <!-- Displays recap information in a table -->
@@ -218,6 +218,6 @@
     <button class="btn bg-warning" style="background:red" (click)="denyRecap()">Deny</button>
     <input [ngStyle]="{'border-color':miscBorder}" type="text" id="misc"
            ngbTooltip="Explanation for denial" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Explanation for denial (max 250 characters)" [(ngModel)]="denyExplain" maxlength="250" />
+           placeholder="Explanation for denial (max 250 characters)" [(ngModel)]="form.MailMessage " maxlength="250" />
   </div>
 </div>
