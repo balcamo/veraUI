@@ -2,13 +2,13 @@
 
 <div class="topbar forms" *ngFor="let forms of authForms">
   <div class="list">
-    <div *ngIf="forms.AdvanceAmount != 0 && forms.TotalReimburse == 0">
+    <div *ngIf="forms.AdvanceStatus == 2 && forms.RecapStatus == 3">
       <button class="btn secondary" (mouseover)="hover=true" (mouseleave)="hover=false"
               (click)="displaySelected(forms)">
         <h5>{{forms.LastName}} : Advance</h5>
       </button>
     </div>
-    <div *ngIf="forms.TotalReimburse != 0">
+    <div *ngIf="forms.RecapStatus == 2 && forms.AdvanceStatus == 1">
       <button class="btn secondary" (mouseover)="hover=true" (mouseleave)="hover=false"
               (click)="displaySelected(forms)">
         <h5>{{forms.LastName}} : Recap</h5>

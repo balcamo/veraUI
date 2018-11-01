@@ -60,10 +60,10 @@ export class ViewAuthFormsComponent implements OnInit {
     if (authForm.AdvanceStatus != 0 ) {
       this.advanceLocked = true;
     }
-    console.log("recap status: " + authForm.RecapStatus);
-    console.log("submitted: " + this.submitted);
 
     this.form = authForm;
+    console.log("recap status: " + this.form.RecapStatus);
+
     this.displayRecap = "none";
     if (this.form.ApprovalStatus == 'green') {
       this.dhApprove = "Approved";
@@ -102,6 +102,8 @@ export class ViewAuthFormsComponent implements OnInit {
     }else if (this.form.RecapStatus == 3) {
       this.recapStatus = "Not Started";
     }
+
+
     if (this.displayForm == "none") {
       this.displayForm = "block";
       this.displayRecap = "none";
@@ -165,9 +167,7 @@ export class ViewAuthFormsComponent implements OnInit {
     this.form.RecapMisc = (this.form.RecapMisc.toString() == '' || this.form.RecapMisc == 0.0000 ? 0 : this.form.RecapMisc);
     this.form.TotalRecap = (this.form.TotalRecap.toString() == '' || this.form.TotalRecap == 0.0000 ? 0 : this.form.TotalRecap);
     this.form.TotalReimburse = (this.form.TotalReimburse.toString() == '' || this.form.TotalReimburse == 0.0000 ? 0 : this.form.TotalReimburse);
-    console.log("totalRe  "+this.form.TotalReimburse);
-    if (this.form.TotalReimburse == 0) { this.submitted = false; }
-    else { this.submitted = true; }
+ 
     this.displayRecap = "block";
 
   }

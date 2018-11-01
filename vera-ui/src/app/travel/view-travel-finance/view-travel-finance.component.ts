@@ -54,7 +54,7 @@ export class ViewTravelFinanceComponent implements OnInit {
     this.displayRecap = "none";
     this.advance = false;
     this.recap = false;
-    if (authForm.Advance && authForm.TotalReimburse == 0) {
+    if (this.form.AdvanceStatus == 2 && this.form.RecapStatus == 3) {
       this.advance = true;
     } else {
     this.recap = true;
