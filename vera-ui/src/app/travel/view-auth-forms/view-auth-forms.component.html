@@ -159,7 +159,7 @@
                    [(ngModel)]="form.RecapTravelDays" required [disabled]="!(form.RecapStatus==0 || form.RecapStatus==3)" />
           </th>
         </tr><tr>
-          <th><h5><b>Full Days of Gone</b></h5></th>
+          <th><h5><b>Full Days of Trip</b></h5></th>
           <th><h5>{{form.FullDays}}</h5></th>
           <th>
             <input type="number" ngbTooltip="Full Days of the trip" (change)="checkTot()"
@@ -174,7 +174,7 @@
             <input type="number" ngbTooltip="Miscellaneous" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Miscellaneous*"
                    [(ngModel)]="form.RecapMisc" required [disabled]="!(form.RecapStatus==0 || form.RecapStatus==3)" />
-            Explination: <input type="text" ngbTooltip="Explanation for miscellaneous"
+            Explanation: <input type="text" ngbTooltip="Explanation for miscellaneous"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Explanation for miscellaneous"
                    [(ngModel)]="form.MiscExplain" required [disabled]="!(form.RecapStatus==0 || form.RecapStatus==3)"/>
           </th>

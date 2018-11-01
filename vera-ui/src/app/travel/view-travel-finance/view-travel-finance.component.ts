@@ -51,35 +51,39 @@ export class ViewTravelFinanceComponent implements OnInit {
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
     this.form.MailMessage = '';
-    this.displayRecap = "none";
-    this.advance = false;
-    this.recap = false;
-    if (this.form.AdvanceStatus == 2 && this.form.RecapStatus == 3) {
-      this.advance = true;
-    } else {
-    this.recap = true;
-    }  
-    if (this.recap) {
-      this.food = (this.form.RecapPerDiem * this.consts.travelDayFood * this.form.RecapTravelDays)
-        + (this.form.RecapPerDiem * this.form.RecapFullDays);
+    if (this.form == this.oldForm) {
+      this.displayRecap = "none";
       this.displayAdvance = "none"
-      if (this.displayRecap == "none") {
-        this.displayRecap = "block";
-      } else if (this.form !== this.oldForm) {
-        this.displayRecap = "block";
-      } else if (this.form == this.oldForm) {
-        this.displayRecap = "none";
-      }
     } else {
-      this.food = (this.form.PerDiem * this.consts.travelDayFood * this.form.TravelDays)
-        + (this.form.PerDiem * this.form.FullDays);
-      this.displayRecap = "none"
-      if (this.displayAdvance == "none") {
-        this.displayAdvance = "block";
-      } else if (this.form !== this.oldForm) {
-        this.displayAdvance = "block";
-      } else if (this.form == this.oldForm) {
-        this.displayAdvance = "none";
+      this.advance = false;
+      this.recap = false;
+      if (this.form.AdvanceStatus == 2 && this.form.RecapStatus == 3) {
+        this.advance = true;
+      } else {
+        this.recap = true;
+      }
+      if (this.recap) {
+        this.food = (this.form.RecapPerDiem * this.consts.travelDayFood * this.form.RecapTravelDays)
+          + (this.form.RecapPerDiem * this.form.RecapFullDays);
+        this.displayAdvance = "none"
+        if (this.displayRecap == "none") {
+          this.displayRecap = "block";
+        } else if (this.form !== this.oldForm) {
+          this.displayRecap = "block";
+        } else if (this.form == this.oldForm) {
+          this.displayRecap = "none";
+        }
+      } else {
+        this.food = (this.form.PerDiem * this.consts.travelDayFood * this.form.TravelDays)
+          + (this.form.PerDiem * this.form.FullDays);
+        this.displayRecap = "none"
+        if (this.displayAdvance == "none") {
+          this.displayAdvance = "block";
+        } else if (this.form !== this.oldForm) {
+          this.displayAdvance = "block";
+        } else if (this.form == this.oldForm) {
+          this.displayAdvance = "none";
+        }
       }
     }
     this.oldForm = this.form
