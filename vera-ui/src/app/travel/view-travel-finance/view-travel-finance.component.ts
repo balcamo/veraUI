@@ -24,8 +24,6 @@ export class ViewTravelFinanceComponent implements OnInit {
   form = new AuthForm();
   oldForm: AuthForm;
   formType: string;
-  advance = false;
-  recap = false;
   food: number;
   denyExplain: string;
 
@@ -50,18 +48,13 @@ export class ViewTravelFinanceComponent implements OnInit {
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
     this.form.MailMessage = '';
+    // this if makes sure that old views are removed
     if (this.form == this.oldForm) {
       this.displayRecap = "none";
       this.displayAdvance = "none"
     } else {
-      this.advance = false;
-      this.recap = false;
-      if (this.form.AdvanceStatus == 2 && this.form.RecapStatus == 3) {
-        this.advance = true;
-      } else {
-        this.recap = true;
-      }
-      if (this.recap) {
+      // select display for recap or advance
+      if (this.form.AdvanceStatus == 1 && this.form.RecapStatus == 2) {
         this.food = (this.form.RecapPerDiem * this.consts.travelDayFood * this.form.RecapTravelDays)
           + (this.form.RecapPerDiem * this.form.RecapFullDays);
         this.displayAdvance = "none"

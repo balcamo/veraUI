@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions, Response } from '@angular/http';
 import { Constants } from '../classes/constants';
 import { AuthForm } from '../classes/travel-auth-form';
-import { User, Auth } from '../classes/user';
 import { UserService } from '../service/app.service.user';
 import { Router } from '@angular/router';
 
@@ -65,14 +64,6 @@ export class TravelComponent implements OnInit {
     this.authForms = [];
     this.formsList = false;
 
-    let params: URLSearchParams = new URLSearchParams();
-    var pageHeaders = new Headers({
-      'Content-Type': 'application/json'
-    });
-    let options = new RequestOptions({
-      search: params,
-      headers: pageHeaders
-    });
     console.log(this.consts.url + 'TravelAuth?restUserID=' + this.user.UserID);
     this.http.get(this.consts.url + 'TravelAuth?restUserID=' + this.user.UserID)
       .subscribe((data) => this.waitForHttp(data));
@@ -100,16 +91,7 @@ export class TravelComponent implements OnInit {
     this.user = this.userService.getUser();
     this.authForms = [];
     this.formsList = false;
-
-    let params: URLSearchParams = new URLSearchParams();
-    var pageHeaders = new Headers({
-      'Content-Type': 'application/json'
-    });
-    let options = new RequestOptions({
-      search: params,
-      headers: pageHeaders
-    });
-
+    
     this.http.get(this.consts.url + 'TravelApproval?restUserID=' + this.user.UserID)
       .subscribe((data) => this.waitForHttp(data));
     if (this.authForms.length == 0) {
@@ -138,14 +120,6 @@ export class TravelComponent implements OnInit {
     this.authForms = [];
     this.formsList = false;
 
-    let params: URLSearchParams = new URLSearchParams();
-    var pageHeaders = new Headers({
-      'Content-Type': 'application/json'
-    });
-    let options = new RequestOptions({
-      search: params,
-      headers: pageHeaders
-    });
    // this.http.get(this.consts.url + 'TravelAuth?restUserID=' + this.user.UserID)
     this.http.get(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID)
       .subscribe((data) => this.waitForHttp(data));
