@@ -19,14 +19,14 @@ export class ViewAuthFormsComponent implements OnInit {
   displayForm = "none";
   displayRecap = "none";
   consts = new Constants();
+  // these are to lock the inputs if airfarea and registration were company paid
   registrationComp = true;
   airfareComp = true;
+  // 
   form = new AuthForm();
   oldForm: AuthForm;
   dhApprove: string;
   gmApprove: string;
-  submitted = false;
-  advanceLocked = true;
   advanceStatus: string;
   recapStatus: string;
 
@@ -35,15 +35,11 @@ export class ViewAuthFormsComponent implements OnInit {
     this.userService = userService;
     this.user = this.userService.getUser();
     if (this.authForms == undefined) {
-      console.log("in constructor: no forms to approve");
       this.formsList = false;
     }
   }
 
-  ngOnInit() {
-    console.log("formsList from in all forms html" + this.formsList);
-
-  }
+  ngOnInit() {  }
 
   /**
    * 
@@ -52,18 +48,7 @@ export class ViewAuthFormsComponent implements OnInit {
    * 
    */
   displaySelected(authForm: AuthForm) {
-    if (authForm.RecapStatus == 0 || authForm.RecapStatus == 3 ) {
-      this.submitted = false;
-    } else if (authForm.RecapStatus == 1 || authForm.RecapStatus == 2) {
-      this.submitted = true;
-    }
-    if (authForm.AdvanceStatus != 0 ) {
-      this.advanceLocked = true;
-    }
-
     this.form = authForm;
-    console.log("recap status: " + this.form.RecapStatus);
-
     this.displayRecap = "none";
     if (this.form.ApprovalStatus == 'green') {
       this.dhApprove = "Approved";
@@ -186,9 +171,8 @@ export class ViewAuthFormsComponent implements OnInit {
       headers: pageHeaders
     });
     var body = JSON.stringify(this.form);
-    console.log(this.consts.url + 'Recap');
+    console.log('put.'+this.consts.url + 'TravelAuth');
     this.http.put(this.consts.url + 'TravelAuth?restUserID=' + this.user.UserID, body, options)
-      //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert(data.text()));
   }
    /**
@@ -205,20 +189,8 @@ export class ViewAuthFormsComponent implements OnInit {
       headers: pageHeaders
     });
     var body = JSON.stringify(this.form);
-    console.log(this.consts.url + 'Recap');
+    console.log('post.'+this.consts.url + 'Recap');
     this.http.post(this.consts.url + 'Recap?restUserID=' + this.user.UserID, body, options)
-      //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert(data.text()));
-  }
-
-  waitForHttp(data: string) {
-    console.log("the data : " + data);
-    if (data == "") {
-      console.log("Data returned is null");
-      this.formsList = false;
-    } else {
-      this.formsList = true;
-      console.log("finishing waitForHttp");
-    }
   }
 }

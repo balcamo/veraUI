@@ -39,8 +39,7 @@ export class ViewTravelFinanceComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {  }
 
   /**
    * 
@@ -100,11 +99,10 @@ export class ViewTravelFinanceComponent implements OnInit {
       headers: pageHeaders
     });
     var body = JSON.stringify(this.form);
-    console.log(this.consts.url + 'TravelFinance');
+    console.log('approve addvance put.'+this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
     this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID
       + '&restButtonID=0', body, options)
-      //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert("Advance form is being processed"));
   }
   denyAdvance() {
@@ -117,11 +115,10 @@ export class ViewTravelFinanceComponent implements OnInit {
       headers: pageHeaders
     });
     var body = JSON.stringify(this.form);
-    console.log(this.consts.url + 'TravelFinance');
+    console.log('deny addvance put.' +this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
     this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID
       + '&restButtonID=2', body, options)
-      //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert("Advance form is being returned to the traveler"));
   }
 
@@ -135,11 +132,10 @@ export class ViewTravelFinanceComponent implements OnInit {
       headers: pageHeaders
     });
     var body = JSON.stringify(this.form);
-    console.log(this.consts.url + 'TravelFinance');
+    console.log('approve recap put.' +this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
     this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID
       + '&restButtonID=1', body, options)
-      //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert("Recap form is being processed"));
   }
   denyRecap() {
@@ -152,11 +148,10 @@ export class ViewTravelFinanceComponent implements OnInit {
       headers: pageHeaders
     });
     var body = JSON.stringify(this.form);
-    console.log(this.consts.url + 'TravelFinance');
+    console.log('deny recap put.' +this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
     this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID
       + '&restButtonID=3', body, options)
-      //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert("Recap form is being returned to the traveler"));
   }
 }

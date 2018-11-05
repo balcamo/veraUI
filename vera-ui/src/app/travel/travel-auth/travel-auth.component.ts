@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthForm } from '../../classes/travel-auth-form';
 import { Constants } from '../../classes/constants';
-import { Headers, Http, URLSearchParams, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs';
+import { Headers, Http, URLSearchParams, RequestOptions } from '@angular/http';
 import { User } from '../../classes/user';
 import { UserService } from '../../service/app.service.user';
 
@@ -16,7 +15,6 @@ export class TravelAuthComponent implements OnInit {
   /** variables needed to change colors and fill in the form **/
   form = new AuthForm();
   consts = new Constants();
-  total=0;
   http: Http;
   user: User;
   // variables for border colors of required fields
@@ -59,20 +57,16 @@ export class TravelAuthComponent implements OnInit {
 
   // calculate the estimated total 
   checkTot() {
-    this.total = 0;
+    this.form.TotalEstimate = 0;
     var foodTravel = this.form.PerDiem * this.consts.travelDayFood * this.form.TravelDays;
     var foodFull = this.form.PerDiem * this.form.FullDays;
-    this.total = this.form.RegistrationCost + this.form.Airfare + this.form.RentalCar +
+    this.form.TotalEstimate = this.form.RegistrationCost + this.form.Airfare + this.form.RentalCar +
       this.form.Fuel + this.form.ParkingTolls + this.form.Mileage + this.form.Lodging +
       foodTravel + foodFull + this.form.Misc;
-    this.form.TotalEstimate = this.total;
   }
 
   // function to contact API and submit the form
   submitForm() {
-    console.log("submitting form");
-    console.log(this.form);
-    console.log("user email is" + this.user.UserEmail);
     // this will check if all required fields have been 
     //   filled in before submitting the form to the API
     if (this.checkRequired()) {
@@ -95,7 +89,7 @@ export class TravelAuthComponent implements OnInit {
         this.form.GMID = this.user.UserID;
       }
       var body = JSON.stringify(this.form);
-      console.log(this.consts.url +'TravelAuth');
+      console.log('post' + this.consts.url + 'TravelAuth');
       this.http.post(this.consts.url + 'TravelAuth?restUserID=' + this.user.UserID, body, options)
           .subscribe((data) => alert(data.text()));
       this.setFormDefaults();
@@ -187,6 +181,5 @@ export class TravelAuthComponent implements OnInit {
     this.form.SubmitterSig = null;
     this.form.DHApproval = null;
     this.form.GMApproval = null;
-    this.total = 0; 
   }
 }
