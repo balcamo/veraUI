@@ -11,6 +11,7 @@ export class Constants {
   crew = [];
 
   // Change url based on what server deploying to
-  url = 'https://bigfoot.verawp.local/api/';
+  //url = 'https://bigfoot.verawp.local/api/';
+  url = 'https://bigfoot.verawaterandpower.com/api/';
   //url = 'https://localhost:64154/api/';
 }
