@@ -102,9 +102,7 @@ namespace VeraAPI.HelperClasses
                             { "advance_status", Constants.PendingValue.ToString() },
                             { "advance_date", DateTime.Now.ToString() },
                             { "close_status", Constants.PendingValue.ToString() },
-                            { "close_date", DateTime.Now.ToString() },
-                            { "recap_status", Constants.PendingValue.ToString() },
-                            { "recap_date", DateTime.Now.ToString() }
+                            { "close_date", DateTime.Now.ToString() }
                         };
                     formFilters = new string[,] {
                             { "submitter_id", userID.ToString() },
@@ -275,7 +273,7 @@ namespace VeraAPI.HelperClasses
                             {
                                 if (ConvertStatusValues(travelForm))
                                 {
-                                    log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", travelForm.UserID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
+                                    log.DumpObject(travelForm);
                                     this.WebForms.Add(travelForm);
                                     result++;
                                 }
@@ -317,7 +315,7 @@ namespace VeraAPI.HelperClasses
                             {
                                 if (ConvertStatusValues(travelForm))
                                 {
-                                    log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", travelForm.UserID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
+                                    log.DumpObject(travelForm);
                                     this.WebForms.Add(travelForm);
                                     result++;
                                 }
@@ -371,7 +369,7 @@ namespace VeraAPI.HelperClasses
                                     }
                                     else
                                         log.WriteLogEntry("No forms available for approval by user " + userID);
-                                    log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", travelForm.UserID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
+                                    log.DumpObject(travelForm);
                                 }
                                 else
                                 {
