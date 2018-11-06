@@ -32,17 +32,20 @@
       <lable class="mr-sm-2 mb-0 form-check-inline" for="advanceAmount">Advance Taken: </lable>
       <b>
         <i>
-          <input id="advanceAmount" type="number" class="form-check-inline form-control mr-sm-2 mb-2 mb-sm-0"
-                 [(ngModel)]="form.AdvanceAmount" [disabled]="advanceLocked" />
+          <input [ngStyle]="{'border-color':form.AdvanceStatus==0 ? 'red' : 'black'}" id="advanceAmount" type="number" class="form-check-inline form-control mr-sm-2 mb-2 mb-sm-0"
+                 [(ngModel)]="form.AdvanceAmount" [disabled]="!(form.AdvanceStatus==0)" />
         </i>
       </b>
     </h5>
-    <h5>Department Head Approved: <b><i>{{dhApprove}}</i></b></h5>
-    <h5>General Manager Approved: <b><i>{{gmApprove}}</i></b></h5>
+    <h5>Department Head Approval Status: <b><i>{{dhApprove}}</i></b></h5>
+    <h5>General Manager Approval Status: <b><i>{{gmApprove}}</i></b></h5>
+    <h5>Advance Approval Status: <b><i>{{advanceStatus}}</i></b></h5>
+    <h5>Recap Approval Status: <b><i>{{recapStatus}}</i></b></h5>
 
-    <button *ngIf="!advanceLocked" class="btn bg-success" (click)="submitUpdate()">Submit Update</button>
+    <button *ngIf="(form.AdvanceStatus==0)" class="btn bg-success" style="border-width:4px;border-color:black" (click)="submitUpdate()">Submit Update</button>
 
-    <button class="btn bg-success" (click)="showRecap()">Travel Recap</button>
+    <button class="btn bg-success" [ngStyle]="{'border-color':form.RecapStatus==0 ? 'red' : 'black',
+              'background-color': 'white'}" style="border-width:4px;" (click)="showRecap()">Travel Recap</button>
   </div>
 
   <!-- Displays recap information in a table -->
@@ -69,7 +72,7 @@
           <th>
             <input type="number" ngbTooltip="Registration Cost" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Registration Cost*"
-                   [(ngModel)]="form.RecapRegistrationCost" required [disabled]="registrationComp || submitted"/>
+                   [(ngModel)]="form.RecapRegistrationCost" required [disabled]="registrationComp || !(form.RecapStatus==0 || form.RecapStatus==3)"/>
           </th>
         </tr>
         <tr>
@@ -83,7 +86,7 @@
           <th>
             <input type="number" ngbTooltip="Airfare" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Airfare*"
-                   [(ngModel)]="form.RecapAirfare" required [disabled]="airfareComp || submitted" />
+                   [(ngModel)]="form.RecapAirfare" required [disabled]="airfareComp || !(form.RecapStatus==0 || form.RecapStatus==3)" />
           </th>
         </tr>
         <tr>
@@ -92,7 +95,7 @@
           <th>
             <input type="number" ngbTooltip="Rental Car" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Rental Car*"
-                   [(ngModel)]="form.RecapRentalCar" required [disabled]="submitted"/>
+                   [(ngModel)]="form.RecapRentalCar" required [disabled]="!(form.RecapStatus==0 || form.RecapStatus==3)"/>
           </th>
         </tr>
         <tr>
@@ -101,7 +104,7 @@
           <th>
             <input type="number" ngbTooltip="Enter the miles driven" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Miles Driven*"
-                   [(ngModel)]="form.RecapMileageAmount" required [disabled]="submitted"/>
+                   [(ngModel)]="form.RecapMileageAmount" required [disabled]="!(form.RecapStatus==0 || form.RecapStatus==3)"/>
           </th>
         </tr>
         <tr>
@@ -110,7 +113,7 @@
           <th>
             <input type="number" ngbTooltip="Fuel and Parking" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Parking and tolls*"
-                   [(ngModel)]="form.RecapParkingTolls" required [disabled]="submitted" />
+                   [(ngModel)]="form.RecapParkingTolls" required [disabled]="!(form.RecapStatus==0 || form.RecapStatus==3)" />
           </th>
         </tr>
         <tr>
@@ -119,7 +122,7 @@
           <th>
             <input type="number" ngbTooltip="Fuel and Parking" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Fuel*"
-                   [(ngModel)]="form.RecapFuel" required [disabled]="submitted" />
+                   [(ngModel)]="form.RecapFuel" required [disabled]="!(form.RecapStatus==0 || form.RecapStatus==3)" />
           </th>
         </tr>
         <tr>
@@ -128,7 +131,7 @@
           <th>
             <input type="number" ngbTooltip="Lodging" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Lodging*"
-                   [(ngModel)]="form.RecapLodging" required [disabled]="submitted" />
+                   [(ngModel)]="form.RecapLodging" required [disabled]="!(form.RecapStatus==0 || form.RecapStatus==3)" />
           </th>
         </tr>
         <tr>
@@ -144,7 +147,7 @@
           <th>
             <input type="number" ngbTooltip="Find your city to find the Per Diem at https://www.gsa.gov/travel-resources" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Per Diem*"
-                   [(ngModel)]="form.RecapPerDiem" required [disabled]="submitted" />
+                   [(ngModel)]="form.RecapPerDiem" required [disabled]="!(form.RecapStatus==0 || form.RecapStatus==3)" />
           </th>
         </tr>
         <tr>
@@ -153,15 +156,15 @@
           <th>
             <input type="number" ngbTooltip="Days of Travel" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Days of travel*"
-                   [(ngModel)]="form.RecapTravelDays" required [disabled]="submitted" />
+                   [(ngModel)]="form.RecapTravelDays" required [disabled]="!(form.RecapStatus==0 || form.RecapStatus==3)" />
           </th>
         </tr><tr>
-          <th><h5><b>Full Days of Gone</b></h5></th>
+          <th><h5><b>Full Days of Trip</b></h5></th>
           <th><h5>{{form.FullDays}}</h5></th>
           <th>
             <input type="number" ngbTooltip="Full Days of the trip" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Days of trip*"
-                   [(ngModel)]="form.RecapFullDays" required [disabled]="submitted" />
+                   [(ngModel)]="form.RecapFullDays" required [disabled]="!(form.RecapStatus==0 || form.RecapStatus==3)" />
           </th>
         </tr>
         <tr>
@@ -170,10 +173,10 @@
           <th>
             <input type="number" ngbTooltip="Miscellaneous" (change)="checkTot()"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Miscellaneous*"
-                   [(ngModel)]="form.RecapMisc" required [disabled]="submitted" />
-            Explination: <input type="text" ngbTooltip="Explanation for miscellaneous"
+                   [(ngModel)]="form.RecapMisc" required [disabled]="!(form.RecapStatus==0 || form.RecapStatus==3)" />
+            Explanation: <input type="text" ngbTooltip="Explanation for miscellaneous"
                    class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Explanation for miscellaneous"
-                   [(ngModel)]="form.MiscExplain" required />
+                   [(ngModel)]="form.MiscExplain" required [disabled]="!(form.RecapStatus==0 || form.RecapStatus==3)"/>
           </th>
         </tr>
         <tr>
@@ -193,6 +196,6 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn bg-success" (click)="submitRecap()" [disabled]="submitted" >Submit</button>
+    <button class="btn bg-success" (click)="submitRecap()" [disabled]="!(form.RecapStatus==0 || form.RecapStatus==3)" >Submit</button>
   </div>
 </div>

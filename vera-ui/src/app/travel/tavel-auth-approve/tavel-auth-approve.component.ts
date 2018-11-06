@@ -102,7 +102,7 @@ export class TavelAuthApproveComponent implements OnInit {
     }
     var body = JSON.stringify(this.form);
     console.log("the form being approved: " + this.form.toString());
-    console.log(this.consts.url + 'TravelApproval?restUserID=' + this.user.UserID);
+    console.log('put.'+this.consts.url + 'TravelApproval?restUserID=' + this.user.UserID);
     this.http.put(this.consts.url + 'TravelApproval?restUserID=' + this.user.UserID, body, options)
       .subscribe((data) => alert("You have APPROVED this travel request"));
     
@@ -132,7 +132,7 @@ export class TavelAuthApproveComponent implements OnInit {
       this.form.ApprovalStatus = 'red'
     }
     var body = JSON.stringify(this.form);
-    console.log(this.consts.url + 'TravelApproval');
+    console.log('put.'+this.consts.url + 'TravelApproval');
     this.http.put(this.consts.url + 'TravelApproval?restUserID=' + this.user.UserID, body, options)
       .subscribe((data) => alert("You have DENIED this travel request"));
 

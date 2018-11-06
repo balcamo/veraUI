@@ -24,8 +24,6 @@ export class ViewTravelFinanceComponent implements OnInit {
   form = new AuthForm();
   oldForm: AuthForm;
   formType: string;
-  advance = false;
-  recap = false;
   food: number;
   denyExplain: string;
 
@@ -39,8 +37,7 @@ export class ViewTravelFinanceComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {  }
 
   /**
    * 
@@ -50,36 +47,35 @@ export class ViewTravelFinanceComponent implements OnInit {
    */
   displaySelected(authForm: AuthForm) {
     this.form = authForm;
-   
-    this.displayRecap = "none";
-    this.advance = false;
-    this.recap = false;
-    if (authForm.Advance && authForm.TotalReimburse == 0) {
-      this.advance = true;
-    } else {
-    this.recap = true;
-    }  
-    if (this.recap) {
-      this.food = (this.form.RecapPerDiem * this.consts.travelDayFood * this.form.RecapTravelDays)
-        + (this.form.RecapPerDiem * this.form.RecapFullDays);
+    this.form.MailMessage = '';
+    // this if makes sure that old views are removed
+    if (this.form == this.oldForm) {
+      this.displayRecap = "none";
       this.displayAdvance = "none"
-      if (this.displayRecap == "none") {
-        this.displayRecap = "block";
-      } else if (this.form !== this.oldForm) {
-        this.displayRecap = "block";
-      } else if (this.form == this.oldForm) {
-        this.displayRecap = "none";
-      }
     } else {
-      this.food = (this.form.PerDiem * this.consts.travelDayFood * this.form.TravelDays)
-        + (this.form.PerDiem * this.form.FullDays);
-      this.displayRecap = "none"
-      if (this.displayAdvance == "none") {
-        this.displayAdvance = "block";
-      } else if (this.form !== this.oldForm) {
-        this.displayAdvance = "block";
-      } else if (this.form == this.oldForm) {
-        this.displayAdvance = "none";
+      // select display for recap or advance
+      if (this.form.AdvanceStatus == 1 && this.form.RecapStatus == 2) {
+        this.food = (this.form.RecapPerDiem * this.consts.travelDayFood * this.form.RecapTravelDays)
+          + (this.form.RecapPerDiem * this.form.RecapFullDays);
+        this.displayAdvance = "none"
+        if (this.displayRecap == "none") {
+          this.displayRecap = "block";
+        } else if (this.form !== this.oldForm) {
+          this.displayRecap = "block";
+        } else if (this.form == this.oldForm) {
+          this.displayRecap = "none";
+        }
+      } else {
+        this.food = (this.form.PerDiem * this.consts.travelDayFood * this.form.TravelDays)
+          + (this.form.PerDiem * this.form.FullDays);
+        this.displayRecap = "none"
+        if (this.displayAdvance == "none") {
+          this.displayAdvance = "block";
+        } else if (this.form !== this.oldForm) {
+          this.displayAdvance = "block";
+        } else if (this.form == this.oldForm) {
+          this.displayAdvance = "none";
+        }
       }
     }
     this.oldForm = this.form
@@ -96,11 +92,10 @@ export class ViewTravelFinanceComponent implements OnInit {
       headers: pageHeaders
     });
     var body = JSON.stringify(this.form);
-    console.log(this.consts.url + 'TravelFinance');
+    console.log('approve addvance put.'+this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
     this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID
       + '&restButtonID=0', body, options)
-      //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert("Advance form is being processed"));
   }
   denyAdvance() {
@@ -113,11 +108,10 @@ export class ViewTravelFinanceComponent implements OnInit {
       headers: pageHeaders
     });
     var body = JSON.stringify(this.form);
-    console.log(this.consts.url + 'TravelFinance');
+    console.log('deny addvance put.' +this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
     this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID
-      + '&restButtonID=0&restDenyMessage=' + this.denyExplain, body, options)
-      //.subscribe((data) => this.waitForHttp(data));
+      + '&restButtonID=2', body, options)
       .subscribe((data) => alert("Advance form is being returned to the traveler"));
   }
 
@@ -131,11 +125,10 @@ export class ViewTravelFinanceComponent implements OnInit {
       headers: pageHeaders
     });
     var body = JSON.stringify(this.form);
-    console.log(this.consts.url + 'TravelFinance');
+    console.log('approve recap put.' +this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
     this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID
       + '&restButtonID=1', body, options)
-      //.subscribe((data) => this.waitForHttp(data));
       .subscribe((data) => alert("Recap form is being processed"));
   }
   denyRecap() {
@@ -148,11 +141,10 @@ export class ViewTravelFinanceComponent implements OnInit {
       headers: pageHeaders
     });
     var body = JSON.stringify(this.form);
-    console.log(this.consts.url + 'TravelFinance');
+    console.log('deny recap put.' +this.consts.url + 'TravelFinance');
     this.displaySelected(this.form);
     this.http.put(this.consts.url + 'TravelFinance?restUserID=' + this.user.UserID
-      + '&restButtonID=1&restDenyMessage=' + this.denyExplain, body, options)
-      //.subscribe((data) => this.waitForHttp(data));
+      + '&restButtonID=3', body, options)
       .subscribe((data) => alert("Recap form is being returned to the traveler"));
   }
 }

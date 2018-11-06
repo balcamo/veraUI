@@ -2,7 +2,6 @@ import { Component, Input, OnInit, Output } from '@angular/core';
 import { Constants } from '../classes/constants';
 import { User } from '../classes/user';
 import { UserService } from '../service/app.service.user';
-import { EventEmitter } from 'protractor';
 
 @Component({
   selector: 'app-nav',
