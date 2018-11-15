@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  adalConfig: {
+    tenant: 'my-tenant.onmicrosoft.com',
+    clientId: '00000000-0000-0000-0000-000000000000',
+    postLogoutRedirectUri: '/logout'
+  },
 };
 
 /*

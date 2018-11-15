@@ -6,22 +6,22 @@
   <!-- Traveler information -->
   <h3>Traveler Information</h3>
   <h6>
-    <label class="mr-sm-2 mb-0" for="firstName">First name*</label>
+    <label class="mr-sm-2 mb-0" for="firstName">First name</label>
     <input [ngStyle]="{'border-color':firstNameBorder}" type="text" id="firstName"
            class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.FirstName"
-           placeholder="First name*" required />
+           placeholder="First name" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="lastName">Last name*</label>
+    <label class="mr-sm-2 mb-0" for="lastName">Last name</label>
     <input [ngStyle]="{'border-color':lastNameBorder}" type="text" id="lastName"
            class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.LastName"
-           placeholder="Last name*" required />
+           placeholder="Last name" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="phone">Best phone number while traveling*</label>
+    <label class="mr-sm-2 mb-0" for="phone">Best phone number while traveling</label>
     <input [ngStyle]="{'border-color':phoneBorder}" type="tel" id="phone"
            class="form-control mr-sm-2 mb-2 mb-sm-0" [(ngModel)]="form.Phone" maxlength="10"
-           minlength="10" placeholder="Best phone number while traveling*" required />
+           minlength="13" placeholder="Best phone number while traveling" required />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0" for="email">Email</label>
@@ -32,31 +32,31 @@
   <!-- Event information -->
   <h3>Event Information</h3>
   <h6>
-    <label class="mr-sm-2 mb-0" for="eventTitle">URL to event information*</label>
+    <label class="mr-sm-2 mb-0" for="eventTitle">URL to event information</label>
     <input [ngStyle]="{'border-color':eventTitleBorder}" type="text" id="eventTitle"
            class="form-control mr-sm-2 mb-2 mb-sm-0"
-           [(ngModel)]="form.EventTitle" placeholder="Event info*" required />
+           [(ngModel)]="form.EventTitle" placeholder="Event info" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="eventLocation">Event location*</label>
+    <label class="mr-sm-2 mb-0" for="eventLocation">Event location</label>
     <input [ngStyle]="{'border-color':eventLocBorder}" type="text" id="eventLocation"
            class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Event location*" [(ngModel)]="form.Location" required />
+           placeholder="Event location" [(ngModel)]="form.Location" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0 " for="startDate">Date leaving*</label>
+    <label class="mr-sm-2 mb-0 " for="startDate">Date leaving</label>
     <input [ngStyle]="{'border-color':travelStartBorder}" type="Date" id="startDate"
            class="form-control mr-sm-2 mb-2 mb-sm-0"
            [(ngModel)]="form.TravelBegin" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0 " for="endDate">Date returning*</label>
+    <label class="mr-sm-2 mb-0 " for="endDate">Date returning</label>
     <input [ngStyle]="{'border-color':travelEndBorder}" type="Date" id="endDate"
            class="form-control mr-sm-2 mb-2 mb-sm-0"
            [(ngModel)]="form.TravelEnd" required />
   </h6>
   <h6 class="form-check form-check-inline" [ngStyle]="{'color':distVehColor}">
-    Are you driving a district vehicle*:
+    Are you driving a district vehicle:
   </h6>
   <div class="form-check form-check-inline">
     <input class="form-check-input" type="radio" name="inlineRadioOptions"
@@ -76,80 +76,80 @@
   <!-- Estimated Costs to be used in travel advance -->
   <h3>Estimated Costs</h3>
   <h6>
-    <label class="mr-sm-2 mb-0" for="registration">Registration cost*</label>
+    <label class="mr-sm-2 mb-0" for="registration">Registration cost</label>
     <input [ngStyle]="{'border-color':registrationBorder}" type="number" id="registration"
            ngbTooltip="Registration Cost" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Registration cost*" [(ngModel)]="form.RegistrationCost" required />
+           placeholder="Registration cost" [(ngModel)]="form.RegistrationCost" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="airfare">Airfare cost*</label>
+    <label class="mr-sm-2 mb-0" for="airfare">Airfare cost</label>
     <input [ngStyle]="{'border-color':airfareBorder}" type="number" id="airfare"
            ngbTooltip="Airfare cost" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Airfare Cost*" [(ngModel)]="form.Airfare" required />
+           placeholder="Airfare Cost" [(ngModel)]="form.Airfare" required />
   </h6>
   <div [ngStyle]="{'display':rentalCarDisplay}">
     <h6>
-      <label class="mr-sm-2 mb-0" for="rental">Rental car cost*</label>
+      <label class="mr-sm-2 mb-0" for="rental">Rental car cost</label>
       <input [ngStyle]="{'border-color':rentalBorder}" type="number" id="rental"
              (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0" ngbTooltip="Rental Car Cost"
-             placeholder="Rental car cost*" [(ngModel)]="form.RentalCar" required />
+             placeholder="Rental car cost" [(ngModel)]="form.RentalCar" required />
     </h6>
   </div>
   <h6>
-    <label class="mr-sm-2 mb-0" for="parking">Parking and tolls*</label>
+    <label class="mr-sm-2 mb-0" for="parking">Parking and tolls</label>
     <input [ngStyle]="{'border-color':fuelBorder}" type="number" id="parking"
            ngbTooltip="Cost of parking and tolls" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Parking and tolls*" [(ngModel)]="form.ParkingTolls" required />
+           placeholder="Parking and tolls" [(ngModel)]="form.ParkingTolls" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="fuel">Fuel*</label>
+    <label class="mr-sm-2 mb-0" for="fuel">Fuel</label>
     <input [ngStyle]="{'border-color':fuelBorder}" type="number" id="fuel"
            ngbTooltip="Cost of fuel while in district vehecle or rental car"
            (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Fuel and parking cost*" [(ngModel)]="form.Fuel" required />
+           placeholder="Fuel and parking cost" [(ngModel)]="form.Fuel" required />
   </h6>
   <div [ngStyle]="{'display':rentalCarDisplay}">
     <h6>
-      <label class="mr-sm-2 mb-0 sr-only" for="mileage">Mileage reimburesement cap*</label>
+      <label class="mr-sm-2 mb-0 sr-only" for="mileage">Mileage reimburesement cap</label>
       <a href="https://www.alaskaair.com/" target="_blank" placement="right"
-         ngbTooltip="Enter the cost of the flight to your destination">Mileage reimburesement cap*</a>
+         ngbTooltip="Enter the cost of the flight to your destination">Mileage reimburesement cap</a>
       <input [ngStyle]="{'border-color':mileageBorder}" type="number" id="mileage"
              (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
-             placeholder="Estimated miles to be driven*" [(ngModel)]="form.Mileage" required />
+             placeholder="Estimated miles to be driven" [(ngModel)]="form.Mileage" required />
     </h6>
   </div>
   <h6>
-    <label class="mr-sm-2 mb-0" for="lodging">Lodging*</label>
+    <label class="mr-sm-2 mb-0" for="lodging">Lodging</label>
     <input [ngStyle]="{'border-color':lodgingBorder}" type="number" id="lodging"
            ngbTooltip="Cost of Lodging" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Lodging*" [(ngModel)]="form.Lodging" required />
+           placeholder="Lodging" [(ngModel)]="form.Lodging" required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0 sr-only" for="lodging">Per Diem*</label>
+    <label class="mr-sm-2 mb-0 sr-only" for="lodging">Per Diem</label>
     <a href="https://www.gsa.gov/travel/plan-book/per-diem-rates" target="_blank" placement="right"
-       ngbTooltip="Find your city to find the Per Diem">Per Diem:*</a>
+       ngbTooltip="Find your city to find the Per Diem">Per Diem:</a>
     <input [ngStyle]="{'border-color':perDiemBorder}" required type="number" (change)="checkTot()"
            class="form-control" [(ngModel)]="form.PerDiem" placeholder="Food allowence for each day" />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="travelDays">Number of traveling days*:</label>
+    <label class="mr-sm-2 mb-0" for="travelDays">Number of traveling days:</label>
     <input [ngStyle]="{'border-color':daysTravelBorder}" type="number" id="travelDays"
-           class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Number of days traveling*"
+           class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Number of days traveling"
            [(ngModel)]="form.TravelDays" (change)="checkTot()"
            ngbTooltip="Count the days you will be traveling." required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="fulltravelDays">Number of full days*:</label>
+    <label class="mr-sm-2 mb-0" for="fulltravelDays">Number of full days:</label>
     <input [ngStyle]="{'border-color':daysBorder}" type="number" id="fulltravelDays"
-           class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Number of full days of the trip*"
+           class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Number of full days of the trip"
            [(ngModel)]="form.FullDays" (change)="checkTot()"
            ngbTooltip="Count the full days you will be gone." required />
   </h6>
   <h6>
-    <label class="mr-sm-2 mb-0" for="misc">Miscellaneous*:</label>
+    <label class="mr-sm-2 mb-0" for="misc">Miscellaneous:</label>
     <input [ngStyle]="{'border-color':miscBorder}" type="number" id="misc"
            ngbTooltip="Miscellaneous" (change)="checkTot()" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           placeholder="Miscellaneous*" [(ngModel)]="form.Misc" required />
+           placeholder="Miscellaneous" [(ngModel)]="form.Misc" required />
   </h6>
   <h6>
     <label class="mr-sm-2 mb-0" for="misc">Explanation for miscellaneous costs:</label>
@@ -186,7 +186,7 @@
       Have you read and do you understand the
       <a ngbTooltip="Travel Policy starts on page 18"
          href="https://verawaterandpower.sharepoint.com/PolicyDocs/Forms/AllItems.aspx?id=%2FPolicyDocs%2FPolicy%20No%2E%20200%20-%20Personnel%2Epdf&parent=%2FPolicyDocs"
-         target="_blank">District Travel Policy</a>*:
+         target="_blank">District Travel Policy</a>:
     </span>
   </h6>
   <div class="form-check form-check-inline">

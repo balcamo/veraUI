@@ -7,8 +7,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Serialize, SerializeProperty, Serializable } from 'ts-serializer';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpModule } from '@angular/http';
-
+import { Http, HttpModule } from '@angular/http';
+//import { AdalService, Adal4HTTPService } from 'adal-angular4';
 import { AppRoutingModule } from './app-routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
@@ -49,7 +49,14 @@ import { ViewTravelFinanceComponent } from './travel/view-travel-finance/view-tr
     HttpClientModule,
 
   ],
-  providers: [UserService],
+  providers: [UserService,
+    /*AdalService,
+    {
+      provide: Adal4HTTPService,
+      useFactory: Adal4HTTPService.factory,
+      deps: [Http, AdalService]
+    }*/
+  ],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
 })
