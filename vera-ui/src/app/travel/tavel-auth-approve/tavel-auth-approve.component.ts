@@ -94,11 +94,8 @@ export class TavelAuthApproveComponent implements OnInit {
     this.displaySelected(this.form);
     if (this.user.EntryGroup[3] == 1) {
       this.form.DHApproval = 'green';
-      this.form.DHID = this.user.UserID;
     } else if (this.user.EntryGroup[3] == 99) {
       this.form.GMApproval = 'green';
-      this.form.GMID = this.user.UserID;
-      this.form.ApprovalStatus = 'green'
     }
     var body = JSON.stringify(this.form);
     console.log("the form being approved: " + this.form.toString());

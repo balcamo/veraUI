@@ -49,35 +49,31 @@ export class ViewTravelFinanceComponent implements OnInit {
     this.form = authForm;
     this.form.MailMessage = '';
     // this if makes sure that old views are removed
-    if (this.form == this.oldForm) {
-      this.displayRecap = "none";
+    if (this.form.AdvanceStatus == 1 && this.form.RecapStatus == 2) {
+      this.food = (this.form.RecapPerDiem * this.consts.travelDayFood * this.form.RecapTravelDays)
+        + (this.form.RecapPerDiem * this.form.RecapFullDays);
       this.displayAdvance = "none"
+      if (this.displayRecap == "none") {
+        this.displayRecap = "block";
+      } else if (this.form !== this.oldForm) {
+        this.displayRecap = "block";
+      } else if (this.form == this.oldForm) {
+        this.displayRecap = "none";
+      }
     } else {
-      // select display for recap or advance
-      if (this.form.AdvanceStatus == 1 && this.form.RecapStatus == 2) {
-        this.food = (this.form.RecapPerDiem * this.consts.travelDayFood * this.form.RecapTravelDays)
-          + (this.form.RecapPerDiem * this.form.RecapFullDays);
-        this.displayAdvance = "none"
-        if (this.displayRecap == "none") {
-          this.displayRecap = "block";
-        } else if (this.form !== this.oldForm) {
-          this.displayRecap = "block";
-        } else if (this.form == this.oldForm) {
-          this.displayRecap = "none";
-        }
-      } else {
-        this.food = (this.form.PerDiem * this.consts.travelDayFood * this.form.TravelDays)
-          + (this.form.PerDiem * this.form.FullDays);
-        this.displayRecap = "none"
-        if (this.displayAdvance == "none") {
-          this.displayAdvance = "block";
-        } else if (this.form !== this.oldForm) {
-          this.displayAdvance = "block";
-        } else if (this.form == this.oldForm) {
-          this.displayAdvance = "none";
-        }
+      this.food = (this.form.PerDiem * this.consts.travelDayFood * this.form.TravelDays)
+        + (this.form.PerDiem * this.form.FullDays);
+      this.displayRecap = "none"
+      if (this.displayAdvance == "none") {
+        this.displayAdvance = "block";
+      } else if (this.form !== this.oldForm) {
+        this.displayAdvance = "block";
+      } else if (this.form == this.oldForm) {
+        this.displayAdvance = "none";
       }
     }
+
+
     this.oldForm = this.form
 
   }

@@ -65,7 +65,6 @@ export class AppComponent {
       console.log(this.consts.url + 'LDAP');
       this.http.post(this.consts.url + 'LDAP', body, options)
         .subscribe((data) => this.waitForHttp(data));
-      
     }
   }
 
@@ -76,7 +75,7 @@ export class AppComponent {
     this.user.EntryGroup = this.value.AccessKey;
     this.user.token = this.value.SessionKey;
     this.user.UserID = this.value.UserID;
-    if (data == undefined) {
+    if (this.value.UserID== undefined) {
       alert("no data");
     } else if (this.user.EntryGroup[0] == 0) {
       alert("Not a valid email. Please try again");
@@ -88,7 +87,6 @@ export class AppComponent {
       this.userEntry = "none";
       this.mainPage = "block";
       this.emit_event(this.param);
-
     }
     
   }
