@@ -59,6 +59,8 @@ namespace VeraAPI.HelperClasses
                     travelForm.AdvanceDate = DateTime.Now.ToString();
                     travelForm.RecapStatus = Constants.NotStartedValue.ToString();
                     travelForm.RecapDate = DateTime.Now.ToString();
+                    travelForm.CloseStatus = Constants.PendingValue.ToString();
+                    travelForm.CloseDate = DateTime.Now.ToString();
 
                     // Load the job template corresponding to the templateID for the submitted form
                     log.WriteLogEntry("Starting FormDataHandler...");
@@ -198,6 +200,7 @@ namespace VeraAPI.HelperClasses
                         { "recap_travel_days", travelDays.ToString() },
                         { "recap_full_days", fullDays.ToString() },
                         { "recap_misc_amt", miscAmt.ToString() },
+                        { "misc_description", travelForm.MiscExplain },
                         { "recap_total_amt", totalAmt.ToString() },
                         { "reimburse_amt", reimburseAmt.ToString() },
                         { "recap_date", DateTime.Now.ToString() },
@@ -264,7 +267,7 @@ namespace VeraAPI.HelperClasses
                 case Constants.GetFinanceTravelForms: // Load Finance Travel Forms
                     {
                         log.WriteLogEntry("Handling command ID: " + commandID);
-                        string cmdString = string.Format(@"select * from valhalla.dbo.travel where close_status = 2 and ((request_advance = 1 and advance_status = 2) or (advance_status = 1 and recap_status = 2))", dbName);
+                        string cmdString = string.Format(@"select * from valhalla.dbo.travel where close_status = 2 and approval_status = 1 and ((request_advance = 1 and advance_status = 2) or (advance_status = 1 and recap_status = 2))", dbName);
 
                         log.WriteLogEntry("Starting FormDataHandler...");
                         if (formDataHandle.LoadTravelForms(travelForms, cmdString) > 0)
@@ -340,7 +343,8 @@ namespace VeraAPI.HelperClasses
                         {
                             formFields = new string[] { "*" };
                             formFilters = new string[,] {
-                                    { "submitter_id", userID.ToString(), "=", "and" },
+                                    { "supervisor_id", userID.ToString(), "=", "or" },
+                                    { "manager_id", userID.ToString(), "=", "or" },
                                     { "approval_status", Constants.PendingValue.ToString(), "=", "and" }
                                 };
                         }

@@ -3,11 +3,8 @@
     "",
     "\\vera-ui",
     "\\vera-ui\\src",
-    "\\vera-ui\\src\\app\\classes",
-    "\\vera-ui\\src\\app\\travel",
-    "\\vera-ui\\src\\app\\travel\\travel-auth",
-    "\\vera-ui\\src\\app\\travel\\view-auth-forms",
-    "\\veraAPI"
+    "\\veraAPI\\veraAPI\\Controllers"
   ],
+  "SelectedNode": "\\vera-ui\\src\\web.config",
   "PreviewInSolutionExplorer": false
 }

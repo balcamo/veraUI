@@ -29,7 +29,7 @@ namespace VeraAPI.HelperClasses
                 {
                     EmailSubject = "Notify Department Head",
                     RecipientEmailAddress = domainUser.Department.DeptHeadEmail,
-                    EmailBody = "<html><body><p>There has been a request to travel</p><p>go <a href=\"https://bermuda.verawp.local/?route=travel\"> here to approve</a></p></body></html>"
+                    EmailBody = "<html><body><p>There has been a request to travel</p><p>go <a href=\"https://bermuda.verawaterandpower.com/?route=travel\"> here to approve</a></p></body></html>"
                 };
                 try
                 {
@@ -202,7 +202,7 @@ namespace VeraAPI.HelperClasses
                 {
                     EmailSubject = "Notify General Manager",
                     RecipientEmailAddress = domainUser.Company.GeneralManagerEmail,
-                    EmailBody = "<html><body><p>A department head has approved a request to travel</p><p>go <a href=\"https://bermuda.verawp.local/?route=travel\"> here to approve</a></p></body></html>"
+                    EmailBody = "<html><body><p>A department head has approved a request to travel</p><p>go <a href=\"https://bermuda.verawaterandpower.com/?route=travel\"> here to approve</a></p></body></html>"
                 };
                 try
                 {

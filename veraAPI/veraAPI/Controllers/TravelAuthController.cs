@@ -177,6 +177,7 @@ namespace VeraAPI.Controllers
                                 {
                                     log.WriteLogEntry("Starting EmailHelper...");
                                     EmailHelper email = new EmailHelper();
+                                    email.NotifyFinance(Constants.NotificationFinanceAdvance);
                                 }
                             }
                             else

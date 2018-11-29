@@ -28,6 +28,8 @@ namespace VeraAPI.Models.Security
         public string DomainUserName { get; set; }
         public string SessionKey { get; set; }
         public bool Authenicated { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
 
         public UserSession() { }
 
