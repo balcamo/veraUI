@@ -4,11 +4,16 @@
 
 export const environment = {
   production: false,
-  adalConfig: {
-    tenant: 'my-tenant.onmicrosoft.com',
-    clientId: '00000000-0000-0000-0000-000000000000',
-    postLogoutRedirectUri: '/logout'
-  },
+  config: {
+    tenant: 'verawaterandpower.com',
+    clientId: '4e2ad391-77f4-4dd9-bd2b-58125f55e5ba',
+    endpoints: {
+      'https://bigfoot.verawaterandpower.com': 'a809a684-750b-4a1e-a0fb-ee3debe27313 ',
+     //'https://bigfoot.verawaterandpower.com/api/LDAP': 'a809a684-750b-4a1e-a0fb-ee3debe27313 ',
+      //'https://bigfoot.verawaterandpower.com/api/TravelAuth': 'a809a684-750b-4a1e-a0fb-ee3debe27313 ',
+
+    }
+  }
 };
 
 /*

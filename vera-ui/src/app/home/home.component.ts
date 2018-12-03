@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AdalService } from 'adal-angular4';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -6,11 +8,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  user: any;
 
-  constructor() {
+  constructor(private adalService: AdalService, protected http: HttpClient) {
   }
 
   ngOnInit() {
+    this.user = this.adalService.userInfo;
+
+    this.user.token = this.user.token.substring(0, 10) + '...';
   }
 
 }
