@@ -1,9 +1,12 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Headers, Http, URLSearchParams, RequestOptions, Response } from '@angular/http';
 import { User, Auth } from './classes/user';
 import { UserService } from './service/app.service.user';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { AdalService } from 'adal-angular4';
+import { environment } from '../environments/environment';
+
 import { Observable } from 'rxjs';
 import { Constants } from './classes/constants';
 import { NavComponent } from './nav/nav.component';
@@ -16,7 +19,7 @@ import { Serialize, SerializeProperty, Serializable } from 'ts-serializer';
   outputs: ['notify'],
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   userEntry = "block";
   mainPage = "none";
   userService: UserService;
@@ -31,14 +34,38 @@ export class AppComponent {
   url: URL;
   param: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, http: Http, userService: UserService, private httpClient: HttpClient) {
+  constructor(private router: Router, private route: ActivatedRoute, http: Http, userService: UserService, private httpClient: HttpClient, private adalService: AdalService) {
     this.userService = userService;
     this.http = http;
     this.url = new URL(window.location.href);
     this.param = this.url.searchParams.get("route");
     console.log("current param: " + this.param);
-  }
+    adalService.init(environment.config);
 
+  }
+  ngOnInit() {
+
+    this.adalService.handleWindowCallback();
+
+    console.log(this.adalService.userInfo);
+    
+    if (this.adalService.userInfo.authenticated) {
+      let params: URLSearchParams = new URLSearchParams();
+      var pageHeaders = new Headers({
+        'Content-Type': 'application/json'
+      });
+      let options = new RequestOptions({
+        search: params,
+        headers: pageHeaders
+      });
+      var body = JSON.stringify({ UserName: this.adalService.userInfo.userName, UserPwd: this.adalService.userInfo.token });
+      console.log(this.consts.url + 'LDAP');
+      this.http.post(this.consts.url + 'LDAP', body, options)
+        .subscribe((data) => this.waitForHttp(data));
+    }
+    
+    console.log(this.adalService.userInfo);
+  }
   public emit_event(location: string) {
     this.notify.emit(location);
   }
@@ -89,6 +116,12 @@ export class AppComponent {
       this.emit_event(this.param);
     }
     
+  }
+  get authenticated(): boolean {
+    return this.adalService.userInfo.authenticated;
+  }
+  login() {
+    this.adalService.login();
   }
   
 }

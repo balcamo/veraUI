@@ -8,22 +8,15 @@
   </h1>
 </div>
 
-<div [ngStyle]="{'display':userEntry}">
-  <form class="form-control wrapper">
-    <label class="mr-sm-2 mb-0" for="email">Email</label>
-    <input type="text" id="email" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           [(ngModel)]="user.UserEmail" placeholder="Email" required
-           (input)="useremail=$event.target.value" name="email" />
-    <label class="mr-sm-2 mb-0" for="password">Password</label>
-    <input type="password" id="password" class="form-control mr-sm-2 mb-2 mb-sm-0"
-           [(ngModel)]="password" name="password" placeholder="Password" required
-           (input)="password=$event.target.value" />
-    <input type="submit" (click)="submitUserEmail()" (keyup.enter)="submitUserEmail()" routerLink="{{param}}">
-  </form>
+<div *ngIf="!authenticated">
+  
+    <span *ngIf="!authenticated" (click)="login()">
+      <button>Login</button>
+    </span>
+  
 </div>
 
-
-<div [ngStyle]="{'display':mainPage}">
+<div *ngIf="authenticated">
   <!-- display the nav bar -->
   <app-nav [nav]="user.nav"></app-nav>
   <!-- router output -->

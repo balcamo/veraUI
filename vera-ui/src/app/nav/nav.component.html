@@ -4,6 +4,9 @@
 <!-- icon side menu with use of routing -->
 <div class="sidebar">
   <nav>
+    <a>
+      <img placement="right" src="../assets/HoneyDipper1Brown.png" aria-hidden="true" ngbTooltip="Logout">
+    </a>
     <ul *ngFor="let opt of nav" class="nav">
 
       <li placement="right" ngbTooltip="{{opt.name}}" routerLink="{{opt.route}}">
