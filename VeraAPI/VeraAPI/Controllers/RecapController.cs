@@ -60,10 +60,7 @@ namespace VeraAPI.Controllers
                                 result = "Travel Recap Form Submitted.";
                             }
                             else
-                            {
                                 result = "Failed to submit recap form!";
-                                log.WriteLogEntry(result);
-                            }
                         }
                         catch (Exception ex)
                         {
@@ -73,22 +70,14 @@ namespace VeraAPI.Controllers
                         }
                     }
                     else
-                    {
                         result = "Failed to submit travel recap! User not found!";
-                        log.WriteLogEntry(result);
-                    }
                 }
                 else
-                {
                     result = "Failed to submit travel recap! User not recognized!";
-                    log.WriteLogEntry(result);
-                }
             }
             else
-            {
                 result = "Failed to submit travel recap! Invalid user id!";
-                log.WriteLogEntry(result);
-            }
+            log.WriteLogEntry(result);
             log.WriteLogEntry("End RecapController POST.");
             return result;
         }

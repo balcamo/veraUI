@@ -418,10 +418,10 @@ namespace VeraAPI.Models.DataHandler
                     conn.Open();
                     string cmdString = string.Format(@"insert into {0}.dbo.user_session (user_id, company_number, dept_number, position_number, role_number, domain_number, 
 	                                                    username, user_email, first_name, last_name, user_employee_id, dept_name, dept_head_email, 
-	                                                    domain_upn, domain_username, session_key, authenticated)
+	                                                    domain_upn, domain_username, session_key, authenticated, start_time)
                                                         values (@userID, @companyNumber, @deptNumber, @positionNumber, @roleNumber, @domainNumber, 
 	                                                    @userName, @userEmail, @firstName, @lastName, @userEmpID, @deptName, @deptHeadEmail, 
-	                                                    @domainUpn, @domainUserName, @sessionKey, @authenticated)", dbName);
+	                                                    @domainUpn, @domainUserName, @sessionKey, @authenticated, @startTime)", dbName);
                     using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                     {
                         log.WriteLogEntry(string.Format("Domain user {0} {1} {2} {3}", session.FirstName, session.LastName, session.DomainUserName, session.DomainUpn));
@@ -443,6 +443,7 @@ namespace VeraAPI.Models.DataHandler
                         cmd.Parameters.AddWithValue("@domainUserName", session.DomainUserName);
                         cmd.Parameters.AddWithValue("@sessionKey", session.SessionKey);
                         cmd.Parameters.AddWithValue("@authenticated", session.Authenicated);
+                        cmd.Parameters.AddWithValue("@startTime", session.StartTime);
                         if (cmd.ExecuteNonQuery() > 0)
                             result = true;
                     }

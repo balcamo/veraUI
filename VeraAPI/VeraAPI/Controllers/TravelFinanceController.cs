@@ -140,13 +140,13 @@ namespace VeraAPI.Controllers
                                                 }
                                             case 2:
                                                 {
-                                                    string message = string.Format("{0}\n{1}\n{2}", travelAuthForm.EventTitle, travelAuthForm.Location, travelAuthForm.MailMessage);
+                                                    string message = string.Format("{0}{1}{2}{3}{4}", travelAuthForm.EventTitle, Environment.NewLine, travelAuthForm.Location, Environment.NewLine, travelAuthForm.MailMessage);
                                                     email.NotifySubmitter(travelAuthForm.Email, message);
                                                     break;
                                                 }
                                             case 3:
                                                 {
-                                                    string message = string.Format("{0}\n{1}\n{2}", travelAuthForm.EventTitle, travelAuthForm.Location, travelAuthForm.MailMessage);
+                                                    string message = string.Format("{0}{1}{2}{3}{4}", travelAuthForm.EventTitle, Environment.NewLine, travelAuthForm.Location, Environment.NewLine, travelAuthForm.MailMessage);
                                                     email.NotifySubmitter(travelAuthForm.Email, message);
                                                     break;
                                                 }

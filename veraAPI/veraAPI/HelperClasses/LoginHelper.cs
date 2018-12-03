@@ -59,7 +59,8 @@ namespace VeraAPI.HelperClasses
                 DomainUserName = user.DomainUserName,
                 DomainUpn = user.DomainUpn,
                 SessionKey = user.Token.SessionKey,
-                Authenicated = user.Authenicated
+                Authenicated = user.Authenicated,
+                StartTime = DateTime.Now
             };
 
             log.WriteLogEntry("Starting UserDataHandler...");

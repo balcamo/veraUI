@@ -59,6 +59,8 @@ namespace VeraAPI.HelperClasses
                     travelForm.AdvanceDate = DateTime.Now.ToString();
                     travelForm.RecapStatus = Constants.NotStartedValue.ToString();
                     travelForm.RecapDate = DateTime.Now.ToString();
+                    travelForm.CloseStatus = Constants.PendingValue.ToString();
+                    travelForm.CloseDate = DateTime.Now.ToString();
 
                     // Load the job template corresponding to the templateID for the submitted form
                     log.WriteLogEntry("Starting FormDataHandler...");
@@ -102,9 +104,7 @@ namespace VeraAPI.HelperClasses
                             { "advance_status", Constants.PendingValue.ToString() },
                             { "advance_date", DateTime.Now.ToString() },
                             { "close_status", Constants.PendingValue.ToString() },
-                            { "close_date", DateTime.Now.ToString() },
-                            { "recap_status", Constants.PendingValue.ToString() },
-                            { "recap_date", DateTime.Now.ToString() }
+                            { "close_date", DateTime.Now.ToString() }
                         };
                     formFilters = new string[,] {
                             { "submitter_id", userID.ToString() },
@@ -200,6 +200,7 @@ namespace VeraAPI.HelperClasses
                         { "recap_travel_days", travelDays.ToString() },
                         { "recap_full_days", fullDays.ToString() },
                         { "recap_misc_amt", miscAmt.ToString() },
+                        { "misc_description", travelForm.MiscExplain },
                         { "recap_total_amt", totalAmt.ToString() },
                         { "reimburse_amt", reimburseAmt.ToString() },
                         { "recap_date", DateTime.Now.ToString() },
@@ -266,7 +267,7 @@ namespace VeraAPI.HelperClasses
                 case Constants.GetFinanceTravelForms: // Load Finance Travel Forms
                     {
                         log.WriteLogEntry("Handling command ID: " + commandID);
-                        string cmdString = string.Format(@"select * from valhalla.dbo.travel where close_status = 2 and ((request_advance = 1 and advance_status = 2) or (advance_status = 1 and recap_status = 2))", dbName);
+                        string cmdString = string.Format(@"select * from valhalla.dbo.travel where close_status = 2 and approval_status = 1 and ((request_advance = 1 and advance_status = 2) or (advance_status = 1 and recap_status = 2))", dbName);
 
                         log.WriteLogEntry("Starting FormDataHandler...");
                         if (formDataHandle.LoadTravelForms(travelForms, cmdString) > 0)
@@ -275,7 +276,7 @@ namespace VeraAPI.HelperClasses
                             {
                                 if (ConvertStatusValues(travelForm))
                                 {
-                                    log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", travelForm.UserID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
+                                    log.DumpObject(travelForm);
                                     this.WebForms.Add(travelForm);
                                     result++;
                                 }
@@ -317,7 +318,7 @@ namespace VeraAPI.HelperClasses
                             {
                                 if (ConvertStatusValues(travelForm))
                                 {
-                                    log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", travelForm.UserID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
+                                    log.DumpObject(travelForm);
                                     this.WebForms.Add(travelForm);
                                     result++;
                                 }
@@ -342,7 +343,8 @@ namespace VeraAPI.HelperClasses
                         {
                             formFields = new string[] { "*" };
                             formFilters = new string[,] {
-                                    { "submitter_id", userID.ToString(), "=", "and" },
+                                    { "supervisor_id", userID.ToString(), "=", "or" },
+                                    { "manager_id", userID.ToString(), "=", "or" },
                                     { "approval_status", Constants.PendingValue.ToString(), "=", "and" }
                                 };
                         }
@@ -371,7 +373,7 @@ namespace VeraAPI.HelperClasses
                                     }
                                     else
                                         log.WriteLogEntry("No forms available for approval by user " + userID);
-                                    log.WriteLogEntry(string.Format("User: {0} Approval Status: {1} Dept Head: {2} DH Approval: {3} GM: {4} GM Approval {5}", travelForm.UserID, travelForm.ApprovalStatus, travelForm.DHID, travelForm.DHApproval, travelForm.GMID, travelForm.GMApproval));
+                                    log.DumpObject(travelForm);
                                 }
                                 else
                                 {

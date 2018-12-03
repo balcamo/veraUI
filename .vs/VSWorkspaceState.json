@@ -5,12 +5,11 @@
     "\\vera-ui\\src",
     "\\vera-ui\\src\\app",
     "\\vera-ui\\src\\app\\classes",
-    "\\vera-ui\\src\\app\\travel",
-    "\\vera-ui\\src\\app\\travel\\travel-auth",
-    "\\vera-ui\\src\\app\\travel\\view-auth-forms",
-    "\\veraAPI",
-    "\\veraAPI\\veraAPI"
+    "\\vera-ui\\src\\app\\e2e",
+    "\\vera-ui\\src\\app\\home",
+    "\\veraAPI\\veraAPI",
+    "\\veraAPI\\veraAPI\\Controllers"
   ],
-  "SelectedNode": "\\vera-ui\\src\\app\\classes\\travel-auth-form.ts",
+  "SelectedNode": "\\vera-ui\\src\\app",
   "PreviewInSolutionExplorer": false
 }
