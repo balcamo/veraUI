@@ -1,15 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\vera-ui",
-    "\\vera-ui\\src",
-    "\\vera-ui\\src\\app",
-    "\\vera-ui\\src\\app\\classes",
-    "\\vera-ui\\src\\app\\e2e",
-    "\\vera-ui\\src\\app\\home",
+    "\\veraAPI",
     "\\veraAPI\\veraAPI",
     "\\veraAPI\\veraAPI\\Controllers"
   ],
-  "SelectedNode": "\\vera-ui\\src\\app",
+  "SelectedNode": "\\veraAPI\\veraAPI\\Controllers\\LDAPController.cs",
   "PreviewInSolutionExplorer": false
 }
