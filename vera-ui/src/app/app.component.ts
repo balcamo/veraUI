@@ -50,18 +50,7 @@ export class AppComponent implements OnInit {
     console.log(this.adalService.userInfo);
     
     if (this.adalService.userInfo.authenticated) {
-      let params: URLSearchParams = new URLSearchParams();
-      var pageHeaders = new Headers({
-        'Content-Type': 'application/json'
-      });
-      let options = new RequestOptions({
-        search: params,
-        headers: pageHeaders
-      });
-      var body = JSON.stringify({ UserName: this.adalService.userInfo.userName, UserPwd: this.adalService.userInfo.token });
-      console.log(this.consts.url + 'LDAP');
-      this.http.post(this.consts.url + 'LDAP', body, options)
-        .subscribe((data) => this.waitForHttp(data));
+      this.getUser();
     }
     
     console.log(this.adalService.userInfo);
@@ -73,26 +62,19 @@ export class AppComponent implements OnInit {
   /**
    * take imput for user email, send it to the server to check if valid
    * */
-  submitUserEmail() {
-    this.user.UserEmail = this.useremail;
-    if (this.user.UserEmail == null || this.user.UserEmail == '' || this.password == null) {
-      alert("Please Enter your email and password");
-    } else {
-      console.log("user email " + this.user.UserEmail);
-      let params: URLSearchParams = new URLSearchParams();
-      var pageHeaders = new Headers({
-        'Content-Type': 'application/json'
-      });
-      let options = new RequestOptions({
-        search: params,
-        headers: pageHeaders
-      });
-      console.log("just before post");
-      var body = JSON.stringify({ UserName:this.useremail, UserPwd:this.password });
-      console.log(this.consts.url + 'LDAP');
-      this.http.post(this.consts.url + 'LDAP', body, options)
-        .subscribe((data) => this.waitForHttp(data));
-    }
+  getUser() {
+    let params: URLSearchParams = new URLSearchParams();
+    var pageHeaders = new Headers({
+      'Content-Type': 'application/json',
+    });
+    let options = new RequestOptions({
+      search: params,
+      headers: pageHeaders
+    });
+    var body = JSON.stringify({ UserName: this.adalService.userInfo.userName, UserPwd: this.adalService.userInfo.token });
+    console.log(this.consts.url + 'LDAP');
+    this.http.post(this.consts.url + 'LDAP', body, options)
+      .subscribe((data) => this.waitForHttp(data));
   }
 
   waitForHttp(data: any) {
@@ -122,6 +104,7 @@ export class AppComponent implements OnInit {
   }
   login() {
     this.adalService.login();
+    this.getUser();
   }
   
 }
