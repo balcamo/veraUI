@@ -58,7 +58,6 @@ namespace VeraAPI.HelperClasses
                 DeptHeadEmail = user.Department.DeptHeadEmail,
                 DomainUserName = user.DomainUserName,
                 DomainUpn = user.DomainUpn,
-                SessionKey = user.Token.SessionKey,
                 Authenicated = user.Authenicated,
                 StartTime = DateTime.Now
             };
@@ -72,22 +71,6 @@ namespace VeraAPI.HelperClasses
             else
                 log.WriteLogEntry("Failed inserting domain login user!");
             log.WriteLogEntry("End InsertDomainLoginUser.");
-            return result;
-        }
-
-        public bool CompareSessionToken()
-        {
-            log.WriteLogEntry("Starting ConvertSessionToken.");
-            bool result = false;
-            TokenHandler tokenHandle = new TokenHandler();
-            if (tokenHandle.VerifyToken())
-            {
-                log.WriteLogEntry("Success converting session token.");
-                result = true;
-            }
-            else
-                log.WriteLogEntry("Failed converting session token!");
-            log.WriteLogEntry("End ConvertSessionToken.");
             return result;
         }
 
@@ -128,30 +111,12 @@ namespace VeraAPI.HelperClasses
             UserSession session = CurrentSession;
 
             log.WriteLogEntry("Starting UserDataHandler...");
-            UserDataHandler userData = new UserDataHandler(session, dbServer, dbName);
-            if (userData.LoadUserSession(userID))
+            UserDataHandler userData = new UserDataHandler(dbServer, dbName);
+            if (userData.LoadUserSession(session))
                 result = true;
             else
                 log.WriteLogEntry("FAILED to load the current user session!");
             log.WriteLogEntry("End LoadUserSession.");
-            return result;
-        }
-
-        public bool GetSessionToken(DomainUser user)
-        {
-            log.WriteLogEntry("Starting GetSessionToken...");
-            bool result = false;
-            log.WriteLogEntry("Starting TokenHandler...");
-            TokenHandler tokenHandle = new TokenHandler();
-            if (tokenHandle.GenerateDomainToken(user))
-            {
-                user.Token.UserID = user.UserID;
-                result = true;
-                log.WriteLogEntry(string.Format("Current user {0} {1} {2} {3} {4}", user.UserID, user.UserName, user.DomainUpn, user.Token.SessionKey, user.Authenicated));
-            }
-            else
-                log.WriteLogEntry("FAILED to generate domain session key!");
-            log.WriteLogEntry("End GetSessionToken.");
             return result;
         }
     }

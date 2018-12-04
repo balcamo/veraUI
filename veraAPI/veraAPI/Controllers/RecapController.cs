@@ -44,8 +44,8 @@ namespace VeraAPI.Controllers
                 {
                     DomainUser user = new DomainUser();
                     log.WriteLogEntry("Starting UserHelper...");
-                    UserHelper userHelp = new UserHelper(user);
-                    if (userHelp.LoadDomainUser(userID))
+                    UserHelper userHelp = new UserHelper();
+                    if (userHelp.LoadDomainUser(user))
                     {
                         try
                         {
