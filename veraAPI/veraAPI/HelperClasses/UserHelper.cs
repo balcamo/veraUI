@@ -40,16 +40,17 @@ namespace VeraAPI.HelperClasses
             return result;
         }
 
-        public bool LoadDomainUser(int userID)
+        public bool LoadDomainUser(User user)
         {
             log.WriteLogEntry("Begin LoadDomainUser...");
             bool result = false;
-            if (CurrentUser.GetType() == typeof(DomainUser))
+            if (user.GetType() == typeof(DomainUser))
             {
-                DomainUser user = (DomainUser)CurrentUser;
+                DomainUser domainUser = (DomainUser)user;
                 log.WriteLogEntry("Starting UserDataHandler...");
-                userData = new UserDataHandler(user, dbServer, dbName);
-                if (userData.LoadUserData(userID))
+                userData = new UserDataHandler(dbServer, dbName);
+                domainUser.UserID = userData.GetUserID(domainUser.DomainUpn);
+                if (userData.LoadUserData(domainUser.UserID))
                 {
                     if (userData.LoadCompany())
                     {
@@ -59,13 +60,14 @@ namespace VeraAPI.HelperClasses
                             {
                                 if (userData.LoadSecurityRoles() > 0)
                                 {
-                                    user.Token.AccessKey[0] = user.CompanyNumber;
-                                    user.Token.AccessKey[1] = user.DepartmentNumber;
-                                    user.Token.AccessKey[2] = user.PositionNumber;
-                                    user.Token.AccessKey[3] = user.SecurityRoles.FirstOrDefault().RoleNumber;
-                                    user.Token.AccessKey[4] = user.SecurityAccess.FirstOrDefault().AccessNumber;
-                                    log.WriteLogEntry(string.Format("User access key array values {0} {1} {2} {3} {4}", user.CompanyNumber, user.DepartmentNumber, user.PositionNumber, user.SecurityRoles.FirstOrDefault().RoleNumber, user.SecurityAccess.FirstOrDefault().AccessNumber));
-                                    log.WriteLogEntry(string.Format("User token access key {0}", string.Join(",", user.Token.AccessKey)));
+                                    domainUser.Token.UserID = domainUser.UserID;
+                                    domainUser.Token.AccessKey[0] = domainUser.CompanyNumber;
+                                    domainUser.Token.AccessKey[1] = domainUser.DepartmentNumber;
+                                    domainUser.Token.AccessKey[2] = domainUser.PositionNumber;
+                                    domainUser.Token.AccessKey[3] = domainUser.SecurityRoles.FirstOrDefault().RoleNumber;
+                                    domainUser.Token.AccessKey[4] = domainUser.SecurityAccess.FirstOrDefault().AccessNumber;
+                                    log.WriteLogEntry(string.Format("User access key array values {0} {1} {2} {3} {4}", domainUser.CompanyNumber, domainUser.DepartmentNumber, domainUser.PositionNumber, domainUser.SecurityRoles.FirstOrDefault().RoleNumber, domainUser.SecurityAccess.FirstOrDefault().AccessNumber));
+                                    log.WriteLogEntry(string.Format("User token access key {0}", string.Join(",", domainUser.Token.AccessKey)));
                                     result = true;
                                 }
                                 else
@@ -86,6 +88,64 @@ namespace VeraAPI.HelperClasses
             else
                 log.WriteLogEntry("FAILED not a domain user!");
             log.WriteLogEntry("End LoadDomainUser.");
+            return result;
+        }
+
+        public bool LoadUserSession(UserSession session)
+        {
+            log.WriteLogEntry("Starting LoadUserSession...");
+            bool result = false;
+            string dbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
+            string dbName = WebConfigurationManager.AppSettings.Get("LoginDB");
+
+            log.WriteLogEntry("Starting UserDataHandler...");
+            UserDataHandler userData = new UserDataHandler(dbServer, dbName);
+            if (userData.LoadUserSession(session))
+                result = true;
+            else
+                log.WriteLogEntry("FAILED to load the current user session!");
+            log.WriteLogEntry("End LoadUserSession.");
+            return result;
+        }
+
+        public bool InsertDomainUserSession(DomainUser user)
+        {
+            log.WriteLogEntry("Begin InsertDomainLoginUser...");
+            bool result = false;
+            string dbServer = WebConfigurationManager.AppSettings.Get("LoginServer");
+            string dbName = WebConfigurationManager.AppSettings.Get("LoginDB");
+
+            UserSession session = new UserSession(user.UserID)
+            {
+                CompanyNumber = user.CompanyNumber,
+                DeptNumber = user.DepartmentNumber,
+                PositionNumber = user.PositionNumber,
+                DomainNumber = user.CompanyNumber,
+                RoleNumber = user.SecurityRoles.FirstOrDefault().RoleNumber,
+                AccessLevel = user.SecurityAccess.FirstOrDefault().AccessNumber,
+                UserName = user.UserName,
+                UserEmail = user.UserEmail,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                EmployeeID = user.EmployeeID,
+                DeptName = user.Department.DeptName,
+                DeptHeadName = user.Department.DeptHeadName,
+                DeptHeadEmail = user.Department.DeptHeadEmail,
+                DomainUserName = user.DomainUserName,
+                DomainUpn = user.DomainUpn,
+                Authenicated = user.Authenicated,
+                StartTime = DateTime.Now
+            };
+
+            log.WriteLogEntry("Starting UserDataHandler...");
+            UserDataHandler userData = new UserDataHandler(dbServer, dbName);
+            if (userData.InsertUserSession(session))
+            {
+                result = true;
+            }
+            else
+                log.WriteLogEntry("Failed inserting domain login user!");
+            log.WriteLogEntry("End InsertDomainLoginUser.");
             return result;
         }
     }

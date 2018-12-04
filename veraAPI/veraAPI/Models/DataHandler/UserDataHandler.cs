@@ -42,12 +42,11 @@ namespace VeraAPI.Models.DataHandler
             this.CurrentSession = new UserSession();
         }
 
-        public bool LoadUserSession(int userID)
+        public bool LoadUserSession(UserSession session)
         {
             log.WriteLogEntry("Begin LoadUserSession...");
             bool result = false;
             string cmdString = string.Format(@"select * from {0}.dbo.user_session where user_id = @userID", dbName);
-            UserSession session = this.CurrentSession;
 
             using (SqlConnection conn = new SqlConnection(dataConnectionString))
             {
@@ -56,7 +55,7 @@ namespace VeraAPI.Models.DataHandler
                     try
                     {
                         conn.Open();
-                        cmd.Parameters.AddWithValue("@userID", userID);
+                        cmd.Parameters.AddWithValue("@userID", session.UserID);
                         using (SqlDataReader rdr = cmd.ExecuteReader(CommandBehavior.SingleResult))
                         {
                             if (rdr.Read())
@@ -418,10 +417,10 @@ namespace VeraAPI.Models.DataHandler
                     conn.Open();
                     string cmdString = string.Format(@"insert into {0}.dbo.user_session (user_id, company_number, dept_number, position_number, role_number, domain_number, 
 	                                                    username, user_email, first_name, last_name, user_employee_id, dept_name, dept_head_email, 
-	                                                    domain_upn, domain_username, session_key, authenticated, start_time)
+	                                                    domain_upn, domain_username, authenticated, start_time)
                                                         values (@userID, @companyNumber, @deptNumber, @positionNumber, @roleNumber, @domainNumber, 
 	                                                    @userName, @userEmail, @firstName, @lastName, @userEmpID, @deptName, @deptHeadEmail, 
-	                                                    @domainUpn, @domainUserName, @sessionKey, @authenticated, @startTime)", dbName);
+	                                                    @domainUpn, @domainUserName, @authenticated, @startTime)", dbName);
                     using (SqlCommand cmd = new SqlCommand(cmdString, conn))
                     {
                         log.WriteLogEntry(string.Format("Domain user {0} {1} {2} {3}", session.FirstName, session.LastName, session.DomainUserName, session.DomainUpn));
@@ -441,7 +440,6 @@ namespace VeraAPI.Models.DataHandler
                         cmd.Parameters.AddWithValue("@deptHeadEmail", session.DeptHeadEmail);
                         cmd.Parameters.AddWithValue("@domainUpn", session.DomainUpn);
                         cmd.Parameters.AddWithValue("@domainUserName", session.DomainUserName);
-                        cmd.Parameters.AddWithValue("@sessionKey", session.SessionKey);
                         cmd.Parameters.AddWithValue("@authenticated", session.Authenicated);
                         cmd.Parameters.AddWithValue("@startTime", session.StartTime);
                         if (cmd.ExecuteNonQuery() > 0)
