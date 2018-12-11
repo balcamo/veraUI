@@ -246,3 +246,14 @@ C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.J
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.JsonWebTokens.pdb
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.JsonWebTokens.xml
 C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Newtonsoft.Json.pdb
+C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.Owin.Security.OpenIdConnect.dll
+C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.Owin.Security.OpenIdConnect.xml
+C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.Owin.Cors.dll
+C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\System.Web.Http.Cors.dll
+C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.Owin.Cors.xml
+C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\System.Web.Http.Cors.xml
+C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Users\thuff\Source\Repos\veraUI\veraAPI\veraAPI\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.pdb

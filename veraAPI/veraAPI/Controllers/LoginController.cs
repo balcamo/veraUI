@@ -12,33 +12,26 @@ using VeraAPI.HelperClasses;
 
 namespace VeraAPI.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class LoginController : ApiController
     {
         private static Scribe log = new Scribe(System.Web.HttpContext.Current.Server.MapPath("~/logs"), "LoginController_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".log");
 
         // GET: api/Login
+        [Authorize]
         public IEnumerable<string> Get()
         {
-            //
-            // The Scope claim tells you what permissions the client application has in the service.
-            // In this case we look for a scope value of user_impersonation, or full access to the service as the user.
-            //
-            if (ClaimsPrincipal.Current.FindFirst("http://schemas.microsoft.com/identity/claims/scope").Value != "user_impersonation")
-            {
-                throw new HttpResponseException(new HttpResponseMessage { StatusCode = HttpStatusCode.Unauthorized, ReasonPhrase = "The Scope claim does not contain 'user_impersonation' or scope claim not found" });
-            }
-            
-            // NameIdentifier claim contains an immutable, unique identifier for the user.
-            Claim subject = ClaimsPrincipal.Current.FindFirst(ClaimTypes.NameIdentifier);
-
-            return new string[] { "value1", "value2" };
+            log.WriteLogEntry("Starting GET...");
+            var userClaim = this.User.Identity as System.Security.Claims.ClaimsIdentity;
+            string userName = userClaim?.FindFirst("name")?.Value;
+            log.WriteLogEntry("End GET.");
+            return new string[] { userName, "value2" };
         }
 
         // GET: api/Login/5
         public string Get(int id)
         {
-            return "value";
+            return "Hello from the API!";
         }
 
         // POST: api/Login

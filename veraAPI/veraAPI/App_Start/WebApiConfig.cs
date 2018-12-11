@@ -19,6 +19,9 @@ namespace VeraAPI
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            var corsPolicy = new System.Web.Http.Cors.EnableCorsAttribute("*", "*", "GET, POST, OPTIONS, PUT");
+            config.EnableCors(corsPolicy);
         }
     }
 }
