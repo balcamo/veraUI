@@ -106,7 +106,7 @@ var db *sql.DB
 var server = "apiarywebsql-dev.database.windows.net"
 var port = 1433
 var user = "balcamo"
-var password = "message@6whiskey"
+var password = ""
 var database = "apiaryweb-dev"
 
 func meters(){
