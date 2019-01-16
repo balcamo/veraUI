@@ -8,8 +8,8 @@ export const environment = {
     tenant: 'verawaterandpower.com',
     clientId: '4e2ad391-77f4-4dd9-bd2b-58125f55e5ba',
     endpoints: {
-      'https://bigfoot.verawaterandpower.com': 'a809a684-750b-4a1e-a0fb-ee3debe27313 ',
-      'https://bigfoot.verawaterandpower.com/api/LDAP': 'a809a684-750b-4a1e-a0fb-ee3debe27313 ',
+      'https://bigfoot.verawaterandpower.com/': 'a809a684-750b-4a1e-a0fb-ee3debe27313 ',
+      //'https://bigfoot.verawaterandpower.com/api/Login': 'a809a684-750b-4a1e-a0fb-ee3debe27313 ',
       //'https://bigfoot.verawaterandpower.com/api/TravelAuth': 'a809a684-750b-4a1e-a0fb-ee3debe27313 ',
 
     }

@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
   userEntry = "block";
   mainPage = "none";
   userService: UserService;
-  user = new User();;
+  user = new User();
   consts = new Constants();
   http: Http;
   notify: EventEmitter<string> = new EventEmitter<string>();
@@ -40,20 +40,11 @@ export class AppComponent implements OnInit {
     this.url = new URL(window.location.href);
     this.param = this.url.searchParams.get("route");
     console.log("current param: " + this.param);
-    adalService.init(environment.config);
+    this.user.nav = this.consts.employee;
 
   }
   ngOnInit() {
 
-    this.adalService.handleWindowCallback();
-
-    console.log(this.adalService.userInfo);
-    
-    if (this.adalService.userInfo.authenticated) {
-      this.getUser();
-    }
-    
-    console.log(this.adalService.userInfo);
   }
   public emit_event(location: string) {
     this.notify.emit(location);
@@ -64,17 +55,19 @@ export class AppComponent implements OnInit {
    * */
   getUser() {
     let params: URLSearchParams = new URLSearchParams();
-    var pageHeaders = new Headers({
-      'Content-Type': 'application/json',
-    });
+    var pageHeaders = new Headers();
+    pageHeaders.append('Content-Type', 'application/json');
+    pageHeaders.append('authorization', this.adalService.userInfo.token.toString());
+    
     let options = new RequestOptions({
       search: params,
       headers: pageHeaders
     });
     var body = JSON.stringify({ UserName: this.adalService.userInfo.userName, UserPwd: this.adalService.userInfo.token });
-    console.log(this.consts.url + 'LDAP');
-    this.http.post(this.consts.url + 'LDAP', body, options)
-      .subscribe((data) => this.waitForHttp(data));
+    console.log(this.consts.url + 'Login');
+    this.http.get(this.consts.url + 'Login').subscribe((data) =>console.log(data));
+    //this.http.post(this.consts.url + 'Login', body)
+    //  .subscribe((data) => this.waitForHttp(data));
   }
 
   waitForHttp(data: any) {

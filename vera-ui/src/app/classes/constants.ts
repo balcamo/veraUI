@@ -6,7 +6,8 @@ export class Constants {
   customer = [];
   employee = [
     { name: "Home", route: "./home", icon: "../../assets/HomeBrown.png" },
-    { name: "Travel", route: "./travel", icon: "../../assets/TravelIconBrown.png" },
+    //{ name: "Travel", route: "./travel", icon: "../../assets/TravelIconBrown.png" },
+    { name: "Meter Reads", route: "./meter-reads", icon: "../../assets/2hives2bee.png" },
   ];
   crew = [];
 

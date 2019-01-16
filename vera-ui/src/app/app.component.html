@@ -8,15 +8,15 @@
   </h1>
 </div>
 
-<div *ngIf="!authenticated">
+<!--div class="d-flex flex-wrap main">
   
-    <span *ngIf="!authenticated" (click)="login()">
-      <button>Login</button>
+    <span  (click)="getUser()">
+      <button>    Hit api</button>
     </span>
   
-</div>
+</div-->
 
-<div *ngIf="authenticated">
+<div >
   <!-- display the nav bar -->
   <app-nav [nav]="user.nav"></app-nav>
   <!-- router output -->

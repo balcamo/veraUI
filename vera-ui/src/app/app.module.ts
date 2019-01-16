@@ -8,7 +8,7 @@ import { Serialize, SerializeProperty, Serializable } from 'ts-serializer';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { Http, HttpModule } from '@angular/http';
+import { Http, HttpModule  } from '@angular/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AdalService, AdalGuard, AdalInterceptor  } from 'adal-angular4';
@@ -23,6 +23,7 @@ import { ViewAuthFormsComponent } from './travel/view-auth-forms/view-auth-forms
 import { UserService } from './service/app.service.user';
 import { TavelAuthApproveComponent } from './travel/tavel-auth-approve/tavel-auth-approve.component';
 import { ViewTravelFinanceComponent } from './travel/view-travel-finance/view-travel-finance.component';
+import { MeterReadsComponent } from './meter-reads/meter-reads.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ViewTravelFinanceComponent } from './travel/view-travel-finance/view-tr
     ViewAuthFormsComponent,
     TavelAuthApproveComponent,
     ViewTravelFinanceComponent,
+    MeterReadsComponent,
     
   ],
   imports: [
