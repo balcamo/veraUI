@@ -1,4 +1,4 @@
-package main
+ package main
 
 import (
 	"handlers"
@@ -37,7 +37,7 @@ func main() {
         }
     })
 
-    r.GET("/meters", handlers.GetMetersListHandler)
+    r.GET("/meters", meters.Meters())
    
     //r.POST("/todo", handlers.AddTodoHandler)
     //r.DELETE("/todo/:id", handlers.DeleteTodoHandler)
