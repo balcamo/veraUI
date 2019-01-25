@@ -98,19 +98,47 @@ import (
     "context"
     "log"
     "fmt"
-    "errors"
 )
 
-var db *sql.DB
+// Meter structure
+type Meter struct{
+	MeterNumber	string `json:"MeterNumber"`
+	Manufactuer	string `json:"Manufactuer"`
+	ModelNum	string `json:"ModelNum"`
+	SerialNum	string `json:"SerialNum"`
+	Substation	string `json:"Substation"`
+	Feeder		string `json:"Feeder"`
+	Address		string `json:"Address"`
+	Location	string `json:"Location"`
+	BillingType	string `json:"BillingType"`
+	BillingCycle string `json:"BillingCycle"`
+	Multiplier	string `json:"Multiplier"`
+	Route		string `json:"Route"`
+	LogDate		string `json:"LogDate"`
+	Endpoint	string `json:"Endpoint"`}
+
+
+
+var (
+	list []Meter
+	db *sql.DB
+	server = "apiarywebsql-dev.database.windows.net"
+	port = 1433
+	user = "balcamo"
+	password = "message@6whiskey"
+	database = "apiaryweb-dev"
+)
+/*var db *sql.DB
 
 var server = "apiarywebsql-dev.database.windows.net"
 var port = 1433
 var user = "balcamo"
 var password = ""
-var database = "apiaryweb-dev"
+var database = "apiaryweb-dev"*/
 
-func meters(){
+func Meters() ([]Meter){
 	// Build connection string
+	
 	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;",
 		server, user, password, port, database)
 
@@ -128,50 +156,64 @@ func meters(){
     }
     fmt.Printf("Connected!\n")
 
-	count, err := ReadMeters()
+	list, err := ReadMeters()
     if err != nil {
         log.Fatal("Error reading Employees: ", err.Error())
     }
-    fmt.Printf("Read %d row(s) successfully.\n", count)
-
+	return list
 }
 
 // ReadMeters reads all employee records
-func ReadMeters() (int, error) {
+func ReadMeters() ([]Meter, error) {
+	lst := []Meter{}
     ctx := context.Background()
 
     // Check if database is alive.
     err := db.PingContext(ctx)
     if err != nil {
-        return -1, err
+        return lst, err
     }
-
-    tsql := fmt.Sprintf("SELECT Id, Name, Location FROM TestSchema.Employees;")
+	tsql := fmt.Sprintf("SELECT * FROM dbo.electric_meter;")
 
     // Execute query
     rows, err := db.QueryContext(ctx, tsql)
     if err != nil {
-        return -1, err
+        return lst, err
     }
 
     defer rows.Close()
 
-    var count int
+
 
     // Iterate through the result set.
     for rows.Next() {
-        var name, location string
-        var id int
-
+        
+		var meterNumber, manufact, modelNum, serial,substation, feeder string
+		var id,address, location,btype,bcycle, multiplier,route,log,endpoint string
+		var meter Meter
         // Get values from row.
-        err := rows.Scan(&id, &name, &location)
+        err := rows.Scan(&id,&meterNumber,&manufact,&modelNum,&serial, &substation,&feeder,&address,&location,&btype,&bcycle, &multiplier,&route,&log,&endpoint)
         if err != nil {
-            return -1, err
+            return lst, err
         }
+		meter = Meter{
+			MeterNumber:meterNumber,
+			Manufactuer:manufact,
+			ModelNum:modelNum,
+			SerialNum:serial,
+			Substation:substation,
+			Feeder:feeder,
+			Address:address,
+			Location:location,
+			BillingType:btype,
+			BillingCycle:bcycle,
+			Multiplier:multiplier,
+			Route:route,
+			LogDate:log,
+			Endpoint:endpoint}
 
-        fmt.Printf("ID: %d, Name: %s, Location: %s\n", id, name, location)
-        count++
+		lst = append(lst, meter)
     }
 
-    return count, nil
+    return lst, nil
 }

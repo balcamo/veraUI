@@ -1,47 +1,68 @@
 <button class="btn secondary" (click)="getGoAPI()">Refresh the meter list</button>
 
-<div style="border:solid 5px; max-width:80%;min-width:50%; background-color:white;padding:5%;border-radius: 25px; margin-left:50px">
-  <table datatable class="row-border hover">
+<div style="border:solid 5px; max-width:100%;min-width:70%; background-color:white;padding:5%;border-radius: 25px; margin-left:50px">
+
+  <table *ngIf="!meterSelected" datatable class="row-border hover">
+    
     <thead>
       <tr>
-        <th><h5>Meter Number</h5></th>
-        <th><h5>Endpoint</h5></th>
-        <th><h5>Substation</h5></th>
-        <th><h5>Frequency</h5></th>
-        <th><h5>Max Kw</h5></th>
-        <th><h5>Phase</h5></th>
+        <th width="100%"><h5>Meter Number</h5></th>
+        <th width="100%"><h5>Address</h5></th>
+        <th width="100%"><h5>Substation</h5></th>
       </tr>
     </thead>
     <tbody *ngFor="let meter of meters">
-      <tr >
+      <tr>
         <th>
           <button type="button" class="btn link" (click)="setMeter(meter)"><h5>{{meter.MeterNumber}}</h5></button>
         </th>
-
         <th>
-          <h5>{{meter.Endpoint}}</h5>
+          <h5>{{meter.Address}}</h5>
         </th>
         <th>
           <h5>{{meter.Substation}}</h5>
         </th>
-        <th>
-          <h5>{{meter.Freq}}</h5>
-        </th>
-        <th>
-          <h5>{{meter.MaxkW}}</h5>
-        </th>
-        <th>
-          <h5>{{meter.Phase}}</h5>
-        </th>
-      </tr>
-      <tr [ngStyle]="{'display':viewReads}" *ngFor="let read of reads">
-        <th>
-          <h5>{{read.Date}}</h5>
-        </th>
-        <th>
-          <h5>{{read.Kwh}}</h5>
-        </th>
       </tr>
     </tbody>
   </table>
+  <div *ngIf="meterSelected">
+    <button type="button" class="btn" (click)="allMeters()">All Meters</button>
+    <h3>Meter: {{currentMeter.MeterNumber}}, Address: {{currentMeter.Address}}, Substation: {{currentMeter.Substation}}</h3>
+    <table datatable class="row-border hover">
+      <thead>
+        <tr>
+          <th width="100%"><h5>Meter Location</h5></th>
+          <th width="100%"><h5>Billing Type</h5></th>
+          <th width="100%"><h5>Multiplier</h5></th>
+          <th width="100%"><h5>Last Logging Date</h5></th>
+          <th width="100%"><h5>Endpoint</h5></th>
+          <th width="100%"><h5>Billing cycle</h5></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>
+            <h5>{{currentMeter.MeterLocation}}</h5>
+          </th>
+          <th>
+            <h5>{{currentMeter.BillingType}}</h5>
+          </th>
+          <th>
+            <h5>{{currentMeter.Multiplier}}</h5>
+          </th>
+          <th>
+            <h5>{{currentMeter.LogDate}}</h5>
+          </th>
+          <th>
+            <h5>{{currentMeter.Endpoint}}</h5>
+          </th>
+          <th>
+            <h5>{{currentMeter.BillingCycle}}</h5>
+          </th>
+        </tr>
+      </tbody>
+    </table>
   </div>
+</div>
+
+

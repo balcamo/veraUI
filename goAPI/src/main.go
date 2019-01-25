@@ -2,6 +2,7 @@
 
 import (
 	"handlers"
+	//"meters"
 	"path"
 	"path/filepath"
 	"github.com/gin-gonic/gin"
@@ -37,7 +38,7 @@ func main() {
         }
     })
 
-    r.GET("/meters", meters.Meters())
+    r.GET("/meters", handlers.GetMetersListHandler)
    
     //r.POST("/todo", handlers.AddTodoHandler)
     //r.DELETE("/todo/:id", handlers.DeleteTodoHandler)

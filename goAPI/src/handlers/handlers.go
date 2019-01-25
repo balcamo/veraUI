@@ -1,9 +1,9 @@
 package handlers
 
 import (
-    "encoding/json"
-    "io"
-    "io/ioutil"
+    //"encoding/json"
+    //"io"
+    //"io/ioutil"
     "net/http"
 	"meters"
     "github.com/gin-gonic/gin"
@@ -11,7 +11,7 @@ import (
 
 // GetMetersListHandler returns all current todo items
 func GetMetersListHandler(c *gin.Context) {
-    c.JSON(http.StatusOK, meters.Get())
+    c.JSON(http.StatusOK, meters.Meters())
 }
 
 // AddTodoHandler adds a new todo to the todo list
@@ -48,7 +48,7 @@ func CompleteTodoHandler(c *gin.Context) {
     c.JSON(http.StatusOK, "")
 }*/
 
-func convertHTTPBodyToMeters(httpBody io.ReadCloser) (meters.Meter, int, error) {
+/*func convertHTTPBodyToMeters(httpBody io.ReadCloser) (meters.Meter, int, error) {
     body, err := ioutil.ReadAll(httpBody)
     if err != nil {
         return meters.Meter{}, http.StatusInternalServerError, err
@@ -64,4 +64,4 @@ func convertJSONBodyToMeters(jsonBody []byte) (meters.Meter, int, error) {
         return meters.Meter{}, http.StatusBadRequest, err
     }
     return metersItem, http.StatusOK, nil
-}
+}*/

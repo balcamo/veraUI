@@ -22,6 +22,8 @@ export class MeterReadsComponent implements OnInit {
   viewReads = "none";
   reads: MeterRead[];
   oldReads: MeterRead[];
+  meterSelected = false;
+  currentMeter: Meters;
 
   constructor(http: Http, userService: UserService, private httpClient: HttpClient, ) {
     this.http = http;
@@ -49,19 +51,13 @@ export class MeterReadsComponent implements OnInit {
   }
 
   setMeter(meter: Meters) {
-    this.reads = meter.Reads;
-    console.log(meter.Reads);
-    if (this.viewReads == "none") {
-      this.viewReads = "block";
-
-    } else if (this.reads !== this.oldReads) {
-      this.viewReads = "block";
-
-    } else if (this.reads == this.oldReads) {
-      this.viewReads = "none";
-
-    }
-
+    this.meterSelected = true;
+    this.currentMeter = meter;
+    console.log(meter);
     this.oldReads = this.reads
+  }
+
+  allMeters() {
+    this.meterSelected = false;
   }
 }
