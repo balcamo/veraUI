@@ -15,4 +15,6 @@ export class Constants {
   //url = 'https://bigfoot.verawp.local/api/';
   url = 'https://bigfoot.verawaterandpower.com/api/';
   //url = 'https://localhost:64154/api/';
+
+  meter_categories = ['Meter Number', 'Address', 'Substation', 'Meter Location', 'Billing Type', 'Multiplier', 'Last Logging Date', 'Endpoint','Billing Cycle','Usage'];
 }
