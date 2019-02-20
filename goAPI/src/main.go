@@ -18,13 +18,13 @@ func main() {
     // - Credentials share
     // - Preflight requests cached for 12 hours
     r.Use(cors.New(cors.Config{
-        AllowOrigins:     []string{"https://localhost:4200"},
+        AllowOrigins:     []string{"https://angularapiary.azurewebsites.net"},
         AllowMethods:     []string{"PUT", "PATCH","GET","POST","DELETE"},
         AllowHeaders:     []string{"*"},
         ExposeHeaders:    []string{"Content-Length"},
         AllowCredentials: true,
         AllowOriginFunc: func(origin string) bool {
-            return origin == "https://localhost:4200"
+            return origin == "https://angularapiary.azurewebsites.net"
         },
     }))
 
@@ -32,9 +32,9 @@ func main() {
         dir, file := path.Split(c.Request.RequestURI)
         ext := filepath.Ext(file)
         if file == "" || ext == "" {
-            c.File("https://localhost:4200")
+            c.File("https://angularapiary.azurewebsites.net")
         } else {
-            c.File("https://localhost:4200/meter-reads" + path.Join(dir, file))
+            c.File("https://angularapiary.azurewebsites.net/meter-reads" + path.Join(dir, file))
         }
     })
 
