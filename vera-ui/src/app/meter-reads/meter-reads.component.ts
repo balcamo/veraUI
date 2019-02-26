@@ -40,7 +40,9 @@ export class MeterReadsComponent implements OnInit {
   }
   getGoAPI() {
     console.log("in the button function");
-    this.http.get("http://localhost:3000/meters").subscribe((data) => this.waitForMeters(data));
+    this.http.get("http://vm-apiary.verawp.local:3000/meters").subscribe((data) => console.log(data));
+    console.log("after the get");
+//    this.http.get("http://vm-apiary.verawp.local:3000/meters").subscribe((data) => this.waitForMeters(data));
   }
 
   waitForMeters(data:any) {
