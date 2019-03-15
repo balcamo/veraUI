@@ -1,0 +1,93 @@
+<button class="btn secondary" (click)="getGoAPI()">Refresh the meter list</button>
+
+<div style="border:solid 5px;width:85vw;min-width:70vw; background-color:white;padding:5%;border-radius: 25px;margin-left:30px">
+
+  <select (change)="filterMeters($event.target.value)" class="btn secondary">
+    <option value="0">Select Category to Filter On</option>
+    <option *ngFor="let opt of filterOpts" value="{{opt}}">{{opt}}</option>
+  </select>
+  <input type="text" placeholder="Enter value to filter"
+         (keyup)="filterData($event.target.value)" />
+  <br />
+  <br />
+  <table *ngIf="!meterSelected" class="table table-hover " [mfData]="filteredMeters" #mf="mfDataTable" [mfRowsOnPage]="5">
+    <!--table *ngIf="!meterSelected" class="table-bordered "-->
+
+    <thead>
+      <tr>
+        <th><h5><b>Meter Number</b></h5></th>
+        <th><h5><b>Address</b></h5></th>
+        <th><h5><b>Substation</b></h5></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let meter of mf.data">
+        <th>
+          <button type="button" class="btn link" (click)="setMeter(meter)"><h5>{{meter.MeterNumber}}</h5></button>
+        </th>
+        <th>
+          <h5>{{meter.Address}}</h5>
+        </th>
+        <th>
+          <h5>{{meter.Substation}}</h5>
+        </th>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4">
+          <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+  <div *ngIf="meterSelected">
+    <button type="button" class="btn" (click)="allMeters()">All Meters</button>
+    <h3>Meter: {{currentMeter.MeterNumber}}, Address: {{currentMeter.Address}}, Substation: {{currentMeter.Substation}}</h3>
+    <table datatable class="row-border hover">
+      <tbody>
+        <tr>
+          <th><h5><b>Meter Location</b></h5></th>
+          <th>
+            <h5>{{currentMeter.Location}}</h5>
+          </th>
+
+        </tr>
+        <tr>
+          <th><h5><b>Billing Type</b></h5></th>
+
+          <th>
+            <h5>{{currentMeter.BillingType}}</h5>
+          </th>
+
+        </tr>
+        <tr>
+          <th><h5><b>Multiplier</b></h5></th>
+          <th>
+            <h5>{{currentMeter.Multiplier}}</h5>
+          </th>
+        </tr>
+        <tr>
+          <th><h5><b>Last Logging Date</b></h5></th>
+          <th>
+            <h5 style="">{{currentMeter.LogDate}}</h5>
+          </th>
+        </tr>
+        <tr>
+          <th><h5><b>Endpoint</b></h5></th>
+          <th>
+            <h5>{{currentMeter.Endpoint}}</h5>
+          </th>
+        </tr>
+        <tr>
+          <th><h5><b>Billing Cycle</b></h5></th>
+          <th>
+            <h5>{{currentMeter.BillingCycle}}</h5>
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
