@@ -1,96 +1,6 @@
 package meters
 
-/*import (
-	"sync"
-)
 
-var(
-	list []Meter
-	mtx sync.RWMutex
-    once sync.Once
-)
-
-func init() {
-    once.Do(initialiseList)
-}
-
-func initialiseList() {
-    list = []Meter{}
-	reads1 := []MeterRead{}
-	reads2 := []MeterRead{}
-	reads3 := []MeterRead{}
-	z := MeterRead{Date:"01/09/2019",Kwh:"23"}
-	y := MeterRead{Date:"01/10/2019",Kwh:"30"}
-	x := MeterRead{Date:"01/11/2019",Kwh:"20"}
-	w := MeterRead{Date:"01/09/2019",Kwh:"32"}
-	u := MeterRead{Date:"01/10/2019",Kwh:"28"}
-	t := MeterRead{Date:"01/11/2019",Kwh:"25"}
-	s := MeterRead{Date:"01/09/2019",Kwh:"15"}
-	r := MeterRead{Date:"01/10/2019",Kwh:"22"}
-	q := MeterRead{Date:"01/11/2019",Kwh:"17"}
-	reads1 = append(reads1,z)	
-	reads1 = append(reads1,y)	
-	reads1 = append(reads1,x)
-	reads2 = append(reads1,w)	
-	reads2 = append(reads1,u)	
-	reads2 = append(reads1,t)
-	reads3 = append(reads1,s)	
-	reads3 = append(reads1,r)	
-	reads3 = append(reads1,q)
-	a := Meter{
-		MeterNumber:"001",
-		Endpoint:"001",
-		Reads:reads1,
-		Substation:"6",
-		Freq:"11.0023",
-		MaxkW:"80",
-		Phase:"A"}
-	b := Meter{
-		MeterNumber:"002",
-		Endpoint:"002",
-		Reads:reads2,
-		Substation:"6",
-		Freq:"11.4239",
-		MaxkW:"80",
-		Phase:"B"}	
-	c := Meter{
-		MeterNumber:"003",
-		Endpoint:"003",
-		Reads:reads3,
-		Substation:"6",
-		Freq:"10.0423",
-		MaxkW:"80",
-		Phase:"C"}
-
-	list = append(list, a)
-	list = append(list, b)
-	list = append(list, c)
-}
-
-// Meter structure
-type Meter struct{
-	MeterNumber	string `json:"MeterNumber"`
-	Endpoint	string `json:"Endpoint"`
-	Reads		[]MeterRead
-	Substation	string `json:"Substation"`
-	Freq		string `json:"Freq"`
-	MaxkW		string `json:"MaxkW"`
-	Phase		string `json:"Phase"`
-}
-
-type MeterRead struct{
-	Date	string `json:"Date"`
-	Kwh		string `json:"Kwh"`
-}
-
-// retrieve the list of meters
-func Get() []Meter{
-	return list
-}
-
-func isMatchingMeterNumber(a string, b string) bool {
-    return a == b
-}*/
 
 import (
     _ "github.com/denisenkom/go-mssqldb"
@@ -192,10 +102,27 @@ func ReadMeters() ([]Meter, error) {
 		var id,address, location,btype,bcycle, multiplier,route,log,endpoint string
 		var meter Meter
         // Get values from row.
+	
         err := rows.Scan(&id,&meterNumber,&manufact,&modelNum,&serial, &substation,&feeder,&address,&location,&btype,&bcycle, &multiplier,&route,&log,&endpoint)
         if err != nil {
-            return lst, err
+	    //if &id == nil {id = "N/A"}
+	    //if &meterNumber == nil {meterNumber = "N/A"}
+	    //if &manufact == nil {manufact = "N/A"}
+	    //if &modelNum == nil {modelNum = "N/A"}
+	    //if &serial == nil {serial = "N/A"}
+	    //if &substation == nil {substation = "N/A"}
+	    if &feeder == nil {feeder = "N/A"}
+	    if &address == nil {address = "N/A"}
+	    //if &location == nil {location = "N/A"}
+	    //if &btype == nil {btype = "N/A"}
+	    //if &bcycle == nil {bcycle = "N/A"}
+	    if &multiplier == nil {multiplier = "N/A"}
+	    //if &route == nil {route = "N/A"}
+	    //if &log == nil {log = "N/A"}
+	    //if &endpoint == nil {endpoint = "N/A"}
+           // return lst, err
         }
+
 		meter = Meter{
 			MeterNumber:meterNumber,
 			Manufactuer:manufact,
@@ -211,7 +138,6 @@ func ReadMeters() ([]Meter, error) {
 			Route:route,
 			LogDate:log,
 			Endpoint:endpoint}
-
 		lst = append(lst, meter)
     }
 

@@ -18,7 +18,7 @@ func main() {
     // - Credentials share
     // - Preflight requests cached for 12 hours
     r.Use(cors.New(cors.Config{
-        AllowOrigins:     []string{"https://angularapiary.azurewebsites.net"},
+        AllowOrigins:     []string{"http://angularapiary.azurewebsites.net"},
         AllowMethods:     []string{"PUT", "PATCH","GET","POST","DELETE"},
         AllowHeaders:     []string{"*"},
         ExposeHeaders:    []string{"Content-Length"},
