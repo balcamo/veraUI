@@ -11,6 +11,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Http, HttpModule  } from '@angular/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
+import { DataTableModule } from "angular-6-datatable";
+
 import { AdalService, AdalGuard, AdalInterceptor  } from 'adal-angular4';
 import { AppRoutingModule } from './app-routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -21,9 +23,12 @@ import { HomeComponent } from './home/home.component';
 import { TravelAuthComponent } from './travel/travel-auth/travel-auth.component';
 import { ViewAuthFormsComponent } from './travel/view-auth-forms/view-auth-forms.component';
 import { UserService } from './service/app.service.user';
+import { MeterService } from './service/app.service.meters';
 import { TavelAuthApproveComponent } from './travel/tavel-auth-approve/tavel-auth-approve.component';
 import { ViewTravelFinanceComponent } from './travel/view-travel-finance/view-travel-finance.component';
 import { MeterReadsComponent } from './meter-reads/meter-reads.component';
+import { MetersComponent } from './meter-reads/meters/meters.component';
+import { MetersReportsComponent } from './meter-reads/meters-reports/meters-reports.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +41,9 @@ import { MeterReadsComponent } from './meter-reads/meter-reads.component';
     TavelAuthApproveComponent,
     ViewTravelFinanceComponent,
     MeterReadsComponent,
-    
+    MetersComponent,
+    MetersReportsComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -48,13 +55,15 @@ import { MeterReadsComponent } from './meter-reads/meter-reads.component';
     MDBBootstrapModule.forRoot(),
     NgbModule.forRoot(),
     HttpClientModule,
+    DataTableModule,
   ],
   exports: [
     HttpModule,
     HttpClientModule,
+  
 
   ],
-  providers: [UserService,
+  providers: [UserService, MeterService,
     AdalService, AdalGuard,
     { provide: HTTP_INTERCEPTORS, useClass: AdalInterceptor, multi: true }
   ],

@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Headers, Http, URLSearchParams, RequestOptions, Response } from '@angular/http';
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { Constants } from '../classes/constants';
+import { AuthForm } from '../classes/travel-auth-form';
 import { UserService } from '../service/app.service.user';
-import { User, Auth } from '../classes/user';
-import { Meters, MeterRead } from '../classes/meter-reads';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -15,27 +14,20 @@ import { Meters, MeterRead } from '../classes/meter-reads';
 export class MeterReadsComponent implements OnInit {
 
   userService: UserService;
-  user = new User();
+  @Input() user;
   consts = new Constants();
   http: Http;
-  meters: Meters[];
-  filteredMeters: Meters[];
-  viewReads = "none";
-  reads: MeterRead[];
-  oldReads: MeterRead[];
-  meterSelected = false;
-  currentMeter: Meters;
-  filterOpts = this.consts.meter_categories;
-  filterCategory: string;
-  filterString: string;
+  metersDisplay = "block";
+  reportsDisplay = "none";
 
-  constructor(http: Http, userService: UserService, private httpClient: HttpClient, ) {
+
+  constructor(private router: Router, http: Http, userService: UserService) {
     this.http = http;
     this.userService = userService;
-
+    this.user = this.userService.getUser();
   }
-
   ngOnInit() {
+<<<<<<< HEAD
     this.getGoAPI()
   }
   getGoAPI() {
@@ -63,83 +55,35 @@ export class MeterReadsComponent implements OnInit {
     console.log(meter);
     this.oldReads = this.reads
   }
+=======
+>>>>>>> f349dd0fea26000ec32bd1195da1b2d1eb7ac2e7
 
-  allMeters() {
-    this.meterSelected = false;
   }
-  // filter meters based on entered string
-  filterData(value: any) {
-    this.filterString = value;
-    if (this.filterString == "") {
-      this.filteredMeters = this.meters
+  /**
+ * This function will toggle the display of
+ * all meters
+ **/
+  displayAllMeters() {
+    this.user = this.userService.getUser();
+    if (this.metersDisplay == "none") {
+      this.reportsDisplay = "none";
+      this.metersDisplay = "block";
     } else {
-     if (this.filterCategory == this.filterOpts[0]) {
-        this.filteredMeters = this.meters.filter(s => s.MeterNumber.includes(this.filterString));
-      }
-      else if (this.filterCategory == this.filterOpts[1]) {
-        this.filteredMeters = this.meters.filter(s => s.Address.includes(this.filterString));
-      }
-      else if (this.filterCategory == this.filterOpts[2]) {
-        this.filteredMeters = this.meters.filter(s => s.Substation.includes(this.filterString));
-      }
-      else if (this.filterCategory == this.filterOpts[3]) {
-        this.filteredMeters = this.meters.filter(s => s.Location.includes(this.filterString));
-      }
-      else if (this.filterCategory == this.filterOpts[4]) {
-        this.filteredMeters = this.meters.filter(s => s.BillingType.includes(this.filterString));
-      }
-      else if (this.filterCategory == this.filterOpts[5]) {
-        this.filteredMeters = this.meters.filter(s => s.Multiplier.includes(this.filterString));
-      }
-      else if (this.filterCategory == this.filterOpts[6]) {
-        this.filteredMeters = this.meters.filter(s => s.LogDate.includes(this.filterString));
-      }
-      else if (this.filterCategory == this.filterOpts[7]) {
-        this.filteredMeters = this.meters.filter(s => s.Endpoint.includes(this.filterString));
-      }
-      else if (this.filterCategory == this.filterOpts[8]) {
-        this.filteredMeters = this.meters.filter(s => s.BillingCycle.includes(this.filterString));
-      }
-      else if (this.filterCategory == this.filterOpts[9]) {
-        this.filteredMeters = this.meters.filter(s => s.BillingCycle.includes(this.filterString));
-      } else {
-        this.filteredMeters = this.meters.filter(s => (this.checkIncludes(s, this.filterString)));
-      }
-
+      this.metersDisplay = "none";
     }
-    console.log(this.filterString);
-
   }
-
-  checkIncludes(meter: Meters, filterVal: string) {
-    if (meter.MeterNumber.includes(filterVal) || meter.Substation.includes(filterVal) || 
-      meter.Address.includes(filterVal) || meter.Location.includes(filterVal) ||
-      meter.BillingType.includes(filterVal) || meter.BillingCycle.includes(filterVal) ||
-      meter.Multiplier.includes(filterVal) || meter.Route.includes(filterVal) ||
-      meter.LogDate.includes(filterVal) || meter.Endpoint.includes(filterVal)) {
-      return true;
+  /**
+ * This function will toggle the display of
+ * Meter Reports
+ **/
+  displayMeterReports() {
+    this.user = this.userService.getUser();
+    if (this.reportsDisplay == "none") {
+      this.metersDisplay = "none";
+      this.reportsDisplay = "block";
     } else {
-      return false
+      this.reportsDisplay = "none";
     }
-  }
-
-  // designate which colomn things are being filterd on
-  filterMeters(value: any) {
-    if (value == "undefined") {
-      this.filterCategory = "0"
-    }
-    else {
-      this.filterCategory = value;
-    }
-    console.log("filter cat "+this.filterCategory);
-    if (this.filterString != "undefined") {
-      this.filterData(this.filterString);
-    }
-    else {
-      this.filteredMeters = this.meters;
-    }
-    console.log("we did it");
-
   }
 
 }

@@ -8,6 +8,8 @@ import { TravelAuthComponent } from './travel/travel-auth/travel-auth.component'
 import { ViewAuthFormsComponent } from './travel/view-auth-forms/view-auth-forms.component';
 import { TavelAuthApproveComponent } from './travel/tavel-auth-approve/tavel-auth-approve.component';
 import { NavComponent } from './nav/nav.component';
+import { MetersComponent } from './meter-reads/meters/meters.component';
+import { MetersReportsComponent } from './meter-reads/meters-reports/meters-reports.component';
 
 const routes: Routes = [
   {
@@ -22,7 +24,12 @@ const routes: Routes = [
   },
   {
     path: 'meter-reads',
-    component: MeterReadsComponent
+    component: MeterReadsComponent,
+    children: [
+      { path: 'meters', component: MetersComponent },
+      { path: 'meterReports', component: MetersReportsComponent },
+
+    ]
   },
   {
     path: 'nav',

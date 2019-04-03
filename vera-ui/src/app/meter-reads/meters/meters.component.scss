@@ -1,0 +1,57 @@
+@import '../../../theme.scss';
+
+tbody button {
+  color: blue;
+}
+
+.btn {
+  border: 1px solid $success;
+  background-color: $success;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+  text-transform: lowercase;
+  text-transform: capitalize;
+}
+
+option {
+  background-color: white;
+}
+
+input {
+  margin-left: .5vw;
+  font-size: 16px;
+}
+
+table {
+  text-align: center;
+  width: 100%;
+  border: 1px solid $secondary;
+}
+
+th {
+  text-align: center;
+  margin: auto;
+  border: 1px solid $secondary;
+}
+
+tr, thead {
+  text-align: center;
+  margin: auto;
+  border: 1px solid $secondary;
+}
+
+.secondary {
+  border-color: $success;
+  color: $primary;
+}
+
+.secondary:hover {
+  color: $primary;
+}
+
+.link {
+  color: $secondary;
+  background-color: white;
+  border-color: white;
+}

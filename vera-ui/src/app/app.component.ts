@@ -6,7 +6,8 @@ import { UserService } from './service/app.service.user';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { AdalService } from 'adal-angular4';
 import { environment } from '../environments/environment';
-
+import { MeterService } from './service/app.service.meters';
+import { Meters } from './classes/meter-reads';
 import { Observable } from 'rxjs';
 import { Constants } from './classes/constants';
 import { NavComponent } from './nav/nav.component';
@@ -34,13 +35,17 @@ export class AppComponent implements OnInit {
   url: URL;
   param: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, http: Http, userService: UserService, private httpClient: HttpClient, private adalService: AdalService) {
+  constructor(private router: Router, private route: ActivatedRoute, http: Http, userService: UserService,
+              meterService:MeterService, private httpClient: HttpClient, private adalService: AdalService) {
     this.userService = userService;
     this.http = http;
     this.url = new URL(window.location.href);
     this.param = this.url.searchParams.get("route");
     console.log("current param: " + this.param);
     this.user.nav = this.consts.employee;
+    if (meterService.getMeterList() == null) {
+      meterService.setMeterList(new Array<Meters>());
+    }
 
   }
   ngOnInit() {

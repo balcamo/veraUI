@@ -1,28 +1,19 @@
 @import '../../theme.scss';
-tbody button {
-  color:blue;
+
+a {
+  color: $secondary;
+  text-decoration: none;
 }
-table {
+
+.mylist {
   text-align: center;
-  width: 100%;
-  border: 1px solid $secondary;
+  align-content: center;
+  position: relative;
+  display: flex;
 }
-th {
-  text-align: center;
-  margin: auto;
-  border: 1px solid $secondary;
-}
-tr, thead {
-  text-align: center;
-  margin: auto;
-  border: 1px solid $secondary;
-}
-.secondary {
-  background-color: $success;
-  color: $primary;
-}
-.link{
-  color:$secondary;
-  background-color:white;
-  border-color:white;
+
+.btn {
+  text-transform: lowercase;
+  text-transform: capitalize;
+  color: $success;
 }
